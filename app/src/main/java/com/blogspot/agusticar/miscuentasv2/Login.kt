@@ -37,8 +37,9 @@ fun LoginComponent(modifier: Modifier = Modifier) {
     var password by rememberSaveable {
         mutableStateOf("")
     }
-    var enabledLoginButton by rememberSaveable { mutableStateOf(false) }
+    var enabledLoginButton by rememberSaveable { mutableStateOf( false) }
     var enabledTextFieldNewPassword by rememberSaveable { mutableStateOf(false)}
+    enabledLoginButton = userName.isNotEmpty()&& password.isNotEmpty()&& userName.isNotBlank() &&password.isNotBlank()
     ConstraintLayout(
         modifier
             .fillMaxSize()
@@ -103,4 +104,8 @@ fun LoginComponent(modifier: Modifier = Modifier) {
             )
         }
     }
+}
+
+private fun enableLoginButton():Boolean{
+    return false
 }
