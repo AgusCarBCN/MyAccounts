@@ -40,7 +40,7 @@ fun TextFieldComponent(
     inputText: String,
     onTextChange: (String) -> Unit,
     type: BoardType,
-    passWordVisible: Boolean=false, // Boolean to determine if password should be visible or not
+    textVisible: Boolean=false, // Boolean to determine if password should be visible or not
 ) {
     var visiblePasswordIcon by rememberSaveable { mutableStateOf(false) }
     TextField(
@@ -61,7 +61,7 @@ fun TextFieldComponent(
             .padding(16.dp), keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = getBoardType(type) // Set the keyboard type based on the input parameter
         ),
-        visualTransformation = if (passWordVisible && !visiblePasswordIcon) PasswordVisualTransformation() else VisualTransformation.None, // Change display based on boolean
+        visualTransformation = if (textVisible && !visiblePasswordIcon) PasswordVisualTransformation() else VisualTransformation.None, // Change display based on boolean
 
         colors = TextFieldDefaults.colors(
             contentColorFor(backgroundColor = Color.Transparent),

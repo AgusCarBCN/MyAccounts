@@ -33,20 +33,17 @@ class MainActivity : ComponentActivity() {
             MisCuentasv2Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    LoginComponent(modifier = Modifier.padding(innerPadding))
-                   /* Box(
+
+                    /*Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding),
                         contentAlignment = Alignment.Center
                     ) {
                        
-                        ModelButton(
-                            text = "Login",
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier.width(320.dp)
-                        )
+
                     }*/
+                    LoginComponent(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

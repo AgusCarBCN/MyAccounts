@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">MyAccountsV2</string>
+
+    <string name="title_activity_other">Other</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <!-- Login -->
+
+    <string name="loginButton">Log in</string>
+    <string name="confirmButton">Confirm</string>
+    <string name="backButton">Back</string>
+    <string name="username">Enter your name</string>
+    <string name="password">Enter password</string>
+    <string name="forgotpassword">Forgot your password?</string>
+    <string name="requestuser">Enter username (step 1)</string>
+    <string name="newpassword">Enter new password (step 2)</string>
+    <string name="goodmornig">Good morning</string>
+    <string name="goodafternoon">Good afternoon</string>
+    <string name="goodevening">Good evening</string>
+
+</resources>
