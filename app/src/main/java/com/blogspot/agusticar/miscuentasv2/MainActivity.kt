@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -22,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
+
 import com.blogspot.agusticar.miscuentasv2.recyclerview.Tutorial
 
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
@@ -34,15 +37,13 @@ class MainActivity : ComponentActivity() {
             MisCuentasv2Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-
                    Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding),
-                        contentAlignment = Alignment.Center
+                            .padding(innerPadding)
                     ) {
                        
-                    Tutorial()
+                   Tutorial()
                     }
 
                 }

@@ -42,7 +42,7 @@ fun ModelButton(
         enabled = enabledButton,
         modifier = modifier
             .wrapContentHeight() // Altura ajustable
-            .padding(16.dp),
+            .padding(10.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
             contentColor = if (pressed) pressedContentColor else defaultContentColor,
