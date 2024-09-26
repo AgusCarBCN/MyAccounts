@@ -13,9 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
@@ -23,6 +26,7 @@ import com.blogspot.agusticar.miscuentasv2.R
 @Composable
 fun ModelButton(
     text: String,
+    fontDimen:Int,
     modifier: Modifier = Modifier, // Permitir modificar el botón desde el exterior
     enabledButton: Boolean = true,
     onClickButton: () -> Unit
@@ -52,7 +56,7 @@ fun ModelButton(
         ) {
         Text(
             text = text,
-            fontSize = 20.sp, // Ajusta según @dimen/large
+            fontSize = with(LocalDensity.current) { dimensionResource(id = fontDimen).toSp() },
             fontWeight = FontWeight.Bold, // Estilo de texto en negrita
             textAlign = TextAlign.Center,
         )

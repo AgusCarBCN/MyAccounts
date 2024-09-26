@@ -44,4 +44,7 @@
     <string name="des5">\t\t\tPersonaliza misCuentasApp según tus preferencias.
         Visualiza tus gastos convertidos a dólares, euros o libras para una perspectiva global.
         </string>
+    <!---Icons-->
+    <string name="visibily">Contraseña visible</string>
+    <string name="visibilyoff">Contraseña no visible</string>
 </resources>

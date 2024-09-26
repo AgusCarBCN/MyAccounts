@@ -42,6 +42,8 @@
         personal financial goals. Improve it as needed.</string>
     <string name="des5">\t\t\tCustomize myAccountsApp according to your preferences.
         View your expenses converted to dollars, euros or pounds for a global perspective</string>
-
+    <!---Icons-->
+    <string name="visibily">Password visible</string>
+    <string name="visibilyoff">Password no visible</string>
 
 </resources>

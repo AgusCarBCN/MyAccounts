@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -72,12 +73,14 @@ fun TextFieldComponent(
         trailingIcon = {
             if(type==BoardType.PASSWORD){
                 if(visiblePasswordIcon) {
-                    Icon(painter = painterResource (id=R.drawable.visibility), contentDescription ="Contraseña visible" )
+                    Icon(painter = painterResource (id=R.drawable.visibility), contentDescription = stringResource(
+                        id = R.string.visibily
+                    ) )
 
                 }else {
                     Icon(
                         painter = painterResource(id = R.drawable.visibility_off),
-                        contentDescription = "Contraseña no visible"
+                        contentDescription = stringResource(id = R.string.visibilyoff)
                     )
                 }
                 IconButton(onClick = {visiblePasswordIcon=!visiblePasswordIcon}) {

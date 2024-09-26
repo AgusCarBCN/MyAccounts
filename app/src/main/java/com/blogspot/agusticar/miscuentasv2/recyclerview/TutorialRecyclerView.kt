@@ -24,7 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -72,8 +74,7 @@ fun Tutorial(modifier: Modifier = Modifier, listOfItems: List<TutorialItem> = ge
         }
 
 
-        ModelButton(text = stringResource(id = R.string.loginButton),
-            modifier = Modifier
+        ModelButton(text = stringResource(id = R.string.loginButton),R.dimen.text_title_medium,modifier = Modifier
                 .width(360.dp)
                 .constrainAs(loginButton) {
                     top.linkTo(horizontalPager.bottom)          // Parte superior anclada al imageBox
@@ -113,7 +114,7 @@ private fun ItemCard(item: TutorialItem) {
                     .align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
+                fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
                 color = colorResource(id = R.color.black)
             )
             Spacer(modifier = Modifier.width(5.dp)) // Espacio entre imagen y texto
@@ -135,8 +136,8 @@ private fun ItemCard(item: TutorialItem) {
                     .padding(top = 10.dp, bottom = 5.dp, end = 10.dp, start = 10.dp)
                     .align(Alignment.CenterHorizontally),
 
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_extra_large).toSp() },
                 color = colorResource(id = R.color.black)
             )
 
@@ -203,12 +204,12 @@ private fun CircleIndicator(
             ) {
             repeat(totalDots) { index ->
                 Icon(
-                    painter = painterResource(R.drawable.circleindicator),
+                    painter =if(index==selectedIndex) painterResource(R.drawable.elipseindicator) else painterResource(R.drawable.circleindicator),
                     contentDescription = "indicator",
                     tint = if (index == selectedIndex) colorResource(id = R.color.darkOrange) else colorResource(
                         id = R.color.orange
                     ),
-                    modifier = if (index == selectedIndex) Modifier.size(20.dp) else Modifier.size(
+                    modifier = if (index == selectedIndex) Modifier.size(24.dp) else Modifier.size(
                         12.dp
                     )
 

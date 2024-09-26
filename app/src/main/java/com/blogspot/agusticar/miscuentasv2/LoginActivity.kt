@@ -1,12 +1,10 @@
 package com.blogspot.agusticar.miscuentasv2
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,20 +25,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.blogspot.agusticar.miscuentasv2.R.*
+import com.blogspot.agusticar.miscuentasv2.R.color
+import com.blogspot.agusticar.miscuentasv2.R.drawable
+import com.blogspot.agusticar.miscuentasv2.R.string
 import com.blogspot.agusticar.miscuentasv2.component.BoardType
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
-import androidx.compose.ui.res.stringResource
 import java.time.LocalTime
-import java.util.Date
 
 
 class LoginActivity : ComponentActivity() {
@@ -67,7 +68,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
     var password by rememberSaveable {
         mutableStateOf("")
     }
-    var salutation by rememberSaveable {mutableStateOf("")}
+    var salutation by rememberSaveable { mutableStateOf("") }
 
     var enabledLoginButton by rememberSaveable { mutableStateOf(false) }
     var enabledTextFieldNewPassword by rememberSaveable { mutableStateOf(false) }
@@ -124,7 +125,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
             if (!enabledTextFieldNewPassword) {
                 Text(
                     text = getGreeting(username = "Agustin"),
-                    fontSize = 20.sp,
+                    fontSize =  with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_big).toSp() },
                     color = colorResource(color.darkBrown),
                     fontWeight = FontWeight.Bold
                 )
@@ -143,7 +144,10 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     BoardType.PASSWORD,
                     true
                 )
-                ModelButton(text = stringResource(id = string.loginButton), modifier = Modifier.width(320.dp), enabledLoginButton,
+                ModelButton(text = stringResource(id = string.loginButton),
+                     R.dimen.text_title_medium,
+                    modifier = Modifier.width(320.dp),
+                    enabledLoginButton,
                     onClickButton = {
                         if (validateLoginButton(userName, password)) {
                             Log.d("Login", "Login success")
@@ -162,7 +166,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     content = {
                         Text(
                             text = stringResource(id = string.forgotpassword),
-                            fontSize = 12.sp,
+                            fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_medium).toSp() },
                             color = colorResource(id = color.black)
                         )
                     }
@@ -186,7 +190,9 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     BoardType.PASSWORD,
                     true
                 )
-                ModelButton(text = stringResource(id = R.string.confirmButton), modifier = Modifier.width(320.dp), true,
+                ModelButton(text = stringResource(id = R.string.confirmButton),R.dimen.text_title_medium,
+                    modifier = Modifier.width(320.dp),
+                    true,
                     onClickButton = {
                         if (validateLoginButton(userName, password)) {
                             Log.d("Login", "Login success")
@@ -196,7 +202,10 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     }
                 )
 
-                ModelButton(text = stringResource(id = string.backButton), modifier = Modifier.width(320.dp), true,
+                ModelButton(text = stringResource(id = string.backButton),
+                    R.dimen.text_title_medium,
+                    modifier = Modifier.width(320.dp),
+                    true,
                     onClickButton = {
                         changeVisibility(
                             enabledTextFieldNewPassword,
@@ -222,9 +231,9 @@ private fun changeVisibility(visibility: Boolean, onChangeVisibility: (Boolean) 
 
 
 @Composable
-private fun getGreeting(username:String):String{
+private fun getGreeting(username: String): String {
     val hour = LocalTime.now().hour
-    return  when (hour) {
+    return when (hour) {
         in 6..11 -> "${stringResource(id = string.goodmornig)} $username"
         in 12..17 -> "${stringResource(id = string.goodafternoon)} $username"
         else -> "${stringResource(id = string.goodevening)} $username"
