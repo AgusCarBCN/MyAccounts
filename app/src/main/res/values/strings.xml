@@ -15,4 +15,33 @@
     <string name="goodmornig">Good morning</string>
     <string name="goodafternoon">Good afternoon</string>
     <string name="goodevening">Good evening</string>
+
+
+    <!--String onBoarding -->
+
+    <string name="wellcomeOnBoarding">Wellcome to MyAccountsApp</string>
+    <string name="title0">Wellcome to myAccountsApp</string>
+    <string name="title1">Create your profile</string>
+    <string name="title2">Record your daily income and expenses.</string>
+    <string name="title3">Check your notes.</string>
+    <string name="title4">Enable notifications</string>
+    <string name="title5">Configure your application and accounts.</string>
+    <string name="des0">\t\t\tWelcome to myAppAccounts! Your personalized tool for financial control.
+        Record expenses and income and achieve your savings goals. Get notifications about your accounts to make
+        informed financial decisions. Start your journey to strong financial health today!</string>
+
+    <string name="des1">\t\t\tCreate your profile to use the app. This ensures the confidentiality of your notes,
+        securely stored on your mobile device. Establish your profile now for a personalized and
+        protected experience!</string>
+    <string name="des2">\t\t\tFor effective management of your personal finances, record your daily income
+        and expenses for each of your accounts. You can do this in the "New Amount" menu option and
+        also conduct transactions under the "Transaction" option.</string>
+    <string name="des3">\t\t\tCheck your progress using the "Charts" and "Query" options for a comprehensive overview.</string>
+    <string name="des4">\t\t\tActivate notifications to stay informed. Receive daily, weekly, and monthly
+        reports of your notes. Enabling expense alerts and balance notifications will help you achieve your
+        personal financial goals. Improve it as needed.</string>
+    <string name="des5">\t\t\tCustomize myAccountsApp according to your preferences.
+        View your expenses converted to dollars, euros or pounds for a global perspective</string>
+
+
 </resources>

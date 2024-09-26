@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
+import com.blogspot.agusticar.miscuentasv2.recyclerview.Tutorial
 
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
 
@@ -34,16 +35,16 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
 
-                    /*Box(
+                   Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding),
                         contentAlignment = Alignment.Center
                     ) {
                        
+                    Tutorial()
+                    }
 
-                    }*/
-                    LoginComponent(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
