@@ -15,11 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -43,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.drawable
 import com.blogspot.agusticar.miscuentasv2.R.string
@@ -78,7 +76,7 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginComponent(modifier: Modifier = Modifier) {
+fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
 
     var userName by rememberSaveable {
         mutableStateOf("")
@@ -171,7 +169,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     modifier = Modifier.width(360.dp),
                     enabledLoginButton,
                     onClickButton = {
-
+                        navigationController.navigate("createprofile")
                     }
                 )
 

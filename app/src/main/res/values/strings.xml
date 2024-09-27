@@ -55,7 +55,8 @@
     <!--Option side menu-->
     <string name="mainmenu">Main navigation menu</string>
     <string name="management">Financial management</string>
-    <string name="others">Settings and others</string>
+    <string name="aboutapp">Information about App</string>
+    <string name="privacy">Privacy policy</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="notification">Notifications</string>

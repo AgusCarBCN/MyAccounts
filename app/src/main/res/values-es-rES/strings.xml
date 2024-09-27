@@ -55,9 +55,10 @@
     <!--Option side menu-->
     <string name="mainmenu">Menu principal de navegación</string>
     <string name="management">Gestion de finanzas</string>
-    <string name="others">Configuración y otros</string>
+    <string name="aboutapp">Información de la App</string>
     <string name="home">Inicio</string>
     <string name="profile">Perfil</string>
+    <string name="privacy">Politica de privacidad</string>
     <string name="notification">Notificaciones</string>
     <string name="calculator">Calculadora</string>
     <string name="chart">Gráfico de barras</string>
@@ -66,7 +67,7 @@
     <string name="search">Buscar</string>
     <string name="accountsetting">Configura tus cuentas</string>
     <string name="settings">Ajustes</string>
-    <string name="about">Acerca de</string>
+    <string name="about">Acerca de </string>
     <string name="exitapp">Cerrar sesion</string>
 
 </resources>

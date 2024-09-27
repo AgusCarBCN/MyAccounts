@@ -29,6 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.blogspot.agusticar.miscuentasv2.component.BoardType
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
@@ -60,7 +62,8 @@ class CreateProfile : ComponentActivity() {
 }
 
 @Composable
-fun CreateProfileComponent() {
+fun CreateProfileComponent(navigationController: NavHostController) {
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -124,9 +127,9 @@ fun CreateProfileComponent() {
             ModelButton(text = stringResource(id = R.string.confirmButton),
                 R.dimen.text_title_medium,
                 modifier = Modifier.width(360.dp),
-                false,
+                true,
                 onClickButton = {
-
+                    navigationController.navigate("home")
                 }
             )
 
@@ -135,7 +138,7 @@ fun CreateProfileComponent() {
                 modifier = Modifier.width(360.dp),
                 true,
                 onClickButton = {
-
+                    navigationController.navigate("login")
                 }
             )
         }
