@@ -74,7 +74,7 @@ fun Tutorial(modifier: Modifier = Modifier, listOfItems: List<TutorialItem> = ge
         }
 
 
-        ModelButton(text = stringResource(id = R.string.loginButton),R.dimen.text_title_medium,modifier = Modifier
+        ModelButton(text = stringResource(id = R.string.createProfileButton),R.dimen.text_title_medium,modifier = Modifier
                 .width(360.dp)
                 .constrainAs(loginButton) {
                     top.linkTo(horizontalPager.bottom)          // Parte superior anclada al imageBox

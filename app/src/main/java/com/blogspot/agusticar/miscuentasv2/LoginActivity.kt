@@ -130,14 +130,14 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     fontWeight = FontWeight.Bold
                 )
                 TextFieldComponent(
-                    modifier = Modifier.width(320.dp),
+                    modifier = Modifier.width(360.dp),
                     stringResource(id = string.username),
                     userName,
                     onTextChange = { new -> userName = new },
                     BoardType.TEXT
                 )
                 TextFieldComponent(
-                    modifier = Modifier.width(320.dp),
+                    modifier = Modifier.width(360.dp),
                     stringResource(id = string.username),
                     password,
                     onTextChange = { password = it },
@@ -146,7 +146,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                 )
                 ModelButton(text = stringResource(id = string.loginButton),
                      R.dimen.text_title_medium,
-                    modifier = Modifier.width(320.dp),
+                    modifier = Modifier.width(360.dp),
                     enabledLoginButton,
                     onClickButton = {
                         if (validateLoginButton(userName, password)) {
@@ -175,7 +175,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
             }
             if (enabledTextFieldNewPassword) {
                 TextFieldComponent(
-                    modifier = Modifier.width(320.dp),
+                    modifier = Modifier.width(360.dp),
                     stringResource(id = string.requestuser),
                     userName,
                     onTextChange = { new -> userName = new },
@@ -183,7 +183,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                 )
 
                 TextFieldComponent(
-                    modifier = Modifier.width(320.dp),
+                    modifier = Modifier.width(360.dp),
                     stringResource(id = string.newpassword),
                     password,
                     onTextChange = { password = it },
@@ -191,7 +191,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     true
                 )
                 ModelButton(text = stringResource(id = R.string.confirmButton),R.dimen.text_title_medium,
-                    modifier = Modifier.width(320.dp),
+                    modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
                         if (validateLoginButton(userName, password)) {
@@ -204,7 +204,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
 
                 ModelButton(text = stringResource(id = string.backButton),
                     R.dimen.text_title_medium,
-                    modifier = Modifier.width(320.dp),
+                    modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
                         changeVisibility(

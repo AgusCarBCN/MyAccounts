@@ -35,15 +35,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MisCuentasv2Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold() { innerPadding ->
 
                    Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)
                     ) {
-                       
-                   Tutorial()
+                       CreateProfileComponent()
+
                     }
 
                 }

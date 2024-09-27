@@ -7,6 +7,8 @@
     <string name="loginButton">Log In</string>
     <string name="confirmButton">Confirm</string>
     <string name="backButton">Back</string>
+    <string name="name">Enter your name</string>
+    <string name="repeatpassword">Repeat your password</string>
     <string name="username">Enter your name</string>
     <string name="password">Enter password</string>
     <string name="forgotpassword">Forgot your password?</string>
@@ -42,8 +44,11 @@
         personal financial goals. Improve it as needed.</string>
     <string name="des5">\t\t\tCustomize myAccountsApp according to your preferences.
         View your expenses converted to dollars, euros or pounds for a global perspective</string>
+    <!---Profile-->
+    <string name="createProfileButton">Create a profile</string>
     <!---Icons-->
     <string name="visibily">Password visible</string>
     <string name="visibilyoff">Password no visible</string>
+    <string name="title_activity_create_profile">CreateProfile</string>
 
 </resources>

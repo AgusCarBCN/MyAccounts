@@ -9,7 +9,9 @@
     <string name="loginButton">Inicio de sesion</string>
     <string name="confirmButton">Confirmar</string>
     <string name="backButton">Atras</string>
-    <string name="username">Introduce tu nombre</string>
+    <string name="name">Intrude tu nombre</string>
+    <string name="repeatpassword">Repite la contraseña</string>
+    <string name="username">Introduce tu nombre de usuario</string>
     <string name="password">Introduce contraseña</string>
     <string name="forgotpassword">¿Olvidaste la contraseña?</string>
     <string name="requestuser">Introduce nombre de usuario(paso 1</string>
@@ -44,6 +46,8 @@
     <string name="des5">\t\t\tPersonaliza misCuentasApp según tus preferencias.
         Visualiza tus gastos convertidos a dólares, euros o libras para una perspectiva global.
         </string>
+    <!---Profile-->
+    <string name="createProfileButton">Crea un perfil</string>
     <!---Icons-->
     <string name="visibily">Contraseña visible</string>
     <string name="visibilyoff">Contraseña no visible</string>
