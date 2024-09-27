@@ -1,13 +1,13 @@
 package com.blogspot.agusticar.miscuentasv2
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,12 +15,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,7 +42,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.drawable
@@ -41,7 +50,9 @@ import com.blogspot.agusticar.miscuentasv2.component.BoardType
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
+import kotlinx.coroutines.launch
 import java.time.LocalTime
+
 
 
 class LoginActivity : ComponentActivity() {
@@ -49,10 +60,17 @@ class LoginActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             MisCuentasv2Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginComponent(modifier = Modifier.padding(innerPadding))
+
+                val drawerState = rememberDrawerState(DrawerValue.Closed)
+                val scope = rememberCoroutineScope()
+
+
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+                    Box(){
+                        Modifier.fillMaxSize().padding(innerPadding)
+                    }
                 }
             }
         }
@@ -68,7 +86,11 @@ fun LoginComponent(modifier: Modifier = Modifier) {
     var password by rememberSaveable {
         mutableStateOf("")
     }
-    var salutation by rememberSaveable { mutableStateOf("") }
+
+    val scope = rememberCoroutineScope()
+    /* Se usa para gestionar el estado del Snackbar. Esto te permite mostrar y controlar el Snackbar
+     desde cualquier parte de tu UI.*/
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var enabledLoginButton by rememberSaveable { mutableStateOf(false) }
     var enabledTextFieldNewPassword by rememberSaveable { mutableStateOf(false) }
@@ -138,7 +160,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                 )
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
-                    stringResource(id = string.username),
+                    stringResource(id = string.password),
                     password,
                     onTextChange = { password = it },
                     BoardType.PASSWORD,
@@ -149,11 +171,7 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     modifier = Modifier.width(360.dp),
                     enabledLoginButton,
                     onClickButton = {
-                        if (validateLoginButton(userName, password)) {
-                            Log.d("Login", "Login success")
-                        } else {
-                            Log.d("Login", "Login failed")
-                        }
+
                     }
                 )
 
@@ -194,11 +212,13 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                     modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
-                        if (validateLoginButton(userName, password)) {
-                            Log.d("Login", "Login success")
-                        } else {
-                            Log.d("Login", "Login failed")
-                        }
+
+                            scope.launch {
+                                snackbarHostState.showSnackbar("campo vacio",duration =SnackbarDuration.Short)
+
+                            }
+
+
                     }
                 )
 
@@ -212,9 +232,13 @@ fun LoginComponent(modifier: Modifier = Modifier) {
                             onChangeVisibility = { enabledTextFieldNewPassword = it })
                     }
                 )
+
             }
         }
     }
+    /*Se agregó SnackbarHost al final de LoginComponent, que es necesario para mostrar el Snackbar.
+    El SnackbarHost debe estar en el árbol de composables.*/
+    SnackbarHost(hostState = snackbarHostState)
 }
 
 

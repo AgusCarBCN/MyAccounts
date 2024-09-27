@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MisCuentasv2</string>
+    <string name="app_name">Mis Cuentas</string>
     <string name="title_activity_other">Other</string>
     <string name="title_activity_login">LoginActivity</string>
 
@@ -51,4 +51,22 @@
     <!---Icons-->
     <string name="visibily">Contraseña visible</string>
     <string name="visibilyoff">Contraseña no visible</string>
+
+    <!--Option side menu-->
+    <string name="mainmenu">Menu principal de navegación</string>
+    <string name="management">Gestion de finanzas</string>
+    <string name="others">Configuración y otros</string>
+    <string name="home">Inicio</string>
+    <string name="profile">Perfil</string>
+    <string name="notification">Notificaciones</string>
+    <string name="calculator">Calculadora</string>
+    <string name="chart">Gráfico de barras</string>
+    <string name="newincome">Nuevo importe</string>
+    <string name="transfer">Transferencia</string>
+    <string name="search">Buscar</string>
+    <string name="accountsetting">Configura tus cuentas</string>
+    <string name="settings">Ajustes</string>
+    <string name="about">Acerca de</string>
+    <string name="exitapp">Cerrar sesion</string>
+
 </resources>

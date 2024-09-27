@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MisCuentasv2</string>
+    <string name="app_name">Mis Cuentas</string>
     <string name="title_activity_other">Other</string>
     <string name="title_activity_login">LoginActivity</string>
     <!-- Login -->
@@ -49,6 +49,24 @@
     <!---Icons-->
     <string name="visibily">Password visible</string>
     <string name="visibilyoff">Password no visible</string>
-    <string name="title_activity_create_profile">CreateProfile</string>
+    <string name="title_activity_create_profile" translatable="false">CreateProfile</string>
+    <string name="title_activity_main_screen" translatable="false">MainScreen</string>
+
+    <!--Option side menu-->
+    <string name="mainmenu">Main navigation menu</string>
+    <string name="management">Financial management</string>
+    <string name="others">Settings and others</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="notification">Notifications</string>
+    <string name="calculator">Calculator</string>
+    <string name="chart">BarChart</string>
+    <string name="newincome">New amount</string>
+    <string name="transfer">Transfer</string>
+    <string name="search">Search</string>
+    <string name="accountsetting">Manage your accounts</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="exitapp">Log out</string>
 
 </resources>
