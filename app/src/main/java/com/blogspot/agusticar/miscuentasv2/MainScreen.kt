@@ -45,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.model.OptionItem
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
 import kotlinx.coroutines.CoroutineScope
@@ -141,7 +142,7 @@ fun DrawerContent() {
         modifier = Modifier
             .fillMaxWidth(0.75f)
             .padding(top = 88.dp)
-            .background(colorResource(id = R.color.lightYellow))
+            .background(color = Color.Transparent)
 
     ) {
 
@@ -199,11 +200,15 @@ private fun ClickableRow(option:OptionItem,onClick: () -> Unit) {
             Icon(
                 painterResource(id = option.resourceIconItem),
                 contentDescription = "Side menu",
-                Modifier.size(36.dp)
+                Modifier.size(28.dp),
+                tint= colorResource(id = R.color.darkBrown)
 
             )
             Spacer(modifier = Modifier.width(10.dp))
-            Text(text = stringResource(id =option.resourceTitleItem), color = Color.Black)
+            Text(text = stringResource(id =option.resourceTitleItem),
+                 color = colorResource(id = R.color.darkBrown),
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 @Composable
@@ -213,9 +218,11 @@ private fun TitleOptions(title:Int){
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            ,
+        ,
+        color = Color.Black,
          //fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
 
     )
 }
