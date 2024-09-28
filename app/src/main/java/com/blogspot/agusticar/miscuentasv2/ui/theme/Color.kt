@@ -2,13 +2,18 @@ package com.blogspot.agusticar.miscuentasv2.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
 
-val DarkOrange = Color(0xFFBF360C) // Color darkOrange en Compose
-val Orange = Color(0xFFFF9800) // Color orange en Compose
+val DeepPurple = Color(0xFF331436) // Color 1: Un púrpura profundo
+val Crimson = Color(0xFF7A1745) // Color 2: Un carmesí oscuro
+val CoralPink = Color(0xFFCB4757) // Color 3: Un rosa coral
+val SoftPeach = Color(0xFFEB9961) // Color 4: Un melocotón suave
+val LightYellow = Color(0xFFFCF4B6) // Color 5: Un amarillo claro
+val Black = Color(0xFF000000)
+val DarkBrown = Color(0xFF1A1B17)
+val Red = Color(0xFFFF0000) // Color Rojo
+val White = Color(0xFFFFFFFF) // Color Blanco
+
+
+
+

@@ -201,7 +201,7 @@ private fun CircleIndicator(
             ) {
             repeat(totalDots) { index ->
                 Icon(
-                    painter =if(index==selectedIndex) painterResource(R.drawable.elipseindicator) else painterResource(R.drawable.circleindicator),
+                    painter =if(index==selectedIndex) painterResource(R.drawable.circleindicator) else painterResource(R.drawable.circleindicator),
                     contentDescription = "indicator",
                     tint = if (index == selectedIndex) colorResource(id = R.color.darkOrange) else colorResource(
                         id = R.color.orange

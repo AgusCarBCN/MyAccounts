@@ -37,6 +37,7 @@ import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.drawable
 import com.blogspot.agusticar.miscuentasv2.R.string
 import com.blogspot.agusticar.miscuentasv2.component.BoardType
+import com.blogspot.agusticar.miscuentasv2.component.LocalCustomColorsPalette
 
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
@@ -76,7 +77,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.5f)
-                .background(colorResource(id = color.orange))
+                .background(LocalCustomColorsPalette.current.backgroundPrimary)
                 .constrainAs(imageBox) {
                     top.linkTo(parent.top)          // Parte superior anclada al padre
                     start.linkTo(parent.start)      // Empieza en el lado izquierdo del padre
@@ -92,7 +93,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(250.dp) // Uso de size para mantener la relación de aspecto
-                    .background(colorResource(id = color.orange))
+                    .background(LocalCustomColorsPalette.current.backgroundPrimary)
             )
         }
 
@@ -101,7 +102,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.5f)
-                .background(colorResource(id = color.yellow))  // Color de fondo
+                .background(LocalCustomColorsPalette.current.backgroundSecondary)  // Color de fondo
                 .constrainAs(loginBox) {
                     top.linkTo(imageBox.bottom)          // Parte superior anclada al imageBox
                     start.linkTo(parent.start)           // Empieza en el lado izquierdo del padre

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,10 +33,10 @@ fun ModelButton(
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     // Definir colores
-    val defaultContentColor = colorResource(id = R.color.black)
-    val pressedContentColor = colorResource(id = R.color.white)
-    val defaultContainerColor = colorResource(id = R.color.orange)
-    val pressedContainerColor = colorResource(id = R.color.darkOrange)
+    val defaultContentColor = LocalCustomColorsPalette.current.contentColorDefault
+    val pressedContentColor = LocalCustomColorsPalette.current.contentColorPressed
+    val defaultContainerColor = LocalCustomColorsPalette.current.containerColorDefault
+    val pressedContainerColor =LocalCustomColorsPalette.current.containerColorPressed
     Button(
         onClick = {
             onClickButton() // Ejecutar el clic pasado como parámetro
