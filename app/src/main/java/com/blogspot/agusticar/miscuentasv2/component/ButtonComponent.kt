@@ -8,19 +8,17 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 
 @Composable
 fun ModelButton(
@@ -36,7 +34,7 @@ fun ModelButton(
     val defaultContentColor = LocalCustomColorsPalette.current.contentColorDefault
     val pressedContentColor = LocalCustomColorsPalette.current.contentColorPressed
     val defaultContainerColor = LocalCustomColorsPalette.current.containerColorDefault
-    val pressedContainerColor =LocalCustomColorsPalette.current.containerColorPressed
+    val pressedContainerColor = LocalCustomColorsPalette.current.containerColorPressed
     Button(
         onClick = {
             onClickButton() // Ejecutar el clic pasado como parámetro

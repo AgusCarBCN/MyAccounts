@@ -37,7 +37,7 @@ import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.drawable
 import com.blogspot.agusticar.miscuentasv2.R.string
 import com.blogspot.agusticar.miscuentasv2.component.BoardType
-import com.blogspot.agusticar.miscuentasv2.component.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
@@ -77,7 +77,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.5f)
-                .background(LocalCustomColorsPalette.current.backgroundPrimary)
+                .background(LocalCustomColorsPalette.current.backgroundImage)
                 .constrainAs(imageBox) {
                     top.linkTo(parent.top)          // Parte superior anclada al padre
                     start.linkTo(parent.start)      // Empieza en el lado izquierdo del padre
@@ -93,7 +93,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(250.dp) // Uso de size para mantener la relación de aspecto
-                    .background(LocalCustomColorsPalette.current.backgroundPrimary)
+                    .background(LocalCustomColorsPalette.current.backgroundImage)
             )
         }
 
@@ -102,7 +102,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.5f)
-                .background(LocalCustomColorsPalette.current.backgroundSecondary)  // Color de fondo
+                .background(LocalCustomColorsPalette.current.backgroundPrimary)  // Color de fondo
                 .constrainAs(loginBox) {
                     top.linkTo(imageBox.bottom)          // Parte superior anclada al imageBox
                     start.linkTo(parent.start)           // Empieza en el lado izquierdo del padre
@@ -154,7 +154,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                         Text(
                             text = stringResource(id = string.forgotpassword),
                             fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_medium).toSp() },
-                            color = colorResource(id = color.black)
+                            color = LocalCustomColorsPalette.current.textColor
                         )
                     }
                 )

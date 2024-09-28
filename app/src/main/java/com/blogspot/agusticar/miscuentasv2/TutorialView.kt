@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
+import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.model.Routes
 import com.blogspot.agusticar.miscuentasv2.model.TutorialItem
 
@@ -40,7 +41,7 @@ fun Tutorial(modifier: Modifier,navigationController: NavHostController,listOfIt
     ConstraintLayout(
         modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.yellow))
+            .background(LocalCustomColorsPalette.current.backgroundPrimary)
     ) {
         val (horizontalPager, loginButton) = createRefs()
         val pagerState = rememberPagerState(pageCount = {
@@ -98,7 +99,7 @@ private fun ItemCard(item: TutorialItem) {
     ) {
         Column(
             modifier = Modifier
-                .background(colorResource(id = R.color.yellow))
+                .background(LocalCustomColorsPalette.current.backgroundPrimary)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -112,7 +113,7 @@ private fun ItemCard(item: TutorialItem) {
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
-                color = colorResource(id = R.color.black)
+                color = (LocalCustomColorsPalette.current.hightTextColor)
             )
             Spacer(modifier = Modifier.width(5.dp)) // Espacio entre imagen y texto
             // Mostrar imagen
@@ -135,7 +136,7 @@ private fun ItemCard(item: TutorialItem) {
 
                 fontWeight = FontWeight.Normal,
                 fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_extra_large).toSp() },
-                color = colorResource(id = R.color.black)
+                color = LocalCustomColorsPalette.current.textColor
             )
 
         }
@@ -201,11 +202,11 @@ private fun CircleIndicator(
             ) {
             repeat(totalDots) { index ->
                 Icon(
-                    painter =if(index==selectedIndex) painterResource(R.drawable.circleindicator) else painterResource(R.drawable.circleindicator),
+                    painter = painterResource(R.drawable.circleindicator),
                     contentDescription = "indicator",
-                    tint = if (index == selectedIndex) colorResource(id = R.color.darkOrange) else colorResource(
-                        id = R.color.orange
-                    ),
+                    tint = if (index == selectedIndex) LocalCustomColorsPalette.current.indicatorSelected
+                    else LocalCustomColorsPalette.current.indicatorDefault,
+
                     modifier = if (index == selectedIndex) Modifier.size(24.dp) else Modifier.size(
                         12.dp
                     )

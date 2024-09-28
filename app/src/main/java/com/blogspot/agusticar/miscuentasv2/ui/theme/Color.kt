@@ -13,7 +13,7 @@ val Black = Color(0xFF000000)
 val DarkBrown = Color(0xFF1A1B17)
 val Red = Color(0xFFFF0000) // Color Rojo
 val White = Color(0xFFFFFFFF) // Color Blanco
-
+val LightGrey = Color(0xFF808080)
 
 
 

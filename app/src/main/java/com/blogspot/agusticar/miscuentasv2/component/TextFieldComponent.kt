@@ -25,6 +25,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 
 
 @Composable
@@ -59,7 +60,7 @@ fun TextFieldComponent(
         visualTransformation = if (textVisible && !visiblePasswordIcon) PasswordVisualTransformation() else VisualTransformation.None, // Change display based on boolean
 
         colors = TextFieldDefaults.colors(
-            contentColorFor(backgroundColor = Color.Transparent),
+            contentColorFor(backgroundColor = LocalCustomColorsPalette.current.textFieldColor),
             focusedIndicatorColor = Color.Transparent,  // Sin borde cuando está enfocado
             unfocusedIndicatorColor = Color.Transparent  // Sin borde cuando no está enfocado
 

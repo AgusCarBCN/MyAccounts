@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.model.OptionItem
 import com.blogspot.agusticar.miscuentasv2.model.Routes
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +62,7 @@ fun HomeScreen(navigationController: NavHostController) {
             Scaffold(modifier = Modifier.fillMaxSize(),
                 { TopBarApp(scope, drawerState) },
                 { BottomAppBar(navigationController)},
-                containerColor = colorResource(id = R.color.yellow)
+                containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here
                 Column(
@@ -91,9 +92,9 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = colorResource(id = R.color.darkOrange),
-            titleContentColor = Color.White,
-            actionIconContentColor = colorResource(id = R.color.darkOrange)
+            containerColor = LocalCustomColorsPalette.current.backgroundImage,
+            titleContentColor = LocalCustomColorsPalette.current.textFieldColor,
+            actionIconContentColor = LocalCustomColorsPalette.current.indicatorSelected
         )
     )
 }
@@ -104,8 +105,8 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
 private fun BottomAppBar(navigationController: NavHostController) {
 
     BottomAppBar(
-        containerColor = colorResource(id = R.color.darkOrange),
-        contentColor = colorResource(R.color.white),
+        containerColor = LocalCustomColorsPalette.current.backgroundImage,
+        contentColor = LocalCustomColorsPalette.current.iconColor,
         actions = {
             IconButtonApp("Home", R.drawable.home
                 , onClickButton = {navigationController.navigate(Routes.Tutorial.route)} )
@@ -139,7 +140,7 @@ private fun DrawerContent() {
         HeadDrawerMenu()
         Column(
             modifier = Modifier
-                .background(colorResource(id = R.color.lightYellow))
+                .background(LocalCustomColorsPalette.current.backgroundSecondary)
         ) {
             TitleOptions(R.string.management)
 
@@ -162,7 +163,7 @@ private fun HeadDrawerMenu() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorResource(id = R.color.orange))
+            .background(LocalCustomColorsPalette.current.containerColorPressed)
 
     ) {
         Image(
@@ -191,13 +192,13 @@ private fun ClickableRow(option: OptionItem, onClick: () -> Unit) {
             painterResource(id = option.resourceIconItem),
             contentDescription = "Side menu",
             Modifier.size(28.dp),
-            tint = colorResource(id = R.color.darkBrown)
+            tint = LocalCustomColorsPalette.current.secondaryIconColor
 
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = stringResource(id = option.resourceTitleItem),
-            color = colorResource(id = R.color.darkBrown),
+            color = LocalCustomColorsPalette.current.secondaryTextColor,
             fontWeight = FontWeight.Bold
         )
     }
@@ -211,7 +212,7 @@ private fun TitleOptions(title: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        color = Color.Black,
+        color = LocalCustomColorsPalette.current.secondaryTextColor,
         //fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp
@@ -231,7 +232,7 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
                     painter = painterResource(id = resourceIcon),
                     contentDescription = title,
                     modifier = Modifier.size(36.dp), // Cambia el tamaño dinámicamente
-                    tint = Color.White
+                    tint = LocalCustomColorsPalette.current.iconColor
                 )
             }
 

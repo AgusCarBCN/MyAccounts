@@ -1,16 +1,15 @@
-package com.blogspot.agusticar.miscuentasv2.component
+package com.blogspot.agusticar.miscuentasv2.model
 
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.blogspot.agusticar.miscuentasv2.ui.theme.Black
 import com.blogspot.agusticar.miscuentasv2.ui.theme.CoralPink
+import com.blogspot.agusticar.miscuentasv2.ui.theme.Crimson
 import com.blogspot.agusticar.miscuentasv2.ui.theme.DarkBrown
 import com.blogspot.agusticar.miscuentasv2.ui.theme.DeepPurple
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LightGrey
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LightYellow
-import com.blogspot.agusticar.miscuentasv2.ui.theme.Red
 import com.blogspot.agusticar.miscuentasv2.ui.theme.SoftPeach
 import com.blogspot.agusticar.miscuentasv2.ui.theme.White
 
@@ -26,44 +25,48 @@ data class CustomColorsPalette(
     val hightTextColor: Color = Color.Unspecified,
     val barColor: Color = Color.Unspecified,
     val iconColor: Color = Color.Unspecified,
-    val secondaryIconColor: Color = Color.Unspecified
+    val secondaryTextColor: Color = Color.Unspecified,
+    val secondaryIconColor: Color = Color.Unspecified,
+    val textFieldColor:Color=Color.Unspecified,
+    val indicatorDefault:Color = Color.Unspecified,
+    val indicatorSelected:Color = Color.Unspecified,
+    val backgroundImage:Color = Color.Unspecified,
 
 )
-val DeepPurple = Color(0xFF331436) // Color 1: Un púrpura profundo
-val Crimson = Color(0xFF7A1745) // Color 2: Un carmesí oscuro
-val CoralPink = Color(0xFFCB4757) // Color 3: Un rosa coral
-val SoftPeach = Color(0xFFEB9961) // Color 4: Un melocotón suave
-val LightYellow = Color(0xFFFCF4B6) // Color 5: Un amarillo claro
-val Black = Color(0xFF000000)
-val DarkBrown = Color(0xFF1A1B17)
-val Red = Color(0xFFFF0000) // Color Rojo
-val White = Color(0xFFFFFFFF) // Color Blanco
 
 val LightCustomColorsPalette = CustomColorsPalette(
-    containerColorDefault =  CoralPink,
-    containerColorPressed =  Crimson,
-    contentColorDefault =  LightYellow,
-    contentColorPressed =  White,
-    backgroundPrimary =  LightYellow,
-    backgroundSecondary =  SoftPeach,
+    containerColorDefault =  Crimson,
+    containerColorPressed =  CoralPink,
+    contentColorDefault =  White,
+    contentColorPressed =  LightYellow,
+    backgroundPrimary =  SoftPeach,
+    backgroundSecondary =  LightYellow,
     textColor =  DarkBrown,
     hightTextColor =  Black,
     iconColor = LightYellow,
-    secondaryIconColor = Black
-
+    secondaryTextColor =  Black,
+    secondaryIconColor = Black,
+    textFieldColor = LightYellow,
+    indicatorDefault =  DeepPurple,
+    indicatorSelected =  Crimson,
+    backgroundImage = Crimson
 )
 val DarkCustomColorsPalette = CustomColorsPalette(
     containerColorDefault =  SoftPeach,
-    containerColorPressed =  LightYellow,
-    contentColorDefault =  Crimson,
-    contentColorPressed =  DeepPurple,
-    backgroundPrimary =  Black,
-    backgroundSecondary =  DarkBrown,
-    textColor =  LightYellow,
-    hightTextColor =  White,
-    iconColor = LightYellow,
-    secondaryIconColor =  Black
-
+    containerColorPressed =  CoralPink,
+    contentColorDefault = LightYellow,
+    contentColorPressed =  White,
+    backgroundPrimary =  DarkBrown,
+    backgroundSecondary =  SoftPeach,
+    textColor =  White,
+    hightTextColor =  LightYellow,
+    iconColor = White,
+    secondaryTextColor = DarkBrown,
+    secondaryIconColor =  Black,
+    textFieldColor = LightGrey,
+    indicatorDefault =  SoftPeach,
+    indicatorSelected =  CoralPink,
+    backgroundImage = Black
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }

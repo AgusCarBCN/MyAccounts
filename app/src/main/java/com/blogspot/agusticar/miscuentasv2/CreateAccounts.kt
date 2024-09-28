@@ -23,6 +23,7 @@ import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.component.BoardType
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.model.Routes
 
 @Composable
@@ -32,7 +33,7 @@ fun CreateAccountsComponent(navigationController: NavHostController){
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.yellow)) // Reemplaza con tu color de fondo
+            .background(LocalCustomColorsPalette.current.backgroundPrimary) // Reemplaza con tu color de fondo
     ){
         val (titleCreateAccount, inputData) = createRefs()
 

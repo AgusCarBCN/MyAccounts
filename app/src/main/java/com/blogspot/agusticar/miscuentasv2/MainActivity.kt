@@ -22,9 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MisCuentasv2Theme {
-
                 Scaffold(modifier = Modifier) { innerPadding ->
-
                     Surface(
                         modifier = Modifier
                             .fillMaxSize()

@@ -1,6 +1,5 @@
 package com.blogspot.agusticar.miscuentasv2.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -11,12 +10,12 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
-import com.blogspot.agusticar.miscuentasv2.component.DarkCustomColorsPalette
-import com.blogspot.agusticar.miscuentasv2.component.LightCustomColorsPalette
-import com.blogspot.agusticar.miscuentasv2.component.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.model.DarkCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.model.LightCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 
 // Definición de la paleta de colores para un tema claro
-val LightColorApp = lightColorScheme(
+/*val LightColorApp = lightColorScheme(
     primary = CoralPink, // Color primario
     secondary = SoftPeach, // Color secundario
     background = LightYellow, // Color de fondo
@@ -41,7 +40,7 @@ val DarkColorApp = darkColorScheme(
     onSurface = White, // Texto blanco sobre la superficie
     error = Red, // Color de error
     onError = White // Texto blanco sobre el color de error
-)
+)*/
 
 // Implementación del tema con soporte para tema claro/oscuro y colores dinámicos
 @Composable
@@ -51,7 +50,7 @@ fun MisCuentasv2Theme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
+    /*val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -61,7 +60,7 @@ fun MisCuentasv2Theme(
         else -> LightColorApp
     }
 
-    // logic for which custom palette to use
+    // logic for which custom palette to use*/
     val customColorsPalette =
         if (darkTheme) DarkCustomColorsPalette
         else LightCustomColorsPalette
@@ -71,7 +70,7 @@ fun MisCuentasv2Theme(
         LocalCustomColorsPalette provides customColorsPalette // our custom palette
     ) {
         MaterialTheme(
-            colorScheme = colorScheme, // the MaterialTheme still uses the "normal" palette
+            //colorScheme = colorScheme, // the MaterialTheme still uses the "normal" palette
             content = content
         )
     }
