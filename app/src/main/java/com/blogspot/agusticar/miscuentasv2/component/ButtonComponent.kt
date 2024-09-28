@@ -31,10 +31,11 @@ fun ModelButton(
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     // Definir colores
-    val defaultContentColor = LocalCustomColorsPalette.current.contentColorDefault
-    val pressedContentColor = LocalCustomColorsPalette.current.contentColorPressed
-    val defaultContainerColor = LocalCustomColorsPalette.current.containerColorDefault
-    val pressedContainerColor = LocalCustomColorsPalette.current.containerColorPressed
+    val defaultContentColor = LocalCustomColorsPalette.current.textButtonColorDefault
+    val pressedContentColor = LocalCustomColorsPalette.current.textButtonColorPressed
+    val defaultContainerColor = LocalCustomColorsPalette.current.buttonColorDefault
+    val pressedContainerColor = LocalCustomColorsPalette.current.buttonColorPressed
+    val disabled= LocalCustomColorsPalette.current.disableButton
     Button(
         onClick = {
             onClickButton() // Ejecutar el clic pasado como parámetro
@@ -47,7 +48,8 @@ fun ModelButton(
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
             contentColor = if (pressed) pressedContentColor else defaultContentColor,
-            containerColor = if (pressed) pressedContainerColor else defaultContainerColor
+            containerColor = if (pressed) pressedContainerColor
+            else if(!enabledButton) disabled else defaultContainerColor
         ),
 
         ) {

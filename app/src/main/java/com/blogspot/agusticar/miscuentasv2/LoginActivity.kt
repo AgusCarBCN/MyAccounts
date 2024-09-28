@@ -77,7 +77,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.5f)
-                .background(LocalCustomColorsPalette.current.backgroundImage)
+                .background(LocalCustomColorsPalette.current.imageBackground)
                 .constrainAs(imageBox) {
                     top.linkTo(parent.top)          // Parte superior anclada al padre
                     start.linkTo(parent.start)      // Empieza en el lado izquierdo del padre
@@ -93,7 +93,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(250.dp) // Uso de size para mantener la relación de aspecto
-                    .background(LocalCustomColorsPalette.current.backgroundImage)
+                    .background(LocalCustomColorsPalette.current.imageBackground)
             )
         }
 

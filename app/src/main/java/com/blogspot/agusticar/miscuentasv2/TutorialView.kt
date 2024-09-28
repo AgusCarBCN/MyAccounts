@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -113,7 +112,7 @@ private fun ItemCard(item: TutorialItem) {
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
-                color = (LocalCustomColorsPalette.current.hightTextColor)
+                color = (LocalCustomColorsPalette.current.boldTextColor)
             )
             Spacer(modifier = Modifier.width(5.dp)) // Espacio entre imagen y texto
             // Mostrar imagen

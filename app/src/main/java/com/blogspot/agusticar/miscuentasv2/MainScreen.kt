@@ -35,7 +35,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -87,14 +86,14 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
                 Icon(
                     if (drawerState.isOpen) Icons.Filled.Close else Icons.Filled.Menu,
                     contentDescription = "Side menu",
-                    tint = Color.White
+                    tint = LocalCustomColorsPalette.current.contentBarColor
                 )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = LocalCustomColorsPalette.current.backgroundImage,
-            titleContentColor = LocalCustomColorsPalette.current.textFieldColor,
-            actionIconContentColor = LocalCustomColorsPalette.current.indicatorSelected
+            containerColor = LocalCustomColorsPalette.current.barBackground,
+            titleContentColor = LocalCustomColorsPalette.current.contentBarColor,
+            actionIconContentColor = LocalCustomColorsPalette.current.contentBarColor
         )
     )
 }
@@ -105,8 +104,8 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
 private fun BottomAppBar(navigationController: NavHostController) {
 
     BottomAppBar(
-        containerColor = LocalCustomColorsPalette.current.backgroundImage,
-        contentColor = LocalCustomColorsPalette.current.iconColor,
+        containerColor = LocalCustomColorsPalette.current.barBackground,
+        contentColor = LocalCustomColorsPalette.current.contentBarColor,
         actions = {
             IconButtonApp("Home", R.drawable.home
                 , onClickButton = {navigationController.navigate(Routes.Tutorial.route)} )
@@ -140,7 +139,7 @@ private fun DrawerContent() {
         HeadDrawerMenu()
         Column(
             modifier = Modifier
-                .background(LocalCustomColorsPalette.current.backgroundSecondary)
+                .background(LocalCustomColorsPalette.current.drawerColor)
         ) {
             TitleOptions(R.string.management)
 
@@ -163,7 +162,7 @@ private fun HeadDrawerMenu() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(LocalCustomColorsPalette.current.containerColorPressed)
+            .background(LocalCustomColorsPalette.current.headDrawerColor)
 
     ) {
         Image(
@@ -192,13 +191,13 @@ private fun ClickableRow(option: OptionItem, onClick: () -> Unit) {
             painterResource(id = option.resourceIconItem),
             contentDescription = "Side menu",
             Modifier.size(28.dp),
-            tint = LocalCustomColorsPalette.current.secondaryIconColor
+            tint = LocalCustomColorsPalette.current.contentDrawerColor
 
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = stringResource(id = option.resourceTitleItem),
-            color = LocalCustomColorsPalette.current.secondaryTextColor,
+            color = LocalCustomColorsPalette.current.contentDrawerColor,
             fontWeight = FontWeight.Bold
         )
     }
@@ -212,7 +211,7 @@ private fun TitleOptions(title: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        color = LocalCustomColorsPalette.current.secondaryTextColor,
+        color = LocalCustomColorsPalette.current.contentDrawerColor,
         //fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp
@@ -232,7 +231,7 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
                     painter = painterResource(id = resourceIcon),
                     contentDescription = title,
                     modifier = Modifier.size(36.dp), // Cambia el tamaño dinámicamente
-                    tint = LocalCustomColorsPalette.current.iconColor
+                    tint = LocalCustomColorsPalette.current.contentBarColor
                 )
             }
 
