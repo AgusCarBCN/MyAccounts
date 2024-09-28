@@ -1,28 +1,20 @@
 package com.blogspot.agusticar.miscuentasv2
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,35 +37,13 @@ import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.drawable
 import com.blogspot.agusticar.miscuentasv2.R.string
 import com.blogspot.agusticar.miscuentasv2.component.BoardType
+
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
-import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
+import com.blogspot.agusticar.miscuentasv2.model.Routes
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
-
-
-class LoginActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MisCuentasv2Theme {
-
-                val drawerState = rememberDrawerState(DrawerValue.Closed)
-                val scope = rememberCoroutineScope()
-
-
-                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-                    Box(){
-                        Modifier.fillMaxSize().padding(innerPadding)
-                    }
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
@@ -169,7 +139,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                     modifier = Modifier.width(360.dp),
                     enabledLoginButton,
                     onClickButton = {
-                        navigationController.navigate("createprofile")
+                        navigationController.navigate(Routes.Home.route)
                     }
                 )
 
@@ -206,16 +176,13 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                     BoardType.PASSWORD,
                     true
                 )
-                ModelButton(text = stringResource(id = R.string.confirmButton),R.dimen.text_title_medium,
+                ModelButton(text = stringResource(id = string.confirmButton),R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
-
                             scope.launch {
                                 snackbarHostState.showSnackbar("campo vacio",duration =SnackbarDuration.Short)
-
                             }
-
 
                     }
                 )
@@ -230,6 +197,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                             onChangeVisibility = { enabledTextFieldNewPassword = it })
                     }
                 )
+
 
             }
         }

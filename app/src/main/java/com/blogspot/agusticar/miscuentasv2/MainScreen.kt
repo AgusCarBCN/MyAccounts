@@ -1,10 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2
 
-import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,7 +33,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -47,45 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.model.OptionItem
-import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
+import com.blogspot.agusticar.miscuentasv2.model.Routes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class MainScreen : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MisCuentasv2Theme {
-                val drawerState = rememberDrawerState(DrawerValue.Closed)
-                val scope = rememberCoroutineScope()
-                ModalNavigationDrawer(
-                    drawerState = drawerState,
-                    drawerContent = { DrawerContent() },
-                    scrimColor = Color.Transparent,
-                    content = {
-                        // Main content goes here
-                        Scaffold(modifier = Modifier.fillMaxSize(),
-                            { TopBarApp(scope, drawerState) },
-                            { BottomAppBar()},
-                            containerColor = colorResource(id = R.color.yellow)
-                        ) { innerPadding ->
-                            // Add your main screen content here
-                            Column(
-                                modifier = Modifier.padding(innerPadding)
-                            ) {
-                                // Example content
-                                Text("Welcome to the main content area!")
-                                // You can add more components here
-                            }
-                        }
-                    }
-                )
-            }
-        }
-    }
-}
 @Composable
 fun HomeScreen(navigationController: NavHostController) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -98,7 +60,7 @@ fun HomeScreen(navigationController: NavHostController) {
             // Main content goes here
             Scaffold(modifier = Modifier.fillMaxSize(),
                 { TopBarApp(scope, drawerState) },
-                { BottomAppBar()},
+                { BottomAppBar(navigationController)},
                 containerColor = colorResource(id = R.color.yellow)
             ) { innerPadding ->
                 // Add your main screen content here
@@ -139,18 +101,23 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
 
 
 @Composable
-private fun BottomAppBar() {
+private fun BottomAppBar(navigationController: NavHostController) {
+
     BottomAppBar(
         containerColor = colorResource(id = R.color.darkOrange),
         contentColor = colorResource(R.color.white),
         actions = {
-            IconButtonApp("Home", R.drawable.home, onClickButton = { Log.d("Home","boton HOme")} )
+            IconButtonApp("Home", R.drawable.home
+                , onClickButton = {navigationController.navigate(Routes.Tutorial.route)} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Search", R.drawable.searchoption, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Settings", R.drawable.settings, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
-            IconButtonApp("Profile", R.drawable.profile, onClickButton = {} )
+            IconButtonApp("Profile", R.drawable.profile, onClickButton = {
+                //navigationController.navigate("createprofile")
+
+            } )
         },
         tonalElevation = 5.dp
         )
@@ -253,19 +220,21 @@ private fun TitleOptions(title: Int) {
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
+
 @Composable
 private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () -> Unit) {
 
-        IconButton(
-            onClick = onClickButton
-        ) {
-            Icon(
-                painter = painterResource(id = resourceIcon),
-                contentDescription = title,
-                modifier = Modifier.size(36.dp), // Cambia el tamaño dinámicamente
-                tint = Color.White
-            )
+            IconButton(
+                onClick = onClickButton
+            ) {
+                Icon(
+                    painter = painterResource(id = resourceIcon),
+                    contentDescription = title,
+                    modifier = Modifier.size(36.dp), // Cambia el tamaño dinámicamente
+                    tint = Color.White
+                )
+            }
+
         }
-    }
+
 

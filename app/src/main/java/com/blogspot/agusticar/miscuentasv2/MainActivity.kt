@@ -6,15 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.blogspot.agusticar.miscuentasv2.model.Routes
 
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
 
@@ -24,11 +22,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MisCuentasv2Theme {
-                val drawerState = rememberDrawerState(DrawerValue.Closed)
-                val scope = rememberCoroutineScope()
+
                 Scaffold(modifier = Modifier) { innerPadding ->
 
-                   Surface(
+                    Surface(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)
@@ -36,24 +33,32 @@ class MainActivity : ComponentActivity() {
                         val navigationController = rememberNavController()
                         NavHost(
                             navController = navigationController,
-                            startDestination = "createprofile"
+                            startDestination = Routes.Tutorial.route
                         ) {
-                            composable("login"){
-                                LoginComponent(modifier=Modifier.fillMaxSize() ,navigationController)
+                            composable(Routes.Login.route) {
+                                LoginComponent(
+                                    modifier = Modifier.fillMaxSize(),
+                                    navigationController
+                                )
                             }
-                        composable("createprofile"){
-                            CreateProfileComponent(navigationController)
+                            composable(Routes.CreateProfile.route) {
+                                CreateProfileComponent(navigationController)
+                            }
+                            composable(Routes.Home.route) {
+                                HomeScreen(navigationController)
+                            }
+                            composable(Routes.Tutorial.route) {
+                               Tutorial(modifier= Modifier.padding(innerPadding), navigationController)
+                            }
+                            composable(Routes.CreateProfile.route) {
+                                CreateAccountsComponent(navigationController)
+                            }
                         }
-                        composable("home"){
-                            HomeScreen(navigationController)
-                        }
-                        }
-                    }
 
+                    }
                 }
             }
         }
     }
-
 }
 

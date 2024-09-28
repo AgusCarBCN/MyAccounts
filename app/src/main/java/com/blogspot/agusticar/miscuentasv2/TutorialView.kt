@@ -1,13 +1,10 @@
-package com.blogspot.agusticar.miscuentasv2.recyclerview
+package com.blogspot.agusticar.miscuentasv2
 
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,15 +29,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.blogspot.agusticar.miscuentasv2.R
+import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
+import com.blogspot.agusticar.miscuentasv2.model.Routes
 import com.blogspot.agusticar.miscuentasv2.model.TutorialItem
 
 @Composable
-fun Tutorial(modifier: Modifier = Modifier, listOfItems: List<TutorialItem> = getItems()) {
-
+fun Tutorial(modifier: Modifier,navigationController: NavHostController,listOfItems: List<TutorialItem> = getItems()) {
     ConstraintLayout(
         modifier
             .fillMaxSize()
@@ -69,7 +65,7 @@ fun Tutorial(modifier: Modifier = Modifier, listOfItems: List<TutorialItem> = ge
                 // Contenido de cada página
                 ItemCard(item = listOfItems[page]) // Mostrando un item en cada página
             }
-            Log.d("total circulos", pagerState.targetPage.toString())
+
             CircleIndicator(totalDots = listOfItems.size, pagerState.targetPage)
         }
 
@@ -83,7 +79,8 @@ fun Tutorial(modifier: Modifier = Modifier, listOfItems: List<TutorialItem> = ge
                     bottom.linkTo(parent.bottom)         // Parte inferior anclada al padre
                 }, true,
             onClickButton = {
-
+               // navigationController.navigate(Routes.CreateProfile.route)
+                navigationController.navigate(Routes.Login.route)
             }
         )
     }
@@ -133,7 +130,7 @@ private fun ItemCard(item: TutorialItem) {
                 modifier = Modifier
                     .width(360.dp)
                     .height(220.dp)
-                    .padding(top = 10.dp, bottom = 5.dp, end = 10.dp, start = 10.dp)
+                    .padding(top = 10.dp, bottom = 5.dp)
                     .align(Alignment.CenterHorizontally),
 
                 fontWeight = FontWeight.Normal,

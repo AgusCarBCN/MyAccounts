@@ -1,18 +1,12 @@
 package com.blogspot.agusticar.miscuentasv2.component
 
-import android.graphics.drawable.Icon
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -99,7 +93,7 @@ private fun getBoardType(type: BoardType): KeyboardType {
         BoardType.TEXT-> KeyboardType.Text
         BoardType.URI -> KeyboardType.Uri
         BoardType.DECIMAL -> KeyboardType.Password
-        else -> KeyboardType.Text
+
     }
 }
 

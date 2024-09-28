@@ -47,6 +47,11 @@
         View your expenses converted to dollars, euros or pounds for a global perspective</string>
     <!---Profile-->
     <string name="createProfileButton">Create a profile</string>
+    <string name="createAccount">Create your accounts</string>
+    <string name="createaccountmsg">You can create your account now or later.</string>
+    <string name="enteramount">Amount</string>
+    <string name="amountName">Account name</string>
+    <string name="addAccount">Add account</string>
     <!---Icons-->
     <string name="visibily">Password visible</string>
     <string name="visibilyoff">Password no visible</string>

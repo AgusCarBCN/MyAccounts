@@ -18,9 +18,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 
 @Composable
@@ -58,7 +56,7 @@ fun ModelButton(
             text = text,
             fontSize = with(LocalDensity.current) { dimensionResource(id = fontDimen).toSp() },
             fontWeight = FontWeight.Bold, // Estilo de texto en negrita
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Center
         )
     }
 }

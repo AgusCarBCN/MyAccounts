@@ -1,24 +1,18 @@
 package com.blogspot.agusticar.miscuentasv2
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,36 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.blogspot.agusticar.miscuentasv2.component.BoardType
+
 import com.blogspot.agusticar.miscuentasv2.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
-import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
+import com.blogspot.agusticar.miscuentasv2.model.Routes
 
-class CreateProfile : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MisCuentasv2Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-}
 
 @Composable
 fun CreateProfileComponent(navigationController: NavHostController) {
@@ -96,7 +66,7 @@ fun CreateProfileComponent(navigationController: NavHostController) {
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.username),
                 "",
-                onTextChange = { it },
+                onTextChange = {  },
                 BoardType.TEXT,
                 false
             )
@@ -104,7 +74,7 @@ fun CreateProfileComponent(navigationController: NavHostController) {
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.name),
                 "",
-                onTextChange = { it },
+                onTextChange = {  },
                 BoardType.TEXT,
                 false
             )
@@ -112,7 +82,7 @@ fun CreateProfileComponent(navigationController: NavHostController) {
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.password),
                 "",
-                onTextChange = { it },
+                onTextChange = {  },
                 BoardType.PASSWORD,
                 true
             )
@@ -120,7 +90,7 @@ fun CreateProfileComponent(navigationController: NavHostController) {
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.repeatpassword),
                 "",
-                onTextChange = { it },
+                onTextChange = {  },
                 BoardType.PASSWORD,
                 true
             )
@@ -129,7 +99,7 @@ fun CreateProfileComponent(navigationController: NavHostController) {
                 modifier = Modifier.width(360.dp),
                 true,
                 onClickButton = {
-                    navigationController.navigate("home")
+                    navigationController.navigate(Routes.CreateAccounts.route)
                 }
             )
 
@@ -138,11 +108,11 @@ fun CreateProfileComponent(navigationController: NavHostController) {
                 modifier = Modifier.width(360.dp),
                 true,
                 onClickButton = {
-                    navigationController.navigate("login")
+                    navigationController.navigate(Routes.Login.route)
                 }
             )
-        }
 
+        }
 
     }
 }
@@ -189,7 +159,7 @@ fun ProfileImageWithCamera() {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(colorResource(id=R.color.orange))
+                    .background(colorResource(id = R.color.orange))
             )
         }
     }

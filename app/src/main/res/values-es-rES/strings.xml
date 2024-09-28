@@ -48,6 +48,11 @@
         </string>
     <!---Profile-->
     <string name="createProfileButton">Crea un perfil</string>
+    <string name="createaccountmsg">Puedes crear tus cuentas ahora o mas tarde.</string>
+    <string name="createAccount">Crea tu cuentas</string>
+    <string name="enteramount">Saldo</string>
+    <string name="amountName">Nombre de la cuenta</string>
+    <string name="addAccount">Añade una cuenta</string>
     <!---Icons-->
     <string name="visibily">Contraseña visible</string>
     <string name="visibilyoff">Contraseña no visible</string>
