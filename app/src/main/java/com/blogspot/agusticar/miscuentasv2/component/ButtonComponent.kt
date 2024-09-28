@@ -48,8 +48,8 @@ fun ModelButton(
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
             contentColor = if (pressed) pressedContentColor else defaultContentColor,
-            containerColor = if (pressed) pressedContainerColor
-            else if(!enabledButton) disabled else defaultContainerColor
+            containerColor = if (pressed) pressedContainerColor else defaultContainerColor,
+            disabledContainerColor= LocalCustomColorsPalette.current.disableButton
         ),
 
         ) {

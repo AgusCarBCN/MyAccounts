@@ -60,11 +60,20 @@ fun TextFieldComponent(
         visualTransformation = if (textVisible && !visiblePasswordIcon) PasswordVisualTransformation() else VisualTransformation.None, // Change display based on boolean
 
         colors = TextFieldDefaults.colors(
-            contentColorFor(backgroundColor = LocalCustomColorsPalette.current.textFieldColor),
+            focusedTextColor = LocalCustomColorsPalette.current.textColor,
             focusedIndicatorColor = Color.Transparent,  // Sin borde cuando está enfocado
-            unfocusedIndicatorColor = Color.Transparent  // Sin borde cuando no está enfocado
+            unfocusedIndicatorColor = Color.Transparent,  // Sin borde cuando no está enfocado
+            focusedContainerColor = LocalCustomColorsPalette.current.focusedContainerTextField,
+            unfocusedContainerColor = LocalCustomColorsPalette.current.unfocusedContainerTextField,
+            unfocusedTextColor = LocalCustomColorsPalette.current.textColor,
+            focusedLabelColor = LocalCustomColorsPalette.current.textColor,
+            unfocusedLabelColor = LocalCustomColorsPalette.current.textColor,
+            disabledLabelColor = LocalCustomColorsPalette.current.textColor,
+            disabledTextColor = LocalCustomColorsPalette.current.textColor,
+            unfocusedTrailingIconColor = LocalCustomColorsPalette.current.textColor,
+            focusedTrailingIconColor = LocalCustomColorsPalette.current.textColor),
 
-        ),
+
         trailingIcon = {
             if(type==BoardType.PASSWORD){
                 if(visiblePasswordIcon) {

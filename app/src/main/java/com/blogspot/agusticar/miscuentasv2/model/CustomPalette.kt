@@ -8,6 +8,7 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.CoralPink
 import com.blogspot.agusticar.miscuentasv2.ui.theme.Crimson
 import com.blogspot.agusticar.miscuentasv2.ui.theme.DarkBrown
 import com.blogspot.agusticar.miscuentasv2.ui.theme.DeepPurple
+import com.blogspot.agusticar.miscuentasv2.ui.theme.GreyBlue
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LightGrey
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LightYellow
 import com.blogspot.agusticar.miscuentasv2.ui.theme.PeachyCream
@@ -25,60 +26,72 @@ data class CustomColorsPalette(
     val backgroundSecondary: Color = Color.Unspecified,
     val barBackground: Color = Color.Unspecified,
     val textColor: Color = Color.Unspecified,
+    val invertedTextColor: Color = Color.Unspecified,
     val boldTextColor: Color = Color.Unspecified,
     val barColor: Color = Color.Unspecified,
     val iconColor: Color = Color.Unspecified,
     val contentBarColor:Color = Color.Unspecified,
-    val textFieldColor:Color=Color.Unspecified,
     val indicatorDefault:Color = Color.Unspecified,
     val indicatorSelected:Color = Color.Unspecified,
     val imageBackground:Color = Color.Unspecified,
     val drawerColor:Color = Color.Unspecified,
     val headDrawerColor:Color = Color.Unspecified,
-    val contentDrawerColor:Color = Color.Unspecified
+    val contentDrawerColor:Color = Color.Unspecified,
+    val focusedContainerTextField:Color=Color.Unspecified,
+    val unfocusedContainerTextField:Color=Color.Unspecified,
+    val focusedTextFieldColor:Color=Color.Unspecified,
+    val unfocusedTextFieldColor:Color=Color.Unspecified
     )
 
 val LightCustomColorsPalette = CustomColorsPalette(
     buttonColorDefault =  SoftPeach,
     buttonColorPressed =  CoralPink,
-    disableButton = PeachyCream,
+    disableButton = GreyBlue,
     textButtonColorDefault =  Black,
     textButtonColorPressed =  White,
     backgroundPrimary =  PeachyCream,
     backgroundSecondary =  LightYellow,
     barBackground= CoralPink,
     textColor =  DarkBrown,
+    invertedTextColor= LightYellow,
     boldTextColor =  Black,
     iconColor = Black,
     contentBarColor = Black,
-    textFieldColor = LightYellow,
     indicatorDefault =  SoftPeach,
     indicatorSelected =  CoralPink,
     imageBackground = CoralPink,
     drawerColor = LightYellow,
     headDrawerColor = SoftPeach,
-    contentDrawerColor = Black
+    contentDrawerColor = Black,
+    focusedContainerTextField = LightYellow,
+    unfocusedContainerTextField = LightYellow,
+    focusedTextFieldColor = DarkBrown,
+    unfocusedTextFieldColor = DarkBrown
 )
 val DarkCustomColorsPalette = CustomColorsPalette(
     buttonColorDefault =  SoftPeach,
     buttonColorPressed =  PeachyCream,
-    disableButton = SoftPeach,
-    textButtonColorDefault =  White,
-    textButtonColorPressed =  Black,
+    disableButton = LightYellow,
+    textButtonColorDefault =  LightYellow,
+    textButtonColorPressed =  DarkBrown,
     backgroundPrimary =  DarkBrown,
     backgroundSecondary =  DarkBrown,
     barBackground= Black,
     textColor =  LightYellow,
-    boldTextColor =  White,
-    iconColor = White,
-    contentBarColor = White,
-    textFieldColor = LightGrey,
-    indicatorDefault =  Crimson,
-    indicatorSelected =  SoftPeach,
+    invertedTextColor= DarkBrown,
+    boldTextColor =  LightYellow,
+    iconColor = LightYellow,
+    contentBarColor = LightYellow,
+    indicatorDefault =  SoftPeach,
+    indicatorSelected =  PeachyCream,
     imageBackground = Black,
-    drawerColor = PeachyCream,
+    drawerColor = LightGrey,
     headDrawerColor = SoftPeach,
-    contentDrawerColor = DarkBrown
+    contentDrawerColor = LightYellow,
+    focusedContainerTextField = LightGrey,
+    unfocusedContainerTextField = LightGrey,
+    focusedTextFieldColor = LightYellow,
+    unfocusedTextFieldColor = LightYellow
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }
