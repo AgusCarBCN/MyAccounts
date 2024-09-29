@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2
+package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 
@@ -41,9 +41,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
-import com.blogspot.agusticar.miscuentasv2.model.OptionItem
-import com.blogspot.agusticar.miscuentasv2.model.Routes
+import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
+import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -60,7 +61,7 @@ fun HomeScreen(navigationController: NavHostController) {
             // Main content goes here
             Scaffold(modifier = Modifier.fillMaxSize(),
                 { TopBarApp(scope, drawerState) },
-                { BottomAppBar(navigationController)},
+                { BottomAppBar(navigationController) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here

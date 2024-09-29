@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2
+package com.blogspot.agusticar.miscuentasv2.tutorial.view
 
 
 import androidx.compose.foundation.Image
@@ -30,10 +30,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import com.blogspot.agusticar.miscuentasv2.model.component.ModelButton
-import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
-import com.blogspot.agusticar.miscuentasv2.model.Routes
-import com.blogspot.agusticar.miscuentasv2.model.TutorialItem
+import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.components.ModelButton
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.main.model.Routes
+import com.blogspot.agusticar.miscuentasv2.tutorial.model.TutorialItem
 
 @Composable
 fun Tutorial(modifier: Modifier,navigationController: NavHostController,listOfItems: List<TutorialItem> = getItems()) {
@@ -70,7 +71,8 @@ fun Tutorial(modifier: Modifier,navigationController: NavHostController,listOfIt
         }
 
 
-        ModelButton(text = stringResource(id = R.string.createProfileButton),R.dimen.text_title_medium,modifier = Modifier
+        ModelButton(text = stringResource(id = R.string.createProfileButton),
+            R.dimen.text_title_medium,modifier = Modifier
                 .width(360.dp)
                 .constrainAs(loginButton) {
                     top.linkTo(horizontalPager.bottom)          // Parte superior anclada al imageBox

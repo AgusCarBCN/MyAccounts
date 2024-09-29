@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2
+package com.blogspot.agusticar.miscuentasv2.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,13 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.blogspot.agusticar.miscuentasv2.createaccounts.CreateAccountsComponent
+import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
-import com.blogspot.agusticar.miscuentasv2.model.Routes
+import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
+import com.blogspot.agusticar.miscuentasv2.main.model.Routes
+import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
 
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
 

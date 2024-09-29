@@ -1,19 +1,8 @@
-package com.blogspot.agusticar.miscuentasv2.model
+package com.blogspot.agusticar.miscuentasv2.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import com.blogspot.agusticar.miscuentasv2.ui.theme.Black
-import com.blogspot.agusticar.miscuentasv2.ui.theme.CoralPink
-import com.blogspot.agusticar.miscuentasv2.ui.theme.Crimson
-import com.blogspot.agusticar.miscuentasv2.ui.theme.DarkBrown
-import com.blogspot.agusticar.miscuentasv2.ui.theme.DeepPurple
-import com.blogspot.agusticar.miscuentasv2.ui.theme.GreyBlue
-import com.blogspot.agusticar.miscuentasv2.ui.theme.LightGrey
-import com.blogspot.agusticar.miscuentasv2.ui.theme.LightYellow
-import com.blogspot.agusticar.miscuentasv2.ui.theme.PeachyCream
-import com.blogspot.agusticar.miscuentasv2.ui.theme.SoftPeach
-import com.blogspot.agusticar.miscuentasv2.ui.theme.White
 
 @Immutable
 data class CustomColorsPalette(

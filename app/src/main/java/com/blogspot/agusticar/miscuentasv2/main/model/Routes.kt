@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.model
+package com.blogspot.agusticar.miscuentasv2.main.model
 
 sealed class Routes(val route:String){
     object Home : Routes("home")

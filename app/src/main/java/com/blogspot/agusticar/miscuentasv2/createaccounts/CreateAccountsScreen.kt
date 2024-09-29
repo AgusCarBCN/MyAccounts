@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2
+package com.blogspot.agusticar.miscuentasv2.createaccounts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,11 +19,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import com.blogspot.agusticar.miscuentasv2.model.component.BoardType
-import com.blogspot.agusticar.miscuentasv2.model.component.ModelButton
-import com.blogspot.agusticar.miscuentasv2.model.component.TextFieldComponent
-import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
-import com.blogspot.agusticar.miscuentasv2.model.Routes
+import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.components.BoardType
+import com.blogspot.agusticar.miscuentasv2.components.ModelButton
+import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 
 @Composable
 

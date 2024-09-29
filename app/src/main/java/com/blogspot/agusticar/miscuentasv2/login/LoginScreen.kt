@@ -18,11 +18,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -38,15 +35,13 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.drawable
 import com.blogspot.agusticar.miscuentasv2.R.string
-import com.blogspot.agusticar.miscuentasv2.model.component.BoardType
-import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.components.BoardType
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
-import com.blogspot.agusticar.miscuentasv2.model.component.ModelButton
-import com.blogspot.agusticar.miscuentasv2.model.component.TextFieldComponent
-import com.blogspot.agusticar.miscuentasv2.model.Routes
+import com.blogspot.agusticar.miscuentasv2.components.ModelButton
+import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import kotlinx.coroutines.launch
-import java.time.LocalTime
-import kotlin.math.log
 
 
 @Composable

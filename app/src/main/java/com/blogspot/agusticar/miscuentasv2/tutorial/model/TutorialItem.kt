@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.model
+package com.blogspot.agusticar.miscuentasv2.tutorial.model
 
 import androidx.annotation.DrawableRes
 
