@@ -19,15 +19,19 @@ import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
 import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
+import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
 
 class MainActivity : ComponentActivity() {
+
+   private val context=this
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MisCuentasv2Theme {
+
                 Scaffold(modifier = Modifier) { innerPadding ->
                     Surface(
                         modifier = Modifier
@@ -37,7 +41,8 @@ class MainActivity : ComponentActivity() {
                         val navigationController = rememberNavController()
                         NavHost(
                             navController = navigationController,
-                            startDestination = Routes.Tutorial.route
+                            startDestination =Routes.Tutorial.route
+
                         ) {
                             composable(Routes.Login.route) {
                                 LoginComponent(
@@ -52,9 +57,10 @@ class MainActivity : ComponentActivity() {
                                 HomeScreen(navigationController)
                             }
                             composable(Routes.Tutorial.route) {
-                               Tutorial(modifier= Modifier.padding(innerPadding), navigationController)
+                               Tutorial(TutorialViewModel(this@MainActivity),modifier= Modifier.padding(innerPadding),
+                                   navigationController)
                             }
-                            composable(Routes.CreateProfile.route) {
+                            composable(Routes.CreateAccounts.route) {
                                 CreateAccountsComponent(navigationController)
                             }
                         }

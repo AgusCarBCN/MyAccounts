@@ -1,6 +1,8 @@
 package com.blogspot.agusticar.miscuentasv2.login
 
+import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +11,7 @@ import com.blogspot.agusticar.miscuentasv2.R
 import java.time.LocalTime
 
 class LoginViewModel:ViewModel () {
+
 
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> = _userName

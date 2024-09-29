@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.tutorial.view
 
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +20,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -37,13 +41,20 @@ import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.TutorialItem
 
 @Composable
-fun Tutorial(modifier: Modifier,navigationController: NavHostController,listOfItems: List<TutorialItem> = getItems()) {
+fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationController: NavHostController,listOfItems: List<TutorialItem> = getItems()) {
+
+    val context: Context = LocalContext.current
+
+    val toLogin by tutorialViewModel.toLogin.observeAsState(false)
+
     ConstraintLayout(
         modifier
             .fillMaxSize()
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
     ) {
         val (horizontalPager, loginButton) = createRefs()
+        //Cargar valor de DataStore...
+        //val toLogin=false
         val pagerState = rememberPagerState(pageCount = {
             listOfItems.size  // Cada página corresponde a un item de la lista
         })
@@ -71,7 +82,7 @@ fun Tutorial(modifier: Modifier,navigationController: NavHostController,listOfIt
         }
 
 
-        ModelButton(text = stringResource(id = R.string.createProfileButton),
+        ModelButton(text = stringResource(id =if(!toLogin)R.string.createProfileButton else R.string.loginButton),
             R.dimen.text_title_medium,modifier = Modifier
                 .width(360.dp)
                 .constrainAs(loginButton) {
@@ -81,8 +92,11 @@ fun Tutorial(modifier: Modifier,navigationController: NavHostController,listOfIt
                     bottom.linkTo(parent.bottom)         // Parte inferior anclada al padre
                 }, true,
             onClickButton = {
-               // navigationController.navigate(Routes.CreateProfile.route)
-                navigationController.navigate(Routes.Login.route)
+                if (toLogin) {
+                    navigationController.navigate(Routes.Login.route)
+                } else {
+                    navigationController.navigate(Routes.CreateProfile.route)
+                }
             }
         )
     }

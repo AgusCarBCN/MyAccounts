@@ -110,8 +110,8 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController,lo
             if (!enableNewPassword) {
                 Text(
                     text = loginViewModel.getGreeting(),
-                    fontSize =  with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_big).toSp() },
-                    color = colorResource(color.darkBrown),
+                    fontSize =  with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
+                    color = LocalCustomColorsPalette.current.textColor,
                     fontWeight = FontWeight.Bold
                 )
                 TextFieldComponent(
