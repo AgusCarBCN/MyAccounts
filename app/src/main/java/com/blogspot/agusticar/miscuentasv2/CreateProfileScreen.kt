@@ -23,10 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import com.blogspot.agusticar.miscuentasv2.component.BoardType
+import com.blogspot.agusticar.miscuentasv2.model.component.BoardType
 
-import com.blogspot.agusticar.miscuentasv2.component.ModelButton
-import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.model.component.ModelButton
+import com.blogspot.agusticar.miscuentasv2.model.component.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.model.Routes
 

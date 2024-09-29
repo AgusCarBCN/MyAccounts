@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.v220beta01)
     // To use constraintlayout in compose
     implementation(libs.androidx.constraintlayout.compose)
+    implementation (libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.component
+package com.blogspot.agusticar.miscuentasv2.model.component
 
 
 import androidx.compose.foundation.interaction.MutableInteractionSource

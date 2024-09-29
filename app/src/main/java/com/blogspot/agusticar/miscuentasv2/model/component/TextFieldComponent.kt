@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.component
+package com.blogspot.agusticar.miscuentasv2.model.component
 
 
 import androidx.compose.foundation.layout.padding
@@ -75,8 +75,8 @@ fun TextFieldComponent(
 
 
         trailingIcon = {
-            if(type==BoardType.PASSWORD){
-                if(visiblePasswordIcon) {
+            if(type== BoardType.PASSWORD){
+                if(!visiblePasswordIcon) {
                     Icon(painter = painterResource (id=R.drawable.visibility), contentDescription = stringResource(
                         id = R.string.visibily
                     ) )
@@ -100,7 +100,7 @@ private fun getBoardType(type: BoardType): KeyboardType {
         BoardType.NUMBER -> KeyboardType.Number
         BoardType.PASSWORD -> KeyboardType.Password
         BoardType.PHONE -> KeyboardType.Phone
-        BoardType.TEXT-> KeyboardType.Text
+        BoardType.TEXT -> KeyboardType.Text
         BoardType.URI -> KeyboardType.Uri
         BoardType.DECIMAL -> KeyboardType.Password
 

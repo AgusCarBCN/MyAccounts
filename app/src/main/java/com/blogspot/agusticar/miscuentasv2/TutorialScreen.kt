@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import com.blogspot.agusticar.miscuentasv2.component.ModelButton
+import com.blogspot.agusticar.miscuentasv2.model.component.ModelButton
 import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.model.Routes
 import com.blogspot.agusticar.miscuentasv2.model.TutorialItem

@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,9 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import com.blogspot.agusticar.miscuentasv2.component.BoardType
-import com.blogspot.agusticar.miscuentasv2.component.ModelButton
-import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.model.component.BoardType
+import com.blogspot.agusticar.miscuentasv2.model.component.ModelButton
+import com.blogspot.agusticar.miscuentasv2.model.component.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.model.Routes
 

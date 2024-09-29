@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
+import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
 import com.blogspot.agusticar.miscuentasv2.model.Routes
 
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
@@ -36,7 +39,7 @@ class MainActivity : ComponentActivity() {
                             composable(Routes.Login.route) {
                                 LoginComponent(
                                     modifier = Modifier.fillMaxSize(),
-                                    navigationController
+                                    navigationController, LoginViewModel()
                                 )
                             }
                             composable(Routes.CreateProfile.route) {

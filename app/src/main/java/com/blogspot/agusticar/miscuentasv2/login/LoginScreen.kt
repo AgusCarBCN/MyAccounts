@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2
+package com.blogspot.agusticar.miscuentasv2.login
 
 
 import androidx.compose.foundation.Image
@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,37 +34,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.drawable
 import com.blogspot.agusticar.miscuentasv2.R.string
-import com.blogspot.agusticar.miscuentasv2.component.BoardType
+import com.blogspot.agusticar.miscuentasv2.model.component.BoardType
 import com.blogspot.agusticar.miscuentasv2.model.LocalCustomColorsPalette
 
-import com.blogspot.agusticar.miscuentasv2.component.ModelButton
-import com.blogspot.agusticar.miscuentasv2.component.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.model.component.ModelButton
+import com.blogspot.agusticar.miscuentasv2.model.component.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.model.Routes
 import kotlinx.coroutines.launch
 import java.time.LocalTime
+import kotlin.math.log
 
 
 @Composable
-fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
+fun LoginComponent(modifier: Modifier,navigationController: NavHostController,loginViewModel: LoginViewModel) {
 
-    var userName by rememberSaveable {
-        mutableStateOf("")
-    }
-    var password by rememberSaveable {
-        mutableStateOf("")
-    }
-
+    val userName by loginViewModel.userName.observeAsState("")
+    val password by loginViewModel.password.observeAsState("")
+    val enableButton by loginViewModel.enableButton.observeAsState(false)
+    val enableNewPassword by loginViewModel.enableNewPassword.observeAsState(false)
+    val validateLogin by loginViewModel.validateLoginButton.observeAsState(false)
     val scope = rememberCoroutineScope()
     /* Se usa para gestionar el estado del Snackbar. Esto te permite mostrar y controlar el Snackbar
      desde cualquier parte de tu UI.*/
     val snackbarHostState = remember { SnackbarHostState() }
 
-    var enabledLoginButton by rememberSaveable { mutableStateOf(false) }
-    var enabledTextFieldNewPassword by rememberSaveable { mutableStateOf(false) }
-    enabledLoginButton = enableLoginButton(userName, password)
+
     ConstraintLayout(
         modifier
             .fillMaxSize()
@@ -113,9 +112,9 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (!enabledTextFieldNewPassword) {
+            if (!enableNewPassword) {
                 Text(
-                    text = getGreeting(username = "Agustin"),
+                    text = loginViewModel.getGreeting(),
                     fontSize =  with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_big).toSp() },
                     color = colorResource(color.darkBrown),
                     fontWeight = FontWeight.Bold
@@ -124,31 +123,34 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.username),
                     userName,
-                    onTextChange = { new -> userName = new },
+                    onTextChange = { loginViewModel.onLoginChanged(it,password)},
                     BoardType.TEXT
                 )
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.password),
                     password,
-                    onTextChange = { password = it },
+                    onTextChange = { loginViewModel.onLoginChanged(userName,it)},
                     BoardType.PASSWORD,
                     true
                 )
                 ModelButton(text = stringResource(id = string.loginButton),
-                     R.dimen.text_title_medium,
+                    R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
-                    enabledLoginButton,
+                    enableButton,
                     onClickButton = {
-                        navigationController.navigate(Routes.Home.route)
+                        if(validateLogin) {
+                            navigationController.navigate(Routes.Home.route)
+                        }else
+                            scope.launch {
+                                snackbarHostState.showSnackbar("Login no valido",duration =SnackbarDuration.Short)
+                            }
                     }
                 )
 
                 TextButton(
                     onClick = {
-                        changeVisibility(
-                            enabledTextFieldNewPassword,
-                            onChangeVisibility = { enabledTextFieldNewPassword = it })
+                        loginViewModel.onEnableNewPassword(true)
                     },
                     content = {
                         Text(
@@ -160,12 +162,12 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                 )
 
             }
-            if (enabledTextFieldNewPassword) {
+            if (enableNewPassword) {
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.requestuser),
                     userName,
-                    onTextChange = { new -> userName = new },
+                    onTextChange = { loginViewModel.onLoginChanged(it,password) },
                     BoardType.TEXT
                 )
 
@@ -173,11 +175,12 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.newpassword),
                     password,
-                    onTextChange = { password = it },
+                    onTextChange = { loginViewModel.onLoginChanged(userName,it) },
                     BoardType.PASSWORD,
                     true
                 )
-                ModelButton(text = stringResource(id = string.confirmButton),R.dimen.text_title_medium,
+                ModelButton(text = stringResource(id = string.confirmButton),
+                    R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
@@ -193,9 +196,7 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
                     modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
-                        changeVisibility(
-                            enabledTextFieldNewPassword,
-                            onChangeVisibility = { enabledTextFieldNewPassword = it })
+                        loginViewModel.onEnableNewPassword(false)
                     }
                 )
 
@@ -209,27 +210,10 @@ fun LoginComponent(modifier: Modifier,navigationController: NavHostController) {
 }
 
 
-private fun enableLoginButton(userName: String, password: String): Boolean =
-
-    userName.isNotEmpty() && password.isNotEmpty() && userName.isNotBlank() && password.isNotBlank() && password.length >= 6
-
-private fun validateLoginButton(userName: String, password: String): Boolean =
-    userName == "Agus" && password == "nina1971"
-
-private fun changeVisibility(visibility: Boolean, onChangeVisibility: (Boolean) -> Unit) {
-    onChangeVisibility(!visibility)
-}
 
 
-@Composable
-private fun getGreeting(username: String): String {
-    val hour = LocalTime.now().hour
-    return when (hour) {
-        in 6..11 -> "${stringResource(id = string.goodmornig)} $username"
-        in 12..17 -> "${stringResource(id = string.goodafternoon)} $username"
-        else -> "${stringResource(id = string.goodevening)} $username"
-    }
-}
+
+
 
 
 

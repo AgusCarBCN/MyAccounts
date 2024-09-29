@@ -1,6 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.model
 
-import com.blogspot.agusticar.miscuentasv2.component.CurrencySymbol
+import com.blogspot.agusticar.miscuentasv2.model.component.CurrencySymbol
 
 data class Currency(private val symbol: CurrencySymbol, private val iconResource:Int )
 
