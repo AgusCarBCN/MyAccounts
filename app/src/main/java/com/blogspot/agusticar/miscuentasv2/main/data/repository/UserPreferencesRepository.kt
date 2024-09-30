@@ -57,7 +57,7 @@ class UserPreferencesRepository @Inject constructor(private val context: Context
 
 
     override suspend fun getToLogin(): Boolean =
-        context.dataStore.data.first()[UserPreferencesKeys.TO_LOGIN] ?: true
+        context.dataStore.data.first()[UserPreferencesKeys.TO_LOGIN] ?: false
 
 
 

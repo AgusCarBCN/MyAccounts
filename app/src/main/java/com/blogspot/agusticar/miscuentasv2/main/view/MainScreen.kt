@@ -116,7 +116,7 @@ private fun BottomAppBar(navigationController: NavHostController) {
             IconButtonApp("Settings", R.drawable.settings, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Profile", R.drawable.profile, onClickButton = {
-                //navigationController.navigate("createprofile")
+                navigationController.navigate(Routes.Login.route)
 
             } )
         },

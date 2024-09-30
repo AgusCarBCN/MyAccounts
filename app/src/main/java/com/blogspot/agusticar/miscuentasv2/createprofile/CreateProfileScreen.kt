@@ -78,7 +78,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationCon
 
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.username),
+                stringResource(id = R.string.name),
                 createViewModel.name.observeAsState("").value,
                 onTextChange = {createViewModel.setName(it) },
                 BoardType.TEXT,
@@ -86,7 +86,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationCon
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.name),
+                stringResource(id = R.string.username),
                 createViewModel.username.observeAsState("").value,
                 onTextChange = { createViewModel.setUsername(it) },
                 BoardType.TEXT,

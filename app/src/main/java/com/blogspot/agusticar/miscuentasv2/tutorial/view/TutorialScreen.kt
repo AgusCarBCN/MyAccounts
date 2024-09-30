@@ -47,7 +47,7 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationCo
 
 
 
-    val toLogin by tutorialViewModel.toLogin.observeAsState("false")
+    val toLogin by tutorialViewModel.toLogin.observeAsState(false)
     val scope = rememberCoroutineScope()
 
     ConstraintLayout(
@@ -87,7 +87,7 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationCo
         }
 
 
-        ModelButton(text = stringResource(id =if(toLogin==false)R.string.createProfileButton else R.string.loginButton),
+        ModelButton(text = stringResource(id =if(toLogin) R.string.loginButton else R.string.createProfileButton),
             R.dimen.text_title_medium,modifier = Modifier
                 .width(360.dp)
                 .constrainAs(loginButton) {
@@ -98,10 +98,11 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationCo
                 }, true,
             onClickButton = {
 
-                if (toLogin==false) {
-                    navigationController.navigate(Routes.CreateProfile.route)
-                } else {
+                         // Lógica para navegar a la pantalla de login o crear cuenta
+                if (toLogin) {
                     navigationController.navigate(Routes.Login.route)
+                } else {
+                    navigationController.navigate(Routes.CreateProfile.route)
                 }
 
             }
