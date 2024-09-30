@@ -8,7 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
-import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserPreferencesRepository
+import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserDataStoreRepository
+import com.blogspot.agusticar.miscuentasv2.main.domain.GetUserProfileDataUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.SetToLoginUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.SetUserProfileDataUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +19,7 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: UserPreferencesRepository):ViewModel () {
+class LoginViewModel @Inject constructor(private val getUserProfileData: GetUserProfileDataUseCase):ViewModel () {
 
     private val _user = MutableLiveData<UserProfile>()
     private val user: LiveData<UserProfile> = _user
@@ -42,7 +45,8 @@ class LoginViewModel @Inject constructor(private val repository: UserPreferences
     init {
         // Cargar el valor inicial de toLogin desde el repositorio al inicializar el ViewModel
         viewModelScope.launch {
-            val userProfile= repository.getUserDataProfile()
+            val userProfile=getUserProfileData()
+            //val userProfile= repository.getUserDataProfile()
             _user.value = userProfile
             _name.value = userProfile.profileName
 

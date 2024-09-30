@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
-class UserPreferencesRepository @Inject constructor(private val context: Context) :
+class UserDataStoreRepository @Inject constructor(private val context: Context) :
     DataStoreRepository {
 
 
@@ -37,16 +37,19 @@ class UserPreferencesRepository @Inject constructor(private val context: Context
                     preferences[UserPreferencesKeys.USERNAME] = userProfile.userName
                     preferences[UserPreferencesKeys.PASSWORD] = userProfile.password
                 }
-                Log.e("DataStoreUser", "value ${userProfile.name} ${userProfile.userName} ${userProfile.password}" )
+                Log.e(
+                    "DataStoreUser",
+                    "value ${userProfile.name} ${userProfile.userName} ${userProfile.password}"
+                )
             }
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e("DataStoreUser", "Error writing to DataStore", e)
         }
     }
 
     override suspend fun getShowTutorial(): Boolean =
-        context.dataStore.data.first()[UserPreferencesKeys.SHOW_TUTORIAL] ?: true
+    context.dataStore.data .first()[UserPreferencesKeys.SHOW_TUTORIAL] ?: true
 
 
     override suspend fun setShowTutorial(showTutorial: Boolean) {

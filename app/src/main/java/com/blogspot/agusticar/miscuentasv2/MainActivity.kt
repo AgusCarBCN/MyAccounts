@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
+import com.blogspot.agusticar.miscuentasv2.main.domain.GetToLoginUseCase
 import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
@@ -39,9 +41,12 @@ class MainActivity : ComponentActivity() {
     private val loginViewModel:LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
+
             MisCuentasv2Theme {
 
                 Scaffold(modifier = Modifier) { innerPadding ->
@@ -51,13 +56,17 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding)
                     ) {
                         val navigationController = rememberNavController()
-                        val showTutorial=tutorialViewModel.getShowTutorial()
+
                         NavHost(
                             navController = navigationController,
-                            startDestination =if(showTutorial)Routes.Tutorial.route
-                            else Routes.Login.route
+                            startDestination = Routes.Tutorial.route
 
                         ) {
+                            composable(Routes.Tutorial.route) {
+                                Tutorial(tutorialViewModel,modifier= Modifier.padding(innerPadding),
+                                    navigationController)
+                            }
+
                             composable(Routes.Login.route) {
                                 LoginComponent(loginViewModel,
                                     modifier = Modifier.fillMaxSize(),
@@ -70,10 +79,7 @@ class MainActivity : ComponentActivity() {
                             composable(Routes.Home.route) {
                                 HomeScreen(navigationController)
                             }
-                            composable(Routes.Tutorial.route) {
-                               Tutorial(tutorialViewModel,modifier= Modifier.padding(innerPadding),
-                                   navigationController)
-                            }
+
                             composable(Routes.CreateAccounts.route) {
                                 CreateAccountsComponent(navigationController)
                             }

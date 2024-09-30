@@ -1,20 +1,21 @@
 package com.blogspot.agusticar.miscuentasv2.createprofile
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserPreferencesRepository
+import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserDataStoreRepository
+import com.blogspot.agusticar.miscuentasv2.main.domain.GetUserProfileDataUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.SetToLoginUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.SetUserProfileDataUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateProfileViewModel @Inject constructor(private val repository: UserPreferencesRepository) : ViewModel() {
+class CreateProfileViewModel @Inject constructor(private val setProfileData: SetUserProfileDataUseCase,
+    private val setLoginTo:SetToLoginUseCase) : ViewModel() {
 
 
 
@@ -52,8 +53,9 @@ class CreateProfileViewModel @Inject constructor(private val repository: UserPre
     fun setUserDataProfile(newProfile:UserProfile) {
         viewModelScope.launch {
             // Llamar a la función suspend de tu repositorio
-            repository.setUserDataProfile(newProfile)
-            repository.setToLogin(true)
+            setProfileData(newProfile)
+            setLoginTo(true)
+
             // Actualizar el valor en el LiveData para reflejar el cambio en la UI
 
         }
