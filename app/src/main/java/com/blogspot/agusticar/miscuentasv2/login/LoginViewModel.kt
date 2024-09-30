@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.login
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -39,21 +40,32 @@ class LoginViewModel @Inject constructor(private val repository: UserPreferences
 
     private val _enableNewPassword = MutableLiveData<Boolean>()
     val enableNewPassword: LiveData<Boolean> = _enableNewPassword
+
     init {
         // Cargar el valor inicial de toLogin desde el repositorio al inicializar el ViewModel
         viewModelScope.launch {
-            _user.value= repository.getUserDataProfile()
+            _user.value = repository.getUserDataProfile()
         }
     }
-
-
 
     fun onLoginChanged(userName: String, password: String) {
         _userName.value = userName
         _password.value = password
+
+        Log.d("Datos leidos: ", "Usuario en _user: ${_user.value?.profileName}, Comparado con userName: ${_userName.value}")
+
         _enableButton.value = enableLoginButton(userName, password)
-        _validateLoginButton.value = validateLoginButton(userName, password)
+
+        // Si los datos del perfil no han sido cargados aún, no intentamos validar
+        if (_user.value != null) {
+            _validateLoginButton.value = validateLoginButton(userName, password)
+        } else {
+            _validateLoginButton.value = false
+            Log.d("Login", "Datos de usuario aún no disponibles")
+        }
     }
+
+
 
     fun onEnableNewPassword(enableNewPassword: Boolean) {
         _enableNewPassword.value = enableNewPassword
@@ -75,6 +87,13 @@ class LoginViewModel @Inject constructor(private val repository: UserPreferences
     private fun enableLoginButton(userName: String, password: String): Boolean =
         userName.isNotEmpty() && password.isNotEmpty() && userName.isNotBlank() && password.isNotBlank() && password.length >= 6
 
-    private fun validateLoginButton(userName: String, password: String): Boolean =
-        userName == "Agus" && password == "nina1971"
+    private fun validateLoginButton(userName: String, password: String): Boolean {
+        val userProfile = _user.value
+        return if (userProfile != null) {
+            userName == userProfile.profileName && password == userProfile.profilePass
+        } else {
+            false
+        }
+
+    }
 }

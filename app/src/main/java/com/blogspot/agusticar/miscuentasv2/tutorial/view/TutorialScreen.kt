@@ -47,7 +47,7 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationCo
 
 
 
-    val toLogin by tutorialViewModel.toLogin.observeAsState()
+    val toLogin by tutorialViewModel.toLogin.observeAsState("false")
     val scope = rememberCoroutineScope()
 
     ConstraintLayout(

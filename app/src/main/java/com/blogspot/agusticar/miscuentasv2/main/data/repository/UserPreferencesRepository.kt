@@ -24,7 +24,9 @@ class UserPreferencesRepository @Inject constructor(private val context: Context
                 userName = preferences[UserPreferencesKeys.USERNAME] ?: "",
                 password = preferences[UserPreferencesKeys.PASSWORD] ?: ""
             )
+
         }
+
     }
 
     override suspend fun setUserDataProfile(userProfile: UserProfile) {
@@ -35,7 +37,7 @@ class UserPreferencesRepository @Inject constructor(private val context: Context
                     preferences[UserPreferencesKeys.USERNAME] = userProfile.userName
                     preferences[UserPreferencesKeys.PASSWORD] = userProfile.password
                 }
-                Log.e("DataStoreUser", "value ${userProfile.name} ${userProfile.userName}" )
+                Log.e("DataStoreUser", "value ${userProfile.name} ${userProfile.userName} ${userProfile.password}" )
             }
 
         }catch (e: Exception) {

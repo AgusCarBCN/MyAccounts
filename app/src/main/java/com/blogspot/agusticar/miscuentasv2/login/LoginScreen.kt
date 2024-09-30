@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navigationController: NavHostController) {
 
-    val name by loginViewModel.userName.observeAsState("")
+
     val userName by loginViewModel.userName.observeAsState("")
     val password by loginViewModel.password.observeAsState("")
     val enableButton by loginViewModel.enableButton.observeAsState(false)

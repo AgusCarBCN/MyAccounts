@@ -115,7 +115,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationCon
                 onClickButton = {
                     navigationController.navigate(Routes.CreateAccounts.route)
                     try{
-                    scope.launch { createViewModel.setToLogin(false)
+                    scope.launch { createViewModel.setToLogin(true)
                     createViewModel.setUserDataProfile(UserProfile(
                         createViewModel.name.value!!,
                         createViewModel.username.value!!, createViewModel.password.value!!
