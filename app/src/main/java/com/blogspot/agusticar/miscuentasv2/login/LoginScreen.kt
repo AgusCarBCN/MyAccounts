@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navigationController: NavHostController) {
 
-
+    val name by loginViewModel.name.observeAsState("")
     val userName by loginViewModel.userName.observeAsState("")
     val password by loginViewModel.password.observeAsState("")
     val enableButton by loginViewModel.enableButton.observeAsState(false)
@@ -110,7 +110,7 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navigationC
         ) {
             if (!enableNewPassword) {
                 Text(
-                    text = loginViewModel.getGreeting(),
+                    text = loginViewModel.getGreeting(name),
                     fontSize =  with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
                     color = LocalCustomColorsPalette.current.textColor,
                     fontWeight = FontWeight.Bold

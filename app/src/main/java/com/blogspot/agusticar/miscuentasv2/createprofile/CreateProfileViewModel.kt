@@ -16,12 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateProfileViewModel @Inject constructor(private val repository: UserPreferencesRepository) : ViewModel() {
 
-    // LiveData para observar el valor de toLogin
-    private val _toLogin = MutableLiveData<Boolean>()
-    val toLogin: LiveData<Boolean> = _toLogin
 
-    private val _user = MutableLiveData<UserProfile>()
-    val user: LiveData<UserProfile> = _user
 
     // LiveData para los campos de texto
     private val _username = MutableLiveData<String>()
@@ -36,47 +31,57 @@ class CreateProfileViewModel @Inject constructor(private val repository: UserPre
     private val _repeatPassword = MutableLiveData<String>()
     val repeatPassword: LiveData<String> = _repeatPassword
 
-    init {
-        // Cargar el valor inicial de toLogin desde el repositorio al inicializar el ViewModel
-        viewModelScope.launch {
-            _toLogin.value = repository.getToLogin()
-            _user.value= repository.getUserDataProfile()
-        }
+    //LiveData para habilitar boton de confirmar
+    private val _enableButton = MutableLiveData<Boolean>()
+    val enableButton: LiveData<Boolean> = _enableButton
+
+
+
+    fun onTextFieldsChanged(name:String,userName:String,password:String,newPassword:String){
+        _name.value = name
+        _username.value = userName
+        _password.value = password
+        _repeatPassword.value = newPassword
+        //Verificaciones para activar boton de confirmar
+        _enableButton.value=enableConfirmButton(name,userName,password,newPassword)
     }
 
     // Función para setear un nuevo valor para toLogin en el repositorio
-    fun setToLogin(newValue: Boolean) {
-        viewModelScope.launch {
-            // Llamar a la función suspend de tu repositorio
-            repository.setToLogin(newValue)
-            // Actualizar el valor en el LiveData para reflejar el cambio en la UI
-            _toLogin.value = newValue
-        }
-    }
+
     // Función para setear un nuevo valor para toLogin en el repositorio
     fun setUserDataProfile(newProfile:UserProfile) {
         viewModelScope.launch {
             // Llamar a la función suspend de tu repositorio
             repository.setUserDataProfile(newProfile)
+            repository.setToLogin(true)
             // Actualizar el valor en el LiveData para reflejar el cambio en la UI
-            _user.value=newProfile
+
         }
     }
-    // Funciones para actualizar los campos de texto
-    fun setUsername(newValue: String) {
-        _username.value = newValue
-    }
 
-    fun setName(newValue: String) {
-        _name.value = newValue
-    }
 
-    fun setPassword(newValue: String) {
-        _password.value = newValue
-    }
+    private fun enableConfirmButton(name: String, userName: String, password: String, newPassword: String): Boolean {
+        // Verifica que los campos no estén en blanco
+        if (name.isBlank() || userName.isBlank() || password.isBlank() || newPassword.isBlank()) {
+            return false
+        }
 
-    fun setRepeatPassword(newValue: String) {
-        _repeatPassword.value = newValue
+        // Verifica que el nombre de usuario tenga al menos 3 caracteres (opcional)
+        if (userName.length < 3) {
+            return false
+        }
+
+        // Verifica que la contraseña tenga al menos 6 caracteres
+        if (password.length < 6) {
+            return false
+        }
+
+        // Verifica que la nueva contraseña coincida con la original
+        if (password != newPassword) {
+            return false
+        }
+
+        return true
     }
 
 }

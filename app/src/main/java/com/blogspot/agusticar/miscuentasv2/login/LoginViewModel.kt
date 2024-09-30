@@ -1,9 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.login
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,7 +19,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(private val repository: UserPreferencesRepository):ViewModel () {
 
     private val _user = MutableLiveData<UserProfile>()
-    val user: LiveData<UserProfile> = _user
+    private val user: LiveData<UserProfile> = _user
 
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
@@ -44,7 +42,10 @@ class LoginViewModel @Inject constructor(private val repository: UserPreferences
     init {
         // Cargar el valor inicial de toLogin desde el repositorio al inicializar el ViewModel
         viewModelScope.launch {
-            _user.value = repository.getUserDataProfile()
+            val userProfile= repository.getUserDataProfile()
+            _user.value = userProfile
+            _name.value = userProfile.profileName
+
         }
     }
 
@@ -52,7 +53,7 @@ class LoginViewModel @Inject constructor(private val repository: UserPreferences
         _userName.value = userName
         _password.value = password
 
-        Log.d("Datos leidos: ", "Usuario en _user: ${_user.value?.profileName}, Comparado con userName: ${_userName.value}")
+        Log.d("Datos leidos: ", "Usuario en _user: ${_user.value?.profileUserName}, Comparado con userName: ${_userName.value}")
 
         _enableButton.value = enableLoginButton(userName, password)
 
@@ -72,7 +73,7 @@ class LoginViewModel @Inject constructor(private val repository: UserPreferences
     }
 
     @Composable
-    fun getGreeting(): String {
+    fun getGreeting(userName:String): String {
         val hour = LocalTime.now().hour
 
         val greeting = when (hour) {
@@ -81,7 +82,7 @@ class LoginViewModel @Inject constructor(private val repository: UserPreferences
             else -> stringResource(id = R.string.goodevening)
         }
 
-        return "$greeting, ${_user.value?.name}!" // Concatenar el saludo con el nombre
+        return "$greeting, $userName" // Concatenar el saludo con el nombre
     }
 
     private fun enableLoginButton(userName: String, password: String): Boolean =
@@ -90,10 +91,9 @@ class LoginViewModel @Inject constructor(private val repository: UserPreferences
     private fun validateLoginButton(userName: String, password: String): Boolean {
         val userProfile = _user.value
         return if (userProfile != null) {
-            userName == userProfile.profileName && password == userProfile.profilePass
+            userName == userProfile.profileUserName && password == userProfile.profilePass
         } else {
             false
         }
-
     }
 }

@@ -1,7 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.tutorial.view
 
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,10 +44,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationController: NavHostController,listOfItems: List<TutorialItem> = getItems()) {
 
-
-
     val toLogin by tutorialViewModel.toLogin.observeAsState(false)
-    val scope = rememberCoroutineScope()
 
     ConstraintLayout(
 

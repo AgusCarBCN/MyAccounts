@@ -44,9 +44,12 @@ import javax.inject.Inject
 @Composable
 fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationController: NavHostController) {
 
-
+    val name by createViewModel.name.observeAsState("")
+    val userName by createViewModel.username.observeAsState("")
+    val password by createViewModel.password.observeAsState("")
+    val repeatPassword by createViewModel.repeatPassword.observeAsState("")
     val scope = rememberCoroutineScope()
-
+    val enableButton by createViewModel.enableButton.observeAsState(false)
 
     ConstraintLayout(
         modifier = Modifier
@@ -79,46 +82,45 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationCon
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.name),
-                createViewModel.name.observeAsState("").value,
-                onTextChange = {createViewModel.setName(it) },
+                name,
+                onTextChange = {createViewModel.onTextFieldsChanged(it,userName,password,repeatPassword) },
                 BoardType.TEXT,
                 false
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.username),
-                createViewModel.username.observeAsState("").value,
-                onTextChange = { createViewModel.setUsername(it) },
+                userName,
+                onTextChange ={createViewModel.onTextFieldsChanged(name,it,password,repeatPassword) } ,
                 BoardType.TEXT,
                 false
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.password),
-                createViewModel.password.observeAsState("").value,
-                onTextChange = { createViewModel.setPassword(it) },
+                password,
+                onTextChange = {createViewModel.onTextFieldsChanged(name,userName,it,repeatPassword) },
                 BoardType.PASSWORD,
                 true
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.repeatpassword),
-                createViewModel.repeatPassword.observeAsState("").value,
-                onTextChange = {createViewModel.setRepeatPassword(it)  },
+                repeatPassword,
+                onTextChange = {createViewModel.onTextFieldsChanged(name,userName,password,it) },
                 BoardType.PASSWORD,
                 true
             )
             ModelButton(text = stringResource(id = R.string.confirmButton),
                 R.dimen.text_title_medium,
                 modifier = Modifier.width(360.dp),
-                true,
+                enableButton,
                 onClickButton = {
                     navigationController.navigate(Routes.CreateAccounts.route)
                     try{
-                    scope.launch { createViewModel.setToLogin(true)
+                    scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(
-                        createViewModel.name.value!!,
-                        createViewModel.username.value!!, createViewModel.password.value!!
+                        name,userName,password
                     ))}
                         Log.d( "Datastore","dato grabado")
                     }catch (e: Exception) {
