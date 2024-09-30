@@ -1,6 +1,9 @@
 package com.blogspot.agusticar.miscuentasv2.tutorial.view
 
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
@@ -216,19 +220,24 @@ private fun CircleIndicator(
             modifier
                 .height(40.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
 
             ) {
             repeat(totalDots) { index ->
+                // Animación de escala para el punto seleccionado
+                val scale = animateFloatAsState(
+                    targetValue = if (index == selectedIndex) 1.1f else 1f, // Escala más grande si es el seleccionado
+                    animationSpec = spring(dampingRatio = Spring.DefaultDisplacementThreshold, stiffness = Spring.StiffnessLow)
+                )
                 Icon(
-                    painter = painterResource(R.drawable.circleindicator),
+                    painter = painterResource(if(index==selectedIndex)R.drawable.indicatorselected
+                    else R.drawable.circleindicator ),
                     contentDescription = "indicator",
                     tint = if (index == selectedIndex) LocalCustomColorsPalette.current.indicatorSelected
                     else LocalCustomColorsPalette.current.indicatorDefault,
+                    modifier = Modifier
+                        .scale(scale.value)
 
-                    modifier = if (index == selectedIndex) Modifier.size(24.dp) else Modifier.size(
-                        12.dp
-                    )
 
                 )
             }
