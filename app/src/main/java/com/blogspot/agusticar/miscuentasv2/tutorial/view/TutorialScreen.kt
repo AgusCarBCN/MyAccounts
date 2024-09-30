@@ -46,13 +46,13 @@ import com.blogspot.agusticar.miscuentasv2.tutorial.model.TutorialItem
 import kotlinx.coroutines.launch
 
 @Composable
-fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navToScreen:()->Unit,listOfItems: List<TutorialItem> = getItems()) {
+fun Tutorial(tutorialViewModel:TutorialViewModel,navToScreen:()->Unit,listOfItems: List<TutorialItem> = getItems()) {
 
     val toLogin by tutorialViewModel.toLogin.observeAsState(false)
 
     ConstraintLayout(
 
-        modifier
+        modifier=Modifier
             .fillMaxSize()
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
     ) {
@@ -65,7 +65,7 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navToScreen:
         })
 
         Column(
-            modifier.constrainAs(horizontalPager) {
+            modifier=Modifier.constrainAs(horizontalPager) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)

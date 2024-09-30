@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             composable(Routes.Tutorial.route) {
                                 Tutorial(
-                                    tutorialViewModel, modifier = Modifier.padding(innerPadding),
+                                    tutorialViewModel,
                                     navToScreen = {navigationController.navigate(if(toLogin) Routes.Login.route
                                     else Routes.CreateProfile.route)}
                                 )
