@@ -42,7 +42,7 @@ import com.blogspot.agusticar.miscuentasv2.tutorial.model.TutorialItem
 import kotlinx.coroutines.launch
 
 @Composable
-fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationController: NavHostController,listOfItems: List<TutorialItem> = getItems()) {
+fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navToScreen:()->Unit,listOfItems: List<TutorialItem> = getItems()) {
 
     val toLogin by tutorialViewModel.toLogin.observeAsState(false)
 
@@ -92,16 +92,16 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationCo
                     end.linkTo(parent.end)               // Termina en el lado derecho del padre
                     bottom.linkTo(parent.bottom)         // Parte inferior anclada al padre
                 }, true,
-            onClickButton = {
+            onClickButton = {navToScreen()}
 
                          // Lógica para navegar a la pantalla de login o crear cuenta
-                if (toLogin) {
+               /* if (toLogin) {
                     navigationController.navigate(Routes.Login.route)
                 } else {
                     navigationController.navigate(Routes.CreateProfile.route)
-                }
+                }*/
 
-            }
+
         )
     }
 

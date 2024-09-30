@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationController: NavHostController) {
+fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navToBackLogin:()->Unit,navToCreateAccounts:()->Unit) {
 
     val name by createViewModel.name.observeAsState("")
     val userName by createViewModel.username.observeAsState("")
@@ -113,7 +113,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationCon
                 modifier = Modifier.width(360.dp),
                 enableButton,
                 onClickButton = {
-                    navigationController.navigate(Routes.CreateAccounts.route)
+                    navToCreateAccounts()
                     try{
                     scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(
@@ -131,7 +131,8 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationCon
                 modifier = Modifier.width(360.dp),
                 true,
                 onClickButton = {
-                    navigationController.navigate(Routes.Login.route)
+                    navToBackLogin()
+                    //navigationController.navigate(Routes.Login.route)
                 }
             )
 

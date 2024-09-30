@@ -28,7 +28,7 @@ import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 
 @Composable
 
-fun CreateAccountsComponent(navigationController: NavHostController){
+fun CreateAccountsComponent(navToLogin:()->Unit,navToBack:()->Unit){
 
     ConstraintLayout(
         modifier = Modifier
@@ -98,7 +98,8 @@ fun CreateAccountsComponent(navigationController: NavHostController){
                 modifier = Modifier.width(360.dp),
                 true,
                 onClickButton = {
-                    navigationController.navigate(Routes.Home.route)
+                navToLogin()
+                //navigationController.navigate(Routes.Home.route)
                 }
             )
 
@@ -107,7 +108,8 @@ fun CreateAccountsComponent(navigationController: NavHostController){
                 modifier = Modifier.width(360.dp),
                 true,
                 onClickButton = {
-                    navigationController.navigate(Routes.CreateProfile.route)
+                navToBack()
+                // navigationController.navigate(Routes.CreateProfile.route)
                 }
             )
 

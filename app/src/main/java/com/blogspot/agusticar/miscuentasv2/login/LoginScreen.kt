@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navigationController: NavHostController) {
+fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:()->Unit) {
 
     val name by loginViewModel.name.observeAsState("")
     val userName by loginViewModel.userName.observeAsState("")
@@ -136,7 +136,8 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navigationC
                     enableButton,
                     onClickButton = {
                         if(validateLogin) {
-                            navigationController.navigate(Routes.Home.route)
+                            navToMain()
+                        //navigationController.navigate(Routes.Home.route)
                         }else
                             scope.launch {
                                 snackbarHostState.showSnackbar("Login no valido",duration =SnackbarDuration.Short)
