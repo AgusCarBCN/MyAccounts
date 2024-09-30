@@ -98,7 +98,6 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationCo
                 }, true,
             onClickButton = {
 
-                //scope.launch { tutorialViewModel.getToLogin()}// Actualizar estado de toLogin
                 if (toLogin==false) {
                     navigationController.navigate(Routes.CreateProfile.route)
                 } else {

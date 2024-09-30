@@ -27,21 +27,27 @@ class UserPreferencesRepository @Inject constructor(private val context: Context
         }
     }
 
-    override suspend fun setUserProfile(userProfile: UserProfile) {
-        withContext(Dispatchers.IO) {
-            context.dataStore.edit { preferences ->
-                preferences[UserPreferencesKeys.NAME] = userProfile.name
-                preferences[UserPreferencesKeys.USERNAME] = userProfile.userName
-                preferences[UserPreferencesKeys.PASSWORD] = userProfile.password
+    override suspend fun setUserDataProfile(userProfile: UserProfile) {
+        try {
+            withContext(Dispatchers.IO) {
+                context.dataStore.edit { preferences ->
+                    preferences[UserPreferencesKeys.NAME] = userProfile.name
+                    preferences[UserPreferencesKeys.USERNAME] = userProfile.userName
+                    preferences[UserPreferencesKeys.PASSWORD] = userProfile.password
+                }
+                Log.e("DataStoreUser", "value ${userProfile.name} ${userProfile.userName}" )
             }
+
+        }catch (e: Exception) {
+            Log.e("DataStoreUser", "Error writing to DataStore", e)
         }
     }
 
-    override suspend fun getShowTutorialPreference(): Boolean =
+    override suspend fun getShowTutorial(): Boolean =
         context.dataStore.data.first()[UserPreferencesKeys.SHOW_TUTORIAL] ?: true
 
 
-    override suspend fun setShowTutorialPreference(showTutorial: Boolean) {
+    override suspend fun setShowTutorial(showTutorial: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[UserPreferencesKeys.SHOW_TUTORIAL] = showTutorial
         }
@@ -57,10 +63,10 @@ class UserPreferencesRepository @Inject constructor(private val context: Context
         try {
             context.dataStore.edit { preferences ->
                 preferences[UserPreferencesKeys.TO_LOGIN] = toLogin
-                Log.e("DataStore2", "Funciona bien en userRepo")
+                Log.e("DataStoreWrite", "value $toLogin wrote" )
             }
         } catch (e: Exception) {
-            Log.e("DataStore", "Error writing to DataStore2", e)
+            Log.e("DataStoreWrite", "Error writing to DataStore", e)
         }
 
 }}

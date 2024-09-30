@@ -6,10 +6,10 @@ import javax.inject.Inject
 interface DataStoreRepository {
 
     suspend fun getUserDataProfile(): UserProfile
-    suspend fun setUserProfile(userProfile: UserProfile)
+    suspend fun setUserDataProfile(userProfile: UserProfile)
 
-    suspend fun getShowTutorialPreference():Boolean?
-    suspend fun setShowTutorialPreference(showTutorial:Boolean)
+    suspend fun getShowTutorial():Boolean?
+    suspend fun setShowTutorial(showTutorial:Boolean)
 
     suspend fun getToLogin():Boolean?
     suspend fun setToLogin(toLogin:Boolean)

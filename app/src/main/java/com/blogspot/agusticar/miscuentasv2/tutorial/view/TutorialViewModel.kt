@@ -19,11 +19,13 @@ class TutorialViewModel@Inject constructor(private val repository: UserPreferenc
 
     // LiveData para observar el valor de toLogin
     private val _toLogin = MutableLiveData<Boolean>()
+
     val toLogin: LiveData<Boolean> = _toLogin
 
     init {
         // Cargar el valor inicial al inicializar el ViewModel
         getToLogin()
+        enableTutorial()
     }
 
     // Función para cargar el valor desde el repositorio en una corrutina
@@ -33,11 +35,22 @@ class TutorialViewModel@Inject constructor(private val repository: UserPreferenc
                 // Llamar al repositorio para obtener el valor almacenado y asignarlo al LiveData
                 val loginStatus = repository.getToLogin()
                 _toLogin.value = loginStatus
-                Log.d("TutorialViewModel", "Valor inicial de toLogin: $loginStatus")
+                Log.d("TutorialViewModel", "Success getting toLogin value: $loginStatus")
             } catch (e: Exception) {
-                Log.e("TutorialViewModel", "Error al obtener toLogin: ${e.message}")
+                Log.e("TutorialViewModel", "Error getting toLogin value: ${e.message}")
             }
         }
     }
-
+    private fun enableTutorial() {
+        viewModelScope.launch {
+            try {
+                // Llamar al repositorio para obtener el valor almacenado y asignarlo al LiveData
+                val enableTutorial = repository.getShowTutorial()
+                _toLogin.value = enableTutorial
+                Log.d("TutorialViewModel", "Success getting showTutorial value: $enableTutorial")
+            } catch (e: Exception) {
+                Log.e("TutorialViewModel", "Error getting showTutorial value: ${e.message}")
+            }
+        }
+    }
 }

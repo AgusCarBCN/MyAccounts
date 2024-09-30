@@ -36,8 +36,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLoginViewModel(): LoginViewModel {
-        return LoginViewModel()
+    fun provideLoginViewModel(userPreferences: UserPreferencesRepository): LoginViewModel {
+        return LoginViewModel(userPreferences)
     }
 
 }

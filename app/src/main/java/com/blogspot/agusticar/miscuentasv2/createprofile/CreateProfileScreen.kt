@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
@@ -35,6 +36,7 @@ import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserPreferencesRepository
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
+import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,8 +45,9 @@ import javax.inject.Inject
 fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationController: NavHostController) {
 
 
-
     val scope = rememberCoroutineScope()
+
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -76,32 +79,32 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationCon
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.username),
-                "",
-                onTextChange = {  },
+                createViewModel.name.observeAsState("").value,
+                onTextChange = {createViewModel.setName(it) },
                 BoardType.TEXT,
                 false
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.name),
-                "",
-                onTextChange = {  },
+                createViewModel.username.observeAsState("").value,
+                onTextChange = { createViewModel.setUsername(it) },
                 BoardType.TEXT,
                 false
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.password),
-                "",
-                onTextChange = {  },
+                createViewModel.password.observeAsState("").value,
+                onTextChange = { createViewModel.setPassword(it) },
                 BoardType.PASSWORD,
                 true
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.repeatpassword),
-                "",
-                onTextChange = {  },
+                createViewModel.repeatPassword.observeAsState("").value,
+                onTextChange = {createViewModel.setRepeatPassword(it)  },
                 BoardType.PASSWORD,
                 true
             )
@@ -112,7 +115,11 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationCon
                 onClickButton = {
                     navigationController.navigate(Routes.CreateAccounts.route)
                     try{
-                    scope.launch { createViewModel.setToLogin(true)}
+                    scope.launch { createViewModel.setToLogin(false)
+                    createViewModel.setUserDataProfile(UserProfile(
+                        createViewModel.name.value!!,
+                        createViewModel.username.value!!, createViewModel.password.value!!
+                    ))}
                         Log.d( "Datastore","dato grabado")
                     }catch (e: Exception) {
                         Log.e("DataStore", "Error writing to DataStore", e)

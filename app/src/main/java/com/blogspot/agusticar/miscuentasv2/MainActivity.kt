@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
 
     private val tutorialViewModel:TutorialViewModel by viewModels()
     private val createProfileViewModel:CreateProfileViewModel by viewModels()
+    private val loginViewModel:LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +55,9 @@ class MainActivity : ComponentActivity() {
 
                         ) {
                             composable(Routes.Login.route) {
-                                LoginComponent(
+                                LoginComponent(loginViewModel,
                                     modifier = Modifier.fillMaxSize(),
-                                    navigationController, LoginViewModel()
+                                    navigationController
                                 )
                             }
                             composable(Routes.CreateProfile.route) {
