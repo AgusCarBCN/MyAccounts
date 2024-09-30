@@ -44,8 +44,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             MisCuentasv2Theme {
-                val toLogin by tutorialViewModel.toLogin.observeAsState(false)
-                val showTutorial by tutorialViewModel.toLogin.observeAsState(false)
+
                 Scaffold(modifier = Modifier) { innerPadding ->
                     Surface(
                         modifier = Modifier
@@ -53,7 +52,9 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding)
                     ) {
                         val navigationController = rememberNavController()
-
+                        // Safely observe the LiveData values with default fallbacks
+                        val showTutorial by tutorialViewModel.showTutorial.observeAsState(true) // Defaults to `true`
+                        val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
                         NavHost(
                             navController = navigationController,
                             startDestination = if(showTutorial)Routes.Tutorial.route
@@ -76,7 +77,7 @@ class MainActivity : ComponentActivity() {
 
                             composable(Routes.CreateAccounts.route) {
                                 CreateAccountsComponent(navToLogin = {
-                                    navigationController.navigate(Routes.CreateAccounts)},
+                                    navigationController.navigate(Routes.Login.route)},
                                     navToBack = {navigationController.popBackStack()}
                                     )
 

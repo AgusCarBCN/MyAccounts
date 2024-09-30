@@ -27,21 +27,35 @@ class TutorialViewModel @Inject constructor(private val getLoginValue:GetToLogin
     val showTutorial: LiveData<Boolean> = _showTutorial
 
     init {
-        // Cargar el valor inicial al inicializar el ViewModel
+        // Launch separate coroutines to manage the two LiveData values independently
+        loadToLoginValue()
+        loadShowTutorialValue()
+    }
+
+    // Load `toLogin` value separately
+    private fun loadToLoginValue() {
         viewModelScope.launch {
             try {
-                // Llamar al repositorio para obtener el valor almacenado y asignarlo al LiveData
-                _toLogin.value = getLoginValue()
-                _showTutorial.value = getShowTutorial()
-
-                Log.d("TutorialViewModel", "Success getting toLogin value: ${_toLogin.value}")
-                Log.d("TutorialViewModel", "Success getting showTutorial value: ${_showTutorial.value}")
+                val loginValue = getLoginValue() // Fetch the value using the use case
+                _toLogin.value = loginValue
+                Log.d("TutorialViewModel", "Success getting toLogin value: $loginValue")
             } catch (e: Exception) {
                 Log.e("TutorialViewModel", "Error getting toLogin value: ${e.message}")
             }
-
         }
+    }
 
+    // Load `showTutorial` value separately
+    private fun loadShowTutorialValue() {
+        viewModelScope.launch {
+            try {
+                val tutorialValue = getShowTutorial() // Fetch the value using the use case
+                _showTutorial.value = tutorialValue
+                Log.d("TutorialViewModel", "Success getting showTutorial value: $tutorialValue")
+            } catch (e: Exception) {
+                Log.e("TutorialViewModel", "Error getting showTutorial value: ${e.message}")
+            }
+        }
     }
 
 
