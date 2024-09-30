@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.createprofile
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -28,13 +32,19 @@ import com.blogspot.agusticar.miscuentasv2.components.BoardType
 
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserPreferencesRepository
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @Composable
-fun CreateProfileComponent(navigationController: NavHostController) {
+fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navigationController: NavHostController) {
 
+
+
+    val scope = rememberCoroutineScope()
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -101,6 +111,12 @@ fun CreateProfileComponent(navigationController: NavHostController) {
                 true,
                 onClickButton = {
                     navigationController.navigate(Routes.CreateAccounts.route)
+                    try{
+                    scope.launch { createViewModel.setToLogin(true)}
+                        Log.d( "Datastore","dato grabado")
+                    }catch (e: Exception) {
+                        Log.e("DataStore", "Error writing to DataStore", e)
+                    }
                 }
             )
 

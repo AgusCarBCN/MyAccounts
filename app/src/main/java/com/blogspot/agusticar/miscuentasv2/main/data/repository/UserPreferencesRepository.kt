@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.main.data.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.edit
 import com.blogspot.agusticar.miscuentasv2.main.data.dataStore
 import com.blogspot.agusticar.miscuentasv2.main.data.preferences.UserPreferencesKeys
@@ -8,9 +9,11 @@ import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 
-class UserPreferencesRepository(private val context: Context): DataStoreRepository{
+class UserPreferencesRepository @Inject constructor(private val context: Context) :
+    DataStoreRepository {
 
 
     override suspend fun getUserDataProfile(): UserProfile {
@@ -34,7 +37,7 @@ class UserPreferencesRepository(private val context: Context): DataStoreReposito
         }
     }
 
-    override suspend fun getShowTutorialPreference(): Boolean=
+    override suspend fun getShowTutorialPreference(): Boolean =
         context.dataStore.data.first()[UserPreferencesKeys.SHOW_TUTORIAL] ?: true
 
 
@@ -46,23 +49,21 @@ class UserPreferencesRepository(private val context: Context): DataStoreReposito
 
 
     override suspend fun getToLogin(): Boolean =
-         context.dataStore.data.first()[UserPreferencesKeys.TO_LOGIN] ?: true
+        context.dataStore.data.first()[UserPreferencesKeys.TO_LOGIN] ?: true
+
 
 
     override suspend fun setToLogin(toLogin: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[UserPreferencesKeys.TO_LOGIN] = toLogin
+        try {
+            context.dataStore.edit { preferences ->
+                preferences[UserPreferencesKeys.TO_LOGIN] = toLogin
+                Log.e("DataStore2", "Funciona bien en userRepo")
+            }
+        } catch (e: Exception) {
+            Log.e("DataStore", "Error writing to DataStore2", e)
         }
-    }
 
-
-
-
-
-
-
-
-}
+}}
 
 
 

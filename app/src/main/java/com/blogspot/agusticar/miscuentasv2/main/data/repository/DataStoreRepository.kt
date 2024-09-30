@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.main.data.repository
 
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
+import javax.inject.Inject
 
 interface DataStoreRepository {
 

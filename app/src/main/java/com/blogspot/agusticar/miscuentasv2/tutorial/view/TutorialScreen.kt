@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,22 +40,26 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.TutorialItem
+import kotlinx.coroutines.launch
 
 @Composable
 fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationController: NavHostController,listOfItems: List<TutorialItem> = getItems()) {
 
-    val context: Context = LocalContext.current
 
-    val toLogin by tutorialViewModel.toLogin.observeAsState(false)
+
+    val toLogin by tutorialViewModel.toLogin.observeAsState()
+    val scope = rememberCoroutineScope()
 
     ConstraintLayout(
+
         modifier
             .fillMaxSize()
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
     ) {
+
         val (horizontalPager, loginButton) = createRefs()
         //Cargar valor de DataStore...
-        //val toLogin=false
+
         val pagerState = rememberPagerState(pageCount = {
             listOfItems.size  // Cada página corresponde a un item de la lista
         })
@@ -82,7 +87,7 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationCo
         }
 
 
-        ModelButton(text = stringResource(id =if(!toLogin)R.string.createProfileButton else R.string.loginButton),
+        ModelButton(text = stringResource(id =if(toLogin==false)R.string.createProfileButton else R.string.loginButton),
             R.dimen.text_title_medium,modifier = Modifier
                 .width(360.dp)
                 .constrainAs(loginButton) {
@@ -92,11 +97,14 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,modifier: Modifier,navigationCo
                     bottom.linkTo(parent.bottom)         // Parte inferior anclada al padre
                 }, true,
             onClickButton = {
-                if (toLogin) {
-                    navigationController.navigate(Routes.Login.route)
-                } else {
+
+                //scope.launch { tutorialViewModel.getToLogin()}// Actualizar estado de toLogin
+                if (toLogin==false) {
                     navigationController.navigate(Routes.CreateProfile.route)
+                } else {
+                    navigationController.navigate(Routes.Login.route)
                 }
+
             }
         )
     }

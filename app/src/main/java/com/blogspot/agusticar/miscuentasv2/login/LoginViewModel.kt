@@ -8,9 +8,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.blogspot.agusticar.miscuentasv2.R
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalTime
+import javax.inject.Inject
 
-class LoginViewModel:ViewModel () {
+@HiltViewModel
+class LoginViewModel @Inject constructor():ViewModel () {
 
 
     private val _userName = MutableLiveData<String>()

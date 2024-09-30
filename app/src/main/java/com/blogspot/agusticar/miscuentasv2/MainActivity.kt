@@ -1,19 +1,22 @@
-package com.blogspot.agusticar.miscuentasv2.main
+package com.blogspot.agusticar.miscuentasv2
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.blogspot.agusticar.miscuentasv2.createaccounts.CreateAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
+import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
 import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
@@ -22,10 +25,16 @@ import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-   private val context=this
+
+
+    private val tutorialViewModel:TutorialViewModel by viewModels()
+    private val createProfileViewModel:CreateProfileViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -51,13 +60,13 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Routes.CreateProfile.route) {
-                                CreateProfileComponent(navigationController)
+                                CreateProfileComponent(createProfileViewModel,navigationController)
                             }
                             composable(Routes.Home.route) {
                                 HomeScreen(navigationController)
                             }
                             composable(Routes.Tutorial.route) {
-                               Tutorial(TutorialViewModel(this@MainActivity),modifier= Modifier.padding(innerPadding),
+                               Tutorial(tutorialViewModel,modifier= Modifier.padding(innerPadding),
                                    navigationController)
                             }
                             composable(Routes.CreateAccounts.route) {
