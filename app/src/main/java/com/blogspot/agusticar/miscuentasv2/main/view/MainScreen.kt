@@ -34,6 +34,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,17 +49,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
+import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.main.model.Routes
+import com.blogspot.agusticar.miscuentasv2.prueba.Prueba
+import com.blogspot.agusticar.miscuentasv2.prueba.Prueba2
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
-import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun HomeScreen(navigationController: NavHostController) {
+fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewModel) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    val selectedScreen by mainViewModel.selectedScreen.collectAsState()
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = { DrawerContent() },
@@ -67,16 +74,21 @@ fun HomeScreen(navigationController: NavHostController) {
             // Main content goes here
             Scaffold(modifier = Modifier.fillMaxSize(),
                 { TopBarApp(scope, drawerState) },
-                { BottomAppBar(navigationController) },
+                { BottomAppBar(mainViewModel,navigationController)},
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
                 ) {
-                    // Example content
-                    Text("Welcome to the main content area!")
-                    // You can add more components here
+                    when(selectedScreen){
+                        IconOptions.HOME -> Text(text = "Esto es el Home")
+                        IconOptions.PROFILE ->  Text(text = "Esto es el Perfil")
+                        else -> Text(text = "Unknown screen: $selectedScreen")
+                    }
+
+
+
                 }
             }
         }
@@ -108,21 +120,21 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
 
 
 @Composable
-private fun BottomAppBar(navigationController: NavHostController) {
+private fun BottomAppBar(viewModel: MainViewModel,navigationController: NavHostController) {
 
     BottomAppBar(
         containerColor = LocalCustomColorsPalette.current.barBackground,
         contentColor = LocalCustomColorsPalette.current.topBarContent,
         actions = {
             IconButtonApp("Home", R.drawable.home
-                , onClickButton = {} )
+                , onClickButton = {viewModel.selectScreen(IconOptions.HOME)} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Search", R.drawable.searchoption, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Settings", R.drawable.settings, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Profile", R.drawable.profile, onClickButton = {
-
+                viewModel.selectScreen(IconOptions.PROFILE)
 
             } )
         },
@@ -261,6 +273,7 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
 // Creamos una fuente de interacciones para el IconButton
     val interactionSource = remember { MutableInteractionSource() }
     // Detectamos si el botón está presionado
+
     val isPressed by interactionSource.collectIsPressedAsState()
             IconButton(
                 onClick = onClickButton,

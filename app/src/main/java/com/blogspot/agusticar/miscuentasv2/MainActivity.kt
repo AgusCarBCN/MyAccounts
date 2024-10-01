@@ -22,6 +22,7 @@ import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
+import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
@@ -34,6 +35,7 @@ class MainActivity : ComponentActivity() {
     private val tutorialViewModel: TutorialViewModel by viewModels()
     private val createProfileViewModel: CreateProfileViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +93,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Routes.Home.route) {
-                                HomeScreen(navigationController)
+                                HomeScreen(navigationController,mainViewModel)
 
                             }
 
