@@ -88,10 +88,8 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.fillMaxSize(),
                                     navToMain = {
                                         navigationController.navigate(Routes.Home.route)}
-
                                 )
                             }
-
                             composable(Routes.Home.route) {
                                 HomeScreen(navigationController)
 

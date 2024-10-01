@@ -7,11 +7,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
-import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserDataStoreRepository
 import com.blogspot.agusticar.miscuentasv2.main.domain.GetUserProfileDataUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.SetToLoginUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.SetUserProfileDataUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.UpDatePasswordUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,10 +18,14 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val getUserProfileData: GetUserProfileDataUseCase):ViewModel () {
+class LoginViewModel @Inject constructor(private val getUserProfileData: GetUserProfileDataUseCase,
+    private val upDatePassword:UpDatePasswordUseCase):ViewModel () {
+
 
     private val _user = MutableLiveData<UserProfile>()
     private val user: LiveData<UserProfile> = _user
+
+    // LiveData para los campos de introduccion de Login
 
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
@@ -33,33 +36,53 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
 
-    private val _enableButton = MutableLiveData<Boolean>()
-    val enableButton: LiveData<Boolean> = _enableButton
+    //LiveData para los campos de nueva contraseña
 
+    private val _userNameNewPassword = MutableLiveData<String>()
+    val userNameNewPassword: LiveData<String> = _userNameNewPassword
+
+    private val _newPassword = MutableLiveData<String>()
+    val newPassword: LiveData<String> = _newPassword
+
+    //LiveData para la habilitación de botones
+    private val _enableLoginButton = MutableLiveData<Boolean>()
+    val enableLoginButton: LiveData<Boolean> = _enableLoginButton
+
+    private val _enableConfirmButton = MutableLiveData<Boolean>()
+    val enableConfirmButton: LiveData<Boolean> = _enableConfirmButton
+
+    //LiveData validación de Login
     private val _validateLoginButton = MutableLiveData<Boolean>()
     val validateLoginButton: LiveData<Boolean> = _validateLoginButton
 
-    private val _enableNewPassword = MutableLiveData<Boolean>()
-    val enableNewPassword: LiveData<Boolean> = _enableNewPassword
+    //LiveData confirmar cambio de contraseña
+    private val _validateConfirmButton = MutableLiveData<Boolean>()
+    val validateConfirmButton: LiveData<Boolean> = _validateConfirmButton
+
+    //LiveData para mostrar botones para introducir nueva contraseña
+    private val _enableNewPasswordFields = MutableLiveData<Boolean>()
+    val enableNewPasswordFields: LiveData<Boolean> = _enableNewPasswordFields
 
     init {
         // Cargar el valor inicial de toLogin desde el repositorio al inicializar el ViewModel
         viewModelScope.launch {
             val userProfile=getUserProfileData()
-            //val userProfile= repository.getUserDataProfile()
+
             _user.value = userProfile
             _name.value = userProfile.profileName
+
 
         }
     }
 
+    //actualizacion de _userName y _password con los valores que se pasan como argumentos
+    // a la función (userName y password).
     fun onLoginChanged(userName: String, password: String) {
         _userName.value = userName
         _password.value = password
+        //Log.d("Datos leidos: ", "Usuario en _user: ${_user.value?.profileUserName}, Comparado con userName: ${_userName.value}")
 
-        Log.d("Datos leidos: ", "Usuario en _user: ${_user.value?.profileUserName}, Comparado con userName: ${_userName.value}")
-
-        _enableButton.value = enableLoginButton(userName, password)
+        _enableLoginButton.value = enableButton(userName, password)
 
         // Si los datos del perfil no han sido cargados aún, no intentamos validar
         if (_user.value != null) {
@@ -71,9 +94,35 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
     }
 
 
+    fun onUpdatePasswordChange(userName: String, newPassword: String){
+        _userNameNewPassword.value = userName
+        _newPassword.value = newPassword
+        _enableConfirmButton.value = enableButton(userName, newPassword)
+        if(_user.value != null) {
+            _validateConfirmButton.value = validateUserName(userName)
 
-    fun onEnableNewPassword(enableNewPassword: Boolean) {
-        _enableNewPassword.value = enableNewPassword
+        }else {
+            _validateLoginButton.value = false
+            Log.d("Login", "Datos de usuario aún no disponibles")
+        }
+    }
+    fun onClearFields(){
+        _userNameNewPassword.value=""
+        _newPassword.value=""
+    }
+
+    fun updatePassword(newPassword: String){
+        viewModelScope.launch {
+          upDatePassword.invoke(newPassword)
+            Log.d("Datos leidos: ", "Usuario en _user: ${_user.value?.profilePass}")
+            val userProfile=getUserProfileData()
+            _user.value = userProfile
+        }
+    }
+
+
+    fun onEnableNewPasswordFields(enableNewPasswordFields: Boolean) {
+        _enableNewPasswordFields.value = enableNewPasswordFields
     }
 
     @Composable
@@ -89,7 +138,7 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
         return "$greeting, $userName" // Concatenar el saludo con el nombre
     }
 
-    private fun enableLoginButton(userName: String, password: String): Boolean =
+    private fun enableButton(userName: String, password: String): Boolean =
         userName.isNotEmpty() && password.isNotEmpty() && userName.isNotBlank() && password.isNotBlank() && password.length >= 6
 
     private fun validateLoginButton(userName: String, password: String): Boolean {
@@ -97,6 +146,14 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
         return if (userProfile != null) {
             userName == userProfile.profileUserName && password == userProfile.profilePass
         } else {
+            false
+        }
+    }
+    private fun validateUserName(userName: String): Boolean{
+        val userProfile=_user.value
+        return if (userProfile!=null){
+            userName==userProfile.profileUserName
+        }else{
             false
         }
     }

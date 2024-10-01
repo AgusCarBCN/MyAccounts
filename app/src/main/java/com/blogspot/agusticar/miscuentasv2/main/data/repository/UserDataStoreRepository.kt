@@ -48,6 +48,12 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
         }
     }
 
+    override suspend fun upDatePassword(newPassword: String) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.PASSWORD] =newPassword
+        }
+    }
+
     override suspend fun getShowTutorial(): Boolean =
     context.dataStore.data .first()[UserPreferencesKeys.SHOW_TUTORIAL] ?: true
 

@@ -261,7 +261,6 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
 // Creamos una fuente de interacciones para el IconButton
     val interactionSource = remember { MutableInteractionSource() }
     // Detectamos si el botón está presionado
-
     val isPressed by interactionSource.collectIsPressedAsState()
             IconButton(
                 onClick = onClickButton,

@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.login
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.drawable
@@ -40,7 +40,6 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
-import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import kotlinx.coroutines.launch
 
 
@@ -50,9 +49,18 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
     val name by loginViewModel.name.observeAsState("")
     val userName by loginViewModel.userName.observeAsState("")
     val password by loginViewModel.password.observeAsState("")
-    val enableButton by loginViewModel.enableButton.observeAsState(false)
-    val enableNewPassword by loginViewModel.enableNewPassword.observeAsState(false)
+
+    val userNameNewPassword by loginViewModel.userNameNewPassword.observeAsState("")
+    val newPassword by loginViewModel.newPassword.observeAsState("")
+
+    val enableLoginButton by loginViewModel.enableLoginButton.observeAsState(false)
+    val enableConfirmButton by loginViewModel.enableConfirmButton.observeAsState(false)
+
+    val enableNewPasswordFields by loginViewModel.enableNewPasswordFields.observeAsState(false)
+
     val validateLogin by loginViewModel.validateLoginButton.observeAsState(false)
+    val validateConfirm by loginViewModel.validateConfirmButton.observeAsState(false)
+
     val scope = rememberCoroutineScope()
     /* Se usa para gestionar el estado del Snackbar. Esto te permite mostrar y controlar el Snackbar
      desde cualquier parte de tu UI.*/
@@ -108,7 +116,7 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
             verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (!enableNewPassword) {
+            if (!enableNewPasswordFields) {
                 Text(
                     text = loginViewModel.getGreeting(name),
                     fontSize =  with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
@@ -133,11 +141,10 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
                 ModelButton(text = stringResource(id = string.loginButton),
                     R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
-                    enableButton,
+                    enableLoginButton,
                     onClickButton = {
                         if(validateLogin) {
                             navToMain()
-                        //navigationController.navigate(Routes.Home.route)
                         }else
                             scope.launch {
                                 snackbarHostState.showSnackbar("Login no valido",duration =SnackbarDuration.Short)
@@ -147,7 +154,7 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
 
                 TextButton(
                     onClick = {
-                        loginViewModel.onEnableNewPassword(true)
+                        loginViewModel.onEnableNewPasswordFields(true)
                     },
                     content = {
                         Text(
@@ -159,32 +166,48 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
                 )
 
             }
-            if (enableNewPassword) {
+            if (enableNewPasswordFields) {
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.requestuser),
-                    userName,
-                    onTextChange = { loginViewModel.onLoginChanged(it,password) },
+                    userNameNewPassword,
+                    onTextChange = { loginViewModel.onUpdatePasswordChange(it,newPassword) },
                     BoardType.TEXT
                 )
 
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.newpassword),
-                    password,
-                    onTextChange = { loginViewModel.onLoginChanged(userName,it) },
+                    newPassword,
+                    onTextChange = { loginViewModel.onUpdatePasswordChange(userNameNewPassword,it) },
                     BoardType.PASSWORD,
                     true
                 )
                 ModelButton(text = stringResource(id = string.confirmButton),
                     R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
-                    true,
+                    enableConfirmButton,
                     onClickButton = {
+                        if(validateConfirm) {
+                            try{
                             scope.launch {
-                                snackbarHostState.showSnackbar("campo vacio",duration =SnackbarDuration.Short)
+                                loginViewModel.updatePassword(newPassword)
+                                snackbarHostState.showSnackbar("contraseña actualizada $newPassword",duration =SnackbarDuration.Short)
+                                loginViewModel.onEnableNewPasswordFields(false)
                             }
-
+                                 } catch (e: Exception) {
+                                Log.e("DataStore", "Error Updating password", e)
+                                }
+                            }
+                         else {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    "usuario no valido",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
+                            loginViewModel.onClearFields()
+                        }
                     }
                 )
 
@@ -193,7 +216,7 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
                     modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
-                        loginViewModel.onEnableNewPassword(false)
+                        loginViewModel.onEnableNewPasswordFields(false)
                     }
                 )
 
