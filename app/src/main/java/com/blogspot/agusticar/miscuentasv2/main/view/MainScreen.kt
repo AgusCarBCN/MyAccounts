@@ -2,6 +2,7 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -141,7 +142,11 @@ private fun DrawerContent() {
             .background(color = Color.Transparent)
 
     ) {
+        // Creamos una fuente de interacciones para el IconButton
+        val interactionSource = remember { MutableInteractionSource() }
+        // Detectamos si el botón está presionado
 
+        val isPressed by interactionSource.collectIsPressedAsState()
         HeadDrawerMenu()
         Column(
             modifier = Modifier
@@ -184,30 +189,54 @@ private fun HeadDrawerMenu() {
 
 // Implementación de Row clickable para cada opción del menú de la izquierda
 @Composable
-private fun ClickableRow(option: OptionItem, onClick: () -> Unit) {
+private fun ClickableRow(
+    option: OptionItem,
+    onClick: () -> Unit,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+) {
+    // Detectar si la fila está presionada
+    val isPressed by interactionSource.collectIsPressedAsState()
 
+    // Definir el color de fondo dependiendo si está presionado o no
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isPressed) LocalCustomColorsPalette.current.buttonColorPressed
+        else LocalCustomColorsPalette.current.drawerColor,
+        label = "row clickable color"
+    )
+    val contentRowColor by animateColorAsState(
+        targetValue = if (isPressed) LocalCustomColorsPalette.current.invertedTextColor
+        else LocalCustomColorsPalette.current.contentDrawerColor,
+        label = "row clickable color"
+    )
+    // Fila clickable con color de fondo animado
     Row(
         modifier = Modifier
-            .clickable(onClick = onClick) // Hacer el Row clickable
-            .padding(16.dp)// Agregar padding para hacer más fácil el click
-            .fillMaxWidth(), Arrangement.Start,
-        Alignment.CenterVertically
+            .clickable(
+                onClick = { onClick() },
+                interactionSource = interactionSource,
+                indication = null // Esto elimina el efecto predeterminado de ripple
+            )
+            .background(backgroundColor) // Aplicar el color de fondo dinámico
+            .padding(16.dp) // Agregar padding
+            .fillMaxWidth(), // Ocupar todo el ancho disponible
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
     ) {
         Icon(
-            painterResource(id = option.resourceIconItem),
+            painter = painterResource(id = option.resourceIconItem),
             contentDescription = "Side menu",
-            Modifier.size(28.dp),
-            tint = LocalCustomColorsPalette.current.contentDrawerColor
-
+            modifier = Modifier.size(28.dp),
+            tint = contentRowColor
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = stringResource(id = option.resourceTitleItem),
-            color = LocalCustomColorsPalette.current.contentDrawerColor,
+            color = contentRowColor,
             fontWeight = FontWeight.Bold
         )
     }
 }
+
 
 @Composable
 private fun TitleOptions(title: Int) {
@@ -232,6 +261,7 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
 // Creamos una fuente de interacciones para el IconButton
     val interactionSource = remember { MutableInteractionSource() }
     // Detectamos si el botón está presionado
+
     val isPressed by interactionSource.collectIsPressedAsState()
 
             IconButton(

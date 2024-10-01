@@ -49,7 +49,7 @@ fun ModelButton(
         colors = ButtonDefaults.buttonColors(
             contentColor = if (pressed) pressedContentColor else defaultContentColor,
             containerColor = if (pressed) pressedContainerColor else defaultContainerColor,
-            disabledContainerColor= LocalCustomColorsPalette.current.disableButton
+            disabledContainerColor= disabled
         ),
 
         ) {
