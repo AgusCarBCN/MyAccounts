@@ -1,10 +1,13 @@
 package com.blogspot.agusticar.miscuentasv2.tutorial.view
 
 
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -25,8 +28,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.components.AnimatedIcon
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
@@ -55,7 +61,7 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,navToScreen:()->Unit,listOfItem
 
     ConstraintLayout(
 
-        modifier=Modifier
+        modifier= Modifier
             .fillMaxSize()
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
     ) {
@@ -116,6 +122,27 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,navToScreen:()->Unit,listOfItem
 
 @Composable
 private fun ItemCard(item: TutorialItem) {
+
+    // Creamos un animatable para manejar el color del ícono
+    val initColor = LocalCustomColorsPalette.current.iconPressed
+    val targetColor = LocalCustomColorsPalette.current.iconColor
+    val color = remember { Animatable(initColor) }
+    val coroutineScope = rememberCoroutineScope()
+    // Iniciamos una corrutina para animar el color de manera infinita
+    if (item.iconItem != R.drawable.contabilidad) {
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                // Animación infinita que alterna entre dos colores
+                color.animateTo(
+                    targetValue = targetColor,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(durationMillis = 2000), // Duración de la transición (1 segundo)
+                        repeatMode = RepeatMode.Reverse // Alterna entre los dos colores
+                    )
+                )
+            }
+        }
+    }
     // Un card sencillo que muestra título, descripción e ícono
     Card(
         modifier = Modifier
@@ -142,14 +169,15 @@ private fun ItemCard(item: TutorialItem) {
                 color = (LocalCustomColorsPalette.current.boldTextColor)
             )
             Spacer(modifier = Modifier.width(5.dp)) // Espacio entre imagen y texto
-            // Mostrar imagen
             Image(
                 painter = painterResource(id = item.iconItem),
                 contentDescription = null, // No se requiere descripción accesible para imágenes decorativas
                 modifier = Modifier
                     .width(250.dp)
                     .height(200.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .align(Alignment.CenterHorizontally),
+                colorFilter =if(item.iconItem!=R.drawable.contabilidad)androidx.compose.ui.graphics.ColorFilter.tint(color.value)
+                else null
             )
             Spacer(modifier = Modifier.width(5.dp)) // Espacio entre imagen y texto
             Text(
