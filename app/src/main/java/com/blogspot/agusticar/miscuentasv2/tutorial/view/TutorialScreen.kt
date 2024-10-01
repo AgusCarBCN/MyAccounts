@@ -1,9 +1,12 @@
 package com.blogspot.agusticar.miscuentasv2.tutorial.view
 
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -213,7 +216,6 @@ private fun CircleIndicator(
 ) {
     Column(
         modifier.fillMaxWidth(),
-
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -227,14 +229,27 @@ private fun CircleIndicator(
                 // Animación de escala para el punto seleccionado
                 val scale = animateFloatAsState(
                     targetValue = if (index == selectedIndex) 1.1f else 1f, // Escala más grande si es el seleccionado
-                    animationSpec = spring(dampingRatio = Spring.DefaultDisplacementThreshold, stiffness = Spring.StiffnessLow)
+                    animationSpec = spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow),
+                    label = "indicatorTutorial"
                 )
+                val indicatorColor by animateColorAsState(
+                    targetValue = if (index == selectedIndex) {
+                        LocalCustomColorsPalette.current.indicatorSelected
+                    } else {
+                        LocalCustomColorsPalette.current.indicatorDefault
+                    },
+                    label = "indicator color",
+                    animationSpec = tween(
+                        durationMillis = 2000, // Duración de la animación
+                        easing = LinearOutSlowInEasing // Controla la velocidad de la transición
+                    )
+                )
+
                 Icon(
-                    painter = painterResource(if(index==selectedIndex)R.drawable.indicatorselected
+                    painter = painterResource (if(index==selectedIndex)R.drawable.indicatorselected
                     else R.drawable.circleindicator ),
                     contentDescription = "indicator",
-                    tint = if (index == selectedIndex) LocalCustomColorsPalette.current.indicatorSelected
-                    else LocalCustomColorsPalette.current.indicatorDefault,
+                    tint = indicatorColor,
                     modifier = Modifier
                         .scale(scale.value)
 

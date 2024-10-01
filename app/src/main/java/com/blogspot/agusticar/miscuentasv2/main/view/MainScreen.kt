@@ -5,6 +5,8 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +33,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
@@ -109,14 +114,14 @@ private fun BottomAppBar(navigationController: NavHostController) {
         contentColor = LocalCustomColorsPalette.current.contentBarColor,
         actions = {
             IconButtonApp("Home", R.drawable.home
-                , onClickButton = {navigationController.navigate(Routes.Tutorial.route)} )
+                , onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Search", R.drawable.searchoption, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Settings", R.drawable.settings, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Profile", R.drawable.profile, onClickButton = {
-                navigationController.navigate(Routes.Login.route)
+
 
             } )
         },
@@ -224,16 +229,16 @@ private fun TitleOptions(title: Int) {
 
 @Composable
 private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () -> Unit) {
+// Creamos una fuente de interacciones para el IconButton
+    val interactionSource = remember { MutableInteractionSource() }
+    // Detectamos si el botón está presionado
+    val isPressed by interactionSource.collectIsPressedAsState()
 
             IconButton(
-                onClick = onClickButton
+                onClick = onClickButton,
+                interactionSource = interactionSource
             ) {
-                Icon(
-                    painter = painterResource(id = resourceIcon),
-                    contentDescription = title,
-                    modifier = Modifier.size(36.dp), // Cambia el tamaño dinámicamente
-                    tint = LocalCustomColorsPalette.current.contentBarColor
-                )
+                IconComponent(isPressed, resourceIcon, 36)
             }
 
         }
