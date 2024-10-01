@@ -18,7 +18,7 @@ data class CustomColorsPalette(
     val invertedTextColor: Color = Color.Unspecified,
     val boldTextColor: Color = Color.Unspecified,
     val barColor: Color = Color.Unspecified,
-    val iconPressed: Color = Color.Unspecified,
+    val iconInvert: Color = Color.Unspecified,
     val iconColor: Color = Color.Unspecified,
     val contentBarColor:Color = Color.Unspecified,
     val indicatorDefault:Color = Color.Unspecified,
@@ -30,7 +30,11 @@ data class CustomColorsPalette(
     val focusedContainerTextField:Color=Color.Unspecified,
     val unfocusedContainerTextField:Color=Color.Unspecified,
     val focusedTextFieldColor:Color=Color.Unspecified,
-    val unfocusedTextFieldColor:Color=Color.Unspecified
+    val unfocusedTextFieldColor:Color=Color.Unspecified,
+    val imageTutorialInit:Color=Color.Unspecified,
+    val imageTutorialTarget:Color=Color.Unspecified,
+   val rowDrawerPressed:Color=Color.Unspecified,
+    val topBarContent:Color = Color.Unspecified,
     )
 
 val LightCustomColorsPalette = CustomColorsPalette(
@@ -45,19 +49,23 @@ val LightCustomColorsPalette = CustomColorsPalette(
     textColor =  DarkBrown,
     invertedTextColor= LightYellow,
     boldTextColor =  Black,
-    iconPressed=SoftPeach,
-    iconColor = Black,
-    contentBarColor = Black,
+    iconInvert= LightYellow,
+    iconColor = LightYellow,
+    contentBarColor = DarkBrown,
     indicatorDefault =  SoftPeach,
     indicatorSelected =  CoralPink,
     imageBackground = CoralPink,
     drawerColor = LightYellow,
     headDrawerColor = SoftPeach,
-    contentDrawerColor = Black,
+    contentDrawerColor = DarkBrown,
     focusedContainerTextField = LightYellow,
     unfocusedContainerTextField = LightYellow,
     focusedTextFieldColor = DarkBrown,
-    unfocusedTextFieldColor = DarkBrown
+    unfocusedTextFieldColor = DarkBrown,
+    imageTutorialInit = CoralPink,
+    imageTutorialTarget = SoftPeach,
+    rowDrawerPressed = Crimson,
+    topBarContent=LightYellow
 )
 val DarkCustomColorsPalette = CustomColorsPalette(
     buttonColorDefault =  SoftPeach,
@@ -71,7 +79,7 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     textColor =  LightYellow,
     invertedTextColor= DarkBrown,
     boldTextColor =  LightYellow,
-    iconPressed=SoftPeach,
+    iconInvert = LightYellow,
     iconColor = LightYellow,
     contentBarColor = LightYellow,
     indicatorDefault =  SoftPeach,
@@ -83,7 +91,12 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     focusedContainerTextField = LightGrey,
     unfocusedContainerTextField = LightGrey,
     focusedTextFieldColor = LightYellow,
-    unfocusedTextFieldColor = LightYellow
+    unfocusedTextFieldColor = LightYellow,
+    imageTutorialInit = SoftPeach,
+    imageTutorialTarget = PeachyCream,
+    topBarContent=LightYellow,
+    rowDrawerPressed = PeachyCream
+
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }

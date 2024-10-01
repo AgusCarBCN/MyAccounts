@@ -93,14 +93,14 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
                 Icon(
                     if (drawerState.isOpen) Icons.Filled.Close else Icons.Filled.Menu,
                     contentDescription = "Side menu",
-                    tint = LocalCustomColorsPalette.current.contentBarColor
+                    tint = LocalCustomColorsPalette.current.topBarContent
                 )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = LocalCustomColorsPalette.current.barBackground,
-            titleContentColor = LocalCustomColorsPalette.current.contentBarColor,
-            actionIconContentColor = LocalCustomColorsPalette.current.contentBarColor
+            titleContentColor = LocalCustomColorsPalette.current.topBarContent,
+            actionIconContentColor = LocalCustomColorsPalette.current.topBarContent
         )
     )
 }
@@ -112,7 +112,7 @@ private fun BottomAppBar(navigationController: NavHostController) {
 
     BottomAppBar(
         containerColor = LocalCustomColorsPalette.current.barBackground,
-        contentColor = LocalCustomColorsPalette.current.contentBarColor,
+        contentColor = LocalCustomColorsPalette.current.topBarContent,
         actions = {
             IconButtonApp("Home", R.drawable.home
                 , onClickButton = {} )
@@ -199,13 +199,13 @@ private fun ClickableRow(
 
     // Definir el color de fondo dependiendo si está presionado o no
     val backgroundColor by animateColorAsState(
-        targetValue = if (isPressed) LocalCustomColorsPalette.current.buttonColorPressed
+        targetValue = if (isPressed) LocalCustomColorsPalette.current.rowDrawerPressed
         else LocalCustomColorsPalette.current.drawerColor,
         label = "row clickable color"
     )
     val contentRowColor by animateColorAsState(
         targetValue = if (isPressed) LocalCustomColorsPalette.current.invertedTextColor
-        else LocalCustomColorsPalette.current.contentDrawerColor,
+        else LocalCustomColorsPalette.current.contentBarColor,
         label = "row clickable color"
     )
     // Fila clickable con color de fondo animado
@@ -263,7 +263,6 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
     // Detectamos si el botón está presionado
 
     val isPressed by interactionSource.collectIsPressedAsState()
-
             IconButton(
                 onClick = onClickButton,
                 interactionSource = interactionSource

@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
-import com.blogspot.agusticar.miscuentasv2.components.AnimatedIcon
+
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
@@ -124,8 +124,8 @@ fun Tutorial(tutorialViewModel:TutorialViewModel,navToScreen:()->Unit,listOfItem
 private fun ItemCard(item: TutorialItem) {
 
     // Creamos un animatable para manejar el color del ícono
-    val initColor = LocalCustomColorsPalette.current.iconPressed
-    val targetColor = LocalCustomColorsPalette.current.iconColor
+    val initColor = LocalCustomColorsPalette.current.imageTutorialInit
+    val targetColor = LocalCustomColorsPalette.current.imageTutorialTarget
     val color = remember { Animatable(initColor) }
     val coroutineScope = rememberCoroutineScope()
     // Iniciamos una corrutina para animar el color de manera infinita

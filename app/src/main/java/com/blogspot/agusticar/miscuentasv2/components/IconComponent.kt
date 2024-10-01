@@ -40,7 +40,7 @@ fun IconComponent(isPressed: Boolean, iconResource: Int, iconSize: Int) {
     )
     val indicatorColor by animateColorAsState(
         targetValue = if (isPressed) {
-            LocalCustomColorsPalette.current.iconPressed
+            LocalCustomColorsPalette.current.iconInvert
         } else {
             LocalCustomColorsPalette.current.iconColor
         },
@@ -64,31 +64,3 @@ fun IconComponent(isPressed: Boolean, iconResource: Int, iconSize: Int) {
 
 }
 
-@Composable
-fun AnimatedIcon(iconResource: Int, modifier: Modifier) {
-    // Creamos un animatable para manejar el color del ícono
-    val initColor = LocalCustomColorsPalette.current.iconPressed
-    val targetColor = LocalCustomColorsPalette.current.iconColor
-    val color = remember { Animatable(initColor) }
-    val coroutineScope = rememberCoroutineScope()
-
-    // Iniciamos una corrutina para animar el color de manera infinita
-    LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            // Animación infinita que alterna entre dos colores
-            color.animateTo(
-                targetValue = targetColor,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(durationMillis = 2000), // Duración de la transición (1 segundo)
-                    repeatMode = RepeatMode.Reverse // Alterna entre los dos colores
-                )
-            )
-        }
-    }
-    Image(
-        painter = painterResource (id = iconResource), // Reemplaza con tu ícono
-        contentDescription = "Ícono de configuración",
-        // Aplica el color animado al ícono
-        colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(color.value)
-    )
-}
