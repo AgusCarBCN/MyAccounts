@@ -1,7 +1,5 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
-import android.graphics.Color
-import android.icu.lang.UCharacter.VerticalOrientation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,25 +12,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.ContentInfoCompat.Flags
 import androidx.wear.compose.material3.Text
-import com.blogspot.agusticar.miscuentasv2.R
+
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
-import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
@@ -69,11 +60,11 @@ fun CurrencySelector(currencies: List<Currency>) {
                 ) {
                     // Asegúrate de que currency.iconResId sea el recurso drawable correcto
                     Image(
-                        painter = painterResource(id = R.drawable.eu), // Usa el recurso de imagen
+                        painter = painterResource(id =currencies[page].flag), // Usa el recurso de imagen
                         contentDescription = "${currencies[page].currencyCode} Icon", // Descripción para accesibilidad
                         modifier = Modifier.size(48.dp) // Ajusta el tamaño de la imagen
                     )
-                    Spacer(modifier = Modifier.width(8.dp)) // Espaciador entre la imagen y el texto
+                    Spacer(modifier = Modifier.width(15.dp)) // Espaciador entre la imagen y el texto
                     Text(
                         text = currencies[page].currencyDescription, // Descripción de la moneda
                         fontSize = 24.sp,
