@@ -74,5 +74,8 @@
     <string name="settings">Ajustes</string>
     <string name="about">Acerca de </string>
     <string name="exitapp">Cerrar sesion</string>
-
+    <!--Create Accounts-->
+    <string name="createaccountsmsg">Puedes crear tus cuentas ahora o mas tarde.</string>
+    <string name="selectcurrency">Escoje una divisa para tus cuentas.</string>
+    <string name="selectedcurrency">Divisa seleccionada: </string>
 </resources>

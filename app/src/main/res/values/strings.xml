@@ -75,5 +75,9 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="exitapp">Log out</string>
+    <!--Create Accounts-->
+    <string name="createaccountsmsg">You can create your accounts now o later.</string>
+    <string name="selectcurrency">Select a currency for your accounts.</string>
+    <string name="selectedcurrency">Selected currency: </string>
 
 </resources>

@@ -64,7 +64,8 @@ private val currencySymbols = mapOf(
     "PEN" to "S/.",     // Sol peruano
     "VND" to "₫"  ,     // Dong vietnamita
     "ARS" to "$"   ,     //Peso argentino
-    "KRW" to "₩"     //South Korean won
+    "KRW" to "₩"   ,  //South Korean won
+    "HNL"   to  "L"   //Honduras
 )
 private val currencies = listOf(
     Currency("USD", "US Dollar",R.drawable.us),
@@ -97,8 +98,9 @@ private val currencies = listOf(
     Currency("COP", "Peso colombiano",R.drawable.co),
     Currency("PEN", "Sol peruano",R.drawable.pe),
     Currency("VND", "Vietnamese Dong",R.drawable.vn),
-    Currency("ARS", "Argentine Peso",R.drawable.ar),
-    Currency("KRW", "South Korean Won",R.drawable.kr)
+    Currency("ARS", "Peso Argentino",R.drawable.ar),
+    Currency("KRW", "South Korean Won",R.drawable.kr),
+    Currency("HNL","Lempira de Honduras",R.drawable.hn)
 )
 
 
@@ -137,6 +139,11 @@ fun CreateAccountsComponent(navToLogin:()->Unit,navToBack:()->Unit){
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
+            Text(modifier = Modifier.fillMaxWidth(),
+            text = stringResource(id = R.string.createaccountmsg),
+            fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_medium).toSp() },
+            fontWeight = FontWeight.Bold, // Estilo de texto en negrita
+            textAlign = TextAlign.Center)
 
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
@@ -163,11 +170,7 @@ fun CreateAccountsComponent(navToLogin:()->Unit,navToBack:()->Unit){
                 }
             )
            CurrencySelector(currencies)
-            Text(modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.createaccountmsg),
-                fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_medium).toSp() },
-                fontWeight = FontWeight.Bold, // Estilo de texto en negrita
-                textAlign = TextAlign.Center)
+
 
 
             ModelButton(text = stringResource(id = R.string.loginButton),

@@ -18,10 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Text
+import com.blogspot.agusticar.miscuentasv2.R
 
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -40,7 +42,7 @@ fun CurrencySelector(currencies: List<Currency>) {
             .padding(5.dp)
     ) {
         Text(
-            text = "Selecciona una divisa para tus cuentas",
+            text = stringResource(id = R.string.selectcurrency),
             fontSize = 18.sp,
             color = LocalCustomColorsPalette.current.textColor,  // Color del texto
             modifier = Modifier
@@ -48,6 +50,7 @@ fun CurrencySelector(currencies: List<Currency>) {
                 .fillMaxWidth(),
             textAlign = TextAlign.Center
         )
+
 
         VerticalPager(
             state = pagerState,
@@ -87,7 +90,7 @@ fun CurrencySelector(currencies: List<Currency>) {
 
         // Muestra el nombre de la moneda seleccionada actualmente
         Text(
-            text = "Selected currency: ${currencies[pagerState.currentPage].currencyCode}",
+            text = "${stringResource(id = R.string.selectedcurrency)}${currencies[pagerState.currentPage].currencyCode}",
             fontSize = 18.sp,
             color = LocalCustomColorsPalette.current.textColor,  // Color del texto
             modifier = Modifier
