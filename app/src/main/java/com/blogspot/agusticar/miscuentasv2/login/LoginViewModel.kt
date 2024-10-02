@@ -7,10 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
-import com.blogspot.agusticar.miscuentasv2.main.domain.GetUserProfileDataUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.UpDatePasswordUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetUserProfileDataUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.UpDatePasswordUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val getUserProfileData: GetUserProfileDataUseCase,
-    private val upDatePassword:UpDatePasswordUseCase):ViewModel () {
+                                         private val upDatePassword: UpDatePasswordUseCase
+):ViewModel () {
 
 
     private val _user = MutableLiveData<UserProfile>()
@@ -115,7 +115,10 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
         viewModelScope.launch {
           upDatePassword.invoke(newPassword)
             Log.d("Datos leidos: ", "Usuario en _user: ${_user.value?.profilePass}")
+            // Obtener el perfil actualizado
             val userProfile=getUserProfileData()
+            // Emitir los nuevos datos del perfil
+            // Actualizar LiveData con el nuevo perfil
             _user.value = userProfile
         }
     }

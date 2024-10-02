@@ -1,13 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.di
 
 import android.content.Context
-import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
-import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserDataStoreRepository
-import com.blogspot.agusticar.miscuentasv2.main.domain.GetToLoginUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.GetUserProfileDataUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.SetToLoginUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.SetUserProfileDataUseCase
+import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.repository.UserDataStoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.main.data.repository
+package com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.repository
 
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import javax.inject.Inject

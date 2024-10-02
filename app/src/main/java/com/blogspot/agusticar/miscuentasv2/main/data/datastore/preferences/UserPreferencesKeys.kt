@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.main.data.preferences
+package com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences
 
 
 import androidx.datastore.preferences.core.booleanPreferencesKey

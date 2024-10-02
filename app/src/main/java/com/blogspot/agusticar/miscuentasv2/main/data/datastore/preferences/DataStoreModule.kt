@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.main.data
+package com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore

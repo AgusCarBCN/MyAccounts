@@ -1,10 +1,10 @@
-package com.blogspot.agusticar.miscuentasv2.main.data.repository
+package com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.repository
 
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.edit
-import com.blogspot.agusticar.miscuentasv2.main.data.dataStore
-import com.blogspot.agusticar.miscuentasv2.main.data.preferences.UserPreferencesKeys
+import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.dataStore
+import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.UserPreferencesKeys
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

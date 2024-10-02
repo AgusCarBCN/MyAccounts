@@ -6,16 +6,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blogspot.agusticar.miscuentasv2.main.data.repository.UserDataStoreRepository
-import com.blogspot.agusticar.miscuentasv2.main.domain.GetShowTutorialUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.GetToLoginUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetShowTutorialUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetToLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TutorialViewModel @Inject constructor(private val getLoginValue:GetToLoginUseCase,
-    private val getShowTutorial:GetShowTutorialUseCase) :
+class TutorialViewModel @Inject constructor(private val getLoginValue: GetToLoginUseCase,
+                                            private val getShowTutorial: GetShowTutorialUseCase
+) :
     ViewModel() {
 
 
