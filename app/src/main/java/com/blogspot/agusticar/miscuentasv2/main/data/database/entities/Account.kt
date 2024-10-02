@@ -18,5 +18,15 @@ data class Account(
         get() = name
     val accountBalance: Double
         get() = balance
+
+    // Método para actualizar el balance
+    fun updateBalance(newBalance: Double) {
+        if (newBalance >= 0) {
+            balance = newBalance
+        } else {
+            throw IllegalArgumentException("El saldo no puede ser negativo")
+        }
+    }
+
 }
 
