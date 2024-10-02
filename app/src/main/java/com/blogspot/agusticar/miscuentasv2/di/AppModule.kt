@@ -15,7 +15,6 @@ import javax.inject.Singleton
  todo el ciclo de vida de la aplicación*/
 
 @InstallIn(SingletonComponent::class)
-
 @Module
 
 object AppModule {
@@ -23,8 +22,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUserPreferencesRepository(@ApplicationContext app: Context): UserDataStoreRepository {
-        return UserDataStoreRepository(app)
+    fun provideUserPreferencesRepository(@ApplicationContext context: Context): UserDataStoreRepository {
+        return UserDataStoreRepository(context)
     }
 
 
