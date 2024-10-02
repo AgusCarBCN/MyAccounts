@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -36,7 +35,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -45,12 +43,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.TutorialItem
 import kotlinx.coroutines.launch
 
@@ -211,27 +207,27 @@ private fun getItems(): List<TutorialItem> {
         TutorialItem(
             title = stringResource(id = R.string.title1),
             description = stringResource(id = R.string.des1),
-            icon = R.drawable.person_intro
+            icon = R.drawable.profile
         ),
         TutorialItem(
             title = stringResource(id = R.string.title2),
             description = stringResource(id = R.string.des2),
-            icon = R.drawable.payments_intro
+            icon = R.drawable.paymentsoption
         ),
         TutorialItem(
             title = stringResource(id = R.string.title3),
             description = stringResource(id = R.string.des3),
-            icon = R.drawable.barchart_intro
+            icon = R.drawable.barchartoption
         ),
         TutorialItem(
             title = stringResource(id = R.string.title4),
             description = stringResource(id = R.string.des4),
-            icon = R.drawable.notifications_intro
+            icon = R.drawable.notificationoption
         ),
         TutorialItem(
             title = stringResource(id = R.string.title5),
             description = stringResource(id = R.string.des5),
-            icon = R.drawable.settings_intro
+            icon = R.drawable.settings
         )
     )
 }

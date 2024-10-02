@@ -4,16 +4,19 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("category_table")
-data class Category(
+@Entity("account_table")
+data class Account(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id") private val id: Int = 0,
-    @ColumnInfo("name") private val name: String
+    @ColumnInfo("name") val name: String,
+    @ColumnInfo("balance") private var balance: Double
 ) {
 
-    val categoryId: Int
+    val accountId: Int
         get() = id
-    val categoryName: String
+    val accountName: String
         get() = name
-
+    val accountBalance: Double
+        get() = balance
 }
+

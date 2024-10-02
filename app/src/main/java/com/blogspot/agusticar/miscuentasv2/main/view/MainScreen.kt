@@ -129,7 +129,7 @@ private fun BottomAppBar(viewModel: MainViewModel,navigationController: NavHostC
             IconButtonApp("Home", R.drawable.home
                 , onClickButton = {viewModel.selectScreen(IconOptions.HOME)} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
-            IconButtonApp("Search", R.drawable.searchoption, onClickButton = {} )
+            IconButtonApp("Search", R.drawable.search, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Settings", R.drawable.settings, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
@@ -275,6 +275,7 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
     // Detectamos si el botón está presionado
 
     val isPressed by interactionSource.collectIsPressedAsState()
+
             IconButton(
                 onClick = onClickButton,
                 interactionSource = interactionSource
