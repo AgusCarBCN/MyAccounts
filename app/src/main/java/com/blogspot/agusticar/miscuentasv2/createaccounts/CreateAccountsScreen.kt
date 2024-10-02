@@ -21,10 +21,82 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
+import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
+
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
+
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
+
+
+//Mapa de divisas y simbolos
+private val currencySymbols = mapOf(
+    "USD" to "$",       // Dólar estadounidense
+    "EUR" to "€",       // Euro
+    "JPY" to "¥",       // Yen japonés
+    "GBP" to "£",       // Libra esterlina
+    "AUD" to "A$",      // Dólar australiano
+    "CAD" to "C$",      // Dólar canadiense
+    "CHF" to "CHF",     // Franco suizo
+    "CNY" to "¥",       // Yuan chino
+    "SEK" to "kr",      // Corona sueca
+    "NZD" to "NZ$",     // Dólar neozelandés
+    "MXN" to "$",       // Peso mexicano
+    "SGD" to "S$",      // Dólar de Singapur
+    "HKD" to "HK$",     // Dólar de Hong Kong
+    "NOK" to "kr",      // Corona noruega
+    "RUB" to "₽",       // Rublo ruso
+    "INR" to "₹",       // Rupia india
+    "BRL" to "R$",      // Real brasileño
+    "ZAR" to "R",       // Rand sudafricano
+    "DKK" to "kr",      // Corona danesa
+    "PLN" to "zł",      // Zloty polaco
+    "THB" to "฿",       // Baht tailandés
+    "AED" to "د.إ",     // Dirham de los Emiratos Árabes Unidos
+    "MYR" to "RM",      // Ringgit malayo
+    "PHP" to "₱",       // Peso filipino
+    "ILS" to "₪",       // Shekel israelí
+    "TRY" to "₺",       // Lira turca
+    "CLP" to "$",       // Peso chileno
+    "COP" to "$",       // Peso colombiano
+    "PEN" to "S/.",     // Sol peruano
+    "VND" to "₫"        // Dong vietnamita
+)
+private val currencies = listOf(
+    Currency("USD", "US Dollar"),
+    Currency("EUR", "Euro"),
+    Currency("JPY", "Yen japonés"),
+    Currency("GBP", "British Pound"),
+    Currency("AUD", "Australian Dollar"),
+    Currency("CAD", "Canadian Dollar"),
+    Currency("CHF", "Swiss Franc"),
+    Currency("CNY", "Yuan chino"),
+    Currency("SEK", "Swedish Krona"),
+    Currency("NZD", "New Zealand Dollar"),
+    Currency("MXN", "Peso mexicano"),
+    Currency("SGD", "Singapore Dollar"),
+    Currency("HKD", "Hong Kong Dollar"),
+    Currency("NOK", "Norwegian Krone"),
+    Currency("RUB", "Russian Ruble"),
+    Currency("INR", "Indian Rupee"),
+    Currency("BRL", "Real brasileño"),
+    Currency("ZAR", "South African Rand"),
+    Currency("DKK", "Danish Krone"),
+    Currency("PLN", "Polish Zloty"),
+    Currency("THB", "Thai Baht"),
+    Currency("AED", "UAE Dirham"),
+    Currency("MYR", "Malaysian Ringgit"),
+    Currency("PHP", "Peso filipino"),
+    Currency("ILS", "Israeli Shekel"),
+    Currency("TRY", "Turkish Lira"),
+    Currency("CLP", "Peso chileno"),
+    Currency("COP", "Peso colombiano"),
+    Currency("PEN", "Sol peruano"),
+    Currency("VND", "Vietnamese Dong")
+)
+
 
 @Composable
 
@@ -86,6 +158,7 @@ fun CreateAccountsComponent(navToLogin:()->Unit,navToBack:()->Unit){
 
                 }
             )
+           CurrencySelector(currencies)
             Text(modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.createaccountmsg),
                 fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_medium).toSp() },
@@ -115,7 +188,5 @@ fun CreateAccountsComponent(navToLogin:()->Unit,navToBack:()->Unit){
 
         }
     }
-
-
 
 }

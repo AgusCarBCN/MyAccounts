@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.CreateAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.prueba.Prueba
@@ -82,7 +83,9 @@ fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewM
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     when(selectedScreen){
-                        IconOptions.HOME -> Text(text = "Esto es el Home")
+                        IconOptions.HOME -> CreateAccountsComponent(navToLogin = {}) {
+
+                        }
                         IconOptions.PROFILE ->  Text(text = "Esto es el Perfil")
                         else -> Text(text = "Unknown screen: $selectedScreen")
                     }
