@@ -1,6 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.createaccounts.model
 
-data class Currency(private val code: String, private val description:String )
+data class Currency(private val code: String, private val description:String ,private val idResource:Int)
 
 {
     val currencyCode: String
@@ -8,6 +8,9 @@ data class Currency(private val code: String, private val description:String )
 
     val currencyDescription: String
     get() = description
+
+    val flag:Int
+    get() = idResource
 
     override fun toString(): String {
         return "$currencyCode  $description"
