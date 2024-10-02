@@ -62,7 +62,9 @@ private val currencySymbols = mapOf(
     "CLP" to "$",       // Peso chileno
     "COP" to "$",       // Peso colombiano
     "PEN" to "S/.",     // Sol peruano
-    "VND" to "₫"        // Dong vietnamita
+    "VND" to "₫"  ,     // Dong vietnamita
+    "ARS" to "$"   ,     //Peso argentino
+    "KRW" to "₩"     //South Korean won
 )
 private val currencies = listOf(
     Currency("USD", "US Dollar",R.drawable.us),
@@ -79,7 +81,7 @@ private val currencies = listOf(
     Currency("SGD", "Singapore Dollar",R.drawable.sg),
     Currency("HKD", "Hong Kong Dollar",R.drawable.hk),
     Currency("NOK", "Norwegian Krone",R.drawable.no),
-    Currency("RUB", "Russian Ruble",R.drawable.rs),
+    Currency("RUB", "Russian Ruble",R.drawable.ru),
     Currency("INR", "Indian Rupee",R.drawable.`in`),
     Currency("BRL", "Real brasileño",R.drawable.br),
     Currency("ZAR", "South African Rand",R.drawable.za),
@@ -94,7 +96,9 @@ private val currencies = listOf(
     Currency("CLP", "Peso chileno",R.drawable.cl),
     Currency("COP", "Peso colombiano",R.drawable.co),
     Currency("PEN", "Sol peruano",R.drawable.pe),
-    Currency("VND", "Vietnamese Dong",R.drawable.vn)
+    Currency("VND", "Vietnamese Dong",R.drawable.vn),
+    Currency("ARS", "Argentine Peso",R.drawable.ar),
+    Currency("KRW", "South Korean Won",R.drawable.kr)
 )
 
 

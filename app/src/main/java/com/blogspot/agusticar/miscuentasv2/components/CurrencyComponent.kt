@@ -39,11 +39,21 @@ fun CurrencySelector(currencies: List<Currency>) {
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
             .padding(5.dp)
     ) {
+        Text(
+            text = "Selecciona una divisa para tus cuentas",
+            fontSize = 18.sp,
+            color = LocalCustomColorsPalette.current.textColor,  // Color del texto
+            modifier = Modifier
+                .padding(top = 10.dp, bottom = 10.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+
         VerticalPager(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(LocalCustomColorsPalette.current.topBarContent)
+                .background(LocalCustomColorsPalette.current.backgroundPrimary)
                 .height(70.dp)
         ) { page ->
             // Usamos Box para centrar el contenido vertical y horizontalmente
@@ -51,7 +61,7 @@ fun CurrencySelector(currencies: List<Currency>) {
                 modifier = Modifier
                     .width(360.dp)
                     .height(60.dp)
-                    .background(LocalCustomColorsPalette.current.focusedContainerTextField),
+                    .background(LocalCustomColorsPalette.current.backgroundPrimary),
                 contentAlignment = Alignment.Center // Centramos el contenido en ambas direcciones
             ) {
                 Row(
