@@ -1,5 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.createprofile
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +13,8 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetUserP
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,6 +117,21 @@ class CreateProfileViewModel @Inject constructor(
         }
 
         return true
+    }
+    fun saveImage(context: Context, uri: Uri): String? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val file = File(context.externalCacheDir, "image.jpg")
+            val outputStream = FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.close()
+            file.absolutePath
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            null
+        }
     }
 
 }
