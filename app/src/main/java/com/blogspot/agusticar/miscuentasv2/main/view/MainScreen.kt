@@ -2,6 +2,7 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 
+import android.app.Activity
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,6 +42,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,7 +58,7 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
+import kotlin.system.exitProcess
 
 
 @Composable
@@ -69,7 +71,7 @@ fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewM
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent() },
+        drawerContent = { DrawerContent(mainViewModel) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
@@ -83,9 +85,7 @@ fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewM
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     when(selectedScreen){
-                        IconOptions.HOME ->  {
-
-                        }
+                        IconOptions.HOME ->  {}
                         IconOptions.PROFILE -> Test(viewModel)
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> TODO()
@@ -96,7 +96,13 @@ fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewM
                         IconOptions.SETTING_ACCOUNTS -> TODO()
                         IconOptions.ABOUT -> TODO()
                         IconOptions.POLICY -> TODO()
-                        IconOptions.EXIT -> TODO()
+                        IconOptions.EXIT -> {
+                            // Obtén el contexto actual de la aplicación
+                            val context = LocalContext.current
+                            // Verifica si el contexto es una actividad
+                            val activity = context as? Activity
+                            activity?.finish()
+                        }
                     }
 
                 }
@@ -155,7 +161,7 @@ private fun BottomAppBar(viewModel: MainViewModel,navigationController: NavHostC
 
 //Implementacion de Menú de la izquierda
 @Composable
-private fun DrawerContent() {
+private fun DrawerContent(viewModel: MainViewModel) {
 
     Card(
         modifier = Modifier
@@ -184,7 +190,7 @@ private fun DrawerContent() {
             TitleOptions(R.string.aboutapp)
             ClickableRow(OptionItem(R.string.about, R.drawable.info), onClick = {})
             ClickableRow(OptionItem(R.string.privacy, R.drawable.privacy), onClick = {})
-            ClickableRow(OptionItem(R.string.exitapp, R.drawable.exitapp), onClick = {})
+            ClickableRow(OptionItem(R.string.exitapp, R.drawable.exitapp), onClick = {viewModel.selectScreen(IconOptions.EXIT)})
         }
     }
 }
@@ -283,7 +289,6 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
 // Creamos una fuente de interacciones para el IconButton
     val interactionSource = remember { MutableInteractionSource() }
     // Detectamos si el botón está presionado
-
     val isPressed by interactionSource.collectIsPressedAsState()
 
             IconButton(

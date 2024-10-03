@@ -114,7 +114,7 @@ fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navT
                 modifier = Modifier.width(360.dp),
                 true,
                 onClickButton = {
-                    Log.d("valor a guardar" ,"Code: $currencyCode")
+
                 scope.launch {
                     Log.d("valor a guardar" ,"Code: $currencyCode")
                 createAccountsViewModel.setCurrencySymbol(currencyCode)
