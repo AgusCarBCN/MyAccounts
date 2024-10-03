@@ -49,23 +49,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
-import com.blogspot.agusticar.miscuentasv2.createaccounts.CreateAccountsComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
-import com.blogspot.agusticar.miscuentasv2.main.model.Routes
-import com.blogspot.agusticar.miscuentasv2.prueba.Prueba
-import com.blogspot.agusticar.miscuentasv2.prueba.Prueba2
+import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+
 @Composable
-fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewModel) {
+fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewModel,viewModel: CreateAccountsViewModel) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
+
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -83,14 +83,21 @@ fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewM
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     when(selectedScreen){
-                        IconOptions.HOME -> CreateAccountsComponent(navToLogin = {}) {
+                        IconOptions.HOME ->  {
 
                         }
-                        IconOptions.PROFILE ->  Text(text = "Esto es el Perfil")
-                        else -> Text(text = "Unknown screen: $selectedScreen")
+                        IconOptions.PROFILE -> Test(viewModel)
+                        IconOptions.SEARCH -> TODO()
+                        IconOptions.SETTINGS -> TODO()
+                        IconOptions.NEW_INCOME -> TODO()
+                        IconOptions.TRANSFER -> TODO()
+                        IconOptions.BARCHART -> TODO()
+                        IconOptions.CALCULATOR -> TODO()
+                        IconOptions.SETTING_ACCOUNTS -> TODO()
+                        IconOptions.ABOUT -> TODO()
+                        IconOptions.POLICY -> TODO()
+                        IconOptions.EXIT -> TODO()
                     }
-
-
 
                 }
             }

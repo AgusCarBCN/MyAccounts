@@ -15,7 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.blogspot.agusticar.miscuentasv2.createaccounts.CreateAccountsComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
@@ -34,6 +35,7 @@ class MainActivity : ComponentActivity() {
 
     private val tutorialViewModel: TutorialViewModel by viewModels()
     private val createProfileViewModel: CreateProfileViewModel by viewModels()
+    private val createAccountViewModel: CreateAccountsViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
 
@@ -78,7 +80,7 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(Routes.CreateAccounts.route) {
-                                CreateAccountsComponent(navToLogin = {
+                                CreateAccountsComponent(createAccountViewModel,navToLogin = {
                                     navigationController.navigate(Routes.Login.route)},
                                     navToBack = {navigationController.popBackStack()}
                                     )
@@ -93,7 +95,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Routes.Home.route) {
-                                HomeScreen(navigationController,mainViewModel)
+                                HomeScreen(navigationController,mainViewModel,createAccountViewModel)
 
                             }
 

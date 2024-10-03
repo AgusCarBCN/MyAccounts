@@ -16,8 +16,6 @@ class CreateProfileViewModel @Inject constructor(private val setProfileData: Set
                                                  private val setLoginTo: SetToLoginUseCase
 ) : ViewModel() {
 
-
-
     // LiveData para los campos de texto
     private val _username = MutableLiveData<String>()
     val username: LiveData<String> = _username

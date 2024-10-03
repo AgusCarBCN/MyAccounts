@@ -1,5 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,15 +29,19 @@ import androidx.wear.compose.material3.Text
 import com.blogspot.agusticar.miscuentasv2.R
 
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
 
 @Composable
-fun CurrencySelector(currencies: List<Currency>) {
+fun CurrencySelector(createAccountsViewModel: CreateAccountsViewModel) {
+
+    val currencyCode by createAccountsViewModel.currencyCode.observeAsState("USD")
+
+    val currencies=createAccountsViewModel.getListOfCurrencyCode()
     // Inicializamos el estado del VerticalPager con el número de páginas igual al tamaño de la lista de monedas.
     val pagerState = rememberPagerState(pageCount = { currencies.size })
-
     Column(
         modifier = Modifier
             .width(360.dp)
@@ -59,6 +66,7 @@ fun CurrencySelector(currencies: List<Currency>) {
                 .background(LocalCustomColorsPalette.current.backgroundPrimary)
                 .height(70.dp)
         ) { page ->
+
             // Usamos Box para centrar el contenido vertical y horizontalmente
             Box(
                 modifier = Modifier
@@ -74,7 +82,7 @@ fun CurrencySelector(currencies: List<Currency>) {
                     // Asegúrate de que currency.iconResId sea el recurso drawable correcto
                     Image(
                         painter = painterResource(id =currencies[page].flag), // Usa el recurso de imagen
-                        contentDescription = "${currencies[page].currencyCode} Icon", // Descripción para accesibilidad
+                        contentDescription = "$currencyCode ", // Descripción para accesibilidad
                         modifier = Modifier.size(48.dp) // Ajusta el tamaño de la imagen
                     )
                     Spacer(modifier = Modifier.width(15.dp)) // Espaciador entre la imagen y el texto
@@ -87,10 +95,12 @@ fun CurrencySelector(currencies: List<Currency>) {
                 }
             }
         }
-
+        createAccountsViewModel.onCurrencySelectedChange(currencies[pagerState.currentPage].currencyCode)
+        Log.d("valor en component" ,"Code: $currencyCode")
         // Muestra el nombre de la moneda seleccionada actualmente
         Text(
-            text = "${stringResource(id = R.string.selectedcurrency)}${currencies[pagerState.currentPage].currencyCode}",
+            text = "${stringResource(id = R.string.selectedcurrency)} ${currencies[pagerState.currentPage].currencyCode}",
+
             fontSize = 18.sp,
             color = LocalCustomColorsPalette.current.textColor,  // Color del texto
             modifier = Modifier
@@ -99,6 +109,7 @@ fun CurrencySelector(currencies: List<Currency>) {
             textAlign = TextAlign.Center
         )
     }
+
 }
 
 

@@ -50,12 +50,12 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
 
     override suspend fun upDatePassword(newPassword: String) {
         context.dataStore.edit { preferences ->
-            preferences[UserPreferencesKeys.PASSWORD] =newPassword
+            preferences[UserPreferencesKeys.PASSWORD] = newPassword
         }
     }
 
     override suspend fun getShowTutorial(): Boolean =
-    context.dataStore.data .first()[UserPreferencesKeys.SHOW_TUTORIAL] ?: true
+        context.dataStore.data.first()[UserPreferencesKeys.SHOW_TUTORIAL] ?: true
 
 
     override suspend fun setShowTutorial(showTutorial: Boolean) {
@@ -69,19 +69,34 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
         context.dataStore.data.first()[UserPreferencesKeys.TO_LOGIN] ?: false
 
 
-
     override suspend fun setToLogin(toLogin: Boolean) {
         try {
             context.dataStore.edit { preferences ->
                 preferences[UserPreferencesKeys.TO_LOGIN] = toLogin
-                Log.e("DataStoreWrite", "value $toLogin wrote" )
+                Log.e("DataStoreWrite", "value $toLogin wrote")
             }
         } catch (e: Exception) {
             Log.e("DataStoreWrite", "Error writing to DataStore", e)
         }
 
-}}
+    }
 
+    override suspend fun getCurrencySymbol(): String =
+        context.dataStore.data.first()[UserPreferencesKeys.CURRENCY_SYMBOL] ?: "$"
 
+    override suspend fun setCurrencySymbol(currencySymbol: String) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.CURRENCY_SYMBOL] = currencySymbol
+        }
+    }
 
+    override suspend fun getCurrencyCode(): String =
+        context.dataStore.data.first()[UserPreferencesKeys.CURRENCY_CODE] ?: "USD"
 
+    override suspend fun setCurrencyCode(currencyCode: String) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.CURRENCY_CODE] = currencyCode
+        }
+    }
+
+}
