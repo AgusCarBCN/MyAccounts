@@ -45,6 +45,7 @@ class CreateProfileViewModel @Inject constructor(
     // Definimos selectedImageUri como un LiveData
     private val _selectedImageUri = MutableLiveData<Uri?>()
     val selectedImageUri: LiveData<Uri?> = _selectedImageUri
+
     init{
         viewModelScope.launch {
             _selectedImageUri.value = getUri()
@@ -118,20 +119,6 @@ class CreateProfileViewModel @Inject constructor(
 
         return true
     }
-    fun saveImage(context: Context, uri: Uri): String? {
-        return try {
-            val inputStream = context.contentResolver.openInputStream(uri)
-            val file = File(context.externalCacheDir, "image.jpg")
-            val outputStream = FileOutputStream(file)
-            inputStream?.copyTo(outputStream)
-            inputStream?.close()
-            outputStream.close()
-            file.absolutePath
-        } catch (e: Exception) {
-            e.printStackTrace()
 
-            null
-        }
-    }
 
 }

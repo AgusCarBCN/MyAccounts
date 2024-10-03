@@ -1,5 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.login
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -8,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetPhotoFromUriUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetUserProfileDataUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.UpDatePasswordUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
@@ -17,10 +19,15 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val getUserProfileData: GetUserProfileDataUseCase,
-                                         private val upDatePassword: UpDatePasswordUseCase
-):ViewModel () {
+class LoginViewModel @Inject constructor(
+    private val getUserProfileData: GetUserProfileDataUseCase,
+    private val upDatePassword: UpDatePasswordUseCase,
+    private val getUri: GetPhotoFromUriUseCase
+) : ViewModel() {
 
+    // Definimos selectedImageUri como un LiveData
+    private val _selectedImageUri = MutableLiveData<Uri?>()
+    val selectedImageUri: LiveData<Uri?> = _selectedImageUri
 
     private val _user = MutableLiveData<UserProfile>()
     private val user: LiveData<UserProfile> = _user
@@ -66,12 +73,16 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
     init {
         // Cargar el valor inicial de toLogin desde el repositorio al inicializar el ViewModel
         viewModelScope.launch {
-            val userProfile=getUserProfileData()
-
+            val userProfile = getUserProfileData()
+            _selectedImageUri.value = getUri()
             _user.value = userProfile
             _name.value = userProfile.profileName
 
-
+        }
+    }
+    fun getLoginImage(){
+        viewModelScope.launch {
+            _selectedImageUri.value = getUri()
         }
     }
 
@@ -94,29 +105,30 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
     }
 
 
-    fun onUpdatePasswordChange(userName: String, newPassword: String){
+    fun onUpdatePasswordChange(userName: String, newPassword: String) {
         _userNameNewPassword.value = userName
         _newPassword.value = newPassword
         _enableConfirmButton.value = enableButton(userName, newPassword)
-        if(_user.value != null) {
+        if (_user.value != null) {
             _validateConfirmButton.value = validateUserName(userName)
 
-        }else {
+        } else {
             _validateLoginButton.value = false
             Log.d("Login", "Datos de usuario aún no disponibles")
         }
     }
-    fun onClearFields(){
-        _userNameNewPassword.value=""
-        _newPassword.value=""
+
+    fun onClearFields() {
+        _userNameNewPassword.value = ""
+        _newPassword.value = ""
     }
 
-    fun updatePassword(newPassword: String){
+    fun updatePassword(newPassword: String) {
         viewModelScope.launch {
-          upDatePassword.invoke(newPassword)
+            upDatePassword.invoke(newPassword)
             Log.d("Datos leidos: ", "Usuario en _user: ${_user.value?.profilePass}")
             // Obtener el perfil actualizado
-            val userProfile=getUserProfileData()
+            val userProfile = getUserProfileData()
             // Emitir los nuevos datos del perfil
             // Actualizar LiveData con el nuevo perfil
             _user.value = userProfile
@@ -129,7 +141,7 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
     }
 
     @Composable
-    fun getGreeting(userName:String): String {
+    fun getGreeting(userName: String): String {
         val hour = LocalTime.now().hour
 
         val greeting = when (hour) {
@@ -152,11 +164,12 @@ class LoginViewModel @Inject constructor(private val getUserProfileData: GetUser
             false
         }
     }
-    private fun validateUserName(userName: String): Boolean{
-        val userProfile=_user.value
-        return if (userProfile!=null){
-            userName==userProfile.profileUserName
-        }else{
+
+    private fun validateUserName(userName: String): Boolean {
+        val userProfile = _user.value
+        return if (userProfile != null) {
+            userName == userProfile.profileUserName
+        } else {
             false
         }
     }
