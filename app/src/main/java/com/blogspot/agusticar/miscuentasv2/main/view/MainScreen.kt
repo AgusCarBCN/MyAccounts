@@ -3,6 +3,7 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 import android.app.Activity
+import android.net.Uri
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -51,7 +53,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
+import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -62,7 +66,10 @@ import kotlin.system.exitProcess
 
 
 @Composable
-fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewModel,viewModel: CreateAccountsViewModel) {
+fun HomeScreen(navigationController: NavHostController,
+               mainViewModel: MainViewModel,
+               createAcccountsviewModel: CreateAccountsViewModel,
+               createProfileViewModel: CreateProfileViewModel ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -71,7 +78,7 @@ fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewM
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(mainViewModel) },
+        drawerContent = { DrawerContent(mainViewModel,createProfileViewModel) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
@@ -86,7 +93,7 @@ fun HomeScreen(navigationController: NavHostController, mainViewModel: MainViewM
                 ) {
                     when(selectedScreen){
                         IconOptions.HOME ->  {}
-                        IconOptions.PROFILE -> Test(viewModel)
+                        IconOptions.PROFILE -> Test(createAcccountsviewModel)
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> TODO()
                         IconOptions.NEW_INCOME -> TODO()
@@ -161,7 +168,8 @@ private fun BottomAppBar(viewModel: MainViewModel,navigationController: NavHostC
 
 //Implementacion de Menú de la izquierda
 @Composable
-private fun DrawerContent(viewModel: MainViewModel) {
+private fun DrawerContent(viewModel: MainViewModel,
+                          createProfileViewModel: CreateProfileViewModel) {
 
     Card(
         modifier = Modifier
@@ -175,7 +183,7 @@ private fun DrawerContent(viewModel: MainViewModel) {
         // Detectamos si el botón está presionado
 
         val isPressed by interactionSource.collectIsPressedAsState()
-        HeadDrawerMenu()
+        HeadDrawerMenu(createProfileViewModel)
         Column(
             modifier = Modifier
                 .background(LocalCustomColorsPalette.current.drawerColor)
@@ -197,23 +205,32 @@ private fun DrawerContent(viewModel: MainViewModel) {
 
 //Implementacion de la cabecerera del menu desplegable izquierda
 @Composable
-private fun HeadDrawerMenu() {
+private fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
+
+    val selectedImageUri by createProfileViewModel.selectedImageUri.observeAsState( null)
+    createProfileViewModel.loadImageUri()
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(LocalCustomColorsPalette.current.headDrawerColor)
 
     ) {
-        Image(
+
+        selectedImageUri?.let { UserImage(it) }
+
+
+        }
+            /*Image(
             painterResource(id = R.drawable.contabilidad),
             contentDescription = "Side menu",
             modifier = Modifier
                 .size(85.dp)
                 .padding(10.dp)
-        )
+        )*/
 
     }
-}
+
+
 
 // Implementación de Row clickable para cada opción del menú de la izquierda
 @Composable
@@ -289,6 +306,7 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
 // Creamos una fuente de interacciones para el IconButton
     val interactionSource = remember { MutableInteractionSource() }
     // Detectamos si el botón está presionado
+
     val isPressed by interactionSource.collectIsPressedAsState()
 
             IconButton(

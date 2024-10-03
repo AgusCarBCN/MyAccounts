@@ -14,4 +14,5 @@ object UserPreferencesKeys {
     val PASSWORD = stringPreferencesKey("password")
     val CURRENCY_SYMBOL=stringPreferencesKey("currency_symbol")
     val CURRENCY_CODE=stringPreferencesKey("currency_code")
+    val PHOTO_URI = stringPreferencesKey("photo_uri")
 }

@@ -1,9 +1,12 @@
 package com.blogspot.agusticar.miscuentasv2.createprofile
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetPhotoFromUriUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SaveUriUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetToLoginUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetUserProfileDataUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
@@ -12,8 +15,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateProfileViewModel @Inject constructor(private val setProfileData: SetUserProfileDataUseCase,
-                                                 private val setLoginTo: SetToLoginUseCase
+class CreateProfileViewModel @Inject constructor(
+    private val setProfileData: SetUserProfileDataUseCase,
+    private val setLoginTo: SetToLoginUseCase,
+    private val saveUri: SaveUriUseCase,
+    private val getUri:GetPhotoFromUriUseCase
 ) : ViewModel() {
 
     // LiveData para los campos de texto
@@ -33,21 +39,43 @@ class CreateProfileViewModel @Inject constructor(private val setProfileData: Set
     private val _enableButton = MutableLiveData<Boolean>()
     val enableButton: LiveData<Boolean> = _enableButton
 
+    // Definimos selectedImageUri como un LiveData
+    private val _selectedImageUri = MutableLiveData<Uri?>()
+    val selectedImageUri: LiveData<Uri?> = _selectedImageUri
+    init{
+        viewModelScope.launch {
+            _selectedImageUri.value = getUri()
+        }
+    }
 
-
-    fun onTextFieldsChanged(name:String,userName:String,password:String,newPassword:String){
+    fun onTextFieldsChanged(name: String, userName: String, password: String, newPassword: String) {
         _name.value = name
         _username.value = userName
         _password.value = password
         _repeatPassword.value = newPassword
         //Verificaciones para activar boton de confirmar
-        _enableButton.value=enableConfirmButton(name,userName,password,newPassword)
+        _enableButton.value = enableConfirmButton(name, userName, password, newPassword)
+    }
+
+    fun onImageSelected(selectedImage:Uri)
+    {
+        _selectedImageUri.value = selectedImage
+    }
+    fun saveImageUri(uri:Uri){
+        viewModelScope.launch {
+            saveUri(uri)
+        }
+    }
+    fun loadImageUri(){
+        viewModelScope.launch {
+            _selectedImageUri.value = getUri()
+        }
     }
 
     // Función para setear un nuevo valor para toLogin en el repositorio
 
     // Función para setear un nuevo valor para toLogin en el repositorio
-    fun setUserDataProfile(newProfile:UserProfile) {
+    fun setUserDataProfile(newProfile: UserProfile) {
         viewModelScope.launch {
             // Llamar a la función suspend de tu repositorio
             setProfileData(newProfile)
@@ -59,7 +87,12 @@ class CreateProfileViewModel @Inject constructor(private val setProfileData: Set
     }
 
 
-    private fun enableConfirmButton(name: String, userName: String, password: String, newPassword: String): Boolean {
+    private fun enableConfirmButton(
+        name: String,
+        userName: String,
+        password: String,
+        newPassword: String
+    ): Boolean {
         // Verifica que los campos no estén en blanco
         if (name.isBlank() || userName.isBlank() || password.isBlank() || newPassword.isBlank()) {
             return false

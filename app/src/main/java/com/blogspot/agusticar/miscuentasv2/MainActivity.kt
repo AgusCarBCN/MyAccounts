@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Routes.Home.route) {
-                                HomeScreen(navigationController,mainViewModel,createAccountViewModel)
+                                HomeScreen(navigationController,mainViewModel,createAccountViewModel,createProfileViewModel)
 
                             }
 

@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -36,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.blogspot.agusticar.miscuentasv2.R
@@ -45,22 +43,23 @@ import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navToBackLogin:()->Unit,navToCreateAccounts:()->Unit) {
+fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
+                           navToBackLogin:()->Unit,
+                           navToCreateAccounts:()->Unit) {
 
 
     val name by createViewModel.name.observeAsState("")
     val userName by createViewModel.username.observeAsState("")
     val password by createViewModel.password.observeAsState("")
+    val selectedImageUri by createViewModel.selectedImageUri.observeAsState( null)
     val repeatPassword by createViewModel.repeatPassword.observeAsState("")
     val scope = rememberCoroutineScope()
     val enableButton by createViewModel.enableButton.observeAsState(false)
-
 
 
 
@@ -80,7 +79,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navToBackLogi
                 // Parte inferior anclada al padre
             }) {
 
-            ProfileImageWithCamera()
+            ProfileImageWithCamera(createViewModel)
         }
         Column(modifier = Modifier
             .constrainAs(box) {
@@ -134,7 +133,8 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navToBackLogi
                     scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(
                         name,userName,password
-                    ))}
+                    ))
+                    createViewModel.saveImageUri(selectedImageUri!!)}
                         Log.d( "Datastore","dato grabado")
                     }catch (e: Exception) {
                         Log.e("DataStore", "Error writing to DataStore", e)
@@ -158,15 +158,17 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel, navToBackLogi
 }
 
 @Composable
-@Preview
-fun ProfileImageWithCamera() {
+
+fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
     // Lanza el selector de imágenes
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         selectedImageUri = uri
+        selectedImageUri?.let { viewModel.onImageSelected(it) }
     }
     Box(
         modifier = Modifier
@@ -189,7 +191,6 @@ fun ProfileImageWithCamera() {
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize() // La imagen ocupa todo el Card
-
                 )
             }
             // Imagen de perfil

@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.repository
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.datastore.preferences.core.edit
 import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.dataStore
@@ -96,6 +97,19 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
     override suspend fun setCurrencyCode(currencyCode: String) {
         context.dataStore.edit { preferences ->
             preferences[UserPreferencesKeys.CURRENCY_CODE] = currencyCode
+        }
+    }
+
+    override suspend fun getPhotoUri(): Uri {
+
+        val uriString=context.dataStore.data.first()[UserPreferencesKeys.PHOTO_URI] ?: ""
+
+        return Uri.parse(uriString)
+
+    }
+    override suspend fun setPhotoUri(uri: Uri) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.PHOTO_URI] =uri.toString()
         }
     }
 
