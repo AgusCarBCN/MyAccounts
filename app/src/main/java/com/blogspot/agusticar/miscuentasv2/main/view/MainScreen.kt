@@ -220,13 +220,7 @@ private fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
 
         }
-            /*Image(
-            painterResource(id = R.drawable.contabilidad),
-            contentDescription = "Side menu",
-            modifier = Modifier
-                .size(85.dp)
-                .padding(10.dp)
-        )*/
+
 
     }
 
