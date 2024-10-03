@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.datastore.preferences)
-
+    implementation(libs.coil.compose)
     runtimeOnly(libs.androidx.material.icons.extended)
     implementation(libs.androidx.constraintlayout.v220beta01)
     // To use constraintlayout in compose
