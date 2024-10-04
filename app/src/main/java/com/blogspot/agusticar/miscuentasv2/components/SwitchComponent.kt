@@ -1,12 +1,14 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.Text
@@ -17,10 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -38,11 +39,11 @@ fun SwitchComponent(title:String,
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 10.dp),
+            .padding(top = 10.dp, end = 20.dp, start = 20.dp),
         Arrangement.SpaceEvenly,
         Alignment.CenterVertically
     ) {
-        Column {
+        Column(modifier = Modifier.weight(0.75f)) {
             Text(text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize =18.sp,
@@ -50,7 +51,7 @@ fun SwitchComponent(title:String,
             Text(text = description,
                 color=LocalCustomColorsPalette.current.textColor)
         }
-        Switch(
+        Switch(modifier = Modifier.weight(0.25f),
             checked = switchCheckedState,
             onCheckedChange = { switchCheckedState = it
                               onClickSwitch(it)},
@@ -81,18 +82,60 @@ fun SwitchComponent(title:String,
         )
     }
 }
-
 @Composable
-fun HeadSwitch(title:String){
+fun RowComponent(title: String,
+                 description:String,
+                 iconResource:Int,
+                 onClick: () -> Unit) {
 
-    Text(text = title,
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, end = 20.dp, start = 20.dp)
+            .clickable { onClick() },
+        Arrangement.SpaceEvenly,
+        Alignment.CenterVertically
+    )
+    {
+        Icon(
+            painter = painterResource(id = iconResource),
+            contentDescription = title,
+            modifier = Modifier.weight(0.10f)
+                .size(24.dp)
+                .padding(end=10.dp),
+            tint = LocalCustomColorsPalette.current.textColor
+
+
+        )
+
+        Column(modifier = Modifier.weight(0.90f)) {
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = LocalCustomColorsPalette.current.textColor
+            )
+            Text(
+                text = description,
+                color = LocalCustomColorsPalette.current.textColor
+            )
+        }
+
+    }
+
+
+}
+@Composable
+fun HeadSetting(title: String) {
+
+    Text(
+        text = title,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         modifier = Modifier
-           .padding(top = 15.dp, bottom =15.dp)
-           .fillMaxWidth(),
+            .padding(top = 15.dp, bottom = 15.dp)
+            .fillMaxWidth(),
         color = LocalCustomColorsPalette.current.textHeadColor,
         textAlign = TextAlign.Center
     )
 }
-
