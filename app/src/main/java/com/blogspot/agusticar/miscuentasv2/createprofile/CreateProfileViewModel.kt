@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetPhotoFromUriUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetUserProfileDataUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SaveUriUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetToLoginUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetUserProfileDataUseCase
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateProfileViewModel @Inject constructor(
     private val setProfileData: SetUserProfileDataUseCase,
+    private val getProfileData:GetUserProfileDataUseCase,
     private val setLoginTo: SetToLoginUseCase,
     private val saveUri: SaveUriUseCase,
     private val getUri:GetPhotoFromUriUseCase
@@ -49,6 +51,8 @@ class CreateProfileViewModel @Inject constructor(
     init{
         viewModelScope.launch {
             _selectedImageUri.value = getUri()
+            val user = getProfileData.invoke()
+            _name.value = user.profileName
         }
     }
 

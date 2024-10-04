@@ -21,6 +21,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
     // StateFlow es un flujo que siempre mantiene su último valor emitido.
     val selectedScreen: MutableStateFlow<IconOptions> = _selectedScreen
 
+
     // Función que permite cambiar la pantalla seleccionada.
     // Utiliza viewModelScope para lanzar una corrutina y emitir un nuevo valor.
     fun selectScreen(screen: IconOptions){
