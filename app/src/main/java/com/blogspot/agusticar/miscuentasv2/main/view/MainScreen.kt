@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
+import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
@@ -92,7 +93,7 @@ fun HomeScreen(navigationController: NavHostController,
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     when(selectedScreen){
-                        IconOptions.HOME ->  {}
+                        IconOptions.HOME ->  SwitchComponent()
                         IconOptions.PROFILE -> Test(createAcccountsviewModel)
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> TODO()
@@ -308,6 +309,7 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
     // Detectamos si el botón está presionado
 
     val isPressed by interactionSource.collectIsPressedAsState()
+
 
             IconButton(
                 onClick = onClickButton,
