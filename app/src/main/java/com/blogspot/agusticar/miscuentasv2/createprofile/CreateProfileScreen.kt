@@ -129,13 +129,17 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 enableButton,
                 onClickButton = {
                     navToCreateAccounts()
-                    try{
-                    scope.launch {
-                    createViewModel.setUserDataProfile(UserProfile(
-                        name,userName,password
-                    ))
-                    createViewModel.saveImageUri(selectedImageUri!!)}
-                        Log.d( "Datastore","dato grabado")
+                    try {
+                        scope.launch {
+                            createViewModel.setUserDataProfile(
+                                UserProfile(
+                                    name, userName, password
+                                )
+                            )
+                            selectedImageUri?.let { createViewModel.saveImageUri(it) }
+                            //createViewModel.saveImageUri(selectedImageUri!!)}
+                            Log.d("Datastore", "dato grabado")
+                        }
                     }catch (e: Exception) {
                         Log.e("DataStore", "Error writing to DataStore", e)
                     }

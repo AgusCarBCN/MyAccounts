@@ -3,9 +3,7 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 import android.app.Activity
-import android.net.Uri
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -53,23 +51,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
-import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
+import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.system.exitProcess
 
 
 @Composable
 fun HomeScreen(navigationController: NavHostController,
                mainViewModel: MainViewModel,
-               createAcccountsviewModel: CreateAccountsViewModel,
+               createAccountsViewModel: CreateAccountsViewModel,
                createProfileViewModel: CreateProfileViewModel ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -93,10 +90,10 @@ fun HomeScreen(navigationController: NavHostController,
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     when(selectedScreen){
-                        IconOptions.HOME ->  SwitchComponent()
-                        IconOptions.PROFILE -> Test(createAcccountsviewModel)
+                        IconOptions.HOME -> Test(createAccountsViewModel)
+                        IconOptions.PROFILE -> Test(createAccountsViewModel)
                         IconOptions.SEARCH -> TODO()
-                        IconOptions.SETTINGS -> TODO()
+                        IconOptions.SETTINGS -> SettingScreen()
                         IconOptions.NEW_INCOME -> TODO()
                         IconOptions.TRANSFER -> TODO()
                         IconOptions.BARCHART -> TODO()
@@ -155,7 +152,8 @@ private fun BottomAppBar(viewModel: MainViewModel,navigationController: NavHostC
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Search", R.drawable.search, onClickButton = {} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
-            IconButtonApp("Settings", R.drawable.settings, onClickButton = {} )
+            IconButtonApp("Settings", R.drawable.settings,
+                onClickButton = {viewModel.selectScreen(IconOptions.SETTINGS)} )
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Profile", R.drawable.profile, onClickButton = {
                 viewModel.selectScreen(IconOptions.PROFILE)

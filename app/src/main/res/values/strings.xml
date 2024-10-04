@@ -79,5 +79,11 @@
     <string name="createaccountsmsg">You can create your accounts now o later.</string>
     <string name="selectcurrency">Select a currency for your accounts.</string>
     <string name="selectedcurrency">Selected currency: </string>
-
+    <!--Settings-->
+    <string name="appsettings">App Settings</string>
+    <string name="backup">Backup</string>
+    <string name="theme">App theme</string>
+    <string name="enableonboarding">Onboarding</string>
+    <string name="destheme">Choose between dark or light theme</string>
+    <string name="desenableonboarding">Enable or disable onboarding</string>
 </resources>

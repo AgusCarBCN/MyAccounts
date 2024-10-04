@@ -78,4 +78,12 @@
     <string name="createaccountsmsg">Puedes crear tus cuentas ahora o mas tarde.</string>
     <string name="selectcurrency">Escoje una divisa para tus cuentas.</string>
     <string name="selectedcurrency">Divisa seleccionada: </string>
+
+    <!--Ajustes-->
+    <string name="appsettings">Ajustes generales</string>
+    <string name="backup">Respaldo</string>
+    <string name="destheme">Escoje entre un tema claro o oscuro.</string>
+    <string name="desenableonboarding">Activa o desactiva el tutorial de inicio.</string>
+    <string name="theme">Tema de la app</string>
+    <string name="enableonboarding">Tutorial de inicio.</string>
 </resources>

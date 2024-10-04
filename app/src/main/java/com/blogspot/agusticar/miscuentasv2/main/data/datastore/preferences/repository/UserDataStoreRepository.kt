@@ -110,9 +110,12 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
 
     }
     override suspend fun setPhotoUri(uri: Uri) {
-        val pathImageUri=saveUri(uri)
-        context.dataStore.edit { preferences ->
-            preferences[UserPreferencesKeys.PHOTO_URI] =pathImageUri.toString()
+
+        if(uri!=Uri.EMPTY) {
+            val pathImageUri = saveUri(uri)
+            context.dataStore.edit { preferences ->
+                preferences[UserPreferencesKeys.PHOTO_URI] = pathImageUri.toString()
+            }
         }
     }
 

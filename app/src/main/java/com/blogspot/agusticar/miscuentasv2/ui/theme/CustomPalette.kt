@@ -39,7 +39,8 @@ data class CustomColorsPalette(
     val thumbCheckedColor:Color = Color.Unspecified,
     val thumbDefaultColor:Color = Color.Unspecified,
     val trackCheckedColor:Color = Color.Unspecified,
-    val trackDefaultColor:Color = Color.Unspecified
+    val trackDefaultColor:Color = Color.Unspecified,
+    val textHeadColor:Color = Color.Unspecified,
     )
 
 val LightCustomColorsPalette = CustomColorsPalette(
@@ -76,6 +77,7 @@ val LightCustomColorsPalette = CustomColorsPalette(
     thumbDefaultColor = LightYellow,
     trackCheckedColor = Crimson,
     trackDefaultColor = CoralPink,
+    textHeadColor = DeepPurple,
 
 )
 val DarkCustomColorsPalette = CustomColorsPalette(
@@ -111,7 +113,8 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     thumbCheckedColor = SoftPeach,
     thumbDefaultColor = PeachyCream,
     trackCheckedColor = PeachyCream,
-    trackDefaultColor = Black
+    trackDefaultColor = Black,
+    textHeadColor = SoftPeach
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }
