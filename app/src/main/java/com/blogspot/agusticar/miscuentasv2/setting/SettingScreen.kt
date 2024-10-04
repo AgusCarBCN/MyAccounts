@@ -9,13 +9,23 @@ import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
 
 @Composable
 
-fun SettingScreen(){
+fun SettingScreen() {
 
-Column(){
-    HeadSwitch(title = stringResource(id = R.string.appsettings))
-    SwitchComponent(title= stringResource(id = R.string.theme), description = stringResource(id = R.string.destheme),false)
-    SwitchComponent(title= stringResource(id = R.string.enableonboarding), description = stringResource(id = R.string.desenableonboarding),false)
-    // Aquí se agregarán las vistas de la sección de ajustes
+    Column() {
+        HeadSwitch(title = stringResource(id = R.string.appsettings))
+        SwitchComponent(
+            title = stringResource(id = R.string.theme),
+            description = stringResource(id = R.string.destheme),
+            false,
+            onClickSwitch = {}
+        )
+        SwitchComponent(
+            title = stringResource(id = R.string.enableonboarding),
+            description = stringResource(id = R.string.desenableonboarding),
+            false,
+            onClickSwitch = {}
+        )
+        // Aquí se agregarán las vistas de la sección de ajustes
 
-}
+    }
 }

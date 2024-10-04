@@ -28,8 +28,13 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
 @Composable
-fun SwitchComponent(title:String,description:String,enabledSetting:Boolean) {
-    var switchCheckedState by remember { mutableStateOf(enabledSetting) }
+fun SwitchComponent(title:String,
+                    description:String,
+                    isChecked:Boolean,
+                    onClickSwitch: (Boolean) -> Unit) {
+
+    var switchCheckedState by remember { mutableStateOf(isChecked) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,7 +52,8 @@ fun SwitchComponent(title:String,description:String,enabledSetting:Boolean) {
         }
         Switch(
             checked = switchCheckedState,
-            onCheckedChange = { switchCheckedState = it },
+            onCheckedChange = { switchCheckedState = it
+                              onClickSwitch(it)},
 
             /*
             The "checkedIconColor" and "uncheckedIconColor" excluded from this list
