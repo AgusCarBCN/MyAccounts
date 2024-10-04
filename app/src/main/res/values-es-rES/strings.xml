@@ -104,5 +104,6 @@
     <string name="desdelete_all">Borra todas las cuentas y todos sus registros dentro.</string>
     <string name="desrename_account">Da un nuevo nombre a una de tus cuentas.</string>
     <string name="desadd_an_account">Añade una nueva cuenta a la aplicación</string>
-
+    <string name="changecurrency">Cambia la divisa.</string>
+    <string name="deschangecurrency">Cambia la divisa de tus cuentas.</string>
 </resources>

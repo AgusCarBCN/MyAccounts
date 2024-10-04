@@ -102,5 +102,6 @@
     <string name="desdelete_all">Delete all accounts and all their records inside.</string>
     <string name="desrename_account">Give a new name to one of your accounts.</string>
     <string name="desadd_an_account">Add a new account to the application.</string>
-
+    <string name="changecurrency">Change currency</string>
+    <string name="deschangecurrency">Change the currency of your accounts.</string>
 </resources>

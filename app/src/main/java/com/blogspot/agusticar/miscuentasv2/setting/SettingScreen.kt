@@ -68,7 +68,7 @@ fun SettingScreen() {
 
         SpacerSetting()
 
-        HeadSetting(title = stringResource(id = R.string.backup))
+        HeadSetting(title = stringResource(id = R.string.accountsetting))
 
         RowComponent(title = stringResource(id = R.string.add_an_account),
             description = stringResource(id = R.string.desadd_an_account),
@@ -83,9 +83,9 @@ fun SettingScreen() {
             iconResource = R.drawable.baseline_delete_24,
             onClick = {})
 
-        RowComponent(title = stringResource(id = R.string.deleteall),
-            description = stringResource(id = R.string.desdeleteall),
-            iconResource = R.drawable.deleteall,
+        RowComponent(title = stringResource(id = R.string.changecurrency),
+            description = stringResource(id =R.string.deschangecurrency),
+            iconResource = R.drawable.exchange,
             onClick = {})
     }
 }
