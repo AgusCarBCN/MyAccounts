@@ -1,22 +1,27 @@
 package com.blogspot.agusticar.miscuentasv2.createprofile
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetPhotoFromUriUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetUserProfileDataUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SaveUriUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetToLoginUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetUserProfileDataUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateProfileViewModel @Inject constructor(
     private val setProfileData: SetUserProfileDataUseCase,
+    private val getProfileData:GetUserProfileDataUseCase,
     private val setLoginTo: SetToLoginUseCase,
     private val saveUri: SaveUriUseCase,
     private val getUri:GetPhotoFromUriUseCase
@@ -42,9 +47,12 @@ class CreateProfileViewModel @Inject constructor(
     // Definimos selectedImageUri como un LiveData
     private val _selectedImageUri = MutableLiveData<Uri?>()
     val selectedImageUri: LiveData<Uri?> = _selectedImageUri
+
     init{
         viewModelScope.launch {
             _selectedImageUri.value = getUri()
+            val user = getProfileData.invoke()
+            _name.value = user.profileName
         }
     }
 
@@ -115,5 +123,6 @@ class CreateProfileViewModel @Inject constructor(
 
         return true
     }
+
 
 }

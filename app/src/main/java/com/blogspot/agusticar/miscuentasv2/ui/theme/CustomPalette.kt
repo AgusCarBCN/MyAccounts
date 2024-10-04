@@ -35,6 +35,12 @@ data class CustomColorsPalette(
     val imageTutorialTarget:Color=Color.Unspecified,
    val rowDrawerPressed:Color=Color.Unspecified,
     val topBarContent:Color = Color.Unspecified,
+    val backgroundSwitch:Color = Color.Unspecified,
+    val thumbCheckedColor:Color = Color.Unspecified,
+    val thumbDefaultColor:Color = Color.Unspecified,
+    val trackCheckedColor:Color = Color.Unspecified,
+    val trackDefaultColor:Color = Color.Unspecified,
+    val textHeadColor:Color = Color.Unspecified,
     )
 
 val LightCustomColorsPalette = CustomColorsPalette(
@@ -65,7 +71,14 @@ val LightCustomColorsPalette = CustomColorsPalette(
     imageTutorialInit = CoralPink,
     imageTutorialTarget = SoftPeach,
     rowDrawerPressed = Crimson,
-    topBarContent=LightYellow
+    topBarContent=LightYellow,
+    backgroundSwitch = CoralPink,
+    thumbCheckedColor = SoftPeach,
+    thumbDefaultColor = LightYellow,
+    trackCheckedColor = Crimson,
+    trackDefaultColor = CoralPink,
+    textHeadColor = DeepPurple,
+
 )
 val DarkCustomColorsPalette = CustomColorsPalette(
     buttonColorDefault =  SoftPeach,
@@ -95,8 +108,13 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     imageTutorialInit = SoftPeach,
     imageTutorialTarget = PeachyCream,
     topBarContent=LightYellow,
-    rowDrawerPressed = PeachyCream
-
+    rowDrawerPressed = PeachyCream,
+    backgroundSwitch = Black,
+    thumbCheckedColor = SoftPeach,
+    thumbDefaultColor = PeachyCream,
+    trackCheckedColor = PeachyCream,
+    trackDefaultColor = Black,
+    textHeadColor = SoftPeach
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }

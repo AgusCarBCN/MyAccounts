@@ -22,4 +22,5 @@ interface DataStoreRepository {
 
     suspend fun getPhotoUri(): Uri
     suspend fun setPhotoUri(uri: Uri)
+
 }

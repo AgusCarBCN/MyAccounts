@@ -12,6 +12,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
@@ -75,7 +76,8 @@ fun UserImage(uri: Uri)
 {
     Card(
         modifier = Modifier
-            .size(80.dp),
+            .size(80.dp)
+            .padding(10.dp),
         shape = CircleShape, // Hace que el Card sea circular
         // Reemplaza lightYellow
     )

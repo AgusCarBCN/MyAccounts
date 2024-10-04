@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.login
 
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -31,21 +33,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import coil.compose.rememberAsyncImagePainter
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.R.color
-import com.blogspot.agusticar.miscuentasv2.R.drawable
 import com.blogspot.agusticar.miscuentasv2.R.string
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
-import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:()->Unit) {
+fun LoginComponent(
+    loginViewModel: LoginViewModel,
+    modifier: Modifier, navToMain: () -> Unit,
+) {
 
+    val image by loginViewModel.selectedImageUri.observeAsState(initial = null)
     val name by loginViewModel.name.observeAsState("")
     val userName by loginViewModel.userName.observeAsState("")
     val password by loginViewModel.password.observeAsState("")
@@ -66,7 +71,7 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
      desde cualquier parte de tu UI.*/
     val snackbarHostState = remember { SnackbarHostState() }
 
-
+    loginViewModel.getLoginImage()
     ConstraintLayout(
         modifier
             .fillMaxSize()
@@ -90,14 +95,24 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Image(
+                painter = if (image == Uri.EMPTY) painterResource(id = R.drawable.contabilidad)
+                else rememberAsyncImagePainter(image), // Carga la imagen desde el Uri ,
+                contentDescription = "Profile Image",
+                contentScale = ContentScale.Crop,
+                modifier = if (image == Uri.EMPTY) Modifier
+                    .size(250.dp)
+                    .background(LocalCustomColorsPalette.current.imageBackground)
+                else Modifier
+                    .fillMaxSize()
+            )
+            /*Image(
                 painter = painterResource(id = drawable.contabilidad),
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(250.dp) // Uso de size para mantener la relación de aspecto
                     .background(LocalCustomColorsPalette.current.imageBackground)
-            )
+            )*/
         }
 
         // Caja de login en la parte inferior, ocupando el otro 50% de la altura
@@ -119,7 +134,7 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
             if (!enableNewPasswordFields) {
                 Text(
                     text = loginViewModel.getGreeting(name),
-                    fontSize =  with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
+                    fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
                     color = LocalCustomColorsPalette.current.textColor,
                     fontWeight = FontWeight.Bold
                 )
@@ -127,14 +142,14 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.username),
                     userName,
-                    onTextChange = { loginViewModel.onLoginChanged(it,password)},
+                    onTextChange = { loginViewModel.onLoginChanged(it, password) },
                     BoardType.TEXT
                 )
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.password),
                     password,
-                    onTextChange = { loginViewModel.onLoginChanged(userName,it)},
+                    onTextChange = { loginViewModel.onLoginChanged(userName, it) },
                     BoardType.PASSWORD,
                     true
                 )
@@ -143,11 +158,14 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
                     modifier = Modifier.width(360.dp),
                     enableLoginButton,
                     onClickButton = {
-                        if(validateLogin) {
+                        if (validateLogin) {
                             navToMain()
-                        }else
+                        } else
                             scope.launch {
-                                snackbarHostState.showSnackbar("Login no valido",duration =SnackbarDuration.Short)
+                                snackbarHostState.showSnackbar(
+                                    "Login no valido",
+                                    duration = SnackbarDuration.Short
+                                )
                             }
                     }
                 )
@@ -171,7 +189,7 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.requestuser),
                     userNameNewPassword,
-                    onTextChange = { loginViewModel.onUpdatePasswordChange(it,newPassword) },
+                    onTextChange = { loginViewModel.onUpdatePasswordChange(it, newPassword) },
                     BoardType.TEXT
                 )
 
@@ -179,7 +197,12 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = string.newpassword),
                     newPassword,
-                    onTextChange = { loginViewModel.onUpdatePasswordChange(userNameNewPassword,it) },
+                    onTextChange = {
+                        loginViewModel.onUpdatePasswordChange(
+                            userNameNewPassword,
+                            it
+                        )
+                    },
                     BoardType.PASSWORD,
                     true
                 )
@@ -188,18 +211,20 @@ fun LoginComponent(loginViewModel: LoginViewModel,modifier: Modifier,navToMain:(
                     modifier = Modifier.width(360.dp),
                     enableConfirmButton,
                     onClickButton = {
-                        if(validateConfirm) {
-                            try{
-                            scope.launch {
-                                loginViewModel.updatePassword(newPassword)
-                                snackbarHostState.showSnackbar("contraseña actualizada $newPassword",duration =SnackbarDuration.Short)
-                                loginViewModel.onEnableNewPasswordFields(false)
-                            }
-                                 } catch (e: Exception) {
-                                Log.e("DataStore", "Error Updating password", e)
+                        if (validateConfirm) {
+                            try {
+                                scope.launch {
+                                    loginViewModel.updatePassword(newPassword)
+                                    snackbarHostState.showSnackbar(
+                                        "contraseña actualizada $newPassword",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                    loginViewModel.onEnableNewPasswordFields(false)
                                 }
+                            } catch (e: Exception) {
+                                Log.e("DataStore", "Error Updating password", e)
                             }
-                         else {
+                        } else {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
                                     "usuario no valido",

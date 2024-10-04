@@ -1,19 +1,16 @@
 package com.blogspot.agusticar.miscuentasv2.main.view
 
 
-
 import android.app.Activity
-import android.net.Uri
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -58,18 +56,20 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsVie
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
-import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.system.exitProcess
 
 
 @Composable
-fun HomeScreen(navigationController: NavHostController,
-               mainViewModel: MainViewModel,
-               createAcccountsviewModel: CreateAccountsViewModel,
-               createProfileViewModel: CreateProfileViewModel ) {
+fun HomeScreen(
+    navigationController: NavHostController,
+    mainViewModel: MainViewModel,
+    createAccountsViewModel: CreateAccountsViewModel,
+    createProfileViewModel: CreateProfileViewModel
+) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -78,24 +78,25 @@ fun HomeScreen(navigationController: NavHostController,
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(mainViewModel,createProfileViewModel) },
+        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
-            Scaffold(modifier = Modifier.fillMaxSize(),
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
                 { TopBarApp(scope, drawerState) },
-                { BottomAppBar(mainViewModel,navigationController)},
+                { BottomAppBar(mainViewModel, navigationController) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
                 ) {
-                    when(selectedScreen){
-                        IconOptions.HOME ->  {}
-                        IconOptions.PROFILE -> Test(createAcccountsviewModel)
+                    when (selectedScreen) {
+                        IconOptions.HOME -> Test(createAccountsViewModel)
+                        IconOptions.PROFILE -> Test(createAccountsViewModel)
                         IconOptions.SEARCH -> TODO()
-                        IconOptions.SETTINGS -> TODO()
+                        IconOptions.SETTINGS -> SettingScreen()
                         IconOptions.NEW_INCOME -> TODO()
                         IconOptions.TRANSFER -> TODO()
                         IconOptions.BARCHART -> TODO()
@@ -141,35 +142,38 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
 }
 
 
-
 @Composable
-private fun BottomAppBar(viewModel: MainViewModel,navigationController: NavHostController) {
+private fun BottomAppBar(viewModel: MainViewModel, navigationController: NavHostController) {
 
     BottomAppBar(
         containerColor = LocalCustomColorsPalette.current.barBackground,
         contentColor = LocalCustomColorsPalette.current.topBarContent,
         actions = {
-            IconButtonApp("Home", R.drawable.home
-                , onClickButton = {viewModel.selectScreen(IconOptions.HOME)} )
+            IconButtonApp("Home",
+                R.drawable.home,
+                onClickButton = { viewModel.selectScreen(IconOptions.HOME) })
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
-            IconButtonApp("Search", R.drawable.search, onClickButton = {} )
+            IconButtonApp("Search", R.drawable.search, onClickButton = {})
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
-            IconButtonApp("Settings", R.drawable.settings, onClickButton = {} )
+            IconButtonApp("Settings", R.drawable.settings,
+                onClickButton = { viewModel.selectScreen(IconOptions.SETTINGS) })
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Profile", R.drawable.profile, onClickButton = {
                 viewModel.selectScreen(IconOptions.PROFILE)
 
-            } )
+            })
         },
         tonalElevation = 5.dp
-        )
+    )
 }
 
 
 //Implementacion de Menú de la izquierda
 @Composable
-private fun DrawerContent(viewModel: MainViewModel,
-                          createProfileViewModel: CreateProfileViewModel) {
+private fun DrawerContent(
+    viewModel: MainViewModel,
+    createProfileViewModel: CreateProfileViewModel
+) {
 
     Card(
         modifier = Modifier
@@ -194,11 +198,13 @@ private fun DrawerContent(viewModel: MainViewModel,
             ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {})
             ClickableRow(OptionItem(R.string.chart, R.drawable.barchartoption), onClick = {})
             ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {})
-            ClickableRow(OptionItem(R.string.accountsetting, R.drawable.manageaccount), onClick = {})
+
             TitleOptions(R.string.aboutapp)
             ClickableRow(OptionItem(R.string.about, R.drawable.info), onClick = {})
             ClickableRow(OptionItem(R.string.privacy, R.drawable.privacy), onClick = {})
-            ClickableRow(OptionItem(R.string.exitapp, R.drawable.exitapp), onClick = {viewModel.selectScreen(IconOptions.EXIT)})
+            ClickableRow(
+                OptionItem(R.string.exitapp, R.drawable.exitapp),
+                onClick = { viewModel.selectScreen(IconOptions.EXIT) })
         }
     }
 }
@@ -207,23 +213,37 @@ private fun DrawerContent(viewModel: MainViewModel,
 @Composable
 private fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
-    val selectedImageUri by createProfileViewModel.selectedImageUri.observeAsState( null)
+    val selectedImageUri by createProfileViewModel.selectedImageUri.observeAsState(null)
+    val name by createProfileViewModel.name.observeAsState("user")
+
     createProfileViewModel.loadImageUri()
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(LocalCustomColorsPalette.current.headDrawerColor)
+            .background(LocalCustomColorsPalette.current.headDrawerColor),
+                Arrangement.SpaceEvenly,
+        Alignment.CenterVertically
+
 
     ) {
-
+        Box(modifier = Modifier.weight(0.4f)) {
         selectedImageUri?.let { UserImage(it) }
+        }
 
 
+
+        Column(modifier = Modifier.weight(0.6f),
+            ) {
+            Text(text = "Hola",
+                color= LocalCustomColorsPalette.current.textColor)
+            Text(text = "$name !",
+                color= LocalCustomColorsPalette.current.textColor)
         }
 
 
     }
 
+}
 
 
 // Implementación de Row clickable para cada opción del menú de la izquierda
@@ -294,7 +314,6 @@ private fun TitleOptions(title: Int) {
 }
 
 
-
 @Composable
 private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () -> Unit) {
 // Creamos una fuente de interacciones para el IconButton
@@ -303,13 +322,13 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
 
     val isPressed by interactionSource.collectIsPressedAsState()
 
-            IconButton(
-                onClick = onClickButton,
-                interactionSource = interactionSource
-            ) {
-                IconComponent(isPressed, resourceIcon, 36)
-            }
+    IconButton(
+        onClick = onClickButton,
+        interactionSource = interactionSource
+    ) {
+        IconComponent(isPressed, resourceIcon, 36)
+    }
 
-        }
+}
 
 

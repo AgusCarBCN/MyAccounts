@@ -4,12 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.datastore.preferences.core.edit
-import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.dataStore
 import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.UserPreferencesKeys
+import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.dataStore
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 
@@ -108,9 +110,34 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
 
     }
     override suspend fun setPhotoUri(uri: Uri) {
-        context.dataStore.edit { preferences ->
-            preferences[UserPreferencesKeys.PHOTO_URI] =uri.toString()
+
+        if(uri!=Uri.EMPTY) {
+            val pathImageUri = saveUri(uri)
+            context.dataStore.edit { preferences ->
+                preferences[UserPreferencesKeys.PHOTO_URI] = pathImageUri.toString()
+            }
         }
     }
+
+     private suspend fun saveUri(uri: Uri): String? {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val file = File(context.externalCacheDir, "image.jpg")
+        return if (inputStream != null) {
+            withContext(Dispatchers.IO) {
+                FileOutputStream(file).use { outputStream ->
+                    try {
+                        inputStream.copyTo(outputStream)
+                        file.absolutePath
+                    } catch (e: Exception) {
+                        e.printStackTrace() // Manejo de errores
+                        null
+                    }
+                }
+            }
+        } else {
+            null
+        }
+    }
+
 
 }
