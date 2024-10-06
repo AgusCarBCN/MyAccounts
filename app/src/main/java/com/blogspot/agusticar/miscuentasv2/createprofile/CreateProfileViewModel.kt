@@ -66,6 +66,7 @@ class CreateProfileViewModel @Inject constructor(
             _name.value = user.profileName
             _username.value = user.profileUserName
             _password.value = user.profilePass
+
         }
     }
 
@@ -96,6 +97,7 @@ class CreateProfileViewModel @Inject constructor(
     fun saveImageUri(uri:Uri){
         viewModelScope.launch {
             saveUri(uri)
+            _selectedImageUri.value=getUri()
         }
     }
     fun loadImageUri(){

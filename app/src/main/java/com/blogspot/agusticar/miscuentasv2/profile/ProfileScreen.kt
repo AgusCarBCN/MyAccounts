@@ -20,12 +20,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileImageWithCamera
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -42,7 +44,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     //val enablePasswordButton by createViewModel.enableChangeImage.observeAsState(false)
 
     val scope = rememberCoroutineScope()
-
+    //createViewModel.onImageNoSelected()
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
     Log.d("imageUri",selectedImageUri.toString ())
 
@@ -57,7 +59,17 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 text = "Change Photo",
                 R.dimen.text_title_small, modifier = Modifier.width(220.dp),
                 enableChangeImageButton,
-                onClickButton = {}
+                onClickButton = {
+
+                    scope.launch {
+                        try {
+                            selectedImageUri?.let { createViewModel.saveImageUri(it)
+                            Log.d("ImageUri","imagen guardada ")}
+                        } catch (e:Exception){
+                            Log.d("ImageUri","imagen  No guardada ")
+                        }
+                        }
+                }
             )
         }
         ProfileData(R.string.name,

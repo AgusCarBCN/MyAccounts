@@ -164,7 +164,10 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 fun ProfileImageWithCamera(viewModel:CreateProfileViewModel,defaultImage: Int, imageUri: Uri? =null) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-
+    val saveImage=viewModel.loadImageUri()
+    if(selectedImageUri==null || selectedImageUri==Uri.EMPTY){
+       viewModel.onImageNoSelected()
+    }
     // Lanza el selector de imágenes
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -187,7 +190,7 @@ fun ProfileImageWithCamera(viewModel:CreateProfileViewModel,defaultImage: Int, i
             // Reemplaza lightYellow
         ) {
             if(selectedImageUri==null) {
-                viewModel.onImageNoSelected()
+
                 Image(
                     painter = if(imageUri==Uri.EMPTY)painterResource(id = defaultImage)
                     else  rememberAsyncImagePainter(imageUri), // Reemplaza con tu imagen de placeholder
@@ -197,7 +200,7 @@ fun ProfileImageWithCamera(viewModel:CreateProfileViewModel,defaultImage: Int, i
                         .fillMaxSize() // La imagen ocupa todo el Card
                 )
             }else{
-                viewModel.onImageSelected(selectedImageUri!!)
+
             }
 
             // Imagen de perfil
@@ -233,7 +236,9 @@ fun ProfileImageWithCamera(viewModel:CreateProfileViewModel,defaultImage: Int, i
                 modifier = Modifier
                     .fillMaxSize()
                     .background(LocalCustomColorsPalette.current.buttonColorPressed)
-                    .clickable { photoPickerLauncher.launch("image/*") }
+                    .clickable { photoPickerLauncher.launch("image/*")
+                        selectedImageUri?.let {viewModel.onImageSelected(it)  }
+                        }
             )
         }
     }
