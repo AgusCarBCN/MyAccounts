@@ -34,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.createSavedStateHandle
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
@@ -166,13 +167,17 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val selectedImageUriSaved by viewModel.selectedImageUri.observeAsState( null)
+    // Llama a `onImageNoSelected()` si no hay una imagen seleccionada o guardada
+    //viewModel.onImageNoSelected()
     // Lanza el selector de imágenes
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         selectedImageUri = uri
-        selectedImageUri?.let { viewModel.onImageSelected(it) }
+
+        selectedImageUri?.let { viewModel.onImageSelected(it)}
     }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -230,8 +235,11 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
                 modifier = Modifier
                     .fillMaxSize()
                     .background(LocalCustomColorsPalette.current.buttonColorPressed)
-                    .clickable { photoPickerLauncher.launch("image/*") }
+                    .clickable {
+                        photoPickerLauncher.launch("image/*")
+                    }
             )
+
         }
     }
 }

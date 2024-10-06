@@ -81,6 +81,7 @@ fun HomeScreen(
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
 
 
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = { DrawerContent(mainViewModel, createProfileViewModel) },
@@ -96,9 +97,14 @@ fun HomeScreen(
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
-                ) {
+                ) {if(selectedScreen!=IconOptions.EXIT){
+                    createProfileViewModel.onButtonProfileNoSelected()
+                }
+
+
                     when (selectedScreen) {
-                        IconOptions.HOME -> Test(createAccountsViewModel)
+                        IconOptions.HOME -> {Test(createAccountsViewModel)}
+                       // createProfileViewModel.onButtonProfileNoSelected()
                         IconOptions.PROFILE -> ProfileScreen(createProfileViewModel)
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> SettingScreen()

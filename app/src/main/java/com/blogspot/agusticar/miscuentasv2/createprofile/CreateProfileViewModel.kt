@@ -67,6 +67,7 @@ class CreateProfileViewModel @Inject constructor(
             _username.value = user.profileUserName
             _password.value = user.profilePass
 
+
         }
     }
 
@@ -91,7 +92,7 @@ class CreateProfileViewModel @Inject constructor(
         _selectedImageUri.value = selectedImage
         _enableChangeImage.value=true
     }
-    fun onImageNoSelected(){
+    fun onButtonProfileNoSelected(){
         _enableChangeImage.value=false
     }
     fun saveImageUri(uri:Uri){

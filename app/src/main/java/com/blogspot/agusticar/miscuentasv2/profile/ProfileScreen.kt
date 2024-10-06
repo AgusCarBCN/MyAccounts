@@ -44,7 +44,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     //val enablePasswordButton by createViewModel.enableChangeImage.observeAsState(false)
 
     val scope = rememberCoroutineScope()
-    //createViewModel.onImageNoSelected()
+
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
     Log.d("imageUri",selectedImageUri.toString ())
 
@@ -61,14 +61,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 enableChangeImageButton,
                 onClickButton = {
 
-                    scope.launch {
-                        try {
-                            selectedImageUri?.let { createViewModel.saveImageUri(it)
-                            Log.d("ImageUri","imagen guardada ")}
-                        } catch (e:Exception){
-                            Log.d("ImageUri","imagen  No guardada ")
-                        }
-                        }
+
                 }
             )
         }
