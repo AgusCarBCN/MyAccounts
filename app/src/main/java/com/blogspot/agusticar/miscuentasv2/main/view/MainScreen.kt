@@ -322,10 +322,12 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
     val isPressed by interactionSource.collectIsPressedAsState()
 
     IconButton(
+        modifier=Modifier
+            .background(color = Color.Blue),
         onClick = onClickButton,
         interactionSource = interactionSource
     ) {
-        IconComponent(isPressed, resourceIcon, 36)
+        IconComponent(isPressed, resourceIcon, 28)
     }
 
 }
