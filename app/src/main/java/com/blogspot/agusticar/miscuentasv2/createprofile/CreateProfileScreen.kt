@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
@@ -77,7 +78,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 // Parte inferior anclada al padre
             }) {
 
-            ProfileImageWithCamera(createViewModel,R.drawable.contabilidad,null)
+            ProfileImageWithCamera(createViewModel)
         }
         Column(modifier = Modifier
             .constrainAs(box) {
@@ -161,13 +162,10 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 
 @Composable
 
-fun ProfileImageWithCamera(viewModel:CreateProfileViewModel,defaultImage: Int, imageUri: Uri? =null) {
+fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val saveImage=viewModel.loadImageUri()
-    if(selectedImageUri==null || selectedImageUri==Uri.EMPTY){
-       viewModel.onImageNoSelected()
-    }
+    val selectedImageUriSaved by viewModel.selectedImageUri.observeAsState( null)
     // Lanza el selector de imágenes
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -190,24 +188,20 @@ fun ProfileImageWithCamera(viewModel:CreateProfileViewModel,defaultImage: Int, i
             // Reemplaza lightYellow
         ) {
             if(selectedImageUri==null) {
-
                 Image(
-                    painter = if(imageUri==Uri.EMPTY)painterResource(id = defaultImage)
-                    else  rememberAsyncImagePainter(imageUri), // Reemplaza con tu imagen de placeholder
+                    painter = if(selectedImageUriSaved==Uri.EMPTY)painterResource(id = R.drawable.contabilidad)
+                    else rememberAsyncImagePainter(model = selectedImageUriSaved), // Reemplaza con tu imagen de placeholder
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize() // La imagen ocupa todo el Card
                 )
-            }else{
-
             }
-
             // Imagen de perfil
             selectedImageUri?.let { uri ->
 
                 Image(
-                    painter =rememberAsyncImagePainter(
+                    painter = rememberAsyncImagePainter(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(uri)
                             .crossfade(true)
@@ -236,14 +230,11 @@ fun ProfileImageWithCamera(viewModel:CreateProfileViewModel,defaultImage: Int, i
                 modifier = Modifier
                     .fillMaxSize()
                     .background(LocalCustomColorsPalette.current.buttonColorPressed)
-                    .clickable { photoPickerLauncher.launch("image/*")
-                        selectedImageUri?.let {viewModel.onImageSelected(it)  }
-                        }
+                    .clickable { photoPickerLauncher.launch("image/*") }
             )
         }
     }
 }
-
 
 
 

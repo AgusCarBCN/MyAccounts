@@ -49,7 +49,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     Log.d("imageUri",selectedImageUri.toString ())
 
 
-        ProfileImageWithCamera(createViewModel, defaultImage=R.drawable.contabilidad,selectedImageUri)
+        ProfileImageWithCamera(createViewModel)
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
