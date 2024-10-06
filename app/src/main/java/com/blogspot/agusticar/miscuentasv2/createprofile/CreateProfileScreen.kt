@@ -32,7 +32,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberAsyncImagePainter
@@ -93,7 +92,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.name),
+                stringResource(id = R.string.enterName),
                 name,
                 onTextChange = {createViewModel.onTextFieldsChanged(it,userName,password,repeatPassword) },
                 BoardType.TEXT,
@@ -101,7 +100,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.username),
+                stringResource(id = R.string.enterUsername),
                 userName,
                 onTextChange ={createViewModel.onTextFieldsChanged(name,it,password,repeatPassword) } ,
                 BoardType.TEXT,
@@ -109,7 +108,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.password),
+                stringResource(id = R.string.enterPassword),
                 password,
                 onTextChange = {createViewModel.onTextFieldsChanged(name,userName,it,repeatPassword) },
                 BoardType.PASSWORD,

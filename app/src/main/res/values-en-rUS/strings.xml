@@ -9,10 +9,10 @@
     <string name="loginButton">Log in</string>
     <string name="confirmButton">Confirm</string>
     <string name="backButton">Back</string>
-    <string name="name">Enter your name</string>
+    <string name="enterName">Enter your name</string>
     <string name="repeatpassword">Repeat your password</string>
-    <string name="username">Enter your user name</string>
-    <string name="password">Enter password</string>
+    <string name="enterUsername">Enter your user name</string>
+    <string name="enterPassword">Enter password</string>
     <string name="forgotpassword">Forgot your password?</string>
     <string name="requestuser">Enter username (step 1)</string>
     <string name="newpassword">Enter new password (step 2)</string>
@@ -104,4 +104,9 @@
     <string name="desadd_an_account">Add a new account to the application.</string>
     <string name="changecurrency">Change currency</string>
     <string name="deschangecurrency">Change the currency of your accounts.</string>
+    <!--Profile-->
+    <string name="change">Change</string>
+    <string name="name">Name</string>
+    <string name="userName">User name</string>
+    <string name="password">Password</string>
 </resources>

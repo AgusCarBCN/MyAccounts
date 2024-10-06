@@ -2,6 +2,7 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 import android.app.Activity
+import android.provider.ContactsContract
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,6 +56,7 @@ import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
@@ -94,7 +96,7 @@ fun HomeScreen(
                 ) {
                     when (selectedScreen) {
                         IconOptions.HOME -> Test(createAccountsViewModel)
-                        IconOptions.PROFILE -> Test(createAccountsViewModel)
+                        IconOptions.PROFILE -> ProfileScreen(createProfileViewModel)
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> SettingScreen()
                         IconOptions.NEW_INCOME -> TODO()

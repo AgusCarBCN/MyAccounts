@@ -140,14 +140,14 @@ fun LoginComponent(
                 )
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
-                    stringResource(id = string.username),
+                    stringResource(id = string.enterUsername),
                     userName,
                     onTextChange = { loginViewModel.onLoginChanged(it, password) },
                     BoardType.TEXT
                 )
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
-                    stringResource(id = string.password),
+                    stringResource(id = string.enterPassword),
                     password,
                     onTextChange = { loginViewModel.onLoginChanged(userName, it) },
                     BoardType.PASSWORD,

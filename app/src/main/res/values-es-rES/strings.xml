@@ -9,10 +9,10 @@
     <string name="loginButton">Inicio de sesion</string>
     <string name="confirmButton">Confirmar</string>
     <string name="backButton">Atras</string>
-    <string name="name">Intrude tu nombre</string>
+    <string name="enterName">Intrude tu nombre</string>
     <string name="repeatpassword">Repite la contraseña</string>
-    <string name="username">Introduce tu nombre de usuario</string>
-    <string name="password">Introduce contraseña</string>
+    <string name="enterUsername">Introduce tu nombre de usuario</string>
+    <string name="enterPassword">Introduce contraseña</string>
     <string name="forgotpassword">¿Olvidaste la contraseña?</string>
     <string name="requestuser">Introduce nombre de usuario(paso 1</string>
     <string name="newpassword">Introduce nueva contraseña (paso 2)</string>
@@ -106,4 +106,9 @@
     <string name="desadd_an_account">Añade una nueva cuenta a la aplicación</string>
     <string name="changecurrency">Cambia la divisa.</string>
     <string name="deschangecurrency">Cambia la divisa de tus cuentas.</string>
+    <!--Profile-->
+    <string name="change">Cambiar</string>
+    <string name="name">Nombre</string>
+    <string name="userName">Nombre de usuario</string>
+    <string name="password">Contraseña</string>
 </resources>
