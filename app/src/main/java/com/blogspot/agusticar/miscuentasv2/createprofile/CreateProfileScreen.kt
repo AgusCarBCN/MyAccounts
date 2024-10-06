@@ -61,7 +61,6 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
     val enableButton by createViewModel.enableButton.observeAsState(false)
 
 
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -78,7 +77,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 // Parte inferior anclada al padre
             }) {
 
-            ProfileImageWithCamera(createViewModel,250)
+            ProfileImageWithCamera(createViewModel,R.drawable.contabilidad,null)
         }
         Column(modifier = Modifier
             .constrainAs(box) {
@@ -162,10 +161,10 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 
 @Composable
 
-fun ProfileImageWithCamera(viewModel: CreateProfileViewModel,size:Int) {
+fun ProfileImageWithCamera(viewModel: CreateProfileViewModel, defaultImage: Int, imageUri: Uri? =null) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-
+    val image by viewModel.selectedImageUri.observeAsState(initial = null)
     // Lanza el selector de imágenes
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -183,19 +182,21 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel,size:Int) {
 
         Card(
             modifier = Modifier
-                .size(size.dp),
+                .size(250.dp),
             shape = CircleShape, // Hace que el Card sea circular
             // Reemplaza lightYellow
         ) {
             if(selectedImageUri==null) {
                 Image(
-                    painter = painterResource(id = R.drawable.contabilidad), // Reemplaza con tu imagen de placeholder
+                    painter = if(imageUri==Uri.EMPTY)painterResource(id = defaultImage)
+                    else  rememberAsyncImagePainter(imageUri), // Reemplaza con tu imagen de placeholder
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize() // La imagen ocupa todo el Card
                 )
             }
+
             // Imagen de perfil
             selectedImageUri?.let { uri ->
 
@@ -217,7 +218,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel,size:Int) {
         // Ícono de cámara superpuesto en la esquina inferior izquierda
         Card(
             modifier = Modifier
-                .size((size/5).dp) // Tamaño del ícono de cámara
+                .size(50.dp) // Tamaño del ícono de cámara
                 .align(Alignment.Center) // Posición en la esquina inferior izquierda
                 .offset(x = 80.dp, y = (100).dp),
             shape = CircleShape,

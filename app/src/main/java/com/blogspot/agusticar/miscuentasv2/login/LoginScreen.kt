@@ -106,13 +106,7 @@ fun LoginComponent(
                 else Modifier
                     .fillMaxSize()
             )
-            /*Image(
-                painter = painterResource(id = drawable.contabilidad),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .size(250.dp) // Uso de size para mantener la relación de aspecto
-                    .background(LocalCustomColorsPalette.current.imageBackground)
-            )*/
+
         }
 
         // Caja de login en la parte inferior, ocupando el otro 50% de la altura

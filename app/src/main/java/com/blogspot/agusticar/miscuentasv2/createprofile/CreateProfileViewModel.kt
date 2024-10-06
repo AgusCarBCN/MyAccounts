@@ -53,6 +53,8 @@ class CreateProfileViewModel @Inject constructor(
             _selectedImageUri.value = getUri()
             val user = getProfileData.invoke()
             _name.value = user.profileName
+            _username.value = user.profileUserName
+            _password.value = user.profilePass
         }
     }
 

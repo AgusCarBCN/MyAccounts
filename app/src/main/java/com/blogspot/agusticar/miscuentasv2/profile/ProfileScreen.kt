@@ -10,6 +10,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
-import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
@@ -29,10 +31,18 @@ import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileImageWithCamera
 
 fun ProfileScreen(createViewModel: CreateProfileViewModel) {
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    val name by createViewModel.name.observeAsState("")
+    val userName by createViewModel.username.observeAsState("")
+    val password by createViewModel.password.observeAsState("")
+    val selectedImageUri by createViewModel.selectedImageUri.observeAsState(null)
+    val enableButton by createViewModel.enableButton.observeAsState(false)
+    val scope = rememberCoroutineScope()
 
-        ProfileImageWithCamera(createViewModel, 250)
-        Row(modifier = Modifier.fillMaxWidth(),
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        createViewModel.selectedImageUri
+        ProfileImageWithCamera(createViewModel, defaultImage=R.drawable.contabilidad,selectedImageUri)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -43,16 +53,44 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 onClickButton = {}
             )
         }
-            ProfileData(R.string.name, onClickFieldData = {})
-            ProfileData(R.string.userName, onClickFieldData = {})
-            ProfileData(R.string.password, onClickFieldData = {})
-        }
+        ProfileData(R.string.name,
+            BoardType.TEXT,
+            R.string.newName,
+            name,
+            invisible =  false ,
+            enableButton = false,
+            onClickFieldData = {})
+        ProfileData(
+            R.string.userName,
+            BoardType.TEXT,
+            R.string.newUserName,
+            userName,
+            invisible =  false ,
+            enableButton = false,
+            onClickFieldData = {})
+        ProfileData(
+            R.string.password,
+            BoardType.PASSWORD,
+            R.string.newPassword,
+            password,
+            invisible =  true ,
+            enableButton = false,
+            onClickFieldData = {})
     }
+}
 
 
 @Composable
 
-private fun ProfileData(title: Int, onClickFieldData: () -> Unit) {
+private fun ProfileData(
+    title: Int,
+    type: BoardType,
+    label: Int,
+    oldInput: String,
+    invisible:Boolean,
+    enableButton:Boolean,
+    onClickFieldData: () -> Unit
+) {
     Column(verticalArrangement = Arrangement.Center) {
 
         Text(
@@ -77,12 +115,17 @@ private fun ProfileData(title: Int, onClickFieldData: () -> Unit) {
         )
         {
             TextFieldComponent(modifier = Modifier.weight(0.60f),
-                label = "", inputText = "", onTextChange = {}, type = BoardType.TEXT, true)
+                label = stringResource(id = label),
+                inputText = oldInput,
+                onTextChange = {},
+                type,
+                invisible
+            )
             ModelButton(
                 text = stringResource(id = R.string.change),
                 R.dimen.text_title_small,
                 modifier = Modifier.weight(0.40f),
-                false,
+                enableButton,
                 onClickButton = onClickFieldData
             )
 

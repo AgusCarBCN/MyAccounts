@@ -111,4 +111,7 @@
     <string name="name">Name</string>
     <string name="userName">User name</string>
     <string name="password">Password</string>
+    <string name="newName">New name</string>
+    <string name="newUserName">New user name</string>
+    <string name="newPassword">New password</string>
 </resources>
