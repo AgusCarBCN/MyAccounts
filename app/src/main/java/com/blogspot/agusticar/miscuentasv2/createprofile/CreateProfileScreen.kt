@@ -78,7 +78,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 // Parte inferior anclada al padre
             }) {
 
-            ProfileImageWithCamera(createViewModel)
+            ProfileImageWithCamera(createViewModel,250)
         }
         Column(modifier = Modifier
             .constrainAs(box) {
@@ -162,7 +162,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 
 @Composable
 
-fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
+fun ProfileImageWithCamera(viewModel: CreateProfileViewModel,size:Int) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -183,7 +183,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
 
         Card(
             modifier = Modifier
-                .size(250.dp),
+                .size(size.dp),
             shape = CircleShape, // Hace que el Card sea circular
             // Reemplaza lightYellow
         ) {
@@ -217,7 +217,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
         // Ícono de cámara superpuesto en la esquina inferior izquierda
         Card(
             modifier = Modifier
-                .size(50.dp) // Tamaño del ícono de cámara
+                .size((size/5).dp) // Tamaño del ícono de cámara
                 .align(Alignment.Center) // Posición en la esquina inferior izquierda
                 .offset(x = 80.dp, y = (100).dp),
             shape = CircleShape,

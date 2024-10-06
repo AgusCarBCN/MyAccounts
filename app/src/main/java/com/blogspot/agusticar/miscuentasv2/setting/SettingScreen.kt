@@ -32,7 +32,7 @@ fun SettingScreen() {
             )
     )
     {
-        HeadSetting(title = stringResource(id = R.string.appsettings))
+        HeadSetting(title = stringResource(id = R.string.appsettings),20)
         SwitchComponent(
             title = stringResource(id = R.string.theme),
             description = stringResource(id = R.string.destheme),
@@ -54,7 +54,7 @@ fun SettingScreen() {
 
         SpacerSetting()
 
-        HeadSetting(title = stringResource(id = R.string.backup))
+        HeadSetting(title = stringResource(id = R.string.backup),20)
 
         RowComponent(title = stringResource(id = R.string.createbackup),
             description = stringResource(id = R.string.desbackup),
@@ -68,7 +68,7 @@ fun SettingScreen() {
 
         SpacerSetting()
 
-        HeadSetting(title = stringResource(id = R.string.accountsetting))
+        HeadSetting(title = stringResource(id = R.string.accountsetting),20)
 
         RowComponent(title = stringResource(id = R.string.add_an_account),
             description = stringResource(id = R.string.desadd_an_account),

@@ -126,12 +126,12 @@ fun RowComponent(title: String,
 
 }
 @Composable
-fun HeadSetting(title: String) {
+fun HeadSetting(title: String,size:Int) {
 
     Text(
         text = title,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
+        fontSize = size.sp,
         modifier = Modifier
             .padding(top = 15.dp, bottom = 15.dp)
             .fillMaxWidth(),

@@ -49,11 +49,11 @@ class MainActivity : ComponentActivity() {
 
             MisCuentasv2Theme {
 
-                Scaffold(modifier = Modifier) { innerPadding ->
+
                     Surface(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding)
+
                     ) {
                         val navigationController = rememberNavController()
                         // Safely observe the LiveData values with default fallbacks
@@ -107,5 +107,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
+
 

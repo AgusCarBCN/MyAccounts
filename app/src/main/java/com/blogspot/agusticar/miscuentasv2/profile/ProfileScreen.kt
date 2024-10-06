@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
+import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
@@ -28,8 +29,8 @@ import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileImageWithCamera
 fun ProfileScreen(createViewModel: CreateProfileViewModel) {
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        Text(text = "Change profile photo")
-        ProfileImageWithCamera(createViewModel)
+        HeadSetting(title = "Change profile foto", size =18 )
+        ProfileImageWithCamera(createViewModel,250)
         ProfileData(R.string.name, onClickFieldData = {})
         ProfileData(R.string.userName, onClickFieldData = {})
         ProfileData(R.string.password, onClickFieldData = {})
