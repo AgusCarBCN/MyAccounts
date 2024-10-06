@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
@@ -39,7 +40,10 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        createViewModel.selectedImageUri
+
+
+
+
         ProfileImageWithCamera(createViewModel, defaultImage=R.drawable.contabilidad,selectedImageUri)
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -49,7 +53,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             ModelButton(
                 text = "Change Photo",
                 R.dimen.text_title_small, modifier = Modifier.width(220.dp),
-                false,
+               true,
                 onClickButton = {}
             )
         }

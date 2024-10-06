@@ -67,6 +67,8 @@ class CreateProfileViewModel @Inject constructor(
         _enableButton.value = enableConfirmButton(name, userName, password, newPassword)
     }
 
+
+
     fun onImageSelected(selectedImage:Uri)
     {
         _selectedImageUri.value = selectedImage
