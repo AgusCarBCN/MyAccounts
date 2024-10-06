@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -29,14 +30,25 @@ import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileImageWithCamera
 fun ProfileScreen(createViewModel: CreateProfileViewModel) {
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        HeadSetting(title = "Change profile foto", size =18 )
-        ProfileImageWithCamera(createViewModel,250)
-        ProfileData(R.string.name, onClickFieldData = {})
-        ProfileData(R.string.userName, onClickFieldData = {})
-        ProfileData(R.string.password, onClickFieldData = {})
+
+        ProfileImageWithCamera(createViewModel, 250)
+        Row(modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            ModelButton(
+                text = "Change Photo",
+                R.dimen.text_title_small, modifier = Modifier.width(220.dp),
+                false,
+                onClickButton = {}
+            )
+        }
+            ProfileData(R.string.name, onClickFieldData = {})
+            ProfileData(R.string.userName, onClickFieldData = {})
+            ProfileData(R.string.password, onClickFieldData = {})
+        }
     }
 
-}
 
 @Composable
 
