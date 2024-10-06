@@ -161,10 +161,10 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 
 @Composable
 
-fun ProfileImageWithCamera(viewModel: CreateProfileViewModel, defaultImage: Int, imageUri: Uri? =null) {
+fun ProfileImageWithCamera(viewModel:CreateProfileViewModel,defaultImage: Int, imageUri: Uri? =null) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val image by viewModel.selectedImageUri.observeAsState(initial = null)
+
     // Lanza el selector de imágenes
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -187,6 +187,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel, defaultImage: Int,
             // Reemplaza lightYellow
         ) {
             if(selectedImageUri==null) {
+                viewModel.onImageNoSelected()
                 Image(
                     painter = if(imageUri==Uri.EMPTY)painterResource(id = defaultImage)
                     else  rememberAsyncImagePainter(imageUri), // Reemplaza con tu imagen de placeholder
@@ -195,6 +196,8 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel, defaultImage: Int,
                     modifier = Modifier
                         .fillMaxSize() // La imagen ocupa todo el Card
                 )
+            }else{
+                viewModel.onImageSelected(selectedImageUri!!)
             }
 
             // Imagen de perfil

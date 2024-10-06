@@ -1,5 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.profile
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
@@ -36,12 +36,15 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     val userName by createViewModel.username.observeAsState("")
     val password by createViewModel.password.observeAsState("")
     val selectedImageUri by createViewModel.selectedImageUri.observeAsState(null)
-    val enableButton by createViewModel.enableButton.observeAsState(false)
+    val enableChangeImageButton by createViewModel.enableChangeImage.observeAsState(false)
+    val enableNameButton by createViewModel.enableNameButton.observeAsState(false)
+    //val enableUserNameButton by createViewModel.enableChangeImage.observeAsState(false)
+    //val enablePasswordButton by createViewModel.enableChangeImage.observeAsState(false)
+
     val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-
-
+    Log.d("imageUri",selectedImageUri.toString ())
 
 
         ProfileImageWithCamera(createViewModel, defaultImage=R.drawable.contabilidad,selectedImageUri)
@@ -53,7 +56,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             ModelButton(
                 text = "Change Photo",
                 R.dimen.text_title_small, modifier = Modifier.width(220.dp),
-               true,
+                enableChangeImageButton,
                 onClickButton = {}
             )
         }
@@ -62,8 +65,8 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             R.string.newName,
             name,
             invisible =  false ,
-            enableButton = false,
-            onClickFieldData = {})
+            enableButton = enableNameButton,
+            onClickFieldData = {createViewModel.onNameChanged(name)})
         ProfileData(
             R.string.userName,
             BoardType.TEXT,
@@ -121,7 +124,7 @@ private fun ProfileData(
             TextFieldComponent(modifier = Modifier.weight(0.60f),
                 label = stringResource(id = label),
                 inputText = oldInput,
-                onTextChange = {},
+                onTextChange ={onClickFieldData()} ,
                 type,
                 invisible
             )

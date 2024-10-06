@@ -44,6 +44,17 @@ class CreateProfileViewModel @Inject constructor(
     private val _enableButton = MutableLiveData<Boolean>()
     val enableButton: LiveData<Boolean> = _enableButton
 
+    //LiveData para habilitar boton de cambiar imagen
+    private val _enableChangeImage = MutableLiveData<Boolean>()
+    val enableChangeImage: LiveData<Boolean> = _enableChangeImage
+
+    //LiveData para habilitar boton de cambiar imagen
+    private val _enableNameButton = MutableLiveData<Boolean>()
+    val enableNameButton: LiveData<Boolean> = _enableNameButton
+
+
+
+
     // Definimos selectedImageUri como un LiveData
     private val _selectedImageUri = MutableLiveData<Uri?>()
     val selectedImageUri: LiveData<Uri?> = _selectedImageUri
@@ -66,12 +77,21 @@ class CreateProfileViewModel @Inject constructor(
         //Verificaciones para activar boton de confirmar
         _enableButton.value = enableConfirmButton(name, userName, password, newPassword)
     }
+    fun onNameChanged(newName: String){
+        _name.value = newName
 
+
+
+    }
 
 
     fun onImageSelected(selectedImage:Uri)
     {
         _selectedImageUri.value = selectedImage
+        _enableChangeImage.value=true
+    }
+    fun onImageNoSelected(){
+        _enableChangeImage.value=false
     }
     fun saveImageUri(uri:Uri){
         viewModelScope.launch {
@@ -83,6 +103,7 @@ class CreateProfileViewModel @Inject constructor(
             _selectedImageUri.value = getUri()
         }
     }
+
 
     // Función para setear un nuevo valor para toLogin en el repositorio
 
