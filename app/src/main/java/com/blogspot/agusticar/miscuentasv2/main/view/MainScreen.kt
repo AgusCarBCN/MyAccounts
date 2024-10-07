@@ -224,7 +224,7 @@ private fun DrawerContent(
 @Composable
 private fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
-    val selectedImageUri by createProfileViewModel.selectedImageUri.observeAsState(null)
+    val selectedImageUriSaved by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
     val name by createProfileViewModel.name.observeAsState("user")
 
     createProfileViewModel.loadImageUri()
@@ -238,7 +238,7 @@ private fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
     ) {
         Box(modifier = Modifier.weight(0.4f)) {
-        selectedImageUri?.let { UserImage(it) }
+        selectedImageUriSaved?.let { UserImage(it) }
         }
 
         Column(modifier = Modifier.weight(0.6f),

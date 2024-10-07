@@ -58,10 +58,10 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
     val userName by createViewModel.username.observeAsState("")
     val password by createViewModel.password.observeAsState("")
     val selectedImageUri by createViewModel.selectedImageUri.observeAsState( null)
+    //val selectedImageUriSaved by createViewModel.selectedImageUri.observeAsState( null)
     val repeatPassword by createViewModel.repeatPassword.observeAsState("")
     val scope = rememberCoroutineScope()
     val enableButton by createViewModel.enableButton.observeAsState(false)
-
 
     ConstraintLayout(
         modifier = Modifier
@@ -140,6 +140,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                             //createViewModel.saveImageUri(selectedImageUri!!)}
                             Log.d("SaveFromCreate", selectedImageUri.toString())
                         }
+                        Log.d("SaveFromCreate", selectedImageUri.toString())
                     }catch (e: Exception) {
                         Log.e("DataStore", "Error writing to DataStore", e)
                     }
@@ -166,7 +167,8 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val selectedImageUriSaved by viewModel.selectedImageUri.observeAsState( null)
+    val selectedImageUriSelected by viewModel.selectedImageUri.observeAsState( null)
+    val selectedImageUriSavedFromFile by viewModel.selectedImageUriSaved.observeAsState( null)
     // Llama a `onImageNoSelected()` si no hay una imagen seleccionada o guardada
     //viewModel.onImageNoSelected()
     // Lanza el selector de imágenes
@@ -175,8 +177,9 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
     ) { uri: Uri? ->
         selectedImageUri = uri
         selectedImageUri?.let { viewModel.onImageSelected(it)}
-        Log.d("BeforeClickImage", selectedImageUri.toString())
-        Log.d("BeforeClickImagePathSaved", selectedImageUriSaved.toString())
+        Log.d("AfterClickImageSaved", selectedImageUriSavedFromFile.toString())
+        Log.d("AfterClickImage", selectedImageUri.toString())
+        Log.d("AfterClickImageSelected", selectedImageUriSelected.toString())
     }
 
     Box(
@@ -195,8 +198,8 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
         ) {
             if(selectedImageUri==null) {
                 Image(
-                    painter = if(selectedImageUriSaved==null || selectedImageUriSaved==Uri.EMPTY)painterResource(id = R.drawable.contabilidad)
-                    else rememberAsyncImagePainter(model = selectedImageUriSaved), // Reemplaza con tu imagen de placeholder
+                    painter = if(selectedImageUriSavedFromFile==null || selectedImageUriSavedFromFile==Uri.EMPTY)painterResource(id = R.drawable.contabilidad)
+                    else rememberAsyncImagePainter(model = selectedImageUriSavedFromFile), // Reemplaza con tu imagen de placeholder
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -239,7 +242,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
                     .clickable {
                         photoPickerLauncher.launch("image/*")
                         Log.d("ClickImage", selectedImageUri.toString())
-                        Log.d("ClickImagePathSaved", selectedImageUriSaved.toString())
+                        Log.d("ClickImageSelectedToSave", selectedImageUriSelected.toString())
                     }
             )
 

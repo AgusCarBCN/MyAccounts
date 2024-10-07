@@ -26,8 +26,8 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     // Definimos selectedImageUri como un LiveData
-    private val _selectedImageUri = MutableLiveData<Uri?>()
-    val selectedImageUri: LiveData<Uri?> = _selectedImageUri
+    private val _selectedImageUriSaved = MutableLiveData<Uri?>()
+    val selectedImageUriSaved: LiveData<Uri?> = _selectedImageUriSaved
 
     private val _user = MutableLiveData<UserProfile>()
     private val user: LiveData<UserProfile> = _user
@@ -74,7 +74,7 @@ class LoginViewModel @Inject constructor(
         // Cargar el valor inicial de toLogin desde el repositorio al inicializar el ViewModel
         viewModelScope.launch {
             val userProfile = getUserProfileData()
-            _selectedImageUri.value = getUri()
+            _selectedImageUriSaved.value = getUri()
             _user.value = userProfile
             _name.value = userProfile.profileName
 
@@ -82,7 +82,7 @@ class LoginViewModel @Inject constructor(
     }
     fun getLoginImage(){
         viewModelScope.launch {
-            _selectedImageUri.value = getUri()
+            _selectedImageUriSaved.value = getUri()
         }
     }
 

@@ -46,7 +46,8 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-    Log.d("imageUri",selectedImageUri.toString ())
+
+    Log.d("imageUriFromProfile",selectedImageUri.toString ())
 
 
         ProfileImageWithCamera(createViewModel)
@@ -62,9 +63,9 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 onClickButton = {
                     scope.launch {
                         selectedImageUri?.let { createViewModel.saveImageUri(it) }
-                        Log.d("SaveFromChange", selectedImageUri.toString())
-                    }
 
+                    }
+                    Log.d("SaveFromChange", selectedImageUri.toString())
                 }
             )
         }

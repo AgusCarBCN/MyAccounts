@@ -52,22 +52,23 @@ class CreateProfileViewModel @Inject constructor(
     private val _enableNameButton = MutableLiveData<Boolean>()
     val enableNameButton: LiveData<Boolean> = _enableNameButton
 
-
-
-
     // Definimos selectedImageUri como un LiveData
     private val _selectedImageUri = MutableLiveData<Uri?>()
     val selectedImageUri: LiveData<Uri?> = _selectedImageUri
 
+    // Definimos selectedImageUri como un LiveData
+    private val _selectedImageUriSaved = MutableLiveData<Uri?>()
+    val selectedImageUriSaved: LiveData<Uri?> = _selectedImageUriSaved
+
+
     init{
         viewModelScope.launch {
-            //_selectedImageUri.value = getUri()
+
             val user = getProfileData.invoke()
             _name.value = user.profileName
             _username.value = user.profileUserName
             _password.value = user.profilePass
-
-
+            loadImageUri()
         }
     }
 
@@ -81,9 +82,6 @@ class CreateProfileViewModel @Inject constructor(
     }
     fun onNameChanged(newName: String){
         _name.value = newName
-
-
-
     }
 
 
@@ -98,12 +96,12 @@ class CreateProfileViewModel @Inject constructor(
     fun saveImageUri(uri:Uri){
         viewModelScope.launch {
             saveUri(uri)
-            //_selectedImageUri.value=getUri()
+
         }
     }
     fun loadImageUri(){
         viewModelScope.launch {
-            _selectedImageUri.value = getUri()
+            _selectedImageUriSaved.value = getUri()
         }
     }
 

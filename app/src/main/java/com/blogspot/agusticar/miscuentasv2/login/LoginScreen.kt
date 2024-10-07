@@ -50,7 +50,7 @@ fun LoginComponent(
     modifier: Modifier, navToMain: () -> Unit,
 ) {
 
-    val image by loginViewModel.selectedImageUri.observeAsState(initial = null)
+    val image by loginViewModel.selectedImageUriSaved.observeAsState(initial = null)
     val name by loginViewModel.name.observeAsState("")
     val userName by loginViewModel.userName.observeAsState("")
     val password by loginViewModel.password.observeAsState("")
