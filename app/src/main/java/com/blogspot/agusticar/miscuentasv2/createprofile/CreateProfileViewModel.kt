@@ -133,7 +133,12 @@ class CreateProfileViewModel @Inject constructor(
             _selectedImageUriSaved.value = getUri()
         }
     }
-
+    fun buttonState(photo:Boolean,useName:Boolean,name:Boolean,password:Boolean){
+        _enableChangeImage.value=photo
+        _enableNameButton.value=name
+        _enablePasswordButton.value=password
+        _enableUserNameButton.value=useName
+    }
 
     // Función para setear un nuevo valor para toLogin en el repositorio
 

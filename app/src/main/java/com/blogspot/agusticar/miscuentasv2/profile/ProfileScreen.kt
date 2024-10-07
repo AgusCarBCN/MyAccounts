@@ -85,6 +85,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                     scope.launch {
                         selectedImageUri?.let { createViewModel.saveImageUri(it) }
                         SnackBarController.sendEvent(event = SnackBarEvent(updatedMessages[3]))
+                        createViewModel.buttonState(false,enableUserNameButton,enableNameButton,enablePasswordButton)
                     }
 
                     Log.d("SaveFromChange", selectedImageUri.toString())
@@ -106,6 +107,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(name, userName, password))
                     SnackBarController.sendEvent(event = SnackBarEvent(updatedMessages[0]))
+                    createViewModel.buttonState(enableChangeImageButton,false,enableNameButton,enablePasswordButton)
                 }
 
             }
@@ -122,6 +124,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(name, userName, password))
                     SnackBarController.sendEvent(event = SnackBarEvent(updatedMessages[1]))
+                    createViewModel.buttonState(enableChangeImageButton,enableUserNameButton,false,enablePasswordButton)
                 }
             }
         )
@@ -137,6 +140,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(name, userName, password))
                     SnackBarController.sendEvent(event = SnackBarEvent(updatedMessages[2]))
+                    createViewModel.buttonState(enableChangeImageButton,enableUserNameButton,enableNameButton,false)
                 }
             },
             true

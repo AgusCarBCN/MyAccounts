@@ -164,7 +164,6 @@ fun LoginComponent(
                         } else{
                             scope.launch {
                                 SnackBarController.sendEvent(event = SnackBarEvent("Invalid Login"))
-
                             }
                         }
 
