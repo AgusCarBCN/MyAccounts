@@ -138,7 +138,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                             )
                             selectedImageUri?.let { createViewModel.saveImageUri(it) }
                             //createViewModel.saveImageUri(selectedImageUri!!)}
-                            Log.d("Datastore", "dato grabado")
+                            Log.d("SaveFromCreate", selectedImageUri.toString())
                         }
                     }catch (e: Exception) {
                         Log.e("DataStore", "Error writing to DataStore", e)
@@ -174,8 +174,9 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         selectedImageUri = uri
-
         selectedImageUri?.let { viewModel.onImageSelected(it)}
+        Log.d("BeforeClickImage", selectedImageUri.toString())
+        Log.d("BeforeClickImagePathSaved", selectedImageUriSaved.toString())
     }
 
     Box(
@@ -194,7 +195,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
         ) {
             if(selectedImageUri==null) {
                 Image(
-                    painter = if(selectedImageUriSaved==Uri.EMPTY)painterResource(id = R.drawable.contabilidad)
+                    painter = if(selectedImageUriSaved==null || selectedImageUriSaved==Uri.EMPTY)painterResource(id = R.drawable.contabilidad)
                     else rememberAsyncImagePainter(model = selectedImageUriSaved), // Reemplaza con tu imagen de placeholder
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
@@ -237,6 +238,8 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
                     .background(LocalCustomColorsPalette.current.buttonColorPressed)
                     .clickable {
                         photoPickerLauncher.launch("image/*")
+                        Log.d("ClickImage", selectedImageUri.toString())
+                        Log.d("ClickImagePathSaved", selectedImageUriSaved.toString())
                     }
             )
 

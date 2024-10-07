@@ -60,7 +60,10 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 R.dimen.text_title_small, modifier = Modifier.width(220.dp),
                 enableChangeImageButton,
                 onClickButton = {
-
+                    scope.launch {
+                        selectedImageUri?.let { createViewModel.saveImageUri(it) }
+                        Log.d("SaveFromChange", selectedImageUri.toString())
+                    }
 
                 }
             )

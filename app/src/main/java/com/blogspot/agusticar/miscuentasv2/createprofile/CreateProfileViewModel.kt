@@ -61,7 +61,7 @@ class CreateProfileViewModel @Inject constructor(
 
     init{
         viewModelScope.launch {
-            _selectedImageUri.value = getUri()
+            //_selectedImageUri.value = getUri()
             val user = getProfileData.invoke()
             _name.value = user.profileName
             _username.value = user.profileUserName
@@ -98,7 +98,7 @@ class CreateProfileViewModel @Inject constructor(
     fun saveImageUri(uri:Uri){
         viewModelScope.launch {
             saveUri(uri)
-            _selectedImageUri.value=getUri()
+            //_selectedImageUri.value=getUri()
         }
     }
     fun loadImageUri(){
