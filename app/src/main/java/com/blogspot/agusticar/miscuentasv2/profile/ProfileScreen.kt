@@ -27,6 +27,7 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileImageWithCamera
+import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import com.blogspot.agusticar.miscuentasv2.main.view.HeadDrawerMenu
 import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
 import kotlinx.coroutines.launch
@@ -81,7 +82,12 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             type = BoardType.TEXT,
             sizeFontButton = R.dimen.text_title_small,
             enableUserNameButton,
-            onChangeButtonClick = {}
+            onChangeButtonClick = {
+                scope.launch {
+                    createViewModel.setUserDataProfile(UserProfile(name,userName,password))
+                }
+
+            }
         )
         NewInputComponent(
             title = stringResource(id = R.string.name),
@@ -90,7 +96,11 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             type = BoardType.TEXT,
             sizeFontButton = R.dimen.text_title_small,
             enableNameButton,
-            onChangeButtonClick = {}
+            onChangeButtonClick = {
+                scope.launch {
+                    createViewModel.setUserDataProfile(UserProfile(name,userName,password))
+                }
+            }
         )
         NewInputComponent(
             title = stringResource(id = R.string.password),
@@ -99,7 +109,11 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             type = BoardType.PASSWORD,
             sizeFontButton = R.dimen.text_title_small,
             enablePasswordButton,
-            onChangeButtonClick = {},
+            onChangeButtonClick = {
+                scope.launch {
+                    createViewModel.setUserDataProfile(UserProfile(name,userName,password))
+                }
+            },
             true
         )
 

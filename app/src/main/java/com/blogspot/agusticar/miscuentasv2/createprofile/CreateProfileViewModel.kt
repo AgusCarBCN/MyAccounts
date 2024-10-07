@@ -144,8 +144,10 @@ class CreateProfileViewModel @Inject constructor(
             setProfileData(newProfile)
             setLoginTo(true)
 
-            // Actualizar el valor en el LiveData para reflejar el cambio en la UI
-
+        //Actualizamos los valores para reflejar cambios en UI
+            _name.value=newProfile.name
+            _username.value=newProfile.userName
+            _password.value=newProfile.profilePass
         }
     }
 
