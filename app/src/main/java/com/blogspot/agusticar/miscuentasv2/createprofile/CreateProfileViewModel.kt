@@ -48,9 +48,16 @@ class CreateProfileViewModel @Inject constructor(
     private val _enableChangeImage = MutableLiveData<Boolean>()
     val enableChangeImage: LiveData<Boolean> = _enableChangeImage
 
-    //LiveData para habilitar boton de cambiar imagen
+    //LiveData para habilitar los botones de cambiar campos de perfil
     private val _enableNameButton = MutableLiveData<Boolean>()
     val enableNameButton: LiveData<Boolean> = _enableNameButton
+
+    private val _enablePasswordButton = MutableLiveData<Boolean>()
+    val enablePasswordButton: LiveData<Boolean> = _enablePasswordButton
+
+    private val _enableUserNameButton = MutableLiveData<Boolean>()
+    val enableUserNameButton: LiveData<Boolean> = _enableUserNameButton
+
 
     // Definimos selectedImageUri como un LiveData
     private val _selectedImageUri = MutableLiveData<Uri?>()
@@ -82,16 +89,37 @@ class CreateProfileViewModel @Inject constructor(
     }
     fun onNameChanged(newName: String){
         _name.value = newName
+        _enableNameButton.value=true
     }
 
+    fun onUserNameChanged(newUserName: String){
+        _username.value = newUserName
+        _enableUserNameButton.value=true
+    }
 
+    fun onPasswordChanged(newPassword: String){
+        _password.value = newPassword
+        _enablePasswordButton.value=true
+    }
     fun onImageSelected(selectedImage:Uri)
     {
         _selectedImageUri.value = selectedImage
         _enableChangeImage.value=true
     }
     fun onButtonProfileNoSelected(){
+        viewModelScope.launch {
+
+            val user = getProfileData.invoke()
+            _name.value = user.profileName
+            _username.value = user.profileUserName
+            _password.value = user.profilePass
+        }
+
         _enableChangeImage.value=false
+        _enableNameButton.value=false
+        _enablePasswordButton.value=false
+        _enablePasswordButton.value=false
+
     }
     fun saveImageUri(uri:Uri){
         viewModelScope.launch {

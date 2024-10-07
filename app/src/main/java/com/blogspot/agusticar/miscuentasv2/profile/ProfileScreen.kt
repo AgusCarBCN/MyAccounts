@@ -42,14 +42,14 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     val selectedImageUri by createViewModel.selectedImageUri.observeAsState(null)
     val enableChangeImageButton by createViewModel.enableChangeImage.observeAsState(false)
     val enableNameButton by createViewModel.enableNameButton.observeAsState(false)
-    //val enableUserNameButton by createViewModel.enableChangeImage.observeAsState(false)
-    //val enablePasswordButton by createViewModel.enableChangeImage.observeAsState(false)
+    val enableUserNameButton by createViewModel.enableUserNameButton.observeAsState(false)
+    val enablePasswordButton by createViewModel.enablePasswordButton.observeAsState(false)
 
     val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 
-    Log.d("imageUriFromProfile",selectedImageUri.toString ())
+        Log.d("imageUriFromProfile", selectedImageUri.toString())
 
 
         ProfileImageWithCamera(createViewModel)
@@ -65,8 +65,6 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 onClickButton = {
                     scope.launch {
                         selectedImageUri?.let { createViewModel.saveImageUri(it) }
-
-
                     }
 
                     Log.d("SaveFromChange", selectedImageUri.toString())
@@ -75,43 +73,50 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
 
 
         }
-        ProfileData(R.string.name,
-            BoardType.TEXT,
-            R.string.newName,
-            name,
-            invisible =  false ,
-            enableButton = enableNameButton,
-            onClickFieldData = {createViewModel.onNameChanged(name)})
-        ProfileData(
-            R.string.userName,
-            BoardType.TEXT,
-            R.string.newUserName,
-            userName,
-            invisible =  false ,
-            enableButton = false,
-            onClickFieldData = {})
-        ProfileData(
-            R.string.password,
-            BoardType.PASSWORD,
-            R.string.newPassword,
-            password,
-            invisible =  true ,
-            enableButton = false,
-            onClickFieldData = {})
+
+        NewInputComponent(
+            title = stringResource(id = R.string.userName),
+            inputNewText = userName,
+            onNameTextFieldChanged = { createViewModel.onUserNameChanged(it) },
+            type = BoardType.TEXT,
+            sizeFontButton = R.dimen.text_title_small,
+            enableUserNameButton,
+            onChangeButtonClick = {}
+        )
+        NewInputComponent(
+            title = stringResource(id = R.string.name),
+            inputNewText = name,
+            onNameTextFieldChanged = { createViewModel.onNameChanged(it) },
+            type = BoardType.TEXT,
+            sizeFontButton = R.dimen.text_title_small,
+            enableNameButton,
+            onChangeButtonClick = {}
+        )
+        NewInputComponent(
+            title = stringResource(id = R.string.password),
+            inputNewText = password,
+            onNameTextFieldChanged = { createViewModel.onPasswordChanged(it) },
+            type = BoardType.PASSWORD,
+            sizeFontButton = R.dimen.text_title_small,
+            enablePasswordButton,
+            onChangeButtonClick = {},
+            true
+        )
+
     }
 }
 
 
 @Composable
-
-private fun ProfileData(
-    title: Int,
+fun NewInputComponent(
+    title: String,
+    inputNewText: String,
+    onNameTextFieldChanged: (String) -> Unit,
     type: BoardType,
-    label: Int,
-    oldInput: String,
-    invisible:Boolean,
-    enableButton:Boolean,
-    onClickFieldData: () -> Unit
+    sizeFontButton: Int,
+    enableInputButton: Boolean,
+    onChangeButtonClick: () -> Unit,
+    isPassword:Boolean = false
 ) {
     Column(verticalArrangement = Arrangement.Center) {
 
@@ -119,40 +124,33 @@ private fun ProfileData(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp, start = 30.dp),
-            text = stringResource(id = title),
+            text = title,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
 
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    end = 15.dp, start = 15
-                        .dp
-                ),
-            Arrangement.SpaceEvenly,
-            Alignment.CenterVertically
-        )
-        {
-            TextFieldComponent(modifier = Modifier.weight(0.60f),
-                label = stringResource(id = label),
-                inputText = oldInput,
-                onTextChange ={onClickFieldData()} ,
+                .padding(end = 15.dp, start = 15.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextFieldComponent(
+                modifier = Modifier.weight(0.60f),
+                label = stringResource(id = R.string.newName),
+                inputText = inputNewText,
+                onTextChange = onNameTextFieldChanged,
                 type,
-                invisible
+                isPassword
             )
             ModelButton(
                 text = stringResource(id = R.string.change),
-                R.dimen.text_title_small,
+                sizeFontButton,
                 modifier = Modifier.weight(0.40f),
-                enableButton,
-                onClickButton = onClickFieldData
+                enableInputButton,
+                onClickButton = onChangeButtonClick
             )
-
         }
     }
-
-
 }
