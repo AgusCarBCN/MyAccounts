@@ -222,10 +222,12 @@ private fun DrawerContent(
 
 //Implementacion de la cabecerera del menu desplegable izquierda
 @Composable
-private fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
+fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
     val selectedImageUriSaved by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
+    val selectedImage by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
     val name by createProfileViewModel.name.observeAsState("user")
+
 
     createProfileViewModel.loadImageUri()
     Row(

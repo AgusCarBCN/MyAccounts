@@ -27,6 +27,8 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileImageWithCamera
+import com.blogspot.agusticar.miscuentasv2.main.view.HeadDrawerMenu
+import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
 import kotlinx.coroutines.launch
 
 
@@ -64,10 +66,14 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                     scope.launch {
                         selectedImageUri?.let { createViewModel.saveImageUri(it) }
 
+
                     }
+
                     Log.d("SaveFromChange", selectedImageUri.toString())
                 }
             )
+
+
         }
         ProfileData(R.string.name,
             BoardType.TEXT,

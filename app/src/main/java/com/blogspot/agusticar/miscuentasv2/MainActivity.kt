@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
                         // Safely observe the LiveData values with default fallbacks
                         val showTutorial by tutorialViewModel.showTutorial.observeAsState(true) // Defaults to `true`
                         val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
+
                         NavHost(
                             navController = navigationController,
                             startDestination = if(showTutorial)Routes.Tutorial.route

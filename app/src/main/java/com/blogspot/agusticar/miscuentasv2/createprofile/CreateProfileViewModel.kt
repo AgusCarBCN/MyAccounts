@@ -56,7 +56,7 @@ class CreateProfileViewModel @Inject constructor(
     private val _selectedImageUri = MutableLiveData<Uri?>()
     val selectedImageUri: LiveData<Uri?> = _selectedImageUri
 
-    // Definimos selectedImageUri como un LiveData
+    // Definimos selectedImageUri guardados en fichero como un LiveData
     private val _selectedImageUriSaved = MutableLiveData<Uri?>()
     val selectedImageUriSaved: LiveData<Uri?> = _selectedImageUriSaved
 
@@ -96,7 +96,8 @@ class CreateProfileViewModel @Inject constructor(
     fun saveImageUri(uri:Uri){
         viewModelScope.launch {
             saveUri(uri)
-
+            //Actualizo para ver cambios de manera inmediata
+            _selectedImageUriSaved.value=uri
         }
     }
     fun loadImageUri(){
