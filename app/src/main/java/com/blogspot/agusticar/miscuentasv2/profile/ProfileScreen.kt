@@ -2,6 +2,7 @@ package com.blogspot.agusticar.miscuentasv2.profile
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,10 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,22 +25,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileImageWithCamera
+import com.blogspot.agusticar.miscuentasv2.login.messageSnackBar
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
-import com.blogspot.agusticar.miscuentasv2.main.view.HeadDrawerMenu
-import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
 import kotlinx.coroutines.launch
 
 
 @Composable
 
 fun ProfileScreen(createViewModel: CreateProfileViewModel) {
+    val updatedMessages = listOf(
+        stringResource(id = R.string.userName),  // Aquí obtienes el texto real del recurso
+        stringResource(id = R.string.name),
+        stringResource(id = R.string.password),
+        stringResource(id = R.string.photoUpdated)
+    )
+
+
 
     val name by createViewModel.name.observeAsState("")
     val userName by createViewModel.username.observeAsState("")
@@ -47,6 +58,11 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     val enablePasswordButton by createViewModel.enablePasswordButton.observeAsState(false)
 
     val scope = rememberCoroutineScope()
+
+
+
+    val snackBarHostState = remember { SnackbarHostState() }
+
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 
@@ -66,6 +82,13 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 onClickButton = {
                     scope.launch {
                         selectedImageUri?.let { createViewModel.saveImageUri(it) }
+
+
+                            snackBarHostState.showSnackbar("Updated Profile Photo",
+                                duration = SnackbarDuration.Long
+                            )
+
+
                     }
 
                     Log.d("SaveFromChange", selectedImageUri.toString())
@@ -78,13 +101,18 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
         NewInputComponent(
             title = stringResource(id = R.string.userName),
             inputNewText = userName,
+            R.string.userName,
             onNameTextFieldChanged = { createViewModel.onUserNameChanged(it) },
             type = BoardType.TEXT,
             sizeFontButton = R.dimen.text_title_small,
             enableUserNameButton,
             onChangeButtonClick = {
                 scope.launch {
-                    createViewModel.setUserDataProfile(UserProfile(name,userName,password))
+                    createViewModel.setUserDataProfile(UserProfile(name, userName, password))
+                    snackBarHostState.showSnackbar(
+                        updatedMessages[0],
+                        duration = SnackbarDuration.Long
+                    )
                 }
 
             }
@@ -92,32 +120,43 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
         NewInputComponent(
             title = stringResource(id = R.string.name),
             inputNewText = name,
+            R.string.name,
             onNameTextFieldChanged = { createViewModel.onNameChanged(it) },
             type = BoardType.TEXT,
             sizeFontButton = R.dimen.text_title_small,
             enableNameButton,
             onChangeButtonClick = {
                 scope.launch {
-                    createViewModel.setUserDataProfile(UserProfile(name,userName,password))
+                    createViewModel.setUserDataProfile(UserProfile(name, userName, password))
+                    snackBarHostState.showSnackbar(
+                        updatedMessages[1],
+                        duration = SnackbarDuration.Long
+                    )
                 }
             }
         )
         NewInputComponent(
             title = stringResource(id = R.string.password),
             inputNewText = password,
+            R.string.password,
             onNameTextFieldChanged = { createViewModel.onPasswordChanged(it) },
             type = BoardType.PASSWORD,
             sizeFontButton = R.dimen.text_title_small,
             enablePasswordButton,
             onChangeButtonClick = {
                 scope.launch {
-                    createViewModel.setUserDataProfile(UserProfile(name,userName,password))
+                    createViewModel.setUserDataProfile(UserProfile(name, userName, password))
+                    snackBarHostState.showSnackbar(
+                        updatedMessages[2],
+                        duration = SnackbarDuration.Long
+                    )
                 }
             },
             true
         )
 
     }
+    SnackbarHost(hostState = snackBarHostState)
 }
 
 
@@ -125,12 +164,13 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
 fun NewInputComponent(
     title: String,
     inputNewText: String,
+    label:Int,
     onNameTextFieldChanged: (String) -> Unit,
     type: BoardType,
     sizeFontButton: Int,
     enableInputButton: Boolean,
     onChangeButtonClick: () -> Unit,
-    isPassword:Boolean = false
+    isPassword: Boolean = false
 ) {
     Column(verticalArrangement = Arrangement.Center) {
 
@@ -152,7 +192,7 @@ fun NewInputComponent(
         ) {
             TextFieldComponent(
                 modifier = Modifier.weight(0.60f),
-                label = stringResource(id = R.string.newName),
+                label = stringResource(label),
                 inputText = inputNewText,
                 onTextChange = onNameTextFieldChanged,
                 type,

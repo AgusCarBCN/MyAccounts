@@ -114,4 +114,10 @@
     <string name="newName">Nuevo nombre</string>
     <string name="newUserName">Nuevo usuario</string>
     <string name="newPassword">Nueva contraseña</string>
+    <!--SnackBar messages-->
+    <string name="inValidLogin">Inicio de sesion invalido</string>
+    <string name="userNameUpdated">Nombre de usuario actualizado</string>
+    <string name="nameUpdated">Nombre actualizado</string>
+    <string name="passwordUpdated">Contraseña actualizada</string>
+    <string name="photoUpdated">Foto de perfil actualizada</string>
 </resources>

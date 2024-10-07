@@ -41,6 +41,8 @@ import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.example.modified_snackbar.presentation.ComposeModifiedSnackbar
+import com.example.modified_snackbar.presentation.rememberComposeModifiedSnackbarState
 import kotlinx.coroutines.launch
 
 
@@ -49,7 +51,7 @@ fun LoginComponent(
     loginViewModel: LoginViewModel,
     modifier: Modifier, navToMain: () -> Unit,
 ) {
-
+    val invalidMessage= messageSnackBar(resource = R.string.inValidLogin)
     val image by loginViewModel.selectedImageUriSaved.observeAsState(initial = null)
     val name by loginViewModel.name.observeAsState("")
     val userName by loginViewModel.userName.observeAsState("")
@@ -70,7 +72,7 @@ fun LoginComponent(
     /* Se usa para gestionar el estado del Snackbar. Esto te permite mostrar y controlar el Snackbar
      desde cualquier parte de tu UI.*/
     val snackbarHostState = remember { SnackbarHostState() }
-
+    val state = rememberComposeModifiedSnackbarState()
     loginViewModel.getLoginImage()
     ConstraintLayout(
         modifier
@@ -154,13 +156,15 @@ fun LoginComponent(
                     onClickButton = {
                         if (validateLogin) {
                             navToMain()
-                        } else
-                            scope.launch {
+                        } else{
+                            state.showSnackbar("Invalid Login")
+                        }
+                            /*scope.launch {
                                 snackbarHostState.showSnackbar(
-                                    "Login no valido",
+                                    invalidMessage,
                                     duration = SnackbarDuration.Short
                                 )
-                            }
+                            }*/
                     }
                 )
 
@@ -220,8 +224,9 @@ fun LoginComponent(
                             }
                         } else {
                             scope.launch {
+
                                 snackbarHostState.showSnackbar(
-                                    "usuario no valido",
+                                    "",
                                     duration = SnackbarDuration.Short
                                 )
                             }
@@ -246,7 +251,13 @@ fun LoginComponent(
     /*Se agregó SnackbarHost al final de LoginComponent, que es necesario para mostrar el Snackbar.
     El SnackbarHost debe estar en el árbol de composables.*/
     SnackbarHost(hostState = snackbarHostState)
+    ComposeModifiedSnackbar(state = state)
 }
+@Composable
+fun messageSnackBar(resource:Int):String{
+    return  stringResource(id = resource)
+}
+
 
 
 

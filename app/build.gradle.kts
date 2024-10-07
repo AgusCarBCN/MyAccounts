@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.coil.compose)
     runtimeOnly(libs.androidx.material.icons.extended)
     implementation(libs.androidx.constraintlayout.v220beta01)
+    implementation(libs.compose.modified.snackbar)
     // To use constraintlayout in compose
     implementation(libs.androidx.constraintlayout.compose)
     implementation (libs.androidx.runtime.livedata)

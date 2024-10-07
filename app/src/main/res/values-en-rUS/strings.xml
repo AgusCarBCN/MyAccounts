@@ -112,4 +112,10 @@
     <string name="newName">New name</string>
     <string name="newUserName">New user name</string>
     <string name="newPassword">New password</string>
+    <!--SnackBar messages-->
+    <string name="inValidLogin">Invalid login</string>
+    <string name="userNameUpdated">User name updated</string>
+    <string name="nameUpdated">Name updated</string>
+    <string name="passwordUpdated">Password updated</string>
+    <string name="photoUpdated">Profile photo updated</string>
 </resources>
