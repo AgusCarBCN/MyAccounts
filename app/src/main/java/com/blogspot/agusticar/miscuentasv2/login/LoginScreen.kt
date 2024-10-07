@@ -37,12 +37,17 @@ import coil.compose.rememberAsyncImagePainter
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.string
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.example.modified_snackbar.presentation.ComposeModifiedSnackbar
+import com.example.modified_snackbar.presentation.ComposeModifiedSnackbarSuccess
 import com.example.modified_snackbar.presentation.rememberComposeModifiedSnackbarState
+import com.example.modified_snackbar.util.ComposeModifiedSnackbarPosition
+import com.example.modified_snackbar.util.ComposeModifierSnackbarDuration
 import kotlinx.coroutines.launch
 
 
@@ -157,14 +162,12 @@ fun LoginComponent(
                         if (validateLogin) {
                             navToMain()
                         } else{
-                            state.showSnackbar("Invalid Login")
+                            scope.launch {
+                                SnackBarController.sendEvent(event = SnackBarEvent("Invalid Login"))
+
+                            }
                         }
-                            /*scope.launch {
-                                snackbarHostState.showSnackbar(
-                                    invalidMessage,
-                                    duration = SnackbarDuration.Short
-                                )
-                            }*/
+
                     }
                 )
 
@@ -213,23 +216,18 @@ fun LoginComponent(
                             try {
                                 scope.launch {
                                     loginViewModel.updatePassword(newPassword)
-                                    snackbarHostState.showSnackbar(
+
+                                    /*snackbarHostState.showSnackbar(
                                         "contraseña actualizada $newPassword",
                                         duration = SnackbarDuration.Short
-                                    )
+                                    )*/
                                     loginViewModel.onEnableNewPasswordFields(false)
                                 }
                             } catch (e: Exception) {
                                 Log.e("DataStore", "Error Updating password", e)
                             }
                         } else {
-                            scope.launch {
 
-                                snackbarHostState.showSnackbar(
-                                    "",
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
                             loginViewModel.onClearFields()
                         }
                     }
@@ -250,8 +248,8 @@ fun LoginComponent(
     }
     /*Se agregó SnackbarHost al final de LoginComponent, que es necesario para mostrar el Snackbar.
     El SnackbarHost debe estar en el árbol de composables.*/
-    SnackbarHost(hostState = snackbarHostState)
-    ComposeModifiedSnackbar(state = state)
+
+   // ComposeModifiedSnackbar(state = state)
 }
 @Composable
 fun messageSnackBar(resource:Int):String{

@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
@@ -40,9 +42,9 @@ import kotlinx.coroutines.launch
 
 fun ProfileScreen(createViewModel: CreateProfileViewModel) {
     val updatedMessages = listOf(
-        stringResource(id = R.string.userName),  // Aquí obtienes el texto real del recurso
-        stringResource(id = R.string.name),
-        stringResource(id = R.string.password),
+        stringResource(id = R.string.userNameUpdated),  // Aquí obtienes el texto real del recurso
+        stringResource(id = R.string.nameUpdated),
+        stringResource(id = R.string.passwordUpdated),
         stringResource(id = R.string.photoUpdated)
     )
 
@@ -82,13 +84,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
                 onClickButton = {
                     scope.launch {
                         selectedImageUri?.let { createViewModel.saveImageUri(it) }
-
-
-                            snackBarHostState.showSnackbar("Updated Profile Photo",
-                                duration = SnackbarDuration.Long
-                            )
-
-
+                        SnackBarController.sendEvent(event = SnackBarEvent(updatedMessages[3]))
                     }
 
                     Log.d("SaveFromChange", selectedImageUri.toString())
@@ -109,10 +105,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             onChangeButtonClick = {
                 scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(name, userName, password))
-                    snackBarHostState.showSnackbar(
-                        updatedMessages[0],
-                        duration = SnackbarDuration.Long
-                    )
+                    SnackBarController.sendEvent(event = SnackBarEvent(updatedMessages[0]))
                 }
 
             }
@@ -128,10 +121,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             onChangeButtonClick = {
                 scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(name, userName, password))
-                    snackBarHostState.showSnackbar(
-                        updatedMessages[1],
-                        duration = SnackbarDuration.Long
-                    )
+                    SnackBarController.sendEvent(event = SnackBarEvent(updatedMessages[1]))
                 }
             }
         )
@@ -146,10 +136,7 @@ fun ProfileScreen(createViewModel: CreateProfileViewModel) {
             onChangeButtonClick = {
                 scope.launch {
                     createViewModel.setUserDataProfile(UserProfile(name, userName, password))
-                    snackBarHostState.showSnackbar(
-                        updatedMessages[2],
-                        duration = SnackbarDuration.Long
-                    )
+                    SnackBarController.sendEvent(event = SnackBarEvent(updatedMessages[2]))
                 }
             },
             true
