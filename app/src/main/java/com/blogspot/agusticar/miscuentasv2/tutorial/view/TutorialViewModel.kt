@@ -8,13 +8,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetShowTutorialUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetToLoginUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetShowTutorialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TutorialViewModel @Inject constructor(private val getLoginValue: GetToLoginUseCase,
-                                            private val getShowTutorial: GetShowTutorialUseCase
+class TutorialViewModel @Inject constructor(
+    private val getLoginValue: GetToLoginUseCase,
+    private val getShowTutorial: GetShowTutorialUseCase,
+    private val setShowTutorial: SetShowTutorialUseCase
 ) :
     ViewModel() {
 
@@ -32,6 +35,13 @@ class TutorialViewModel @Inject constructor(private val getLoginValue: GetToLogi
         loadShowTutorialValue()
     }
 
+    fun onChangeShowTutorial(newValue:Boolean) {
+        viewModelScope.launch {
+            _showTutorial.value = newValue
+            setShowTutorial.invoke(newValue)  // Update the value in the data store repository
+        }
+    }
+
     // Load `toLogin` value separately
     private fun loadToLoginValue() {
         viewModelScope.launch {
@@ -43,6 +53,12 @@ class TutorialViewModel @Inject constructor(private val getLoginValue: GetToLogi
                 Log.e("TutorialViewModel", "Error getting toLogin value: ${e.message}")
             }
         }
+    }
+    fun getValueShowTutorial():Boolean? {
+        viewModelScope.launch {
+            _showTutorial.value=getShowTutorial()
+        }
+        return _showTutorial.let { _showTutorial.value }
     }
 
     // Load `showTutorial` value separately

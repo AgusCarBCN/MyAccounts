@@ -119,7 +119,16 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
         }
     }
 
-     private suspend fun saveUri(uri: Uri): String? {
+    override suspend fun getEnableSwitchTutorial(): Boolean? =
+        context.dataStore.data.first()[UserPreferencesKeys.ENABLE_SWITCH_TUTORIAL] ?: true
+
+    override suspend fun setEnableSwitchTutorial(newValue: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.SHOW_TUTORIAL] =newValue
+        }
+    }
+
+    private suspend fun saveUri(uri: Uri): String? {
         val inputStream = context.contentResolver.openInputStream(uri)
         val file = File(context.externalCacheDir, "image.jpg")
         return if (inputStream != null) {

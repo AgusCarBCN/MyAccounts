@@ -64,6 +64,7 @@ import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
+import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -74,7 +75,8 @@ fun HomeScreen(
     navigationController: NavHostController,
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
-    createProfileViewModel: CreateProfileViewModel
+    createProfileViewModel: CreateProfileViewModel,
+    tutorialViewModel:TutorialViewModel
 
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -111,7 +113,7 @@ fun HomeScreen(
                         }
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> {
-                            SettingScreen()
+                            SettingScreen(tutorialViewModel)
                             title=R.string.settingstitle}
                         IconOptions.NEW_INCOME -> TODO()
                         IconOptions.TRANSFER -> TODO()

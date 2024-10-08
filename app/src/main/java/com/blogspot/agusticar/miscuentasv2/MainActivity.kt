@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,7 +27,10 @@ import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
+import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.UserPreferencesKeys
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetShowTutorialUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
+import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
@@ -59,9 +63,12 @@ class MainActivity : ComponentActivity() {
                     }
                 val navigationController = rememberNavController()
                 // Safely observe the LiveData values with default fallbacks
-                val showTutorial by tutorialViewModel.showTutorial.observeAsState(true) // Defaults to `true`
+
                 val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
+                val showTutorial by tutorialViewModel.toLogin.observeAsState(false)
                 val scope = rememberCoroutineScope()
+
+                Log.d("showTutorialMain", showTutorial.toString())
                 ObserveAsEvents(
                     flow = SnackBarController.events,
                     snackbarHostState
@@ -126,7 +133,11 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Routes.Home.route) {
-                                HomeScreen(navigationController,mainViewModel,createAccountViewModel,createProfileViewModel)
+                                HomeScreen(navigationController,
+                                    mainViewModel,
+                                    createAccountViewModel,
+                                    createProfileViewModel,
+                                    tutorialViewModel)
 
                             }
 
