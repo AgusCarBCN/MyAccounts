@@ -67,8 +67,10 @@ class MainActivity : ComponentActivity() {
                 // Safely observe the LiveData values with default fallbacks
 
                 val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
-                val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
-                val enableTutorial by settingViewModel.enableTutorial.observeAsState(true)
+                //val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
+                val showTutorial by settingViewModel.showTutorial.observeAsState()
+
+
 
                 val scope = rememberCoroutineScope()
 
@@ -102,7 +104,7 @@ class MainActivity : ComponentActivity() {
                     ) {innerPadding->
                         NavHost(
                             navController = navigationController,
-                            startDestination = if(showTutorial)Routes.Tutorial.route
+                            startDestination = if(showTutorial==true)Routes.Tutorial.route
                             else Routes.Login.route
 
                         ) {

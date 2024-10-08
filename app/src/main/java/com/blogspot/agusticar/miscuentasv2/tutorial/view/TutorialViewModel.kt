@@ -26,7 +26,7 @@ class TutorialViewModel @Inject constructor(
     private val _toLogin = MutableLiveData<Boolean>(false)
     val toLogin: LiveData<Boolean> = _toLogin
 
-    private val _showTutorial = MutableLiveData<Boolean>(true)
+    private val _showTutorial = MutableLiveData<Boolean>()
     val showTutorial: LiveData<Boolean> = _showTutorial
 
     init {
