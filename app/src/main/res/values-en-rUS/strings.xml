@@ -118,4 +118,15 @@
     <string name="nameUpdated">Name updated</string>
     <string name="passwordUpdated">Password updated</string>
     <string name="photoUpdated">Profile photo updated</string>
+    <!--TopBar titles-->
+    <string name="hometitle">Home</string>
+    <string name="searchtitle">Search</string>
+    <string name="settingstitle">Settings</string>
+    <string name="profiletitle">Profile</string>
+    <string name="new_incometitle">New Income</string>
+    <string name="transfertitle">Transfer</string>
+    <string name="barcharttitle">Bar Chart</string>
+    <string name="calculatortitle">Calculator</string>
+    <string name="setting_accountstitle">Setting Accounts</string>
+    <string name="abouttitle">About</string>
 </resources>

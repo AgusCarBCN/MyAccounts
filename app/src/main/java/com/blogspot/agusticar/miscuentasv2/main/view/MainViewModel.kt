@@ -1,7 +1,9 @@
 package com.blogspot.agusticar.miscuentasv2.main.view
 
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,9 +19,12 @@ class MainViewModel @Inject constructor() : ViewModel() {
     // Inicialmente se establece en "Home".
     private val _selectedScreen = MutableStateFlow(IconOptions.HOME)
 
+
+
     // Exposición pública del StateFlow, permite a los composables observar cambios en el estado.
     // StateFlow es un flujo que siempre mantiene su último valor emitido.
     val selectedScreen: MutableStateFlow<IconOptions> = _selectedScreen
+
 
 
     // Función que permite cambiar la pantalla seleccionada.
@@ -28,6 +33,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             // Emitir el nuevo valor al StateFlow.
             _selectedScreen.emit(screen)
+
         }
     }
 }

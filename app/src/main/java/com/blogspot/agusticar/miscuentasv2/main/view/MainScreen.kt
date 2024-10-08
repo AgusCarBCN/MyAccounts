@@ -40,8 +40,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -77,10 +79,8 @@ fun HomeScreen(
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
-
-
+    var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -90,7 +90,7 @@ fun HomeScreen(
             // Main content goes here
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                { TopBarApp(scope, drawerState) },
+                { TopBarApp(scope, drawerState,title) },
                 { BottomAppBar(mainViewModel, navigationController) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
@@ -100,14 +100,19 @@ fun HomeScreen(
                 ) {if(selectedScreen!=IconOptions.EXIT){
                     createProfileViewModel.onButtonProfileNoSelected()
                 }
-
-
                     when (selectedScreen) {
-                        IconOptions.HOME -> {Test(createAccountsViewModel)}
-                       // createProfileViewModel.onButtonProfileNoSelected()
-                        IconOptions.PROFILE -> ProfileScreen(createProfileViewModel)
+                        IconOptions.HOME -> {
+                            Test(createAccountsViewModel)
+                            title=R.string.hometitle
+
+                        }
+                        IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)
+                            title=R.string.profiletitle
+                        }
                         IconOptions.SEARCH -> TODO()
-                        IconOptions.SETTINGS -> SettingScreen()
+                        IconOptions.SETTINGS -> {
+                            SettingScreen()
+                            title=R.string.settingstitle}
                         IconOptions.NEW_INCOME -> TODO()
                         IconOptions.TRANSFER -> TODO()
                         IconOptions.BARCHART -> TODO()
@@ -132,9 +137,9 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
+private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState,title:Int) {
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name)) },
+        title = { Text(text = stringResource(id = title))},
         navigationIcon = {
             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                 Icon(

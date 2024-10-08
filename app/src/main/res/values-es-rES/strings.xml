@@ -120,4 +120,15 @@
     <string name="nameUpdated">Nombre actualizado</string>
     <string name="passwordUpdated">Contraseña actualizada</string>
     <string name="photoUpdated">Foto de perfil actualizada</string>
+    <!--TopBar titles-->
+    <string name="hometitle">Mis Cuentas</string>
+    <string name="searchtitle">Busqueda</string>
+    <string name="settingstitle">Configuración</string>
+    <string name="profiletitle">Perfil</string>
+    <string name="new_incometitle">Nuevo importe</string>
+    <string name="transfertitle">Transferencia</string>
+    <string name="barcharttitle">Gráficos</string>
+    <string name="calculatortitle">Calculadora</string>
+    <string name="setting_accountstitle">Configuración de las cuentas</string>
+    <string name="abouttitle">About</string>
 </resources>
