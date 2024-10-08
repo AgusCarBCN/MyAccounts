@@ -23,6 +23,6 @@ interface DataStoreRepository {
     suspend fun getPhotoUri(): Uri
     suspend fun setPhotoUri(uri: Uri)
 
-    suspend fun getEnableSwitchTutorial(): Boolean?
-    suspend fun setEnableSwitchTutorial(newValue: Boolean)
+    suspend fun getEnableTutorial(): Boolean?
+    suspend fun setEnableTutorial(newValue: Boolean)
 }

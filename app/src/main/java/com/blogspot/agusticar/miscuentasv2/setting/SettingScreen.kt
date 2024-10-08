@@ -33,6 +33,7 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 fun SettingScreen(tutorialViewModel:TutorialViewModel,settingViewModel:SettingViewModel) {
 
     val isOnboardingEnabled by tutorialViewModel.showTutorial.observeAsState(true)
+
     Log.d("enableBefore",isOnboardingEnabled.toString())
     Column(
         modifier = Modifier
@@ -53,10 +54,11 @@ fun SettingScreen(tutorialViewModel:TutorialViewModel,settingViewModel:SettingVi
         SwitchComponent(
             title = stringResource(id = R.string.enableonboarding),
             description = stringResource(id = R.string.desenableonboarding),
-            true,
+            isOnboardingEnabled,
             onClickSwitch = {
                 tutorialViewModel.onChangeShowTutorial(!isOnboardingEnabled)
-                Log.d("enableAfter",isOnboardingEnabled.toString())
+                settingViewModel.changeEnableTutorial(false)
+
             }
         )
         SwitchComponent(

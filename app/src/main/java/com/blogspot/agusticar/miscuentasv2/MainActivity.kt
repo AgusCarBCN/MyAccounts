@@ -68,6 +68,8 @@ class MainActivity : ComponentActivity() {
 
                 val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
                 val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
+                val enableTutorial by settingViewModel.enableTutorial.observeAsState(true)
+
                 val scope = rememberCoroutineScope()
 
                 Log.d("showTutorialMain", showTutorial.toString())

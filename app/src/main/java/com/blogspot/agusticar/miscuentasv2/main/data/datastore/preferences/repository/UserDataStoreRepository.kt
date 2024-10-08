@@ -119,10 +119,10 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
         }
     }
 
-    override suspend fun getEnableSwitchTutorial(): Boolean =
+    override suspend fun getEnableTutorial(): Boolean =
         context.dataStore.data.first()[UserPreferencesKeys.ENABLE_SWITCH_TUTORIAL] ?: true
 
-    override suspend fun setEnableSwitchTutorial(newValue: Boolean) {
+    override suspend fun setEnableTutorial(newValue: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[UserPreferencesKeys.SHOW_TUTORIAL] =newValue
         }
