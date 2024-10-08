@@ -33,6 +33,7 @@ import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
+import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
     private val createProfileViewModel: CreateProfileViewModel by viewModels()
     private val createAccountViewModel: CreateAccountsViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+    private val settingViewModel: SettingViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
 
 
@@ -137,7 +139,8 @@ class MainActivity : ComponentActivity() {
                                     mainViewModel,
                                     createAccountViewModel,
                                     createProfileViewModel,
-                                    tutorialViewModel)
+                                    tutorialViewModel,
+                                    settingViewModel)
 
                             }
 

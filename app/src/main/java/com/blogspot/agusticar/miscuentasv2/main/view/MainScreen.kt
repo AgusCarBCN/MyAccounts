@@ -63,6 +63,7 @@ import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
+import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -76,7 +77,8 @@ fun HomeScreen(
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
     createProfileViewModel: CreateProfileViewModel,
-    tutorialViewModel:TutorialViewModel
+    tutorialViewModel:TutorialViewModel,
+    settingViewModel:SettingViewModel
 
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -113,7 +115,7 @@ fun HomeScreen(
                         }
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> {
-                            SettingScreen(tutorialViewModel)
+                            SettingScreen(tutorialViewModel,settingViewModel)
                             title=R.string.settingstitle}
                         IconOptions.NEW_INCOME -> TODO()
                         IconOptions.TRANSFER -> TODO()

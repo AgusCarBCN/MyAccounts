@@ -30,7 +30,7 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 @Composable
 
-fun SettingScreen(tutorialViewModel:TutorialViewModel) {
+fun SettingScreen(tutorialViewModel:TutorialViewModel,settingViewModel:SettingViewModel) {
 
     val isOnboardingEnabled by tutorialViewModel.showTutorial.observeAsState(true)
     Log.d("enableBefore",isOnboardingEnabled.toString())
