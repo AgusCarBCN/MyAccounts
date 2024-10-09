@@ -21,4 +21,12 @@ val LightGrey = Color(0xFF0808080)
 val GreyBlue=Color(0xFFA9B7C6)
 val MediumDarkBrown = Color(0xFF2C2D26)
 
+val CoralOrange = Color(0xFFFF6F3C) // Un naranja coral que resalta bien en fondos claros.
+val WarmRed = Color(0xFFE84A27) // Un rojo cálido que llama la atención sin romper la paleta.
+val MutedTerracotta = Color(0xFFB5543A) // Un terracota apagado que se destaca pero es menos brillante.
+val GoldenBrown = Color(0xFF8A5A2F) // Un marrón dorado que crea un buen contraste sin ser demasiado llamativo.
 
+val WarmChocolate = Color(0xFF8B4513) // Marrón cálido con tonos chocolate
+val BurntRed = Color(0xFFB24333) // Un rojo oscuro con matiz cálido
+val MutedCoral = Color(0xFFE57373) // Un coral oscuro y elegante
+val DeepTerracotta = Color(0xFFB35440) // Un terracota profundo pero cálido
