@@ -16,4 +16,6 @@ object UserPreferencesKeys {
     val CURRENCY_CODE=stringPreferencesKey("currency_code")
     val PHOTO_URI = stringPreferencesKey("photo_uri")
     val ENABLE_SWITCH_TUTORIAL = booleanPreferencesKey("enable_switch_tutorial")
+    val ENABLE_SWITCH_DARKTHEME = booleanPreferencesKey("enable_switch_dark theme")
+    val ENABLE_SWITCH_NOTIFICATIONS = booleanPreferencesKey("enable_switch_notification")
 }

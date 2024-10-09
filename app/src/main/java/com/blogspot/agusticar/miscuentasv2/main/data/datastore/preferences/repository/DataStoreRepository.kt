@@ -25,4 +25,10 @@ interface DataStoreRepository {
 
     suspend fun getEnableTutorial(): Boolean?
     suspend fun setEnableTutorial(newValue: Boolean)
+
+    suspend fun getEnableDarkTheme(): Boolean?
+    suspend fun setEnableDarkTheme(newValue: Boolean)
+
+    suspend fun getEnableNotifications(): Boolean?
+    suspend fun setEnableNotifications(newValue: Boolean)
 }
