@@ -22,15 +22,16 @@ import com.blogspot.agusticar.miscuentasv2.components.RowComponent
 import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import kotlinx.coroutines.launch
 
 
 @Composable
 
-fun SettingScreen(tutorialViewModel:TutorialViewModel,settingViewModel:SettingViewModel) {
+fun SettingScreen(tutorialViewModel: TutorialViewModel, settingViewModel: SettingViewModel) {
 
-    // Colectamos el StateFlow del switch
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
+    val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
+    val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
+
     val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
     settingViewModel.getSwitchTutorial()
     val scope = rememberCoroutineScope()
@@ -44,34 +45,29 @@ fun SettingScreen(tutorialViewModel:TutorialViewModel,settingViewModel:SettingVi
             )
     )
     {
-        HeadSetting(title = stringResource(id = R.string.appsettings),20)
+        HeadSetting(title = stringResource(id = R.string.appsettings), 20)
         SwitchComponent(
             title = stringResource(id = R.string.theme),
             description = stringResource(id = R.string.destheme),
-            false,
-            onClickSwitch = {}
+            switchDarkTheme,
+            onClickSwitch = {settingViewModel.onSwitchDarkThemeClicked(it)}
         )
         SwitchComponent(
             title = stringResource(id = R.string.enableonboarding),
             description = stringResource(id = R.string.desenableonboarding),
             switchTutorial,
-            onClickSwitch = {
-
-                        settingViewModel.setValuesTutorial(it)
-
-
-            }
+            onClickSwitch = {settingViewModel.onSwitchTutorialClicked(it)}
         )
         SwitchComponent(
             title = stringResource(id = R.string.enablenotifications),
             description = stringResource(id = R.string.desenableonboarding),
-            false,
-            onClickSwitch = {}
+            switchNotifications,
+            onClickSwitch = {settingViewModel.onSwitchNotificationsClicked(it)}
         )
 
         SpacerSetting()
 
-        HeadSetting(title = stringResource(id = R.string.backup),20)
+        HeadSetting(title = stringResource(id = R.string.backup), 20)
 
         RowComponent(title = stringResource(id = R.string.createbackup),
             description = stringResource(id = R.string.desbackup),
@@ -85,7 +81,7 @@ fun SettingScreen(tutorialViewModel:TutorialViewModel,settingViewModel:SettingVi
 
         SpacerSetting()
 
-        HeadSetting(title = stringResource(id = R.string.accountsetting),20)
+        HeadSetting(title = stringResource(id = R.string.accountsetting), 20)
 
         RowComponent(title = stringResource(id = R.string.add_an_account),
             description = stringResource(id = R.string.desadd_an_account),
@@ -101,14 +97,14 @@ fun SettingScreen(tutorialViewModel:TutorialViewModel,settingViewModel:SettingVi
             onClick = {})
 
         RowComponent(title = stringResource(id = R.string.changecurrency),
-            description = stringResource(id =R.string.deschangecurrency),
+            description = stringResource(id = R.string.deschangecurrency),
             iconResource = R.drawable.exchange,
             onClick = {})
     }
 }
+
 @Composable
-private fun SpacerSetting()
-{
+private fun SpacerSetting() {
     Spacer(
         modifier = Modifier
             .fillMaxWidth()

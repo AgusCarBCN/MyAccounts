@@ -22,9 +22,17 @@ class SettingViewModel @Inject constructor(
     private val changeSwitchTutorial: SetEnableTutorialUseCase
 ) : ViewModel() {
 
-    // Exposición del StateFlow para el switch
+    //Live data del switch para habilitar/deshabilitar tutorial de inicio
     private val _switchTutorial = MutableLiveData<Boolean>()
     val switchTutorial: LiveData<Boolean> = _switchTutorial
+
+    //Live data del switch para habilitar/deshabilitar tema oscuro desde la aplicación
+    private val _switchDarkTheme = MutableLiveData<Boolean>()
+    val switchDarkTheme: LiveData<Boolean> = _switchDarkTheme
+
+    //Live data del switch para habilitar/deshabilitar notificaciones
+    private val _switchNotifications = MutableLiveData<Boolean>()
+    val switchNotifications: LiveData<Boolean> = _switchNotifications
 
     // Este LiveData controla el estado de si mostrar el tutorial
     private val _showTutorial = MutableLiveData<Boolean>()
@@ -36,7 +44,7 @@ class SettingViewModel @Inject constructor(
     }
 
     // Método para cambiar el valor del switch
-    fun setValuesTutorial(checked:Boolean) {
+    fun onSwitchTutorialClicked(checked:Boolean) {
         viewModelScope.launch {
             setShowTutorial.invoke(checked)
             changeSwitchTutorial(checked)
@@ -45,6 +53,17 @@ class SettingViewModel @Inject constructor(
             Log.d("SwitchChecked",_switchTutorial.value.toString())
             Log.d("TutorialChecked",_showTutorial.value.toString())
         }
+    }
+
+    fun onSwitchDarkThemeClicked(checked:Boolean) {
+
+            _switchDarkTheme.value = checked
+
+    }
+    fun onSwitchNotificationsClicked(checked:Boolean) {
+
+        _switchNotifications.value = checked
+
     }
 
 
