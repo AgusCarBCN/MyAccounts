@@ -72,9 +72,8 @@ fun ModelButton(
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     // Definir colores
-    val defaultContentColor = LocalCustomColorsPalette.current.textButtonColorDefault
+
     val pressedContentColor = LocalCustomColorsPalette.current.textButtonColorPressed
-    val defaultContainerColor = LocalCustomColorsPalette.current.buttonColorDefault
     val pressedContainerColor = LocalCustomColorsPalette.current.buttonColorPressed
     val disabled= LocalCustomColorsPalette.current.disableButton
     Button(

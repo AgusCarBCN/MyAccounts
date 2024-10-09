@@ -34,13 +34,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.createSavedStateHandle
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
-
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -236,13 +233,13 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
             Icon(
                 painter = painterResource(id = R.drawable.camera), // Reemplaza con tu ícono de cámara
                 contentDescription = "Camera Icon",
+                tint = LocalCustomColorsPalette.current.textColor, // Reemplaza con tu color de ícono
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(LocalCustomColorsPalette.current.buttonColorPressed)
+                    .background(LocalCustomColorsPalette.current.disableButton)
                     .clickable {
                         photoPickerLauncher.launch("image/*")
-                        Log.d("ClickImage", selectedImageUri.toString())
-                        Log.d("ClickImageSelectedToSave", selectedImageUriSelected.toString())
+
                     }
             )
 

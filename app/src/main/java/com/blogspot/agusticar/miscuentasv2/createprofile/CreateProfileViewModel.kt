@@ -1,6 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.createprofile
 
-import android.content.Context
+
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,8 +14,6 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetUserP
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel

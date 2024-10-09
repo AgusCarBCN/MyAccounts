@@ -12,15 +12,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,11 +39,6 @@ import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import com.example.modified_snackbar.presentation.ComposeModifiedSnackbar
-import com.example.modified_snackbar.presentation.ComposeModifiedSnackbarSuccess
-import com.example.modified_snackbar.presentation.rememberComposeModifiedSnackbarState
-import com.example.modified_snackbar.util.ComposeModifiedSnackbarPosition
-import com.example.modified_snackbar.util.ComposeModifierSnackbarDuration
 import kotlinx.coroutines.launch
 
 
@@ -56,7 +47,7 @@ fun LoginComponent(
     loginViewModel: LoginViewModel,
     modifier: Modifier, navToMain: () -> Unit,
 ) {
-    val invalidMessage= messageSnackBar(resource = R.string.inValidLogin)
+
     val image by loginViewModel.selectedImageUriSaved.observeAsState(initial = null)
     val name by loginViewModel.name.observeAsState("")
     val userName by loginViewModel.userName.observeAsState("")
@@ -76,8 +67,7 @@ fun LoginComponent(
     val scope = rememberCoroutineScope()
     /* Se usa para gestionar el estado del Snackbar. Esto te permite mostrar y controlar el Snackbar
      desde cualquier parte de tu UI.*/
-    val snackbarHostState = remember { SnackbarHostState() }
-    val state = rememberComposeModifiedSnackbarState()
+
     loginViewModel.getLoginImage()
     ConstraintLayout(
         modifier
@@ -250,10 +240,7 @@ fun LoginComponent(
 
    // ComposeModifiedSnackbar(state = state)
 }
-@Composable
-fun messageSnackBar(resource:Int):String{
-    return  stringResource(id = resource)
-}
+
 
 
 
