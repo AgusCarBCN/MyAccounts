@@ -21,6 +21,7 @@
     <string name="goodevening">Good evening</string>
 
 
+
     <!--String onBoarding -->
     <string name="wellcomeOnBoarding">Wellcome to MyAccountsApp</string>
     <string name="title0">Wellcome to myAccountsApp</string>
@@ -129,6 +130,7 @@
     <string name="calculatortitle">Calculator</string>
     <string name="setting_accountstitle">Setting Accounts</string>
     <string name="abouttitle">About</string>
+    <string name="greeting">Hello,</string>
     <!--About-->
     <string name="developer">Developer: Agustin Carnerero Peña</string>
     <string name="iconconta">Accounting icon</string>

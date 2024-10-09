@@ -131,6 +131,7 @@
     <string name="calculatortitle">Calculadora</string>
     <string name="setting_accountstitle">Configuración de las cuentas</string>
     <string name="abouttitle">Acerca de</string>
+    <string name="greeting">Hola,</string>
     <!--Página de acerca de-->
     <string name="developer">Desarrollador: Agustin Carnerero Peña</string>
     <string name="atributions">Atribuciones</string>

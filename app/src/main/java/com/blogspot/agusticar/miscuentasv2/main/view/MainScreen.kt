@@ -74,6 +74,7 @@ import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import okhttp3.internal.userAgent
 
 
 @Composable
@@ -89,6 +90,7 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
+    val userName by createProfileViewModel.name.observeAsState("")
     var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
     // Usar LaunchedEffect para cerrar el drawer cuando cambia la pantalla seleccionada
     LaunchedEffect(key1 = selectedScreen) {
@@ -104,7 +106,9 @@ fun HomeScreen(
             // Main content goes here
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                { TopBarApp(scope, drawerState,title) },
+                { TopBarApp(scope, drawerState,title,
+                    (if(selectedScreen==IconOptions.HOME) userName else "").toString()
+                ) },
                 { BottomAppBar(mainViewModel, navigationController) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
@@ -113,14 +117,14 @@ fun HomeScreen(
                     modifier = Modifier.padding(innerPadding)
                 ) {if(selectedScreen!=IconOptions.EXIT){
                     createProfileViewModel.onButtonProfileNoSelected()
+
                 }
 
                     when (selectedScreen) {
 
                         IconOptions.HOME -> {
                             Test(createAccountsViewModel)
-                            title=R.string.hometitle
-
+                            title=R.string.greeting
                         }
                         IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)
                             title=R.string.profiletitle
@@ -129,8 +133,10 @@ fun HomeScreen(
                         IconOptions.SETTINGS -> {
                             SettingScreen(settingViewModel)
                             title=R.string.settingstitle}
-                        IconOptions.NEW_INCOME -> NewAmount()
-                        IconOptions.TRANSFER -> Transfer()
+                        IconOptions.NEW_INCOME -> {NewAmount()
+                        title=R.string.newincome}
+                        IconOptions.TRANSFER -> {Transfer()
+                        title=R.string.transfer}
                         IconOptions.BARCHART -> TODO()
                         IconOptions.CALCULATOR -> TODO()
                         IconOptions.SETTING_ACCOUNTS -> TODO()
@@ -160,9 +166,10 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState,title:Int) {
+private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState,title:Int,name:String) {
+
     TopAppBar(
-        title = { Text(text = stringResource(id = title))},
+        title = { Text(text = stringResource(id = title)+" "+name)},
         navigationIcon = {
             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                 Icon(
@@ -257,8 +264,7 @@ private fun DrawerContent(
 fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
     val selectedImageUriSaved by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
-    val selectedImage by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
-    val name by createProfileViewModel.name.observeAsState("user")
+    //val name by createProfileViewModel.name.observeAsState("user")
 
 
     createProfileViewModel.loadImageUri()
@@ -275,13 +281,13 @@ fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
         selectedImageUriSaved?.let { UserImage(it) }
         }
 
-        Column(modifier = Modifier.weight(0.6f),
+        /*Column(modifier = Modifier.weight(0.6f),
             ) {
             Text(text = "Hola",
                 color= LocalCustomColorsPalette.current.textColor)
             Text(text = "$name !",
                 color= LocalCustomColorsPalette.current.textColor)
-        }
+        }*/
 
     }
 
