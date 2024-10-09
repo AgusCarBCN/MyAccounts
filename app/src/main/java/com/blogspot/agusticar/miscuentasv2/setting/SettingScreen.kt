@@ -69,7 +69,7 @@ fun SettingScreen(settingViewModel: SettingViewModel) {
             description = stringResource(id = R.string.desbackup),
             iconResource = R.drawable.backup,
             onClick = {})
-        RowComponent(title = stringResource(id = R.string.loginButton),
+        RowComponent(title = stringResource(id = R.string.loadbackup),
             description = stringResource(id = R.string.desload),
             iconResource = R.drawable.download,
             onClick = {})
