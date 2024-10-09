@@ -115,7 +115,7 @@ fun HomeScreen(
                         }
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> {
-                            SettingScreen(tutorialViewModel,settingViewModel)
+                            SettingScreen(settingViewModel)
                             title=R.string.settingstitle}
                         IconOptions.NEW_INCOME -> TODO()
                         IconOptions.TRANSFER -> TODO()

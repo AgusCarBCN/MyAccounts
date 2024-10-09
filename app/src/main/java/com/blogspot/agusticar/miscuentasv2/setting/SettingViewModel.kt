@@ -1,12 +1,15 @@
 package com.blogspot.agusticar.miscuentasv2.setting
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetEnableDarkThemUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetEnableNotificationsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetEnableTutorialUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetShowTutorialUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetEnableDarkThemeUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetEnableNotificationsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetEnableTutorialUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetShowTutorialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +22,12 @@ class SettingViewModel @Inject constructor(
     private val getShowTutorial: GetShowTutorialUseCase,
     private val setShowTutorial: SetShowTutorialUseCase,
     private val getSwitchTutorial: GetEnableTutorialUseCase,
-    private val changeSwitchTutorial: SetEnableTutorialUseCase
+    private val changeSwitchTutorial: SetEnableTutorialUseCase,
+    private val getSwitchDarkTheme: GetEnableDarkThemUseCase,
+    private val changeSwitchDarkTheme: SetEnableDarkThemeUseCase,
+    private val getNotificationsTutorial: GetEnableNotificationsUseCase,
+    private val changeSwitchNotifications: SetEnableNotificationsUseCase
+
 ) : ViewModel() {
 
     //Live data del switch para habilitar/deshabilitar tutorial de inicio
@@ -37,32 +45,40 @@ class SettingViewModel @Inject constructor(
     // Este LiveData controla el estado de si mostrar el tutorial
     private val _showTutorial = MutableLiveData<Boolean>()
     val showTutorial: LiveData<Boolean> = _showTutorial
+
     init {
 
         getSwitchTutorial()
+        getSwitchDarkTheme()
+        getSwitchNotifications()
         getShowTutorial()
     }
 
     // Método para cambiar el valor del switch
-    fun onSwitchTutorialClicked(checked:Boolean) {
+    fun onSwitchTutorialClicked(checked: Boolean) {
         viewModelScope.launch {
             setShowTutorial.invoke(checked)
             changeSwitchTutorial(checked)
-            _switchTutorial.value=checked
-            Log.d("Checked",checked.toString())
-            Log.d("SwitchChecked",_switchTutorial.value.toString())
-            Log.d("TutorialChecked",_showTutorial.value.toString())
+            _switchTutorial.value = checked
+
         }
     }
 
-    fun onSwitchDarkThemeClicked(checked:Boolean) {
-
+    fun onSwitchDarkThemeClicked(checked: Boolean) {
+        viewModelScope.launch {
+            changeSwitchDarkTheme(checked)
             _switchDarkTheme.value = checked
+        }
+
 
     }
-    fun onSwitchNotificationsClicked(checked:Boolean) {
 
-        _switchNotifications.value = checked
+    fun onSwitchNotificationsClicked(checked: Boolean) {
+        viewModelScope.launch {
+            changeSwitchNotifications(checked)
+            _switchNotifications.value = checked
+        }
+
 
     }
 
@@ -80,6 +96,16 @@ class SettingViewModel @Inject constructor(
             _switchTutorial.value = getSwitchTutorial.invoke()
         }
     }
-
-
+    // Obtener el estado del switch del tutorial
+    fun getSwitchDarkTheme() {
+        viewModelScope.launch {
+            _switchDarkTheme.value = getSwitchDarkTheme.invoke()
+        }
+    }
+    // Obtener el estado del switch del tutorial
+    fun getSwitchNotifications() {
+        viewModelScope.launch {
+            _switchNotifications.value = getNotificationsTutorial.invoke()
+        }
+    }
 }
