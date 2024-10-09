@@ -10,8 +10,6 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetShowT
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetEnableTutorialUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetShowTutorialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,8 +23,8 @@ class SettingViewModel @Inject constructor(
 ) : ViewModel() {
 
     // Exposición del StateFlow para el switch
-    private val _switch = MutableLiveData<Boolean>()
-    val switch: LiveData<Boolean> = _switch
+    private val _switchTutorial = MutableLiveData<Boolean>()
+    val switchTutorial: LiveData<Boolean> = _switchTutorial
 
     // Este LiveData controla el estado de si mostrar el tutorial
     private val _showTutorial = MutableLiveData<Boolean>()
@@ -42,9 +40,9 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             setShowTutorial.invoke(checked)
             changeSwitchTutorial(checked)
-            _switch.value=checked
+            _switchTutorial.value=checked
             Log.d("Checked",checked.toString())
-            Log.d("SwitchChecked",_switch.value.toString())
+            Log.d("SwitchChecked",_switchTutorial.value.toString())
             Log.d("TutorialChecked",_showTutorial.value.toString())
         }
     }
@@ -60,8 +58,9 @@ class SettingViewModel @Inject constructor(
     // Obtener el estado del switch del tutorial
     fun getSwitchTutorial() {
         viewModelScope.launch {
-            _switch.value = getSwitchTutorial.invoke()
+            _switchTutorial.value = getSwitchTutorial.invoke()
         }
     }
+
 
 }

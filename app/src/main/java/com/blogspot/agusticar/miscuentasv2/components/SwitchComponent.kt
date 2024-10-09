@@ -34,8 +34,6 @@ fun SwitchComponent(title:String,
                     isChecked:Boolean,
                     onClickSwitch: (Boolean) -> Unit) {
 
-    var switchCheckedState by remember { mutableStateOf(isChecked) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,9 +50,8 @@ fun SwitchComponent(title:String,
                 color=LocalCustomColorsPalette.current.textColor)
         }
         Switch(modifier = Modifier.weight(0.25f),
-            checked = switchCheckedState,
-            onCheckedChange = { switchCheckedState = it
-                              onClickSwitch(it)},
+            checked = isChecked,
+            onCheckedChange = {onClickSwitch(it)},
 
             /*
             The "checkedIconColor" and "uncheckedIconColor" excluded from this list
