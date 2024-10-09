@@ -58,16 +58,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            val navigationController = rememberNavController()
+            // Safely observe the LiveData values with default fallbacks
 
-            MisCuentasv2Theme {
+            val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
+            val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
+            val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
+
+
+            MisCuentasv2Theme(darkTheme =switchDarkTheme ) {
+
                     val snackbarHostState= remember{
                         SnackbarHostState()
                     }
-                val navigationController = rememberNavController()
-                // Safely observe the LiveData values with default fallbacks
 
-                val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
-                val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
 
 
                 val scope = rememberCoroutineScope()
