@@ -131,4 +131,36 @@
     <string name="calculatortitle">Calculadora</string>
     <string name="setting_accountstitle">Configuración de las cuentas</string>
     <string name="abouttitle">About</string>
+    <!--Página de acerca de-->
+    <string name="developer">Desarrollador: Agustin Carnerero Peña</string>
+    <string name="atributions">Atribuciones</string>
+    <string name="iconconta">Icono de contabilidad</string>
+    <string name="icongithub">Icono de logotipo de github</string>
+    <string name="menuicons">Iconos de menu lateral</string>
+    <string name="iconstheme">Iconos de configuracion de tema</string>
+    <string name="iconsdate">Iconos de rango de fecha</string>
+    <string name="attributionicon"> creado por </string>
+    <string name="attributionicons">creados por</string>
+    <string name="version">Version 2.0</string>
+    <string name="description">
+    Mis cuentas es una aplicación diseñada para facilitar el control de tus ingresos y gastos. Con esta herramienta, puedes gestionar eficientemente los movimientos de una a varias cuentas, añadir ingresos, registrar gastos, realizar transferencias entre  cuentas y obtener estadísticas detalladas mediante búsquedas de movimientos.
+
+    Además, la aplicación incluye una práctica calculadora integrada, permitiéndote realizar cálculos de manera rápida y sencilla sin tener que salir de la aplicación.
+
+    Simplifica tu gestión financiera con Mis cuentas y mantén un control preciso de tus transacciones, todo en un solo lugar.
+</string>
+    <string name="desaboutapp">Una pequeña descripcion sobre la app</string>
+    <string name="desaboutme">Quien hay detras de este proyecto.</string>
+    <string name="desshare">Comparte esta app para que llegue a muchos sitios.</string>
+    <string name="desrate">Valora y comparte tu opinión sobre la app.</string>
+    <string name="desemail">Contacta conmigo para darme cualquier sugerencia.</string>
+    <string name="desstore">Descarga mi otra aplicación. MisCuentasApp</string>
+    <string name="despolicy">Accede a la política de privacidad</string>
+    <string name="othersapp">Otras aplicaciones</string>
+    <string name="policy">Política de privacidad</string>
+    <string name="share">Comparte</string>
+    <string name="rate">Valora</string>
+    <string name="contactme">Contactame</string>
+    <string name="visitmygithub">Visita mi github</string>
+
 </resources>

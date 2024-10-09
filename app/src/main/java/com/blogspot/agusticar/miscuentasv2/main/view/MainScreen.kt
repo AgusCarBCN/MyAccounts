@@ -37,6 +37,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -55,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
@@ -85,10 +87,15 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
     var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
-
+    // Usar LaunchedEffect para cerrar el drawer cuando cambia la pantalla seleccionada
+    LaunchedEffect(key1 = selectedScreen) {
+        if (drawerState.isOpen) {
+            drawerState.close() // Cierra el drawer cuando se selecciona una opción
+        }
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel) },
+        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel,drawerState) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
@@ -104,7 +111,9 @@ fun HomeScreen(
                 ) {if(selectedScreen!=IconOptions.EXIT){
                     createProfileViewModel.onButtonProfileNoSelected()
                 }
+
                     when (selectedScreen) {
+
                         IconOptions.HOME -> {
                             Test(createAccountsViewModel)
                             title=R.string.hometitle
@@ -122,7 +131,9 @@ fun HomeScreen(
                         IconOptions.BARCHART -> TODO()
                         IconOptions.CALCULATOR -> TODO()
                         IconOptions.SETTING_ACCOUNTS -> TODO()
-                        IconOptions.ABOUT -> TODO()
+                        IconOptions.ABOUT ->{ AboutScreen()
+
+                        }
                         IconOptions.POLICY -> TODO()
                         IconOptions.EXIT -> {
                             // Obtén el contexto actual de la aplicación
@@ -192,7 +203,8 @@ private fun BottomAppBar(viewModel: MainViewModel, navigationController: NavHost
 @Composable
 private fun DrawerContent(
     viewModel: MainViewModel,
-    createProfileViewModel: CreateProfileViewModel
+    createProfileViewModel: CreateProfileViewModel,
+    drawerState: DrawerState
 ) {
 
     Card(
@@ -213,15 +225,14 @@ private fun DrawerContent(
                 .background(LocalCustomColorsPalette.current.drawerColor)
         ) {
             TitleOptions(R.string.management)
-
             ClickableRow(OptionItem(R.string.newincome, R.drawable.paymentsoption), onClick = {})
             ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {})
             ClickableRow(OptionItem(R.string.chart, R.drawable.barchartoption), onClick = {})
             ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {})
-
             TitleOptions(R.string.aboutapp)
-            ClickableRow(OptionItem(R.string.about, R.drawable.info), onClick = {})
-            ClickableRow(OptionItem(R.string.privacy, R.drawable.privacy), onClick = {})
+            ClickableRow(OptionItem(R.string.about, R.drawable.info), onClick = {
+                viewModel.selectScreen(IconOptions.ABOUT)
+            })
             ClickableRow(
                 OptionItem(R.string.exitapp, R.drawable.exitapp),
                 onClick = { viewModel.selectScreen(IconOptions.EXIT) })

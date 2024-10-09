@@ -19,8 +19,6 @@ class MainViewModel @Inject constructor() : ViewModel() {
     // Inicialmente se establece en "Home".
     private val _selectedScreen = MutableStateFlow(IconOptions.HOME)
 
-
-
     // Exposición pública del StateFlow, permite a los composables observar cambios en el estado.
     // StateFlow es un flujo que siempre mantiene su último valor emitido.
     val selectedScreen: MutableStateFlow<IconOptions> = _selectedScreen

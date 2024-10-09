@@ -129,4 +129,35 @@
     <string name="calculatortitle">Calculator</string>
     <string name="setting_accountstitle">Setting Accounts</string>
     <string name="abouttitle">About</string>
+    <!--About-->
+    <string name="developer">Developer: Agustin Carnerero Peña</string>
+    <string name="iconconta">Accounting icon</string>
+    <string name="icongithub">Github logo icon</string>
+    <string name="menuicons">Side menu icons</string>
+    <string name="iconstheme">Setting theme icons</string>
+    <string name="attributionicon"> made by </string>
+    <string name="attributionicons">made by</string>
+    <string name="atributions">Attributions</string>
+    <string name="iconsdate">Date range icons</string>
+    <string name="version">Version 2.0</string>
+    <string name="description">
+    My Accounts is an application designed to simplify the management of your income and expenses. With this tool, you can efficiently handle transactions for one to several accounts, add income, record expenses, transfer funds between  accounts, and generate detailed statistics through transaction searches.
+
+    Additionally, the application features a handy integrated calculator, allowing you to perform calculations quickly and easily without leaving the app.
+
+    Streamline your financial management with My Accounts and maintain precise control over your transactions, all in one place.
+</string>
+    <string name="desaboutapp">A brief description about the app.</string>
+    <string name="desaboutme">Who is behind this project.</string>
+    <string name="desshare">Share this app to reach many places.</string>
+    <string name="desrate">Rate and share your opinion about the app.</string>
+    <string name="desemail">Contact me to give any suggestion.</string>
+    <string name="desstore">Download my other application. MyAccountsApp</string>
+    <string name="despolicy">Go to private policy</string>
+    <string name="othersapp">Others apps</string>
+    <string name="policy">Private policy</string>
+    <string name="share">Share</string>
+    <string name="rate">Rate</string>
+    <string name="contactme">Contact me</string>
+    <string name="visitmygithub">Visit my github</string>
 </resources>
