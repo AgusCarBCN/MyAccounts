@@ -27,10 +27,7 @@ import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.UserPreferencesKeys
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetShowTutorialUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
-import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
@@ -58,21 +55,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+
             val navigationController = rememberNavController()
-            // Safely observe the LiveData values with default fallbacks
 
             val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
             val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
             val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
 
-
-            MisCuentasv2Theme(darkTheme =switchDarkTheme ) {
-
-                    val snackbarHostState= remember{
-                        SnackbarHostState()
-                    }
-
-
+            MisCuentasv2Theme(darkTheme = switchDarkTheme) {
+                val snackbarHostState = remember {
+                    SnackbarHostState()
+                }
 
                 val scope = rememberCoroutineScope()
 
@@ -90,73 +83,79 @@ class MainActivity : ComponentActivity() {
                             duration = SnackbarDuration.Short
                         )
 
-                        if(result == SnackbarResult.ActionPerformed) {
+                        if (result == SnackbarResult.ActionPerformed) {
                             event.action?.action?.invoke()
                         }
                     }
                 }
-                    Scaffold(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        snackbarHost = {
-                            SnackbarHost(hostState = snackbarHostState)
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    snackbarHost = {
+                        SnackbarHost(hostState = snackbarHostState)
+                    }
+                ) { innerPadding ->
+                    NavHost(
+                        navController = navigationController,
+                        startDestination = if (showTutorial) Routes.Tutorial.route
+                        else Routes.Login.route
 
-                        }
-
-                    ) {innerPadding->
-                        NavHost(
-                            navController = navigationController,
-                            startDestination = if(showTutorial)Routes.Tutorial.route
-                            else Routes.Login.route
-
-                        ) {
-                            composable(Routes.Tutorial.route) {
-                                Tutorial(
-                                    tutorialViewModel,
-                                    navToScreen = {navigationController.navigate(if(toLogin) Routes.Login.route
-                                    else Routes.CreateProfile.route)},
-                                    modifier=Modifier.padding(innerPadding),
-                                )
-                            }
-
-                            composable(Routes.CreateProfile.route) {
-                                CreateProfileComponent(createProfileViewModel,
-                                    navToBackLogin =  {navigationController.popBackStack() },
-                                    navToCreateAccounts = {navigationController.navigate(Routes.CreateAccounts.route)} )
-                            }
-
-                            composable(Routes.CreateAccounts.route) {
-                                CreateAccountsComponent(createAccountViewModel,navToLogin = {
-                                    navigationController.navigate(Routes.Login.route)},
-                                    navToBack = {navigationController.popBackStack()}
+                    ) {
+                        composable(Routes.Tutorial.route) {
+                            Tutorial(
+                                tutorialViewModel,
+                                navToScreen = {
+                                    navigationController.navigate(
+                                        if (toLogin) Routes.Login.route
+                                        else Routes.CreateProfile.route
                                     )
+                                },
+                                modifier = Modifier.padding(innerPadding),
+                            )
+                        }
 
-                            }
-                            composable(Routes.Login.route) {
-                                LoginComponent(
-                                    loginViewModel,
-                                    modifier = Modifier.fillMaxSize(),
-                                    navToMain = {
-                                        navigationController.navigate(Routes.Home.route)}
-                                )
-                            }
-                            composable(Routes.Home.route) {
-                                HomeScreen(navigationController,
-                                    mainViewModel,
-                                    createAccountViewModel,
-                                    createProfileViewModel,
-                                    tutorialViewModel,
-                                    settingViewModel)
+                        composable(Routes.CreateProfile.route) {
+                            CreateProfileComponent(createProfileViewModel,
+                                navToBackLogin = { navigationController.popBackStack() },
+                                navToCreateAccounts = { navigationController.navigate(Routes.CreateAccounts.route) })
+                        }
 
-                            }
-
+                        composable(Routes.CreateAccounts.route) {
+                            CreateAccountsComponent(createAccountViewModel, navToLogin = {
+                                navigationController.navigate(Routes.Login.route)
+                            },
+                                navToBack = { navigationController.popBackStack() }
+                            )
 
                         }
+                        composable(Routes.Login.route) {
+                            LoginComponent(
+                                loginViewModel,
+                                modifier = Modifier.fillMaxSize(),
+                                navToMain = {
+                                    navigationController.navigate(Routes.Home.route)
+                                }
+                            )
+                        }
+                        composable(Routes.Home.route) {
+                            HomeScreen(
+                                navigationController,
+                                mainViewModel,
+                                createAccountViewModel,
+                                createProfileViewModel,
+                                tutorialViewModel,
+                                settingViewModel
+                            )
+
+                        }
+
 
                     }
+
                 }
             }
         }
     }
+}
 
 

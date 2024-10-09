@@ -130,7 +130,7 @@
     <string name="barcharttitle">Gráficos</string>
     <string name="calculatortitle">Calculadora</string>
     <string name="setting_accountstitle">Configuración de las cuentas</string>
-    <string name="abouttitle">About</string>
+    <string name="abouttitle">Acerca de</string>
     <!--Página de acerca de-->
     <string name="developer">Desarrollador: Agustin Carnerero Peña</string>
     <string name="atributions">Atribuciones</string>

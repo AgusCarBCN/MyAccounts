@@ -11,6 +11,7 @@ enum class IconOptions {
     CALCULATOR,
     SETTING_ACCOUNTS,
     ABOUT,
+    ABOUT_DESCRIPTION,
     POLICY,
     EXIT
 }

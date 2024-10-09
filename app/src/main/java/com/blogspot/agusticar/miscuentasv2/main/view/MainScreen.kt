@@ -56,16 +56,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
+import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -126,13 +129,13 @@ fun HomeScreen(
                         IconOptions.SETTINGS -> {
                             SettingScreen(settingViewModel)
                             title=R.string.settingstitle}
-                        IconOptions.NEW_INCOME -> TODO()
-                        IconOptions.TRANSFER -> TODO()
+                        IconOptions.NEW_INCOME -> NewAmount()
+                        IconOptions.TRANSFER -> Transfer()
                         IconOptions.BARCHART -> TODO()
                         IconOptions.CALCULATOR -> TODO()
                         IconOptions.SETTING_ACCOUNTS -> TODO()
-                        IconOptions.ABOUT ->{ AboutScreen()
-
+                        IconOptions.ABOUT ->{ AboutScreen(mainViewModel)
+                            title=R.string.abouttitle
                         }
                         IconOptions.POLICY -> TODO()
                         IconOptions.EXIT -> {
@@ -141,6 +144,11 @@ fun HomeScreen(
                             // Verifica si el contexto es una actividad
                             val activity = context as? Activity
                             activity?.finish()
+                        }
+
+                        IconOptions.ABOUT_DESCRIPTION -> {
+                            AboutApp()
+                            title=R.string.abouttitle
                         }
                     }
 
@@ -225,8 +233,12 @@ private fun DrawerContent(
                 .background(LocalCustomColorsPalette.current.drawerColor)
         ) {
             TitleOptions(R.string.management)
-            ClickableRow(OptionItem(R.string.newincome, R.drawable.paymentsoption), onClick = {})
-            ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {})
+            ClickableRow(OptionItem(R.string.newincome, R.drawable.paymentsoption), onClick = {
+                viewModel.selectScreen(IconOptions.NEW_INCOME)
+            })
+            ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {
+                viewModel.selectScreen(IconOptions.TRANSFER)
+            })
             ClickableRow(OptionItem(R.string.chart, R.drawable.barchartoption), onClick = {})
             ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {})
             TitleOptions(R.string.aboutapp)
