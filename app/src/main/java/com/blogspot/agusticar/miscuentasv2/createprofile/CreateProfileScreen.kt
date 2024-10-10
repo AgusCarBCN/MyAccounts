@@ -233,7 +233,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
             Icon(
                 painter = painterResource(id = R.drawable.camera), // Reemplaza con tu ícono de cámara
                 contentDescription = "Camera Icon",
-                tint = LocalCustomColorsPalette.current.textColor, // Reemplaza con tu color de ícono
+                tint = LocalCustomColorsPalette.current.iconCamara, // Reemplaza con tu color de ícono
                 modifier = Modifier
                     .fillMaxSize()
                     .background(LocalCustomColorsPalette.current.disableButton)

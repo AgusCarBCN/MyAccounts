@@ -163,5 +163,73 @@
     <string name="rate">Rate</string>
     <string name="contactme">Contact me</string>
     <string name="visitmygithub">Visit my github</string>
+  <string name="newexpense">New Expense</string>
+
+        <string name="food">Food</string>
+        <string name="groceries_title">Groceries</string>
+        <string name="groceries_description">Everything related to food purchases and basic products.</string>
+        <string name="restaurants_cafes_title">Restaurants/Cafés</string>
+        <string name="restaurants_cafes_description">Expenses on dining out, coffee, and snacks.</string>
+
+        <string name="housing">Housing</string>
+        <string name="rent_mortgage_title">Rent/Mortgage</string>
+        <string name="rent_mortgage_description">The main expense for housing.</string>
+        <string name="utilities_title">Utilities</string>
+        <string name="utilities_description">Electricity, water, gas, internet, phone bills.</string>
+        <string name="maintenance_title">Maintenance</string>
+        <string name="maintenance_description">Repairs, cleaning, home insurance.</string>
+
+        <string name="transportation">Transportation</string>
+        <string name="fuel_title">Fuel</string>
+        <string name="fuel_description">For those who own a car.</string>
+        <string name="public_transport_title">Public Transport</string>
+        <string name="public_transport_description">Buses, metro, trains.</string>
+        <string name="vehicle_maintenance_title">Vehicle Maintenance</string>
+        <string name="vehicle_maintenance_description">Repairs, insurance, parking.</string>
+
+        <string name="health">Health</string>
+        <string name="health_insurance_title">Health Insurance</string>
+        <string name="health_insurance_description">Policy expenses.</string>
+        <string name="medications_title">Medications</string>
+        <string name="medications_description">Purchases at pharmacies.</string>
+        <string name="medical_appointments_title">Medical Appointments</string>
+        <string name="medical_appointments_description">Visits to doctors, dentists, therapies.</string>
+
+        <string name="entertainment_leisure">Entertainment and Leisure</string>
+        <string name="movies_concerts_events_title">Movies, concerts, events</string>
+        <string name="movies_concerts_events_description">Various forms of entertainment.</string>
+        <string name="subscriptions_title">Subscriptions</string>
+        <string name="subscriptions_description">Netflix, Spotify, streaming services.</string>
+        <string name="vacations_travel_title">Vacations/Travel</string>
+        <string name="vacations_travel_description">Expenses on flights, hotels, excursions.</string>
+
+        <string name="education_training">Education and Training</string>
+        <string name="courses_books_materials_title">Courses, books, materials</string>
+        <string name="tuition_fees_title">Tuition Fees</string>
+        <string name="tuition_fees_description">Tuition fees and school payments.</string>
+
+        <string name="clothing_accessories">Clothing and Accessories</string>
+        <string name="clothing_purchases_title">Clothing Purchases</string>
+        <string name="clothing_purchases_description">Purchases of clothing, footwear, accessories.</string>
+
+        <string name="house">Home</string>
+        <string name="home_decorations_title">Home Decorations</string>
+        <string name="home_decorations_description">Decorations, furniture, appliances.</string>
+
+        <string name="other_expenses">Other Expenses</string>
+        <string name="gifts_title">Gifts</string>
+        <string name="donations_title">Donations</string>
+        <string name="personal_care_title">Personal Care</string>
+        <string name="personal_care_description">Haircuts, cosmetics, gym memberships.</string>
+
+    <string name="salary">Salary</string>
+    <string name="lotery">Lotery</string>
+    <string name="dividens">Dividends</string>
+    <string name="rental">Rent</string>
+    <string name="freelance">Freelance</string>
+    <string name="otherincomes">Others</string>
+    <string name="sales">Sales</string>
+    <string name="subsidies">Subsidies</string>
+
 </resources>
 

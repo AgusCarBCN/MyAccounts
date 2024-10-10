@@ -60,6 +60,7 @@ import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
@@ -153,6 +154,8 @@ fun HomeScreen(
                             AboutApp()
                             title=R.string.abouttitle
                         }
+
+                        IconOptions.NEW_EXPENSE -> CategorySelector()
                     }
 
                 }
@@ -237,8 +240,11 @@ private fun DrawerContent(
                 .background(LocalCustomColorsPalette.current.drawerColor)
         ) {
             TitleOptions(R.string.management)
-            ClickableRow(OptionItem(R.string.newincome, R.drawable.paymentsoption), onClick = {
+            ClickableRow(OptionItem(R.string.newincome, R.drawable.incomes), onClick = {
                 viewModel.selectScreen(IconOptions.NEW_INCOME)
+            })
+            ClickableRow(OptionItem(R.string.newexpense, R.drawable.importoption), onClick = {
+                viewModel.selectScreen(IconOptions.NEW_EXPENSE)
             })
             ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {
                 viewModel.selectScreen(IconOptions.TRANSFER)
