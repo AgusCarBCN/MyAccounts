@@ -164,62 +164,31 @@
     <string name="contactme">Contactame</string>
     <string name="visitmygithub">Visita mi github</string>
     <string name="newexpense">Nuevo Gasto</string>
+
+
+
         <string name="food">Comida</string>
-        <string name="groceries_title">Supermercado</string>
-        <string name="groceries_description">Todo lo relacionado con compras de alimentos y productos básicos.</string>
-        <string name="restaurants_cafes_title">Restaurantes/Cafés</string>
-        <string name="restaurants_cafes_description">Gastos en salir a cenar, café y snacks.</string>
-
-        <string name="housing">Vivienda</string>
-        <string name="rent_mortgage_title">Renta/Hipoteca</string>
-        <string name="rent_mortgage_description">El gasto principal para la vivienda.</string>
-        <string name="utilities_title">Servicios</string>
-        <string name="utilities_description">Electricidad, agua, gas, internet, facturas de teléfono.</string>
-        <string name="maintenance_title">Mantenimiento</string>
-        <string name="maintenance_description">Reparaciones, limpieza, seguro del hogar.</string>
-
-        <string name="transportation">Transporte</string>
+        <string name="morgage">Vivienda</string>
+        <string name="electricitybill">Electricidad</string>
+        <string name="waterbill">Agua</string>
+        <string name="gasbill">Servicios</string>
+        <string name="publictransport">Transporte público</string>
         <string name="fuel_title">Combustible</string>
-        <string name="fuel_description">Para quienes tienen un automóvil.</string>
-        <string name="public_transport_title">Transporte Público</string>
-        <string name="public_transport_description">Buses, metro, trenes.</string>
-        <string name="vehicle_maintenance_title">Mantenimiento del Vehículo</string>
-        <string name="vehicle_maintenance_description">Reparaciones, seguros, estacionamiento.</string>
-
-        <string name="health">Salud</string>
-        <string name="health_insurance_title">Seguro de Salud</string>
-        <string name="health_insurance_description">Gastos de póliza.</string>
-        <string name="medications_title">Medicamentos</string>
-        <string name="medications_description">Compras en farmacias.</string>
-        <string name="medical_appointments_title">Citas Médicas</string>
-        <string name="medical_appointments_description">Visitas a médicos, dentistas, terapias.</string>
-
-        <string name="entertainment_leisure">Entretenimiento y Ocio</string>
-        <string name="movies_concerts_events_title">Películas, conciertos, eventos</string>
-        <string name="movies_concerts_events_description">Diversas formas de entretenimiento.</string>
-        <string name="subscriptions_title">Suscripciones</string>
-        <string name="subscriptions_description">Netflix, Spotify, servicios de streaming.</string>
-        <string name="vacations_travel_title">Vacaciones/Viajes</string>
-        <string name="vacations_travel_description">Gastos en vuelos, hoteles, excursiones.</string>
-
-        <string name="education_training">Educación y Capacitación</string>
-        <string name="courses_books_materials_title">Cursos, libros, materiales</string>
-        <string name="tuition_fees_title">Cuotas Escolares</string>
-        <string name="tuition_fees_description">Cuotas y pagos escolares.</string>
-
-        <string name="clothing_accessories">Ropa y Accesorios</string>
-        <string name="clothing_purchases_title">Compras de Ropa</string>
-        <string name="clothing_purchases_description">Compras de ropa, calzado y accesorios.</string>
-
+        <string name="insurances">Seguros</string>>
+        <string name="health">Gastos médicos</string>
+        <string name="entertainment">Ocio</string>
+        <string name="subscriptions">Suscripciones</string>
+        <string name="vacations_travel_title">Vacaciones</string>
+        <string name="courses_books_materials_title">Educación</string>
+        <string name="clothing">Ropa</string>
         <string name="house">Hogar</string>
-        <string name="home_decorations_title">Decoraciones del Hogar</string>
-        <string name="home_decorations_description">Decoraciones, muebles, electrodomésticos.</string>
-
-        <string name="other_expenses">Otros</string>
+    <string name="car">Coche</string>
+    <string name="gym">Deporte</string>
+    <string name="pets">Mascotas</string>
+    <string name="other_expenses">Otros</string>
         <string name="gifts_title">Regalos</string>
         <string name="donations_title">Donaciones</string>
         <string name="personal_care_title">Cuidado Personal</string>
-        <string name="personal_care_description">Cortes de cabello, cosméticos, membresías de gimnasio.</string>
 
 
         <string name="salary">Salario</string>

@@ -60,7 +60,8 @@ import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
-import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelector
+import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelectorExpenses
+import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelectorIncome
 import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
@@ -131,7 +132,8 @@ fun HomeScreen(
                         IconOptions.SETTINGS -> {
                             SettingScreen(settingViewModel)
                             title=R.string.settingstitle}
-                        IconOptions.NEW_INCOME -> {NewAmount()
+                        IconOptions.NEW_INCOME -> {
+                            CategorySelectorIncome()
                         title=R.string.newincome}
                         IconOptions.TRANSFER -> {Transfer()
                         title=R.string.transfer}
@@ -155,7 +157,10 @@ fun HomeScreen(
                             title=R.string.abouttitle
                         }
 
-                        IconOptions.NEW_EXPENSE -> CategorySelector()
+                        IconOptions.NEW_EXPENSE -> {
+                            CategorySelectorExpenses()
+                            title=R.string.newexpense
+                        }
                     }
 
                 }
