@@ -25,8 +25,12 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 @Composable
 
-fun CategoryEntries(title:String,iconResource:Int,modifier:Modifier,onClickItem:() -> Unit) {
-
+fun CategoryEntries(isIncome:Boolean,title:String,iconResource:Int,modifier:Modifier,onClickItem:() -> Unit) {
+    val initColor=
+        if(isIncome) LocalCustomColorsPalette.current.iconIncomeInit
+        else LocalCustomColorsPalette.current.iconExpenseInit
+    val targetColor= if(isIncome) LocalCustomColorsPalette.current.iconIncomeTarget
+    else LocalCustomColorsPalette.current.iconExpenseTarget
         // Asegúrate de que la columna ocupe todo el espacio de la tarjeta
         Column(
             modifier
@@ -38,7 +42,7 @@ fun CategoryEntries(title:String,iconResource:Int,modifier:Modifier,onClickItem:
             verticalArrangement = Arrangement.Center // Alinea todo al centro verticalmente
         ) {
 
-            IconAnimated(iconResource, 60 )
+            IconAnimated(iconResource, 60,initColor,targetColor )
             Text(
                 text = title, // Corrige 'Dividens' a 'Dividends'
                 fontWeight = FontWeight.Bold,

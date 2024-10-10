@@ -18,11 +18,17 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 @Composable
 
 fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int)
 {
+    val initColor=
+        if(isIncome) LocalCustomColorsPalette.current.iconIncomeInit
+        else LocalCustomColorsPalette.current.iconExpenseInit
+    val targetColor= if(isIncome) LocalCustomColorsPalette.current.iconIncomeTarget
+    else LocalCustomColorsPalette.current.iconExpenseTarget
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -30,7 +36,7 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int)
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        IconAnimated(iconResource = iconResource, sizeIcon =120 )
+        IconAnimated(iconResource = iconResource, sizeIcon =120,initColor, targetColor  )
         HeadSetting(title = stringResource(id = titleResource), 24)
         TextFieldComponent(
             modifier = Modifier.width(320.dp),

@@ -27,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -96,11 +97,11 @@ fun UserImage(uri: Uri)
 }
 
 @Composable
-fun IconAnimated(iconResource:Int,sizeIcon:Int){
+fun IconAnimated(iconResource:Int,sizeIcon:Int,initColor:Color,targetColor: Color){
 
     // Creamos un animatable para manejar el color del ícono
-    val initColor = LocalCustomColorsPalette.current.imageTutorialInit
-    val targetColor = LocalCustomColorsPalette.current.imageTutorialTarget
+    //val initColor = LocalCustomColorsPalette.current.imageTutorialInit
+    //val targetColor = LocalCustomColorsPalette.current.imageTutorialTarget
     val color = remember { Animatable(initColor) }
     val coroutineScope = rememberCoroutineScope()
 
@@ -112,7 +113,7 @@ fun IconAnimated(iconResource:Int,sizeIcon:Int){
                 color.animateTo(
                     targetValue = targetColor,
                     animationSpec = infiniteRepeatable(
-                        animation = tween(durationMillis = 4000), // Duración de la transición (1 segundo)
+                        animation = tween(durationMillis = 6000), // Duración de la transición (1 segundo)
                         repeatMode = RepeatMode.Reverse // Alterna entre los dos colores
                     )
                 )

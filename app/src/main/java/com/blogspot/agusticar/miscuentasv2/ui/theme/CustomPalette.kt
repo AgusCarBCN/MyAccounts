@@ -43,7 +43,12 @@ data class CustomColorsPalette(
     val textHeadColor:Color = Color.Unspecified,
     val textTransition:Color = Color.Unspecified,
     val buttonTransition:Color = Color.Unspecified,
-    val iconCamara:Color = Color.Unspecified
+    val iconCamara:Color = Color.Unspecified,
+    val iconIncomeInit:Color = Color.Unspecified,
+    val iconIncomeTarget:Color = Color.Unspecified,
+    val iconExpenseInit:Color = Color.Unspecified,
+    val iconExpenseTarget:Color = Color.Unspecified,
+
     )
 
 val LightCustomColorsPalette = CustomColorsPalette(
@@ -83,7 +88,11 @@ val LightCustomColorsPalette = CustomColorsPalette(
     trackCheckedColor = SoftPeach,
     trackDefaultColor = DeepTerracotta,
     textHeadColor = Black,
-    iconCamara = Black
+    iconCamara = Black,
+    iconIncomeInit = greenLight,
+    iconIncomeTarget = greenDark,
+    iconExpenseInit = redLight,
+    iconExpenseTarget = redDark
 
 )
 val DarkCustomColorsPalette = CustomColorsPalette(
@@ -123,7 +132,11 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     trackCheckedColor = PeachyCream,
     trackDefaultColor = Black,
     textHeadColor = SoftPeach,
-    iconCamara = Black
+    iconCamara = Black,
+    iconIncomeInit = greenLight,
+    iconIncomeTarget = greenDark,
+    iconExpenseInit = redLight,
+    iconExpenseTarget = redDark
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }
