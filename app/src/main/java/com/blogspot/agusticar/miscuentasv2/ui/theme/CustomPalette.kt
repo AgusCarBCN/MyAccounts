@@ -91,8 +91,8 @@ val LightCustomColorsPalette = CustomColorsPalette(
     iconCamara = Black,
     iconIncomeInit = greenLight,
     iconIncomeTarget = greenDark,
-    iconExpenseInit = redLight,
-    iconExpenseTarget = redDark
+    iconExpenseInit = BurntPeach,
+    iconExpenseTarget = SoftPeach
 
 )
 val DarkCustomColorsPalette = CustomColorsPalette(
@@ -135,8 +135,8 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     iconCamara = Black,
     iconIncomeInit = greenLight,
     iconIncomeTarget = greenDark,
-    iconExpenseInit = redLight,
-    iconExpenseTarget = redDark
+    iconExpenseInit = BurntPeach,
+    iconExpenseTarget = SoftPeach
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }
