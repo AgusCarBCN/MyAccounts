@@ -172,7 +172,7 @@
         <string name="morgage">Vivienda</string>
         <string name="electricitybill">Electricidad</string>
         <string name="waterbill">Agua</string>
-        <string name="gasbill">Servicios</string>
+        <string name="gasbill">Gas</string>
         <string name="publictransport">Transporte público</string>
         <string name="fuel_title">Combustible</string>
         <string name="insurances">Seguros</string>>
@@ -201,5 +201,26 @@
         <string name="sales">Ventas</string>
         <string name="subsidies">Subsidios</string>
 
-
+    <string name="awards">Premios</string>
+    <string name="benefit_assets">Ganancia activos</string>
+    <string name="lost_assets">Perdida activos</string>
+    <string name="books">Libros</string>
+    <string name="music">Música</string>
+    <string name="hobbies">Aficiones</string>
+    <string name="restaurants">Restaurantes</string>
+    <string name="mobile">Móvil</string>
+    <string name="taxes">Impuestos</string>
+    <string name="loans">Préstamos</string>
+    <string name="electronics">Electrónica</string>
+    <string name="financial_assets_losses">Pérdidas activos financieros</string>
+    <string name="coffee">Café</string>
+    <string name="tobacco">Tabaco</string>
+    <string name="supplements">Suplementos</string>
+    <string name="motorcycle">Moto</string>
+    <string name="medical_expenses">Gastos médicos</string>
+    <string name="garden">Jardín</string>
+    <string name="children">Niños</string>
+    <string name="therapies">Terapias</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="gambling">Juego</string>
 </resources>

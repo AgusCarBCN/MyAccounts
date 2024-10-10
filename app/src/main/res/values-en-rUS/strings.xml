@@ -171,7 +171,7 @@
     <string name="morgage">Housing</string>
     <string name="electricitybill">Electricity</string>
     <string name="waterbill">Water</string>
-    <string name="gasbill">Utilities</string>
+    <string name="gasbill">Gas</string>
     <string name="publictransport">Public transport</string>
     <string name="fuel_title">Fuel</string>
     <string name="health">Medical Expenses</string>
@@ -200,5 +200,26 @@
     <string name="sales">Sales</string>
     <string name="subsidies">Subsidies</string>
 
-
+    <string name="awards">Awards</string>
+    <string name="benefit_assets">Win asset</string>
+    <string name="lost_assets">lost asset</string>
+    <string name="books">Books</string>
+    <string name="music">Music</string>
+    <string name="hobbies">Hobbies</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="mobile">Mobile</string>
+    <string name="taxes">Taxes</string>
+    <string name="loans">Loans</string>
+    <string name="electronics">Electronics</string>
+    <string name="financial_assets_losses">Financial assets losses</string>
+    <string name="coffee">Coffee</string>
+    <string name="tobacco">Tobacco</string>
+    <string name="supplements">Supplements</string>
+    <string name="motorcycle">Motorcycle</string>
+    <string name="medical_expenses">Medical expenses</string>
+    <string name="garden">Garden</string>
+    <string name="children">Children</string>
+    <string name="therapies">Therapies</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="gambling">Gambling</string>
 </resources>

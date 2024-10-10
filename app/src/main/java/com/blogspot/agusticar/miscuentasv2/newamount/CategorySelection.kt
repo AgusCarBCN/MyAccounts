@@ -132,6 +132,14 @@ val incomeItems = listOf(
     Category(
         R.string.otherincomes,
         R.drawable.ic_category_otherincomes
+    ),
+    Category(
+        R.string.awards,
+        R.drawable.ic_category_premium
+    ),
+    Category(
+        R.string.benefit_assets,
+        R.drawable.ic_category_winasset
     )
 
 
@@ -238,10 +246,84 @@ val expenseItems = listOf(
         R.drawable.ic_category_donation
     ),
 
+
+
+    Category(
+        R.string.lost_assets,
+        R.drawable.ic_category_lostasset
+    ),
+    Category(
+        R.string.books,
+        R.drawable.ic_category_books
+    ),
+    Category(
+        R.string.music,
+        R.drawable.ic_category_music
+    ),
+    Category(
+        R.string.hobbies,
+        R.drawable.ic_category_hobies
+    ),
+    Category(
+        R.string.taxes,
+        R.drawable.ic_category_tax
+    ),
+    Category(
+        R.string.loans,
+        R.drawable.ic_category_loan
+    ),
+    Category(
+        R.string.electronics,
+        R.drawable.ic_category_electronic
+    ),
+    Category(
+        R.string.coffee,
+        R.drawable.ic_category_coffe
+    ),
+    Category(
+        R.string.tobacco,
+        R.drawable.ic_category_tabac
+    ),
+    Category(
+        R.string.supplements,
+        R.drawable.ic_category_sportsuplement
+    ),
+    Category(
+        R.string.motorcycle,
+        R.drawable.ic_category_bike
+    ),
+
+    Category(
+        R.string.garden,
+        R.drawable.ic_category_garden
+    ),
+    Category(
+        R.string.therapies,
+        R.drawable.ic_category_teraphy
+    ),
+    Category(
+        R.string.alcohol,
+        R.drawable.ic_category_alcohol
+    ),
+    Category(
+        R.string.gambling,
+        R.drawable.ic_category_game
+    ),
     Category(
         R.string.other_expenses,
         R.drawable.ic_category_otherincomes
     )
+
+
+
+
+
+
+
+
+
+
+
 
 
 )
