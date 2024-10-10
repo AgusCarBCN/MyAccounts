@@ -2,6 +2,7 @@ package com.blogspot.agusticar.miscuentasv2.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,13 +25,14 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 @Composable
 
-fun CategoryEntries(title:String,iconResource:Int,modifier:Modifier) {
+fun CategoryEntries(title:String,iconResource:Int,modifier:Modifier,onClickItem:() -> Unit) {
 
         // Asegúrate de que la columna ocupe todo el espacio de la tarjeta
         Column(
-            modifier = Modifier
+            modifier
                 .size(120.dp)
                 .clip(shape = CircleShape)
+                .clickable{onClickItem()}
                 , // Ocupa todo el espacio de la Card
             horizontalAlignment = Alignment.CenterHorizontally, // Alinea todo al centro horizontalmente
             verticalArrangement = Arrangement.Center // Alinea todo al centro verticalmente

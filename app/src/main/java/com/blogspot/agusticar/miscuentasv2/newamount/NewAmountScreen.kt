@@ -15,23 +15,26 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
+import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 
 @Composable
-@Preview
-fun NewAmount()
+
+fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int)
 {
     Column(
-        modifier = Modifier.fillMaxWidth()
-            .padding(top=30.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 30.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HeadSetting(title = stringResource(id = R.string.aboutapp), 24)
+        IconAnimated(iconResource = iconResource, sizeIcon =120 )
+        HeadSetting(title = stringResource(id = titleResource), 24)
         TextFieldComponent(
             modifier = Modifier.width(320.dp),
-            stringResource(id = R.string.enterName),
+            stringResource(id = R.string.desamount),
             "",
             onTextChange = { },
             BoardType.TEXT,
@@ -39,14 +42,14 @@ fun NewAmount()
         )
         TextFieldComponent(
             modifier = Modifier.width(320.dp),
-            stringResource(id = R.string.enterName),
+            stringResource(id = R.string.enternote),
             "",
             onTextChange = { },
             BoardType.DECIMAL,
             false
         )
         AccountSelector()
-        ModelButton(text = stringResource(id = R.string.backButton),
+        ModelButton(text = stringResource(id =if(isIncome) R.string.newincome else R.string.newexpense),
             R.dimen.text_title_small,
             modifier = Modifier.width(320.dp),
             true,

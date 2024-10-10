@@ -2,7 +2,9 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.newamount.model.AmountCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -20,9 +22,15 @@ class MainViewModel @Inject constructor() : ViewModel() {
     // StateFlow es un flujo que siempre mantiene su último valor emitido.
     val selectedScreen: MutableStateFlow<IconOptions> = _selectedScreen
 
+    private val _selectedIcon = MutableStateFlow(R.drawable.ic_category_salary)
+    private val _selectedTitle= MutableStateFlow(R.string.salary)
+    private val _isIncome= MutableStateFlow(true)
 
+    val selectedIcon: MutableStateFlow<Int> = _selectedIcon
+    val selectedTitle: MutableStateFlow<Int> = _selectedTitle
+    val isIncome: MutableStateFlow<Boolean> = _isIncome
 
-    // Función que permite cambiar la pantalla seleccionada.
+        // Función que permite cambiar la pantalla seleccionada.
     // Utiliza viewModelScope para lanzar una corrutina y emitir un nuevo valor.
     fun selectScreen(screen: IconOptions){
         viewModelScope.launch {
@@ -31,5 +39,15 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
         }
     }
+
+    fun selectResources(iconResource:Int,stringResource:Int,isIncome:Boolean){
+
+        viewModelScope.launch {
+            _selectedIcon.emit(iconResource)
+            _selectedTitle.emit(stringResource)
+            _isIncome.emit(isIncome)
+        }
+    }
+
 }
 

@@ -60,8 +60,7 @@ import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
-import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelectorExpenses
-import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelectorIncome
+import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
@@ -89,8 +88,13 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
+    val iconAmount by mainViewModel.selectedIcon.collectAsState()
+    val titleAmount by mainViewModel.selectedTitle.collectAsState()
+    val isIncome by mainViewModel.isIncome.collectAsState()
+
     val userName by createProfileViewModel.name.observeAsState("")
     var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
+
     // Usar LaunchedEffect para cerrar el drawer cuando cambia la pantalla seleccionada
     LaunchedEffect(key1 = selectedScreen) {
         if (drawerState.isOpen) {
@@ -116,11 +120,8 @@ fun HomeScreen(
                     modifier = Modifier.padding(innerPadding)
                 ) {if(selectedScreen!=IconOptions.EXIT){
                     createProfileViewModel.onButtonProfileNoSelected()
-
                 }
-
                     when (selectedScreen) {
-
                         IconOptions.HOME -> {
                             Test(createAccountsViewModel)
                             title=R.string.greeting
@@ -132,8 +133,8 @@ fun HomeScreen(
                         IconOptions.SETTINGS -> {
                             SettingScreen(settingViewModel)
                             title=R.string.settingstitle}
-                        IconOptions.NEW_INCOME -> {
-                            CategorySelectorIncome()
+                        IconOptions.INCOME_OPTIONS -> {
+                            CategorySelector(mainViewModel,true)
                         title=R.string.newincome}
                         IconOptions.TRANSFER -> {Transfer()
                         title=R.string.transfer}
@@ -151,15 +152,18 @@ fun HomeScreen(
                             val activity = context as? Activity
                             activity?.finish()
                         }
-
                         IconOptions.ABOUT_DESCRIPTION -> {
                             AboutApp()
                             title=R.string.abouttitle
                         }
-
-                        IconOptions.NEW_EXPENSE -> {
-                            CategorySelectorExpenses()
+                        IconOptions.EXPENSE_OPTIONS -> {
+                            CategorySelector(mainViewModel,false)
                             title=R.string.newexpense
+                        }
+
+                        IconOptions.NEW_AMOUNT -> {
+                            NewAmount(isIncome, iconAmount ,titleAmount)
+                            title=titleAmount
                         }
                     }
 
@@ -246,10 +250,10 @@ private fun DrawerContent(
         ) {
             TitleOptions(R.string.management)
             ClickableRow(OptionItem(R.string.newincome, R.drawable.incomes), onClick = {
-                viewModel.selectScreen(IconOptions.NEW_INCOME)
+                viewModel.selectScreen(IconOptions.INCOME_OPTIONS)
             })
             ClickableRow(OptionItem(R.string.newexpense, R.drawable.importoption), onClick = {
-                viewModel.selectScreen(IconOptions.NEW_EXPENSE)
+                viewModel.selectScreen(IconOptions.EXPENSE_OPTIONS)
             })
             ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {
                 viewModel.selectScreen(IconOptions.TRANSFER)

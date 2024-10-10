@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -16,35 +18,34 @@ import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.CategoryEntries
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
+import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 
-
+/*
 @Composable
-@Preview
-fun CategorySelectorIncome() {
+
+fun CategorySelectorIncome(mainViewModel: MainViewModel) {
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp)
-
-        // Espaciado alrededor de la cuadrícula
-
-
     ) {
         items(incomeItems.size) { index ->
             CategoryEntries(
                 title = stringResource(incomeItems[index].categoryDescription),
                 iconResource = incomeItems[index].categoryIcon,
                 modifier = Modifier
-                    .padding(10.dp)
-
-            )
+                    .padding(10.dp),
+                onClickItem = {mainViewModel.selectScreen(IconOptions.NEW_INCOME)})
         }
+      }
     }
-}
+
 @Composable
-fun CategorySelectorExpenses() {
+fun CategorySelectorExpenses(mainViewModel:MainViewModel) {
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -61,12 +62,42 @@ fun CategorySelectorExpenses() {
                 title = stringResource(expenseItems[index].categoryDescription),
                 iconResource = expenseItems[index].categoryIcon,
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(10.dp),
+                onClickItem = {mainViewModel.selectScreen(IconOptions.NEW_EXPENSE)
+                    mainViewModel.selectResources(expenseItems[index].categoryIcon,
+                        expenseItems[index].categoryDescription)
+                })
+        }
+    }
+}*/
 
-            )
+@Composable
+
+fun CategorySelector(mainViewModel: MainViewModel,isIncome:Boolean) {
+
+    val categoryItems=if(isIncome)incomeItems else expenseItems
+
+        LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+    ) {
+        items(categoryItems.size) { index ->
+            CategoryEntries(
+                title = stringResource(categoryItems[index].categoryDescription),
+                iconResource = categoryItems[index].categoryIcon,
+                modifier = Modifier
+                    .padding(10.dp),
+                onClickItem = {mainViewModel.selectScreen(IconOptions.NEW_AMOUNT)
+                    mainViewModel.selectResources(categoryItems[index].categoryIcon,
+                        categoryItems[index].categoryDescription,isIncome)
+                })
         }
     }
 }
+
+
 
 val incomeItems = listOf(
     Category(

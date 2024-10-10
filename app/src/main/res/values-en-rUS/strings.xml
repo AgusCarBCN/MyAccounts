@@ -163,6 +163,10 @@
     <string name="contactme">Contact me</string>
     <string name="visitmygithub">Visit my github</string>
     <string name="newexpense">New Expense</string>
+
+    <!--newAmount-->
+    <string name="enternote">Enter amount</string>
+    <string name="desamount">Descripcion del importe</string>
     <string name="food">Food</string>
     <string name="morgage">Housing</string>
     <string name="electricitybill">Electricity</string>

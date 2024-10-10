@@ -49,7 +49,7 @@
     <string name="createProfileButton">Create your profile</string>
     <string name="createaccountmsg">You can create your accounts now or later.</string>
     <string name="createAccount">Create your profile</string>
-    <string name="enteramount">Amount</string>
+    <string name="enternote">Amount</string>
     <string name="amountName">Account name</string>
     <string name="addAccount">Add account</string>
     <!---Icons-->
@@ -164,7 +164,10 @@
     <string name="contactme">Contact me</string>
     <string name="visitmygithub">Visit my github</string>
   <string name="newexpense">New Expense</string>
-
+    <!--newAmount-->
+    <string name="enteramount">Enter amount
+    </string>
+    <string name="desamount">Descripcion del importe</string>
     <string name="food">Food</string>
     <string name="morgage">Housing</string>
     <string name="electricitybill">Electricity</string>
@@ -174,7 +177,6 @@
     <string name="fuel_title">Fuel</string>
     <string name="insurances">Insurances</string>
     <string name="health">Medical Expenses</string>
-
     <string name="pets">Pets</string>
     <string name="entertainment">Entertainment</string>
     <string name="subscriptions">Subscriptions</string>

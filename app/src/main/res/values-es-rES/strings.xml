@@ -165,8 +165,9 @@
     <string name="visitmygithub">Visita mi github</string>
     <string name="newexpense">Nuevo Gasto</string>
 
-
-
+<!--newAmount-->
+        <string name="desamount">Descripcion del importe</string>
+        <string name="enternote">Introduce importe</string>
         <string name="food">Comida</string>
         <string name="morgage">Vivienda</string>
         <string name="electricitybill">Electricidad</string>
