@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:GetCurrencyCodeUseCase,
-    private val setCurrencyCode:SetCurrencyCodeUseCase,
-    private val getCurrencySymbol:GetCurrencySymbolUseCase,
-    private val setCurrencySymbol:SetSymbolCurrencyUseCase) : ViewModel() {
+    private val setCurrencyCode:SetCurrencyCodeUseCase) : ViewModel() {
 
+    private val _isCurrencyExpanded = MutableLiveData<Boolean>()
+    val isCurrencyExpanded: LiveData<Boolean> = _isCurrencyExpanded
 
     private val _currencyCode = MutableLiveData<String>()
     val currencyCode: LiveData<String> = _currencyCode
@@ -34,7 +34,8 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
     init {
         viewModelScope.launch {
             _currencyCode.value = getCurrencyCode()
-            _currencySymbol.value = getCurrencySymbol()
+            //_currencySymbol.value = getCurrencySymbol()
+            _isCurrencyExpanded.value=false
 
         }
     }
@@ -44,12 +45,9 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
 
     }
 
-    fun setCurrencySymbol(currencyCode: String) {
-
+    fun setCurrencyCode(currencyCode: String) {
         viewModelScope.launch {
             setCurrencyCode.invoke(currencyCode)
-            val symbol = getSymbol(currencyCode)
-            setCurrencySymbol.invoke(symbol)
 
         }
     }
@@ -59,84 +57,11 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
         _currencyCodeList.value = currencies
         return currencies
     }
-
-    private fun getSymbol(currency: String): String {
-        _currencySymbol.value = currencySymbols[currency]
-        return currencySymbols[currency] ?: "USD"
+    fun onExpandedChange(newValue:Boolean){
+        _isCurrencyExpanded.value=newValue
     }
 
-   /* private val currencySymbols = mapOf(
-        "USD" to "$",       // Dólar estadounidense
-        "EUR" to "€",       // Euro
-        "JPY" to "¥",       // Yen japonés
-        "GBP" to "£",       // Libra esterlina
-        "AUD" to "A$",      // Dólar australiano
-        "CAD" to "C$",      // Dólar canadiense
-        "CHF" to "CHF",     // Franco suizo
-        "CNY" to "¥",       // Yuan chino
-        "SEK" to "kr",      // Corona sueca
-        "NZD" to "NZ$",     // Dólar neozelandés
-        "MXN" to "$",       // Peso mexicano
-        "SGD" to "S$",      // Dólar de Singapur
-        "HKD" to "HK$",     // Dólar de Hong Kong
-        "NOK" to "kr",      // Corona noruega
-        "RUB" to "₽",       // Rublo ruso
-        "INR" to "₹",       // Rupia india
-        "BRL" to "R$",      // Real brasileño
-        "ZAR" to "R",       // Rand sudafricano
-        "DKK" to "kr",      // Corona danesa
-        "PLN" to "zł",      // Zloty polaco
-        "THB" to "฿",       // Baht tailandés
-        "AED" to "د.إ",     // Dirham de los Emiratos Árabes Unidos
-        "MYR" to "RM",      // Ringgit malayo
-        "PHP" to "₱",       // Peso filipino
-        "ILS" to "₪",       // Shekel israelí
-        "TRY" to "₺",       // Lira turca
-        "CLP" to "$",       // Peso chileno
-        "COP" to "$",       // Peso colombiano
-        "PEN" to "S/.",     // Sol peruano
-        "VND" to "₫",     // Dong vietnamita
-        "ARS" to "$",     //Peso argentino
-        "KRW" to "₩",  //South Korean won
-        "HNL" to "L"   //Honduras
-    )*/
 
-    /*  private val currencies = listOf(
-        Currency("USD", "US Dollar", R.drawable.us),
-        Currency("EUR", "Euro", R.drawable.eu),
-        Currency("JPY", "Yen japonés", R.drawable.jp),
-        Currency("GBP", "British Pound", R.drawable.gb),
-        Currency("AUD", "Australian Dollar", R.drawable.au),
-        Currency("CAD", "Canadian Dollar", R.drawable.ca),
-        Currency("CHF", "Swiss Franc", R.drawable.ch),
-        Currency("CNY", "Yuan chino", R.drawable.cn),
-        Currency("SEK", "Swedish Krona", R.drawable.se),
-        Currency("NZD", "New Zealand Dollar", R.drawable.nz),
-        Currency("MXN", "Peso mexicano", R.drawable.mx),
-        Currency("SGD", "Singapore Dollar", R.drawable.sg),
-        Currency("HKD", "Hong Kong Dollar", R.drawable.hk),
-        Currency("NOK", "Norwegian Krone", R.drawable.no),
-        Currency("RUB", "Russian Ruble", R.drawable.ru),
-        Currency("INR", "Indian Rupee", R.drawable.`in`),
-        Currency("BRL", "Real brasileño", R.drawable.br),
-        Currency("ZAR", "South African Rand", R.drawable.za),
-        Currency("DKK", "Danish Krone", R.drawable.dk),
-        Currency("PLN", "Polish Zloty", R.drawable.pl),
-        Currency("THB", "Thai Baht", R.drawable.th),
-        Currency("AED", "UAE Dirham", R.drawable.sa),
-        Currency("MYR", "Malaysian Ringgit", R.drawable.my),
-        Currency("PHP", "Peso filipino", R.drawable.ph),
-        Currency("ILS", "Israeli Shekel", R.drawable.il),
-        Currency("TRY", "Turkish Lira", R.drawable.tr),
-        Currency("CLP", "Peso chileno", R.drawable.cl),
-        Currency("COP", "Peso colombiano", R.drawable.co),
-        Currency("PEN", "Sol peruano", R.drawable.pe),
-        Currency("VND", "Vietnamese Dong", R.drawable.vn),
-        Currency("ARS", "Peso Argentino", R.drawable.ar),
-        Currency("KRW", "South Korean Won", R.drawable.kr),
-        Currency("HNL","Lempira de Honduras", R.drawable.hn)
-    )
-}*/
     private val currencies = listOf(
         // Lista completa de todas las divisas del mundo, ordenadas alfabéticamente por código:
 
@@ -294,166 +219,5 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
         Currency("ZMW", "Zambian Kwacha", R.drawable.zm),
         Currency("ZWL", "Zimbabwean Dollar", R.drawable.zw)
     )
-    private val currencySymbols = mapOf(
-        // Lista original:
-        "USD" to "$",       // Dólar estadounidense
-        "EUR" to "€",       // Euro
-        "JPY" to "¥",       // Yen japonés
-        "GBP" to "£",       // Libra esterlina
-        "AUD" to "A$",      // Dólar australiano
-        "CAD" to "C$",      // Dólar canadiense
-        "CHF" to "CHF",     // Franco suizo
-        "CNY" to "¥",       // Yuan chino
-        "SEK" to "kr",      // Corona sueca
-        "NZD" to "NZ$",     // Dólar neozelandés
-        "MXN" to "$",       // Peso mexicano
-        "SGD" to "S$",      // Dólar de Singapur
-        "HKD" to "HK$",     // Dólar de Hong Kong
-        "NOK" to "kr",      // Corona noruega
-        "RUB" to "₽",       // Rublo ruso
-        "INR" to "₹",       // Rupia india
-        "BRL" to "R$",      // Real brasileño
-        "ZAR" to "R",       // Rand sudafricano
-        "DKK" to "kr",      // Corona danesa
-        "PLN" to "zł",      // Zloty polaco
-        "THB" to "฿",       // Baht tailandés
-        "AED" to "د.إ",     // Dirham de los Emiratos Árabes Unidos
-        "MYR" to "RM",      // Ringgit malayo
-        "PHP" to "₱",       // Peso filipino
-        "ILS" to "₪",       // Shekel israelí
-        "TRY" to "₺",       // Lira turca
-        "CLP" to "$",       // Peso chileno
-        "COP" to "$",       // Peso colombiano
-        "PEN" to "S/.",     // Sol peruano
-        "VND" to "₫",       // Dong vietnamita
-        "ARS" to "$",       // Peso argentino
-        "KRW" to "₩",       // Won surcoreano
-        "HNL" to "L",       // Lempira de Honduras
-
-        // Divisas adicionales:
-        "AFN" to "؋",       // Afgani afgano
-        "ALL" to "L",       // Lek albanés
-        "AMD" to "֏",       // Dram armenio
-        "ANG" to "ƒ",       // Florín antillano neerlandés
-        "AOA" to "Kz",      // Kwanza angoleño
-        "AWG" to "ƒ",       // Florín arubeño
-        "AZN" to "₼",       // Manat azerbaiyano
-        "BAM" to "KM",      // Marco convertible bosnioherzegovino
-        "BBD" to "Bds$",    // Dólar de Barbados
-        "BDT" to "৳",       // Taka bangladesí
-        "BHD" to ".د.ب",    // Dinar bahreiní
-        "BIF" to "FBu",     // Franco burundés
-        "BMD" to "$",       // Dólar bermudeño
-        "BND" to "B$",      // Dólar de Brunéi
-        "BOB" to "Bs.",     // Boliviano
-        "BSD" to "$",       // Dólar bahameño
-        "BTN" to "Nu.",     // Ngultrum butanés
-        "BWP" to "P",       // Pula botsuano
-        "BYN" to "Br",      // Rublo bielorruso
-        "BZD" to "$",       // Dólar beliceño
-        "CDF" to "FC",      // Franco congoleño
-        "CRC" to "₡",       // Colón costarricense
-        "CUP" to "₱",       // Peso cubano
-        "CVE" to "$",       // Escudo caboverdiano
-        "CZK" to "Kč",      // Corona checa
-        "DJF" to "Fdj",     // Franco yibutiano
-        "DOP" to "RD$",     // Peso dominicano
-        "DZD" to "دج",      // Dinar argelino
-        "EGP" to "£",       // Libra egipcia
-        "ERN" to "Nfk",     // Nakfa eritreo
-        "ETB" to "Br",      // Birr etíope
-        "FJD" to "$",       // Dólar fiyiano
-        "FKP" to "£",       // Libra malvinense
-        "FOK" to "kr",      // Corona feroesa
-        "GEL" to "₾",       // Lari georgiano
-        "GHS" to "₵",       // Cedi ghanés
-        "GIP" to "£",       // Libra gibraltareña
-        "GMD" to "D",       // Dalasi gambiano
-        "GNF" to "FG",      // Franco guineano
-        "GTQ" to "Q",       // Quetzal guatemalteco
-        "GYD" to "$",       // Dólar guyanés
-        "HRK" to "kn",      // Kuna croata
-        "HTG" to "G",       // Gourde haitiano
-        "HUF" to "Ft",      // Forint húngaro
-        "IDR" to "Rp",      // Rupia indonesia
-        "IQD" to "ع.د",     // Dinar iraquí
-        "IRR" to "﷼",      // Rial iraní
-        "ISK" to "kr",      // Corona islandesa
-        "JMD" to "J$",      // Dólar jamaiquino
-        "JOD" to "د.ا",    // Dinar jordano
-        "KES" to "KSh",     // Chelín keniano
-        "KGS" to "с",       // Som kirguís
-        "KHR" to "៛",      // Riel camboyano
-        "KMF" to "CF",      // Franco comorense
-        "KPW" to "₩",       // Won norcoreano
-        "KWD" to "د.ك",     // Dinar kuwaití
-        "KYD" to "$",       // Dólar de las Islas Caimán
-        "KZT" to "₸",       // Tenge kazajo
-        "LAK" to "₭",      // Kip laosiano
-        "LBP" to "ل.ل",     // Libra libanesa
-        "LKR" to "Rs",      // Rupia de Sri Lanka
-        "LRD" to "$",       // Dólar liberiano
-        "LSL" to "L",       // Loti lesotense
-        "LYD" to "ل.د",     // Dinar libio
-        "MAD" to "MAD",     // Dirham marroquí
-        "MDL" to "L",       // Leu moldavo
-        "MGA" to "Ar",      // Ariary malgache
-        "MKD" to "ден",     // Denar macedonio
-        "MMK" to "Ks",      // Kyat birmano
-        "MNT" to "₮",      // Tugrik mongol
-        "MOP" to "MOP$",    // Pataca de Macao
-        "MRU" to "UM",      // Ouguiya mauritana
-        "MUR" to "₨",      // Rupia mauriciana
-        "MVR" to "Rf",      // Rufiyaa maldiva
-        "MWK" to "MK",      // Kwacha malauí
-        "MZN" to "MT",      // Metical mozambiqueño
-        "NAD" to "$",       // Dólar namibio
-        "NGN" to "₦",      // Naira nigeriana
-        "NIO" to "C$",      // Córdoba nicaragüense
-        "NPR" to "₨",      // Rupia nepalí
-        "OMR" to "ر.ع.",   // Rial omaní
-        "PAB" to "B/.",     // Balboa panameño
-        "PGK" to "K",       // Kina de Papúa Nueva Guinea
-        "PKR" to "₨",      // Rupia pakistaní
-        "PYG" to "₲",      // Guaraní paraguayo
-        "QAR" to "ر.ق",     // Riyal catarí
-        "RON" to "lei",     // Leu rumano
-        "RSD" to "дин",     // Dinar serbio
-        "RWF" to "FRw",     // Franco ruandés
-        "SAR" to "ر.س",     // Riyal saudí
-        "SBD" to "$",       // Dólar de las Islas Salomón
-        "SCR" to "₨",      // Rupia seychelense
-        "SDG" to "ج.س.",   // Libra sudanesa
-        "SHP" to "£",       // Libra de Santa Helena
-        "SLL" to "Le",      // Leone de Sierra Leona
-        "SOS" to "Sh",      // Chelín somalí
-        "SRD" to "$",       // Dólar surinamés
-        "SSP" to "£",       // Libra sursudanesa
-        "STN" to "Db",      // Dobra de Santo Tomé y Príncipe
-        "SYP" to "£",       // Libra siria
-        "SZL" to "L",       // Lilangeni de Suazilandia
-        "TJS" to "SM",      // Somoni tayiko
-        "TMT" to "T",       // Manat turcomano
-        "TND" to "د.ت",    // Dinar tunecino
-        "TOP" to "T$",      // Paʻanga tongano
-        "TTD" to "TT$",     // Dólar de Trinidad y Tobago
-        "TWD" to "NT$",     // Nuevo dólar taiwanés
-        "TZS" to "Sh",      // Chelín tanzano
-        "UAH" to "₴",      // Grivna ucraniana
-        "UGX" to "Sh",      // Chelín ugandés
-        "UYU" to "$U",      // Peso uruguayo
-        "UZS" to "лв",      // Som uzbeko
-        "VES" to "Bs.S",    // Bolívar venezolano
-        "VUV" to "VT",      // Vatu vanuatuense
-        "WST" to "WS$",     // Tala samoano
-        "XAF" to "FCFA",    // Franco CFA de África Central
-        "XCD" to "$",       // Dólar del Caribe Oriental
-        "XOF" to "CFA",     // Franco CFA de África Occidental
-        "XPF" to "₣",      // Franco CFP
-        "YER" to "﷼",      // Rial yemení
-        "ZMW" to "ZK",      // Kwacha zambiano
-        "ZWL" to "$",       // Dólar zimbabuense
-    )
-
 
 }

@@ -55,6 +55,7 @@ import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
+import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
@@ -131,7 +132,7 @@ fun HomeScreen(
                         }
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> {
-                            SettingScreen(settingViewModel)
+                            SettingScreen(settingViewModel,mainViewModel)
                             title=R.string.settingstitle}
                         IconOptions.INCOME_OPTIONS -> {
                             CategorySelector(mainViewModel,true)
@@ -165,6 +166,8 @@ fun HomeScreen(
                             NewAmount(isIncome, iconAmount ,titleAmount)
                             title=titleAmount
                         }
+
+                        IconOptions.CHANGE_CURRENCY -> CurrencySelector(createAccountsViewModel)
                     }
 
                 }

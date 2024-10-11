@@ -16,9 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,17 +29,14 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
-
 @Composable
 fun CurrencySelector(createAccountsViewModel: CreateAccountsViewModel) {
     // Obtener el estado actual de la moneda seleccionada
     val currencyCode by createAccountsViewModel.currencyCode.observeAsState("USD")
-
+    // Obtener el estado de expansión desde el ViewModel
+    val isExpanded by createAccountsViewModel.isCurrencyExpanded.observeAsState(false)
     // Obtener la lista de divisas desde el ViewModel
     val currencies = createAccountsViewModel.getListOfCurrencyCode()
-
-    // Inicializar un estado para controlar la visibilidad del selector
-    var isExpanded by remember { mutableStateOf(false) }
 
     // Contenedor principal
     Column(
@@ -51,37 +45,38 @@ fun CurrencySelector(createAccountsViewModel: CreateAccountsViewModel) {
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
             .padding(5.dp)
     ) {
-        // Título
-        Text(
-            text = stringResource(id = R.string.selectcurrency),
-            fontSize = 18.sp,
-            color = LocalCustomColorsPalette.current.textColor,  // Color del texto
-            modifier = Modifier
-                .padding(top = 10.dp, bottom = 10.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
+        if (!isExpanded) {
+            // Título
+            Text(
+                text = stringResource(id = R.string.selectcurrency),
+                fontSize = 18.sp,
+                color = LocalCustomColorsPalette.current.textColor,
+                modifier = Modifier
+                    .padding(top = 10.dp, bottom = 10.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
 
-        // Botón para expandir/colapsar la lista de divisas
-        ModelButton(text = "Select Currency",
-            R.dimen.text_title_medium,
-            modifier = Modifier.fillMaxWidth(),
-            onClickButton = { isExpanded = !isExpanded })
+            // Botón para expandir/colapsar la lista de divisas
+            ModelButton(
+                text = "Select Currency",
+                R.dimen.text_title_medium,
+                modifier = Modifier.fillMaxWidth(),
+                onClickButton = { createAccountsViewModel.onExpandedChange(true) }
+            )
 
-
-        // Mostrar la moneda seleccionada actualmente
-        Text(
-            text = "${stringResource(id = R.string.selectedcurrency)} $currencyCode",
-            fontSize = 18.sp,
-            color = LocalCustomColorsPalette.current.textColor,  // Color del texto
-            modifier = Modifier
-                .padding(top = 10.dp, bottom = 10.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-
-        // Mostrar la lista de divisas si isExpanded es verdadero
-        if (isExpanded) {
+            // Mostrar la moneda seleccionada actualmente
+            Text(
+                text = "${stringResource(id = R.string.selectedcurrency)} $currencyCode",
+                fontSize = 18.sp,
+                color = LocalCustomColorsPalette.current.textColor,
+                modifier = Modifier
+                    .padding(top = 10.dp, bottom = 10.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        } else {
+            // Mostrar solo la lista de divisas si isExpanded es verdadero
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -93,7 +88,7 @@ fun CurrencySelector(createAccountsViewModel: CreateAccountsViewModel) {
                         // Acción al seleccionar la moneda
                         createAccountsViewModel.onCurrencySelectedChange(currency.currencyCode)
                         // Cambia el estado a colapsado
-                        isExpanded = false
+                        createAccountsViewModel.onExpandedChange(false)
                     }
                 }
             }

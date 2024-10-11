@@ -40,101 +40,112 @@ import kotlinx.coroutines.launch
 
 @Composable
 
-fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navToLogin:()->Unit,navToBack:()->Unit){
+fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navToLogin:()->Unit,navToBack:()->Unit) {
+
 
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(LocalCustomColorsPalette.current.backgroundPrimary) // Reemplaza con tu color de fondo
-    ){
+    ) {
         val (titleCreateAccount, inputData) = createRefs()
-        val currencyCode by createAccountsViewModel.currencyCode.observeAsState("EUR")
         val scope = rememberCoroutineScope()
-        Text(modifier = Modifier
-            .padding(top = 30.dp)
-            .constrainAs(titleCreateAccount) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(inputData.top)
-            },
-            text = stringResource(id = R.string.createAccount),
+        val currencyCode by createAccountsViewModel.currencyCode.observeAsState("EUR")
+        val isCurrencyExpanded by createAccountsViewModel.isCurrencyExpanded.observeAsState(false)
+
+        Text(
+            modifier = Modifier
+                .padding(top = 30.dp)
+                .constrainAs(titleCreateAccount) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(inputData.top)
+                },
+            text = if(!isCurrencyExpanded)stringResource(id = R.string.createAccount) else "",
             fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
             fontWeight = FontWeight.Bold, // Estilo de texto en negrita
             textAlign = TextAlign.Center,
             color = LocalCustomColorsPalette.current.textColor
+        )
 
-            )
-        Column(modifier = Modifier
-            .constrainAs(inputData){
-            top.linkTo(titleCreateAccount.bottom)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom)},
+
+        Column(
+            modifier = Modifier
+                .constrainAs(inputData) {
+                    top.linkTo(titleCreateAccount.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                },
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-            Text(modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.createaccountmsg),
-            fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
-            fontWeight = FontWeight.Bold, // Estilo de texto en negrita
-            textAlign = TextAlign.Center,
-            color = LocalCustomColorsPalette.current.textColor
-            )
+            if(!isCurrencyExpanded) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(id = R.string.createaccountmsg),
+                    fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
+                    fontWeight = FontWeight.Bold, // Estilo de texto en negrita
+                    textAlign = TextAlign.Center,
+                    color = LocalCustomColorsPalette.current.textColor
+                )
 
-            TextFieldComponent(
-                modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.amountName),
-                "",
-                onTextChange = {  },
-                BoardType.TEXT,
-                false
-            )
-            TextFieldComponent(
-                modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.enteramount),
-                "",
-                onTextChange = {  },
-                BoardType.TEXT,
-                false
-            )
-            ModelButton(text = stringResource(id = R.string.addAccount),
-                R.dimen.text_title_medium,
-                modifier = Modifier.width(360.dp),
-                true,
-                onClickButton = {
+                TextFieldComponent(
+                    modifier = Modifier.width(360.dp),
+                    stringResource(id = R.string.amountName),
+                    "",
+                    onTextChange = { },
+                    BoardType.TEXT,
+                    false
+                )
+                TextFieldComponent(
+                    modifier = Modifier.width(360.dp),
+                    stringResource(id = R.string.enteramount),
+                    "",
+                    onTextChange = { },
+                    BoardType.TEXT,
+                    false
+                )
+                ModelButton(text = stringResource(id = R.string.addAccount),
+                    R.dimen.text_title_medium,
+                    modifier = Modifier.width(360.dp),
+                    true,
+                    onClickButton = {
 
-                }
-            )
-           CurrencySelector(createAccountsViewModel)
+                    }
+                )
+            }
 
-            ModelButton(text = stringResource(id = R.string.confirmButton),
-                R.dimen.text_title_medium,
-                modifier = Modifier.width(360.dp),
-                true,
-                onClickButton = {
+            CurrencySelector(createAccountsViewModel)
+            if(!isCurrencyExpanded) {
+                ModelButton(text = stringResource(id = R.string.confirmButton),
+                    R.dimen.text_title_medium,
+                    modifier = Modifier.width(360.dp),
+                    true,
+                    onClickButton = {
+                        scope.launch {
+                            Log.d("valor a guardar", "Code: $currencyCode")
+                            createAccountsViewModel.setCurrencyCode(currencyCode)
+                        }
+                        navToLogin()
 
-                scope.launch {
-                    Log.d("valor a guardar" ,"Code: $currencyCode")
-                createAccountsViewModel.setCurrencySymbol(currencyCode)
-                }
-                navToLogin()
+                    }
+                )
 
-                }
-            )
-
-            ModelButton(text = stringResource(id = R.string.backButton),
-                R.dimen.text_title_medium,
-                modifier = Modifier.width(360.dp),
-                true,
-                onClickButton = {
-                navToBack()
-                // navigationController.navigate(Routes.CreateProfile.route)
-                }
-            )
-
+                ModelButton(text = stringResource(id = R.string.backButton),
+                    R.dimen.text_title_medium,
+                    modifier = Modifier.width(360.dp),
+                    true,
+                    onClickButton = {
+                        navToBack()
+                        // navigationController.navigate(Routes.CreateProfile.route)
+                    }
+                )
+            }
         }
     }
-
 }
+
+
