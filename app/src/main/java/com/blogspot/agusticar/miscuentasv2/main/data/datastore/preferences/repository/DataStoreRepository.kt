@@ -14,8 +14,7 @@ interface DataStoreRepository {
     suspend fun getToLogin(): Boolean?
     suspend fun setToLogin(toLogin: Boolean)
 
-    suspend fun getCurrencySymbol(): String?
-    suspend fun setCurrencySymbol(currencySymbol: String)
+
 
     suspend fun getCurrencyCode(): String?
     suspend fun setCurrencyCode(currencyCode: String)

@@ -19,7 +19,7 @@ fun Test(viewModel: CreateAccountsViewModel){
 
     val currencyCode by viewModel.currencyCode.observeAsState("")
 
-    val symbol by viewModel.currencySymbol.observeAsState("")
+
 
     val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
     // Formatear la cantidad en la moneda especificada

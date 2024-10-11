@@ -84,15 +84,6 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
 
     }
 
-    override suspend fun getCurrencySymbol(): String =
-        context.dataStore.data.first()[UserPreferencesKeys.CURRENCY_SYMBOL] ?: "$"
-
-    override suspend fun setCurrencySymbol(currencySymbol: String) {
-        context.dataStore.edit { preferences ->
-            preferences[UserPreferencesKeys.CURRENCY_SYMBOL] = currencySymbol
-        }
-    }
-
     override suspend fun getCurrencyCode(): String =
         context.dataStore.data.first()[UserPreferencesKeys.CURRENCY_CODE] ?: "USD"
 

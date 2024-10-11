@@ -1,6 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 
-import androidx.compose.ui.input.key.Key.Companion.U
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,9 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetCurrencyCodeUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetCurrencySymbolUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetCurrencyCodeUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetSymbolCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,8 +23,6 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
     private val _currencyCode = MutableLiveData<String>()
     val currencyCode: LiveData<String> = _currencyCode
 
-    private val _currencySymbol = MutableLiveData<String>()
-    val currencySymbol: LiveData<String> = _currencySymbol
 
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
@@ -34,7 +30,6 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
     init {
         viewModelScope.launch {
             _currencyCode.value = getCurrencyCode()
-            //_currencySymbol.value = getCurrencySymbol()
             _isCurrencyExpanded.value=false
 
         }
