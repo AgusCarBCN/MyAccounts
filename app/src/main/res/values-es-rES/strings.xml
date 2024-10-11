@@ -166,6 +166,9 @@
     <string name="newexpense">Nuevo gasto</string>
 
     <!--newAmount-->
+    <string name="selectanaccount">Escoje una cuenta</string>
+    <string name="chooseexpense">Elije un tipo de gasto</string>
+    <string name="chooseincome">Elije un tipo de ingreso</string>
     <string name="desamount">Descripcion del importe</string>
     <string name="enternote">Introduce importe</string>
     <string name="food">Comida</string>

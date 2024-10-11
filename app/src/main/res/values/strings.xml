@@ -165,8 +165,10 @@
     <string name="visitmygithub">Visit my github</string>
   <string name="newexpense">New Expense</string>
     <!--newAmount-->
-    <string name="enteramount">Enter amount
-    </string>
+    <string name="enteramount">Enter amount</string>
+    <string name="chooseexpense">choose a type of expense</string>
+    <string name="chooseincome">choose a type of income</string>
+    <string name="selectanaccount">Select an account</string>
     <string name="desamount">Descripcion del importe</string>
     <string name="food">Food</string>
     <string name="morgage">Housing</string>

@@ -167,6 +167,9 @@
     <!--newAmount-->
     <string name="enternote">Enter amount</string>
     <string name="desamount">Descripcion del importe</string>
+    <string name="selectanaccount">Select an account</string>
+    <string name="chooseexpense">choose a type of expense</string>
+    <string name="chooseincome">choose a type of income</string>
     <string name="food">Food</string>
     <string name="morgage">Housing</string>
     <string name="electricitybill">Electricity</string>
@@ -175,7 +178,6 @@
     <string name="publictransport">Public transport</string>
     <string name="fuel_title">Fuel</string>
     <string name="health">Medical Expenses</string>
-
     <string name="insurances">Insurances</string>
     <string name="pets">Pets</string>
     <string name="entertainment">Entertainment</string>

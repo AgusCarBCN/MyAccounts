@@ -32,7 +32,7 @@ fun AccountSelector() {
     ) {
         Text(
             text = "Select an account",
-            fontSize = 18.sp,
+            fontSize = 20.sp,
             color = LocalCustomColorsPalette.current.textColor,  // Color del texto
             modifier = Modifier
                 .padding(top = 10.dp, bottom = 10.dp)
@@ -57,27 +57,14 @@ fun AccountSelector() {
             ) {
 
                     Text(
-                        text = "nombre de la cuenta", // Descripción de la moneda
-                        fontSize = 24.sp,
+                        text = "BBVA  $3400 euros", // Descripción de la moneda
+                        fontSize = 18.sp,
                         color = LocalCustomColorsPalette.current.textColor, // Color del texto
                         textAlign = TextAlign.Left // Alinear el texto a la izquierda
                     )
                 }
             }
         }
-       // createAccountsViewModel.onCurrencySelectedChange(currencies[pagerState.currentPage].currencyCode)
 
-        //Log.d("valor en component" ,"Code: $currencyCode")
-        // Muestra el nombre de la moneda seleccionada actualmente
-       /* Text(
-            text = "Selecciona una cuenta : ",
-
-            fontSize = 18.sp,
-            color = LocalCustomColorsPalette.current.textColor,  // Color del texto
-            modifier = Modifier
-                .padding(top = 10.dp, bottom = 10.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )*/
 
     }

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.CategoryEntries
+import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
@@ -20,6 +21,8 @@ import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 fun CategorySelector(mainViewModel: MainViewModel,isIncome:Boolean) {
 
     val categoryItems=if(isIncome)incomeItems else expenseItems
+    HeadSetting(title = (if(isIncome) stringResource(id = R.string.chooseincome) else stringResource(
+        id = R.string.chooseexpense)), size = 24)
         LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
