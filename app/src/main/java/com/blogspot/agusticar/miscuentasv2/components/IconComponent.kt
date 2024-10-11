@@ -103,6 +103,7 @@ fun IconAnimated(iconResource:Int,sizeIcon:Int,initColor:Color,targetColor: Colo
     //val initColor = LocalCustomColorsPalette.current.imageTutorialInit
     //val targetColor = LocalCustomColorsPalette.current.imageTutorialTarget
     val color = remember { Animatable(initColor) }
+
     val coroutineScope = rememberCoroutineScope()
 
     // Iniciamos una corrutina para animar el color de manera infinita

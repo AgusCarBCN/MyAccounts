@@ -54,7 +54,7 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int)
             BoardType.DECIMAL,
             false
         )
-        AccountSelector()
+        AccountSelector(stringResource(id = R.string.selectanaccount))
         ModelButton(text = stringResource(id =if(isIncome) R.string.newincome else R.string.newexpense),
             R.dimen.text_title_small,
             modifier = Modifier.width(320.dp),

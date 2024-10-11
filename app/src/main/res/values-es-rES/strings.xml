@@ -224,4 +224,8 @@
     <string name="therapies">Terapias</string>
     <string name="alcohol">Alcohol</string>
     <string name="gambling">Juego</string>
+    <!---Transfer-->
+    <string name="originaccount">Selecciona cuenta de origen</string>
+    <string name="destinationaccount">Selecciona cuenta destino</string>
+    <string name="amountentrie">Introduce una cantidad</string>
 </resources>
