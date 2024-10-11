@@ -34,11 +34,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,17 +53,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.about.AboutApp
+import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelector
+import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
+import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
+import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
+import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
+import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 
 
 @Composable
@@ -68,41 +80,70 @@ fun HomeScreen(
     navigationController: NavHostController,
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
-    createProfileViewModel: CreateProfileViewModel
+    createProfileViewModel: CreateProfileViewModel,
+    tutorialViewModel:TutorialViewModel,
+    settingViewModel:SettingViewModel
+
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
+    val iconAmount by mainViewModel.selectedIcon.collectAsState()
+    val titleAmount by mainViewModel.selectedTitle.collectAsState()
+    val isIncome by mainViewModel.isIncome.collectAsState()
 
+    val userName by createProfileViewModel.name.observeAsState("")
+    var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
 
+    // Usar LaunchedEffect para cerrar el drawer cuando cambia la pantalla seleccionada
+    LaunchedEffect(key1 = selectedScreen) {
+        if (drawerState.isOpen) {
+            drawerState.close() // Cierra el drawer cuando se selecciona una opción
+        }
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel) },
+        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel,drawerState) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                { TopBarApp(scope, drawerState) },
+                { TopBarApp(scope, drawerState,title,
+                    (if(selectedScreen==IconOptions.HOME) userName else "").toString()
+                ) },
                 { BottomAppBar(mainViewModel, navigationController) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
-                ) {
+                ) {if(selectedScreen!=IconOptions.EXIT){
+                    createProfileViewModel.onButtonProfileNoSelected()
+                }
                     when (selectedScreen) {
-                        IconOptions.HOME -> Test(createAccountsViewModel)
-                        IconOptions.PROFILE -> Test(createAccountsViewModel)
+                        IconOptions.HOME -> {
+                            Test(createAccountsViewModel)
+                            title=R.string.greeting
+                        }
+                        IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)
+                            title=R.string.profiletitle
+                        }
                         IconOptions.SEARCH -> TODO()
-                        IconOptions.SETTINGS -> SettingScreen()
-                        IconOptions.NEW_INCOME -> TODO()
-                        IconOptions.TRANSFER -> TODO()
+                        IconOptions.SETTINGS -> {
+                            SettingScreen(settingViewModel)
+                            title=R.string.settingstitle}
+                        IconOptions.INCOME_OPTIONS -> {
+                            CategorySelector(mainViewModel,true)
+                        title=R.string.newincome}
+                        IconOptions.TRANSFER -> {Transfer()
+                        title=R.string.transfer}
                         IconOptions.BARCHART -> TODO()
                         IconOptions.CALCULATOR -> TODO()
                         IconOptions.SETTING_ACCOUNTS -> TODO()
-                        IconOptions.ABOUT -> TODO()
+                        IconOptions.ABOUT ->{ AboutScreen(mainViewModel)
+                            title=R.string.abouttitle
+                        }
                         IconOptions.POLICY -> TODO()
                         IconOptions.EXIT -> {
                             // Obtén el contexto actual de la aplicación
@@ -110,6 +151,19 @@ fun HomeScreen(
                             // Verifica si el contexto es una actividad
                             val activity = context as? Activity
                             activity?.finish()
+                        }
+                        IconOptions.ABOUT_DESCRIPTION -> {
+                            AboutApp()
+                            title=R.string.abouttitle
+                        }
+                        IconOptions.EXPENSE_OPTIONS -> {
+                            CategorySelector(mainViewModel,false)
+                            title=R.string.newexpense
+                        }
+
+                        IconOptions.NEW_AMOUNT -> {
+                            NewAmount(isIncome, iconAmount ,titleAmount)
+                            title=titleAmount
                         }
                     }
 
@@ -121,9 +175,10 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState) {
+private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState,title:Int,name:String) {
+
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name)) },
+        title = { Text(text = stringResource(id = title)+" "+name)},
         navigationIcon = {
             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                 Icon(
@@ -172,7 +227,8 @@ private fun BottomAppBar(viewModel: MainViewModel, navigationController: NavHost
 @Composable
 private fun DrawerContent(
     viewModel: MainViewModel,
-    createProfileViewModel: CreateProfileViewModel
+    createProfileViewModel: CreateProfileViewModel,
+    drawerState: DrawerState
 ) {
 
     Card(
@@ -193,15 +249,21 @@ private fun DrawerContent(
                 .background(LocalCustomColorsPalette.current.drawerColor)
         ) {
             TitleOptions(R.string.management)
-
-            ClickableRow(OptionItem(R.string.newincome, R.drawable.paymentsoption), onClick = {})
-            ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {})
+            ClickableRow(OptionItem(R.string.newincome, R.drawable.incomes), onClick = {
+                viewModel.selectScreen(IconOptions.INCOME_OPTIONS)
+            })
+            ClickableRow(OptionItem(R.string.newexpense, R.drawable.importoption), onClick = {
+                viewModel.selectScreen(IconOptions.EXPENSE_OPTIONS)
+            })
+            ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {
+                viewModel.selectScreen(IconOptions.TRANSFER)
+            })
             ClickableRow(OptionItem(R.string.chart, R.drawable.barchartoption), onClick = {})
             ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {})
-
             TitleOptions(R.string.aboutapp)
-            ClickableRow(OptionItem(R.string.about, R.drawable.info), onClick = {})
-            ClickableRow(OptionItem(R.string.privacy, R.drawable.privacy), onClick = {})
+            ClickableRow(OptionItem(R.string.about, R.drawable.info), onClick = {
+                viewModel.selectScreen(IconOptions.ABOUT)
+            })
             ClickableRow(
                 OptionItem(R.string.exitapp, R.drawable.exitapp),
                 onClick = { viewModel.selectScreen(IconOptions.EXIT) })
@@ -211,10 +273,11 @@ private fun DrawerContent(
 
 //Implementacion de la cabecerera del menu desplegable izquierda
 @Composable
-private fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
+fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
-    val selectedImageUri by createProfileViewModel.selectedImageUri.observeAsState(null)
-    val name by createProfileViewModel.name.observeAsState("user")
+    val selectedImageUriSaved by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
+    //val name by createProfileViewModel.name.observeAsState("user")
+
 
     createProfileViewModel.loadImageUri()
     Row(
@@ -227,18 +290,22 @@ private fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
     ) {
         Box(modifier = Modifier.weight(0.4f)) {
-        selectedImageUri?.let { UserImage(it) }
+        selectedImageUriSaved?.let { UserImage(it) }
         }
 
+<<<<<<< HEAD
 
 
         Column(modifier = Modifier.weight(0.6f),
+=======
+        /*Column(modifier = Modifier.weight(0.6f),
+>>>>>>> develop
             ) {
             Text(text = "Hola",
                 color= LocalCustomColorsPalette.current.textColor)
             Text(text = "$name !",
                 color= LocalCustomColorsPalette.current.textColor)
-        }
+        }*/
 
 
     }
@@ -323,10 +390,11 @@ private fun IconButtonApp(title: String, resourceIcon: Int, onClickButton: () ->
     val isPressed by interactionSource.collectIsPressedAsState()
 
     IconButton(
+
         onClick = onClickButton,
         interactionSource = interactionSource
     ) {
-        IconComponent(isPressed, resourceIcon, 36)
+        IconComponent(isPressed, resourceIcon, 28)
     }
 
 }

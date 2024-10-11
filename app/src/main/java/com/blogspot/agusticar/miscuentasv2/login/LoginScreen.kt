@@ -12,15 +12,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +33,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.R.color
 import com.blogspot.agusticar.miscuentasv2.R.string
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
@@ -50,7 +48,7 @@ fun LoginComponent(
     modifier: Modifier, navToMain: () -> Unit,
 ) {
 
-    val image by loginViewModel.selectedImageUri.observeAsState(initial = null)
+    val image by loginViewModel.selectedImageUriSaved.observeAsState(initial = null)
     val name by loginViewModel.name.observeAsState("")
     val userName by loginViewModel.userName.observeAsState("")
     val password by loginViewModel.password.observeAsState("")
@@ -69,7 +67,6 @@ fun LoginComponent(
     val scope = rememberCoroutineScope()
     /* Se usa para gestionar el estado del Snackbar. Esto te permite mostrar y controlar el Snackbar
      desde cualquier parte de tu UI.*/
-    val snackbarHostState = remember { SnackbarHostState() }
 
     loginViewModel.getLoginImage()
     ConstraintLayout(
@@ -106,13 +103,7 @@ fun LoginComponent(
                 else Modifier
                     .fillMaxSize()
             )
-            /*Image(
-                painter = painterResource(id = drawable.contabilidad),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .size(250.dp) // Uso de size para mantener la relación de aspecto
-                    .background(LocalCustomColorsPalette.current.imageBackground)
-            )*/
+
         }
 
         // Caja de login en la parte inferior, ocupando el otro 50% de la altura
@@ -140,14 +131,14 @@ fun LoginComponent(
                 )
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
-                    stringResource(id = string.username),
+                    stringResource(id = string.enterUsername),
                     userName,
                     onTextChange = { loginViewModel.onLoginChanged(it, password) },
                     BoardType.TEXT
                 )
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
-                    stringResource(id = string.password),
+                    stringResource(id = string.enterPassword),
                     password,
                     onTextChange = { loginViewModel.onLoginChanged(userName, it) },
                     BoardType.PASSWORD,
@@ -160,13 +151,12 @@ fun LoginComponent(
                     onClickButton = {
                         if (validateLogin) {
                             navToMain()
-                        } else
+                        } else{
                             scope.launch {
-                                snackbarHostState.showSnackbar(
-                                    "Login no valido",
-                                    duration = SnackbarDuration.Short
-                                )
+                                SnackBarController.sendEvent(event = SnackBarEvent("Invalid Login"))
                             }
+                        }
+
                     }
                 )
 
@@ -215,22 +205,18 @@ fun LoginComponent(
                             try {
                                 scope.launch {
                                     loginViewModel.updatePassword(newPassword)
-                                    snackbarHostState.showSnackbar(
+
+                                    /*snackbarHostState.showSnackbar(
                                         "contraseña actualizada $newPassword",
                                         duration = SnackbarDuration.Short
-                                    )
+                                    )*/
                                     loginViewModel.onEnableNewPasswordFields(false)
                                 }
                             } catch (e: Exception) {
                                 Log.e("DataStore", "Error Updating password", e)
                             }
                         } else {
-                            scope.launch {
-                                snackbarHostState.showSnackbar(
-                                    "usuario no valido",
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
+
                             loginViewModel.onClearFields()
                         }
                     }
@@ -251,8 +237,11 @@ fun LoginComponent(
     }
     /*Se agregó SnackbarHost al final de LoginComponent, que es necesario para mostrar el Snackbar.
     El SnackbarHost debe estar en el árbol de composables.*/
-    SnackbarHost(hostState = snackbarHostState)
+
+   // ComposeModifiedSnackbar(state = state)
 }
+
+
 
 
 

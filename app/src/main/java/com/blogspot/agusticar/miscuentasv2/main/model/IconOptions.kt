@@ -5,12 +5,15 @@ enum class IconOptions {
     SEARCH,
     SETTINGS,
     PROFILE,
-    NEW_INCOME,
+    NEW_AMOUNT,
+    INCOME_OPTIONS,
+    EXPENSE_OPTIONS,
     TRANSFER,
     BARCHART,
     CALCULATOR,
     SETTING_ACCOUNTS,
     ABOUT,
+    ABOUT_DESCRIPTION,
     POLICY,
     EXIT
 }

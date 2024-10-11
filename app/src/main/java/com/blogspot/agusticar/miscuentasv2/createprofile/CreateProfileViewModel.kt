@@ -1,6 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.createprofile
 
-import android.content.Context
+
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,8 +14,6 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetUserP
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,15 +42,38 @@ class CreateProfileViewModel @Inject constructor(
     private val _enableButton = MutableLiveData<Boolean>()
     val enableButton: LiveData<Boolean> = _enableButton
 
+    //LiveData para habilitar boton de cambiar imagen
+    private val _enableChangeImage = MutableLiveData<Boolean>()
+    val enableChangeImage: LiveData<Boolean> = _enableChangeImage
+
+    //LiveData para habilitar los botones de cambiar campos de perfil
+    private val _enableNameButton = MutableLiveData<Boolean>()
+    val enableNameButton: LiveData<Boolean> = _enableNameButton
+
+    private val _enablePasswordButton = MutableLiveData<Boolean>()
+    val enablePasswordButton: LiveData<Boolean> = _enablePasswordButton
+
+    private val _enableUserNameButton = MutableLiveData<Boolean>()
+    val enableUserNameButton: LiveData<Boolean> = _enableUserNameButton
+
+
     // Definimos selectedImageUri como un LiveData
     private val _selectedImageUri = MutableLiveData<Uri?>()
     val selectedImageUri: LiveData<Uri?> = _selectedImageUri
 
+    // Definimos selectedImageUri guardados en fichero como un LiveData
+    private val _selectedImageUriSaved = MutableLiveData<Uri?>()
+    val selectedImageUriSaved: LiveData<Uri?> = _selectedImageUriSaved
+
+
     init{
         viewModelScope.launch {
-            _selectedImageUri.value = getUri()
+
             val user = getProfileData.invoke()
             _name.value = user.profileName
+            _username.value = user.profileUserName
+            _password.value = user.profilePass
+            loadImageUri()
         }
     }
 
@@ -64,20 +85,57 @@ class CreateProfileViewModel @Inject constructor(
         //Verificaciones para activar boton de confirmar
         _enableButton.value = enableConfirmButton(name, userName, password, newPassword)
     }
+    fun onNameChanged(newName: String){
+        _name.value = newName
+        _enableNameButton.value=true
+    }
 
+    fun onUserNameChanged(newUserName: String){
+        _username.value = newUserName
+        _enableUserNameButton.value=true
+    }
+
+    fun onPasswordChanged(newPassword: String){
+        _password.value = newPassword
+        _enablePasswordButton.value=true
+    }
     fun onImageSelected(selectedImage:Uri)
     {
         _selectedImageUri.value = selectedImage
+        _enableChangeImage.value=true
+    }
+    fun onButtonProfileNoSelected(){
+        viewModelScope.launch {
+
+            val user = getProfileData.invoke()
+            _name.value = user.profileName
+            _username.value = user.profileUserName
+            _password.value = user.profilePass
+        }
+
+        _enableChangeImage.value=false
+        _enableNameButton.value=false
+        _enablePasswordButton.value=false
+        _enablePasswordButton.value=false
+
     }
     fun saveImageUri(uri:Uri){
         viewModelScope.launch {
             saveUri(uri)
+            //Actualizo para ver cambios de manera inmediata
+            _selectedImageUriSaved.value=uri
         }
     }
     fun loadImageUri(){
         viewModelScope.launch {
-            _selectedImageUri.value = getUri()
+            _selectedImageUriSaved.value = getUri()
         }
+    }
+    fun buttonState(photo:Boolean,useName:Boolean,name:Boolean,password:Boolean){
+        _enableChangeImage.value=photo
+        _enableNameButton.value=name
+        _enablePasswordButton.value=password
+        _enableUserNameButton.value=useName
     }
 
     // Función para setear un nuevo valor para toLogin en el repositorio
@@ -89,8 +147,10 @@ class CreateProfileViewModel @Inject constructor(
             setProfileData(newProfile)
             setLoginTo(true)
 
-            // Actualizar el valor en el LiveData para reflejar el cambio en la UI
-
+        //Actualizamos los valores para reflejar cambios en UI
+            _name.value=newProfile.name
+            _username.value=newProfile.userName
+            _password.value=newProfile.profilePass
         }
     }
 

@@ -119,7 +119,34 @@ class UserDataStoreRepository @Inject constructor(private val context: Context) 
         }
     }
 
-     private suspend fun saveUri(uri: Uri): String? {
+    override suspend fun getEnableTutorial(): Boolean =
+        context.dataStore.data.first()[UserPreferencesKeys.ENABLE_SWITCH_TUTORIAL] ?: true
+
+    override suspend fun setEnableTutorial(newValue: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.ENABLE_SWITCH_TUTORIAL] =newValue
+        }
+    }
+
+    override suspend fun getEnableDarkTheme(): Boolean =
+        context.dataStore.data.first()[UserPreferencesKeys.ENABLE_SWITCH_DARKTHEME] ?: false
+
+    override suspend fun setEnableDarkTheme(newValue: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.ENABLE_SWITCH_DARKTHEME] =newValue
+        }
+    }
+
+    override suspend fun getEnableNotifications(): Boolean =
+        context.dataStore.data.first()[UserPreferencesKeys.ENABLE_SWITCH_NOTIFICATIONS] ?: false
+
+    override suspend fun setEnableNotifications(newValue: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.ENABLE_SWITCH_NOTIFICATIONS] =newValue
+        }
+    }
+
+    private suspend fun saveUri(uri: Uri): String? {
         val inputStream = context.contentResolver.openInputStream(uri)
         val file = File(context.externalCacheDir, "image.jpg")
         return if (inputStream != null) {

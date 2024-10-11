@@ -51,7 +51,12 @@ import com.blogspot.agusticar.miscuentasv2.tutorial.model.TutorialItem
 import kotlinx.coroutines.launch
 
 @Composable
-fun Tutorial(tutorialViewModel:TutorialViewModel,navToScreen:()->Unit,listOfItems: List<TutorialItem> = getItems()) {
+fun Tutorial(
+    tutorialViewModel: TutorialViewModel,
+    navToScreen: () -> Unit,
+    listOfItems: List<TutorialItem> = getItems(),
+    modifier: Modifier
+) {
 
     val toLogin by tutorialViewModel.toLogin.observeAsState(false)
 

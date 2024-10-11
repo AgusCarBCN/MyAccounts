@@ -1,6 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,10 +13,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -34,8 +30,6 @@ fun SwitchComponent(title:String,
                     isChecked:Boolean,
                     onClickSwitch: (Boolean) -> Unit) {
 
-    var switchCheckedState by remember { mutableStateOf(isChecked) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,9 +46,8 @@ fun SwitchComponent(title:String,
                 color=LocalCustomColorsPalette.current.textColor)
         }
         Switch(modifier = Modifier.weight(0.25f),
-            checked = switchCheckedState,
-            onCheckedChange = { switchCheckedState = it
-                              onClickSwitch(it)},
+            checked = isChecked,
+            onCheckedChange = {onClickSwitch(it)},
 
             /*
             The "checkedIconColor" and "uncheckedIconColor" excluded from this list
@@ -126,12 +119,12 @@ fun RowComponent(title: String,
 
 }
 @Composable
-fun HeadSetting(title: String) {
+fun HeadSetting(title: String,size:Int) {
 
     Text(
         text = title,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
+        fontSize = size.sp,
         modifier = Modifier
             .padding(top = 15.dp, bottom = 15.dp)
             .fillMaxWidth(),

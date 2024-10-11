@@ -32,14 +32,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
-
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -57,11 +55,10 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
     val userName by createViewModel.username.observeAsState("")
     val password by createViewModel.password.observeAsState("")
     val selectedImageUri by createViewModel.selectedImageUri.observeAsState( null)
+    //val selectedImageUriSaved by createViewModel.selectedImageUri.observeAsState( null)
     val repeatPassword by createViewModel.repeatPassword.observeAsState("")
     val scope = rememberCoroutineScope()
     val enableButton by createViewModel.enableButton.observeAsState(false)
-
-
 
     ConstraintLayout(
         modifier = Modifier
@@ -93,7 +90,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.name),
+                stringResource(id = R.string.enterName),
                 name,
                 onTextChange = {createViewModel.onTextFieldsChanged(it,userName,password,repeatPassword) },
                 BoardType.TEXT,
@@ -101,7 +98,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.username),
+                stringResource(id = R.string.enterUsername),
                 userName,
                 onTextChange ={createViewModel.onTextFieldsChanged(name,it,password,repeatPassword) } ,
                 BoardType.TEXT,
@@ -109,7 +106,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
             )
             TextFieldComponent(
                 modifier = Modifier.width(360.dp),
-                stringResource(id = R.string.password),
+                stringResource(id = R.string.enterPassword),
                 password,
                 onTextChange = {createViewModel.onTextFieldsChanged(name,userName,it,repeatPassword) },
                 BoardType.PASSWORD,
@@ -138,8 +135,9 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                             )
                             selectedImageUri?.let { createViewModel.saveImageUri(it) }
                             //createViewModel.saveImageUri(selectedImageUri!!)}
-                            Log.d("Datastore", "dato grabado")
+                            Log.d("SaveFromCreate", selectedImageUri.toString())
                         }
+                        Log.d("SaveFromCreate", selectedImageUri.toString())
                     }catch (e: Exception) {
                         Log.e("DataStore", "Error writing to DataStore", e)
                     }
@@ -166,14 +164,21 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-
+    val selectedImageUriSelected by viewModel.selectedImageUri.observeAsState( null)
+    val selectedImageUriSavedFromFile by viewModel.selectedImageUriSaved.observeAsState( null)
+    // Llama a `onImageNoSelected()` si no hay una imagen seleccionada o guardada
+    //viewModel.onImageNoSelected()
     // Lanza el selector de imágenes
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         selectedImageUri = uri
-        selectedImageUri?.let { viewModel.onImageSelected(it) }
+        selectedImageUri?.let { viewModel.onImageSelected(it)}
+        Log.d("AfterClickImageSaved", selectedImageUriSavedFromFile.toString())
+        Log.d("AfterClickImage", selectedImageUri.toString())
+        Log.d("AfterClickImageSelected", selectedImageUriSelected.toString())
     }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -190,7 +195,8 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
         ) {
             if(selectedImageUri==null) {
                 Image(
-                    painter = painterResource(id = R.drawable.contabilidad), // Reemplaza con tu imagen de placeholder
+                    painter = if(selectedImageUriSavedFromFile==null || selectedImageUriSavedFromFile==Uri.EMPTY)painterResource(id = R.drawable.contabilidad)
+                    else rememberAsyncImagePainter(model = selectedImageUriSavedFromFile), // Reemplaza con tu imagen de placeholder
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -201,7 +207,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
             selectedImageUri?.let { uri ->
 
                 Image(
-                    painter =rememberAsyncImagePainter(
+                    painter = rememberAsyncImagePainter(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(uri)
                             .crossfade(true)
@@ -227,15 +233,19 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
             Icon(
                 painter = painterResource(id = R.drawable.camera), // Reemplaza con tu ícono de cámara
                 contentDescription = "Camera Icon",
+                tint = LocalCustomColorsPalette.current.iconCamara, // Reemplaza con tu color de ícono
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(LocalCustomColorsPalette.current.buttonColorPressed)
-                    .clickable { photoPickerLauncher.launch("image/*") }
+                    .background(LocalCustomColorsPalette.current.disableButton)
+                    .clickable {
+                        photoPickerLauncher.launch("image/*")
+
+                    }
             )
+
         }
     }
 }
-
 
 
 

@@ -1,6 +1,7 @@
 [versions]
 agp = "8.5.0"
 coilCompose = "2.4.0"
+composeModifiedSnackbar = "1.0.1"
 constraintlayoutCompose = "1.1.0-beta01"
 constraintlayoutVersion = "2.2.0-beta01"
 datastore = "1.1.1"
@@ -35,6 +36,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRunt
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+compose-modified-snackbar = { module = "com.github.saimon4u:Compose-Modified-Snackbar", version.ref = "composeModifiedSnackbar" }
 flagkit = { module = "com.github.madebybowtie:flagkit", version.ref = "flagkit" }
 flags = { module = "com.github.WilfriedA:Flags", version.ref = "flags" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }

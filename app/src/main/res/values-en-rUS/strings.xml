@@ -9,16 +9,17 @@
     <string name="loginButton">Log in</string>
     <string name="confirmButton">Confirm</string>
     <string name="backButton">Back</string>
-    <string name="name">Enter your name</string>
+    <string name="enterName">Enter your name</string>
     <string name="repeatpassword">Repeat your password</string>
-    <string name="username">Enter your user name</string>
-    <string name="password">Enter password</string>
+    <string name="enterUsername">Enter your user name</string>
+    <string name="enterPassword">Enter password</string>
     <string name="forgotpassword">Forgot your password?</string>
     <string name="requestuser">Enter username (step 1)</string>
     <string name="newpassword">Enter new password (step 2)</string>
     <string name="goodmornig">Good morning</string>
     <string name="goodafternoon">Good afternoon</string>
     <string name="goodevening">Good evening</string>
+
 
 
     <!--String onBoarding -->
@@ -104,4 +105,127 @@
     <string name="desadd_an_account">Add a new account to the application.</string>
     <string name="changecurrency">Change currency</string>
     <string name="deschangecurrency">Change the currency of your accounts.</string>
+    <!--Profile-->
+    <string name="change">Change</string>
+    <string name="name">Name</string>
+    <string name="userName">User name</string>
+    <string name="password">Password</string>
+    <string name="newName">New name</string>
+    <string name="newUserName">New user name</string>
+    <string name="newPassword">New password</string>
+    <!--SnackBar messages-->
+    <string name="inValidLogin">Invalid login</string>
+    <string name="userNameUpdated">User name updated</string>
+    <string name="nameUpdated">Name updated</string>
+    <string name="passwordUpdated">Password updated</string>
+    <string name="photoUpdated">Profile photo updated</string>
+    <!--TopBar titles-->
+    <string name="hometitle">Home</string>
+    <string name="searchtitle">Search</string>
+    <string name="settingstitle">Settings</string>
+    <string name="profiletitle">Profile</string>
+    <string name="new_incometitle">New Income</string>
+    <string name="transfertitle">Transfer</string>
+    <string name="barcharttitle">Bar Chart</string>
+    <string name="calculatortitle">Calculator</string>
+    <string name="setting_accountstitle">Setting Accounts</string>
+    <string name="abouttitle">About</string>
+    <string name="greeting">Hello,</string>
+    <!--About-->
+    <string name="developer">Developer: Agustin Carnerero Peña</string>
+    <string name="iconconta">Accounting icon</string>
+    <string name="icongithub">Github logo icon</string>
+    <string name="menuicons">Side menu icons</string>
+    <string name="iconstheme">Setting theme icons</string>
+    <string name="attributionicon"> made by </string>
+    <string name="attributionicons">made by</string>
+    <string name="atributions">Attributions</string>
+    <string name="iconsdate">Date range icons</string>
+    <string name="version">Version 2.0</string>
+    <string name="description">
+    My Accounts is an application designed to simplify the management of your income and expenses. With this tool, you can efficiently handle transactions for one to several accounts, add income, record expenses, transfer funds between  accounts, and generate detailed statistics through transaction searches.
+
+    Additionally, the application features a handy integrated calculator, allowing you to perform calculations quickly and easily without leaving the app.
+
+    Streamline your financial management with My Accounts and maintain precise control over your transactions, all in one place.
+</string>
+    <string name="desaboutapp">A brief description about the app.</string>
+    <string name="desaboutme">Who is behind this project.</string>
+    <string name="desshare">Share this app to reach many places.</string>
+    <string name="desrate">Rate and share your opinion about the app.</string>
+    <string name="desemail">Contact me to give any suggestion.</string>
+    <string name="desstore">Download my other application. MyAccountsApp</string>
+    <string name="despolicy">Go to private policy</string>
+    <string name="othersapp">Others apps</string>
+    <string name="policy">Private policy</string>
+    <string name="share">Share</string>
+    <string name="rate">Rate</string>
+    <string name="contactme">Contact me</string>
+    <string name="visitmygithub">Visit my github</string>
+    <string name="newexpense">New Expense</string>
+
+    <!--newAmount-->
+    <string name="enternote">Enter amount</string>
+    <string name="desamount">Descripcion del importe</string>
+    <string name="selectanaccount">Select an account</string>
+    <string name="chooseexpense">choose a type of expense</string>
+    <string name="chooseincome">choose a type of income</string>
+    <string name="food">Food</string>
+    <string name="morgage">Housing</string>
+    <string name="electricitybill">Electricity</string>
+    <string name="waterbill">Water</string>
+    <string name="gasbill">Gas</string>
+    <string name="publictransport">Public transport</string>
+    <string name="fuel_title">Fuel</string>
+    <string name="health">Medical Expenses</string>
+    <string name="insurances">Insurances</string>
+    <string name="pets">Pets</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="vacations_travel_title">Vacations</string>
+    <string name="courses_books_materials_title">Education</string>
+    <string name="clothing">Clothing</string>
+    <string name="house">Home</string>
+    <string name="gym">Sport</string>
+    <string name="other_expenses">Other</string>
+    <string name="gifts_title">Gifts</string>
+    <string name="donations_title">Donations</string>
+    <string name="personal_care_title">Personal Care</string>
+    <string name="car">Car</string>
+
+    <string name="salary">Salary</string>
+    <string name="lotery">Lotery</string>
+    <string name="dividens">Dividends</string>
+    <string name="rental">Rent</string>
+    <string name="freelance">Freelance</string>
+    <string name="otherincomes">Others</string>
+    <string name="sales">Sales</string>
+    <string name="subsidies">Subsidies</string>
+
+    <string name="awards">Awards</string>
+    <string name="benefit_assets">Win asset</string>
+    <string name="lost_assets">lost asset</string>
+    <string name="books">Books</string>
+    <string name="music">Music</string>
+    <string name="hobbies">Hobbies</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="mobile">Mobile</string>
+    <string name="taxes">Taxes</string>
+    <string name="loans">Loans</string>
+    <string name="electronics">Electronics</string>
+    <string name="financial_assets_losses">Financial assets losses</string>
+    <string name="coffee">Coffee</string>
+    <string name="tobacco">Tobacco</string>
+    <string name="supplements">Supplements</string>
+    <string name="motorcycle">Motorcycle</string>
+    <string name="medical_expenses">Medical expenses</string>
+    <string name="garden">Garden</string>
+    <string name="children">Children</string>
+    <string name="therapies">Therapies</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="gambling">Gambling</string>
+    <!---Transfer-->
+    <string name="originaccount">Select an origin account</string>
+    <string name="destinationaccount">Select destination account</string>
+    <string name="amountentrie">Enter an amount</string>
 </resources>
