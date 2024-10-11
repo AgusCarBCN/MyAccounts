@@ -49,8 +49,11 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
 
 
     fun getListOfCurrencyCode(): List<Currency> {
-        _currencyCodeList.value = currencies
-        return currencies
+        //Ordeno la lista por la descripción de la divisa
+        val sortedCurrencies = currencies.sortedBy { it.currencyDescription}
+        _currencyCodeList.value = sortedCurrencies
+
+        return sortedCurrencies
     }
     fun onExpandedChange(newValue:Boolean){
         _isCurrencyExpanded.value=newValue
