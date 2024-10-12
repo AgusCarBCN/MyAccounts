@@ -80,7 +80,7 @@ fun HeadCard(modifier:Modifier,amount:Double,viewModel: CreateAccountsViewModel)
 
         ),
         modifier = Modifier
-            .size(width = 170.dp, height = 100.dp)
+            .size(width = 180.dp, height = 100.dp)
     ) {
         Text(
             text =numberFormat.format(abs(amount)),
@@ -104,7 +104,7 @@ fun HeadCard(modifier:Modifier,amount:Double,viewModel: CreateAccountsViewModel)
     }
 }
 @Composable
-fun AccountCard(amount:Double,viewModel: CreateAccountsViewModel){
+fun AccountCard(amount:Double,name:String,viewModel: CreateAccountsViewModel){
 
     val currencyCode by viewModel.currencyCode.observeAsState("")
     val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
@@ -123,14 +123,14 @@ fun AccountCard(amount:Double,viewModel: CreateAccountsViewModel){
 
         ),
         modifier = Modifier
-            .size(width = 340.dp, height = 100.dp)
+            .size(width = 360.dp, height = 120.dp)
     ) {
         Row(modifier = Modifier.padding(5.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Cuenta1",
+                text = name,
                 modifier = Modifier
                     .padding(10.dp)
                     .weight(0.6f),
