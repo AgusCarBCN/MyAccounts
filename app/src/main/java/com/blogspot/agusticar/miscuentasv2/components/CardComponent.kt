@@ -98,6 +98,7 @@ fun HeadCard(modifier:Modifier,amount:Double,viewModel: CreateAccountsViewModel)
                 .padding(5.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
+            fontSize = 16.sp,
             color= LocalCustomColorsPalette.current.textHeadColor
         )
     }
@@ -134,7 +135,7 @@ fun AccountCard(amount:Double,viewModel: CreateAccountsViewModel){
                     .padding(10.dp)
                     .weight(0.6f),
                 textAlign = TextAlign.Start,
-                fontSize = 20.sp,
+                fontSize = 24.sp,
                 color= LocalCustomColorsPalette.current.textHeadColor
             )
             Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
@@ -144,13 +145,20 @@ fun AccountCard(amount:Double,viewModel: CreateAccountsViewModel){
                     .padding(10.dp)
                     .weight(0.4f),
                 textAlign = TextAlign.End,
-                fontSize = 20.sp,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
-
-
         }
-
+        Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
+        Text(
+            text = "Ver ingresos y gastos",
+            modifier = Modifier
+                .padding(start=10.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.Start,
+            fontSize = 16.sp,
+            color= LocalCustomColorsPalette.current.textHeadColor
+        )
     }
 
 }
