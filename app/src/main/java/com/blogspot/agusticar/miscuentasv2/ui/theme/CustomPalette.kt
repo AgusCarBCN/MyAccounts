@@ -143,8 +143,8 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     iconIncomeTarget = greenDark,
     iconExpenseInit = BurntPeach,
     iconExpenseTarget = SoftPeach,
-    incomeColor = greenLight,
-    expenseColor = redLight
+    incomeColor = greenPistacho,
+    expenseColor = coralRed
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }

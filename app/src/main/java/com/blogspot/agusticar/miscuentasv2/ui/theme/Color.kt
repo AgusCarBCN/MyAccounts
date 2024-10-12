@@ -4,6 +4,8 @@ import androidx.compose.ui.graphics.Color
 
 val greenDark = Color(0xFF006400)  // Verde oscuro
 val greenLight =  Color(0xFF2E7D32)
+val greenPistacho=Color(0xFF8BC34A)
+val coralRed=Color(0xFFFF6F61)
 val redDark = Color(0xFF8B0000) // Rojo oscuro
 val redLight =  Color(0xFF9B1B1B)// Color Rojo
 val DeepBrown = Color(0xFF5C3B28)
