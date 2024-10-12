@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,11 +37,13 @@ import kotlinx.coroutines.launch
 //Mapa de divisas y simbolos
 
 
-
-
 @Composable
 
-fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navToLogin:()->Unit,navToBack:()->Unit) {
+fun CreateAccountsComponent(
+    createAccountsViewModel: CreateAccountsViewModel,
+    navToLogin: () -> Unit,
+    navToBack: () -> Unit
+) {
 
 
     ConstraintLayout(
@@ -52,6 +55,10 @@ fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navT
         val scope = rememberCoroutineScope()
         val currencyCode by createAccountsViewModel.currencyCode.observeAsState("EUR")
         val isCurrencyExpanded by createAccountsViewModel.isCurrencyExpanded.observeAsState(false)
+        val accountName by createAccountsViewModel.accountName.observeAsState("")
+        val accountBalance by createAccountsViewModel.accountBalance.observeAsState("")
+        val pattern = remember { Regex("^\\d+(\\.\\d+)?$") }
+
 
         Text(
             modifier = Modifier
@@ -62,7 +69,7 @@ fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navT
                     end.linkTo(parent.end)
                     bottom.linkTo(inputData.top)
                 },
-            text = if(!isCurrencyExpanded)stringResource(id = R.string.createAccount) else "",
+            text = if (!isCurrencyExpanded) stringResource(id = R.string.createAccount) else "",
             fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
             fontWeight = FontWeight.Bold, // Estilo de texto en negrita
             textAlign = TextAlign.Center,
@@ -82,7 +89,7 @@ fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navT
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-            if(!isCurrencyExpanded) {
+            if (!isCurrencyExpanded) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.createaccountmsg),
@@ -95,17 +102,22 @@ fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navT
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = R.string.amountName),
-                    "",
-                    onTextChange = { },
+                    accountName,
+                    onTextChange = { createAccountsViewModel.onAccountNameChanged(it) },
                     BoardType.TEXT,
                     false
                 )
                 TextFieldComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = R.string.enteramount),
-                    "",
-                    onTextChange = { },
-                    BoardType.TEXT,
+                    accountBalance,
+                    onTextChange = {
+                        if (isValidDecimal(it)) {
+                            //Solo se actualiza si es válido
+                            createAccountsViewModel.onAccountBalanceChanged(it)
+                        }
+                    },
+                    BoardType.DECIMAL,
                     false
                 )
                 ModelButton(text = stringResource(id = R.string.addAccount),
@@ -119,7 +131,7 @@ fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navT
             }
 
             CurrencySelector(createAccountsViewModel)
-            if(!isCurrencyExpanded) {
+            if (!isCurrencyExpanded) {
                 ModelButton(text = stringResource(id = R.string.confirmButton),
                     R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
@@ -148,4 +160,9 @@ fun CreateAccountsComponent(createAccountsViewModel:CreateAccountsViewModel,navT
     }
 }
 
+// Función para validar si la cadena es un número decimal válido
+fun isValidDecimal(text: String): Boolean {
+    //return text.isEmpty() || text.matches(Regex("^\\d*\\.?\\d*\$"))
 
+    return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
+}

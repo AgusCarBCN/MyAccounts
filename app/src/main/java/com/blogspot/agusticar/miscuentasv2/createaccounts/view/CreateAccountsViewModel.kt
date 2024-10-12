@@ -24,6 +24,13 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode: G
     private val _currencyCode = MutableLiveData<String>()
     val currencyCode: LiveData<String> = _currencyCode
 
+    // LiveData para los campos de texto
+    private val _accountName = MutableLiveData<String>()
+    val accountName: LiveData<String> = _accountName
+
+    private val _accountBalance = MutableLiveData<String>()
+    val accountBalance: LiveData<String> = _accountBalance
+
 
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
@@ -60,7 +67,15 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode: G
         _isCurrencyExpanded.value=newValue
     }
 
+    fun onAccountNameChanged(newName: String){
+        _accountName.value = newName
 
+    }
+
+    fun onAccountBalanceChanged(newBalance: String){
+        _accountBalance.value = newBalance
+
+    }
     private val currencies = listOf(
         // Lista completa de todas las divisas del mundo, ordenadas alfabéticamente por código:
 
