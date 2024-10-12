@@ -1,16 +1,26 @@
 package com.blogspot.agusticar.miscuentasv2.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.blogspot.agusticar.miscuentasv2.components.ElevatedCardExample
-
+import androidx.compose.ui.unit.dp
+import com.blogspot.agusticar.miscuentasv2.components.AccountCard
+import com.blogspot.agusticar.miscuentasv2.components.HeadCard
+import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import java.text.NumberFormat
@@ -18,21 +28,29 @@ import java.util.Locale
 
 @Composable
 
-fun HomeScreen(viewModel: CreateAccountsViewModel)
+fun HomeScreen(viewModel: CreateAccountsViewModel,createProfile:CreateProfileViewModel)
 {
-    val currencyCode by viewModel.currencyCode.observeAsState("")
-    val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
-    // Formatear la cantidad en la moneda especificada
-    val numberFormat = NumberFormat.getCurrencyInstance(locale)
+
     val income=3000.43
-    val expenses=1200.78
+    val expenses=-1200.78
+    val selectedImageUri by createProfile.selectedImageUriSaved.observeAsState()
+
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(LocalCustomColorsPalette.current.backgroundPrimary)){
+        .background(LocalCustomColorsPalette.current.backgroundPrimary),
+            verticalArrangement = Arrangement.Top,  // Centra los elementos verticalmente
+            horizontalAlignment = Alignment.CenterHorizontally  // Centra los elementos horizontalmente
+            ){
+        selectedImageUri?.let { UserImage(uri = it, 220) }
+        Row(modifier = Modifier.padding(10.dp)) {
 
-        ElevatedCardExample(numberFormat.format(income))
+            HeadCard(modifier = Modifier.weight(0.5f),income,viewModel)
+            Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
+            HeadCard(modifier = Modifier.weight(0.5f),expenses,viewModel)
 
         }
-
+        Spacer(modifier = Modifier.width(5.dp))
+        AccountCard(5600.34, viewModel )
     }
+}
 

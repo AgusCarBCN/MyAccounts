@@ -124,7 +124,7 @@ fun MainScreen(
                 }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            HomeScreen(createAccountsViewModel)
+                            HomeScreen(createAccountsViewModel,createProfileViewModel)
                             title=R.string.greeting
                         }
                         IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)
@@ -279,7 +279,6 @@ private fun DrawerContent(
 fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
     val selectedImageUriSaved by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
-    //val name by createProfileViewModel.name.observeAsState("user")
 
 
     createProfileViewModel.loadImageUri()
@@ -293,16 +292,8 @@ fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
     ) {
         Box(modifier = Modifier.weight(0.4f)) {
-        selectedImageUriSaved?.let { UserImage(it) }
+        selectedImageUriSaved?.let { UserImage(it,80) }
         }
-
-        /*Column(modifier = Modifier.weight(0.6f),
-            ) {
-            Text(text = "Hola",
-                color= LocalCustomColorsPalette.current.textColor)
-            Text(text = "$name !",
-                color= LocalCustomColorsPalette.current.textColor)
-        }*/
 
     }
 
