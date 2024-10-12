@@ -51,7 +51,7 @@ fun HomeScreen(
 
         }
         Spacer(modifier = Modifier.width(5.dp))
-        HeadSetting(title = "Tus cuentas", size = 24)
+        HeadSetting(title = "Tus cuentas", size = 20)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),  // Ocupa toda la pantalla
             verticalArrangement = Arrangement.Center,  // Centra verticalmente el contenido

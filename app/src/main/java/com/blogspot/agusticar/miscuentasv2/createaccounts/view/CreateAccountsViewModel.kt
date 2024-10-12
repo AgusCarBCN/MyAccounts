@@ -7,15 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetCurrencyCodeUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetCurrencyCodeUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:GetCurrencyCodeUseCase,
-    private val setCurrencyCode:SetCurrencyCodeUseCase) : ViewModel() {
+class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode: GetCurrencyCodeUseCase,
+                                                  private val setCurrencyCode: SetCurrencyCodeUseCase
+) : ViewModel() {
 
     private val _isCurrencyExpanded = MutableLiveData<Boolean>()
     val isCurrencyExpanded: LiveData<Boolean> = _isCurrencyExpanded

@@ -9,9 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetPhotoFromUriUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetUserProfileDataUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.UpDatePasswordUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetPhotoFromUriUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetUserProfileDataUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.UpDatePasswordUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
