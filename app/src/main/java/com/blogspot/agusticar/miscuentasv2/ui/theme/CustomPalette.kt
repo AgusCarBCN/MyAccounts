@@ -48,6 +48,9 @@ data class CustomColorsPalette(
     val iconIncomeTarget:Color = Color.Unspecified,
     val iconExpenseInit:Color = Color.Unspecified,
     val iconExpenseTarget:Color = Color.Unspecified,
+    val incomeColor:Color = Color.Unspecified,
+    val expenseColor:Color = Color.Unspecified
+
 
     )
 
@@ -92,7 +95,10 @@ val LightCustomColorsPalette = CustomColorsPalette(
     iconIncomeInit = greenLight,
     iconIncomeTarget = greenDark,
     iconExpenseInit = BurntPeach,
-    iconExpenseTarget = SoftPeach
+    iconExpenseTarget = SoftPeach,
+    incomeColor = greenLight,
+    expenseColor = BurntPeach
+
 
 )
 val DarkCustomColorsPalette = CustomColorsPalette(
@@ -136,7 +142,9 @@ val DarkCustomColorsPalette = CustomColorsPalette(
     iconIncomeInit = greenLight,
     iconIncomeTarget = greenDark,
     iconExpenseInit = BurntPeach,
-    iconExpenseTarget = SoftPeach
+    iconExpenseTarget = SoftPeach,
+    incomeColor = greenLight,
+    expenseColor = BurntPeach
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }

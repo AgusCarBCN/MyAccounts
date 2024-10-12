@@ -72,29 +72,6 @@ fun IconComponent(isPressed: Boolean, iconResource: Int, iconSize: Int) {
     )
 }
 
-@Composable
-
-fun UserImage(uri: Uri)
-{
-    Card(
-        modifier = Modifier
-            .size(80.dp)
-            .padding(10.dp),
-        shape = CircleShape, // Hace que el Card sea circular
-        // Reemplaza lightYellow
-    )
-
-    {
-            Image(
-                painter =if(uri==Uri.EMPTY) painterResource(id = R.drawable.contabilidad)
-                else rememberAsyncImagePainter(uri), // Carga la imagen desde el Uri ,
-                contentDescription = "Profile Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize() // La imagen ocupa todo el Card
-            )
-    }
-}
 
 @Composable
 fun IconAnimated(iconResource:Int,sizeIcon:Int,initColor:Color,targetColor: Color){

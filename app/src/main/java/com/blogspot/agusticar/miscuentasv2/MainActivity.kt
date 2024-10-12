@@ -28,7 +28,7 @@ import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
-import com.blogspot.agusticar.miscuentasv2.main.view.HomeScreen
+import com.blogspot.agusticar.miscuentasv2.main.view.MainScreen
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
@@ -138,7 +138,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(Routes.Home.route) {
-                            HomeScreen(
+                            MainScreen(
                                 navigationController,
                                 mainViewModel,
                                 createAccountViewModel,

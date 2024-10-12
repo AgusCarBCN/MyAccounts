@@ -60,11 +60,11 @@ import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
+import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
-import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
@@ -77,7 +77,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun HomeScreen(
+fun MainScreen(
     navigationController: NavHostController,
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
@@ -124,7 +124,7 @@ fun HomeScreen(
                 }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            Test(createAccountsViewModel)
+                            HomeScreen(createAccountsViewModel)
                             title=R.string.greeting
                         }
                         IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)
