@@ -60,9 +60,9 @@ class CreateAccountsViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 accountRepository.insertAccount(account)
                 Log.d("Cuenta", "Cuenta creada")
+                resetFields()
             }
-            _accountName.value = ""
-            _accountBalance.value = ""
+
         }catch (e: Exception){
             Log.d("Cuenta", "Error: ${e.message}")
         }
@@ -80,7 +80,10 @@ class CreateAccountsViewModel @Inject constructor(
 
     }
 
-
+    private fun resetFields() {
+        _accountName.postValue("") // Vaciar el nombre de la cuenta
+        _accountBalance.postValue("") // Vaciar el balance de la cuenta
+    }
 
     fun onCurrencySelectedChange(currencySelected: String) {
         _currencyCode.value = currencySelected

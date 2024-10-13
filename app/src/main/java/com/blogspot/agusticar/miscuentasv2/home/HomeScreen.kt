@@ -74,11 +74,10 @@ fun HomeScreen(
         HeadSetting(title = "Tus cuentas", size = 20)
 
         // Si la lista de cuentas está cargando o vacía, muestra un indicador de carga o un mensaje
-        if (accounts == null) {
-            CircularProgressIndicator()  // Indicador de carga
-        } else if (accounts!!.isEmpty()) {
-            Text(text = "No tienes cuentas creadas.")
-        } else {
+        if (accounts.isNullOrEmpty()) {
+            Text(text = "No cuentas creadas")
+        }else{
+
             // Mostrar las cuentas si están disponibles
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -88,7 +87,7 @@ fun HomeScreen(
                 items(accounts!!) { account -> // Solo utiliza accounts
                     AccountCard(
                         numberFormat.format(abs(account.balance)),
-                        account.name,false
+                        account.name,true
 
                     )  // Crea un card para cada cuenta en la lista
                     Spacer(modifier = Modifier.height(10.dp))  // Espacio entre cada card (separación)
