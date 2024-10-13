@@ -48,7 +48,7 @@ fun AccountSelector(title:String) {
     val numberFormat2 = NumberFormat.getCurrencyInstance(Locale("ru", "RU"))
     Column(
         modifier = Modifier
-            .width(360.dp)
+            .width(320.dp)
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
             .padding(5.dp),
         verticalArrangement = Arrangement.Center,
@@ -68,6 +68,7 @@ fun AccountSelector(title:String) {
                     id = if (isDraggingUp) toUp else toDown
                 ),
                 contentDescription = "",
+                tint = LocalCustomColorsPalette.current.textColor, // Color del icono
                 modifier = Modifier
                     .width(36.dp)
                     .padding(end = 8.dp) // Espacio entre el icono y el texto
@@ -80,7 +81,6 @@ fun AccountSelector(title:String) {
                 color = LocalCustomColorsPalette.current.textColor,  // Color del texto
                 modifier = Modifier
                     .padding(vertical = 10.dp),
-
                 textAlign = TextAlign.Start // Alinea el texto a la izquierda, cerca del ícono
             )
         }

@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.newamount
+package com.blogspot.agusticar.miscuentasv2.newamount.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,24 +6,35 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 
-fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int)
+fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:NewAmountViewModel)
 {
+    val scope = rememberCoroutineScope()
+    val description by viewModel.description.observeAsState("")
+    val amount by viewModel.amount.observeAsState("")
+
     val initColor=
         if(isIncome) LocalCustomColorsPalette.current.iconIncomeInit
         else LocalCustomColorsPalette.current.iconExpenseInit
@@ -41,16 +52,16 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int)
         TextFieldComponent(
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.desamount),
-            "",
-            onTextChange = { },
+            description,
+            onTextChange = { viewModel.ondescriptionChanged(it)},
             BoardType.TEXT,
             false
         )
         TextFieldComponent(
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.enternote),
-            "",
-            onTextChange = { },
+            amount,
+            onTextChange = {viewModel.onAmountChanged(it) },
             BoardType.DECIMAL,
             false
         )
@@ -60,7 +71,11 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int)
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {
-                //navigationController.navigate(Routes.Login.route)
+                scope.launch (Dispatchers.IO){
+                    SnackBarController.sendEvent(event = SnackBarEvent("Invalid Login"))
+                    //viewModel.addEntry(Entry(description=titleResource,))
+                }
+
             }
         )
         ModelButton(text = stringResource(id = R.string.backButton),

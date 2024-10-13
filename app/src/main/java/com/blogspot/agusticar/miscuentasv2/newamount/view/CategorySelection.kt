@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.newamount
+package com.blogspot.agusticar.miscuentasv2.newamount.view
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

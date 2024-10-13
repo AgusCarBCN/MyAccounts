@@ -39,7 +39,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -52,7 +51,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
@@ -64,8 +62,9 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsVie
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
-import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelector
-import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
+import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
+import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
+import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmountViewModel
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
@@ -82,7 +81,8 @@ fun MainScreen(
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
     createProfileViewModel: CreateProfileViewModel,
-    settingViewModel: SettingViewModel
+    settingViewModel: SettingViewModel,
+    newAmountViewModel: NewAmountViewModel
 
 ) {
 
@@ -202,7 +202,7 @@ fun MainScreen(
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(isIncome, iconAmount, titleAmount)
+                            NewAmount(isIncome, iconAmount, titleAmount,newAmountViewModel)
                             title = titleAmount
                         }
 
