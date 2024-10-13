@@ -14,10 +14,13 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 interface AccountDao {
 
     // 1. Añadir una cuenta
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAccount(account: Account)
+    @Insert
+    suspend fun insertAccount(account: Account):Long
 
-    // 2. Borrar una cuenta por objeto
+    @Query("SELECT * FROM AccountEntity")
+    suspend fun getAllAccounts(): List<Account>
+
+/*    // 2. Borrar una cuenta por objeto
     @Delete
     suspend fun deleteAccount(account: Account)
 
@@ -41,5 +44,5 @@ interface AccountDao {
     @Query("UPDATE account_table SET balance = :newBalance WHERE id = :accountId")
     suspend fun updateAccountBalance(accountId: Int, newBalance: Double)
 
-
+*/
 }

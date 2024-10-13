@@ -124,7 +124,7 @@ fun MainScreen(
                 }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            HomeScreen(createAccountsViewModel,createProfileViewModel)
+                            HomeScreen(createAccountsViewModel)
                             title=R.string.greeting
                         }
                         IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)

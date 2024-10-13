@@ -61,12 +61,9 @@ fun UserImage(uri: Uri,size:Int)
 }
 
 @Composable
-fun HeadCard(modifier:Modifier,amount:Double,viewModel: CreateAccountsViewModel) {
+fun HeadCard(modifier:Modifier,amount:String,isNegative:Boolean) {
 
-    val currencyCode by viewModel.currencyCode.observeAsState("")
-    val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
-    // Formatear la cantidad en la moneda especificada
-    val numberFormat = NumberFormat.getCurrencyInstance(locale)
+
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -74,7 +71,7 @@ fun HeadCard(modifier:Modifier,amount:Double,viewModel: CreateAccountsViewModel)
         ),
         colors = CardColors(
             containerColor = LocalCustomColorsPalette.current.drawerColor,
-            contentColor = if(amount>=0.0)LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
+            contentColor = if(isNegative)LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
             disabledContainerColor = LocalCustomColorsPalette.current.drawerColor,
             disabledContentColor = LocalCustomColorsPalette.current.incomeColor
 
@@ -83,7 +80,7 @@ fun HeadCard(modifier:Modifier,amount:Double,viewModel: CreateAccountsViewModel)
             .size(width = 180.dp, height = 100.dp)
     ) {
         Text(
-            text =numberFormat.format(abs(amount)),
+            text =amount,
             modifier = Modifier
                 .padding(top = 12.dp)
                 .fillMaxWidth(),
@@ -104,12 +101,9 @@ fun HeadCard(modifier:Modifier,amount:Double,viewModel: CreateAccountsViewModel)
     }
 }
 @Composable
-fun AccountCard(amount:Double,name:String,viewModel: CreateAccountsViewModel){
+fun AccountCard(amount:String,name:String,isNegative:Boolean){
 
-    val currencyCode by viewModel.currencyCode.observeAsState("")
-    val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
-    // Formatear la cantidad en la moneda especificada
-    val numberFormat = NumberFormat.getCurrencyInstance(locale)
+
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -117,7 +111,7 @@ fun AccountCard(amount:Double,name:String,viewModel: CreateAccountsViewModel){
         ),
         colors = CardColors(
             containerColor = LocalCustomColorsPalette.current.drawerColor,
-            contentColor = if(amount>=0.0)LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
+            contentColor = if(isNegative )LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
             disabledContainerColor = LocalCustomColorsPalette.current.drawerColor,
             disabledContentColor = LocalCustomColorsPalette.current.incomeColor
 
@@ -140,7 +134,7 @@ fun AccountCard(amount:Double,name:String,viewModel: CreateAccountsViewModel){
             )
             Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
             Text(
-                text =numberFormat.format(abs(amount)),
+                text =amount,
                 modifier = Modifier
                     .padding(10.dp)
                     .weight(0.4f),

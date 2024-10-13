@@ -54,7 +54,13 @@ android {
 }
 
 dependencies {
+    val roomVersion = "2.6.1"
 
+
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$roomVersion")
 
     //room
     implementation(libs.androidx.room.runtime)
@@ -90,4 +96,8 @@ dependencies {
     //Dagger Hilt
     implementation (libs.hilt.android)
     kapt (libs.hilt.compiler)
+}
+
+kapt {
+    correctErrorTypes= true
 }

@@ -29,8 +29,11 @@ import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -125,6 +128,20 @@ fun CreateAccountsComponent(
                     modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
+                        try{
+                        scope.launch(Dispatchers.IO){
+                            val amountDecimal=accountBalance.toDoubleOrNull()?:0.0
+                            createAccountsViewModel.addAccount(Account(name=accountName, balance = amountDecimal))
+                            //createAccountsViewModel.onClearFields()
+                            Log.d("Cuenta", "Cuenta creada")
+                            println("Cuenta creada")
+
+                        }}
+                        catch(e: Exception){
+                            Log.d("Cuenta", "Error: ${e.message}")
+                            println("Error al cargar ${e.message}")
+                        }
+
 
                     }
                 )

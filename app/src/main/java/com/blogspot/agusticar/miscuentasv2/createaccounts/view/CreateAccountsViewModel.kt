@@ -1,22 +1,31 @@
 package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blogspot.agusticar.miscuentasv2.MisCuentasApp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.main.data.database.repository.AccountRepository
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode: GetCurrencyCodeUseCase,
-                                                  private val setCurrencyCode: SetCurrencyCodeUseCase
+class CreateAccountsViewModel @Inject constructor(
+    private val getCurrencyCode: GetCurrencyCodeUseCase,
+    private val setCurrencyCode: SetCurrencyCodeUseCase,
+    private val accountRepository: AccountRepository
 ) : ViewModel() {
+
+
 
     private val _isCurrencyExpanded = MutableLiveData<Boolean>()
     val isCurrencyExpanded: LiveData<Boolean> = _isCurrencyExpanded
@@ -31,6 +40,8 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode: G
     private val _accountBalance = MutableLiveData<String>()
     val accountBalance: LiveData<String> = _accountBalance
 
+    private val _listOfAccounts = MutableLiveData <List<Account>>()
+    val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
 
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
@@ -38,10 +49,38 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode: G
     init {
         viewModelScope.launch {
             _currencyCode.value = getCurrencyCode()
-            _isCurrencyExpanded.value=false
+            _isCurrencyExpanded.value = false
+
 
         }
     }
+
+    fun addAccount(account:Account){
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                accountRepository.insertAccount(account)
+                Log.d("Cuenta", "Cuenta creada")
+            }
+            _accountName.value = ""
+            _accountBalance.value = ""
+        }catch (e: Exception){
+            Log.d("Cuenta", "Error: ${e.message}")
+        }
+    }
+
+    fun getAllAccounts() {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                _listOfAccounts.postValue( accountRepository.getAllAccounts())
+                Log.d("Cuentas creadas", "Cuentas cargadas")
+            }
+        }catch (e:Exception){
+            Log.d("Cuentas", "Error al cargar")
+        }
+
+    }
+
+
 
     fun onCurrencySelectedChange(currencySelected: String) {
         _currencyCode.value = currencySelected
@@ -58,23 +97,28 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode: G
 
     fun getListOfCurrencyCode(): List<Currency> {
         //Ordeno la lista por la descripción de la divisa
-        val sortedCurrencies = currencies.sortedBy { it.currencyDescription}
+        val sortedCurrencies = currencies.sortedBy { it.currencyDescription }
         _currencyCodeList.value = sortedCurrencies
 
         return sortedCurrencies
     }
-    fun onExpandedChange(newValue:Boolean){
-        _isCurrencyExpanded.value=newValue
+
+    fun onExpandedChange(newValue: Boolean) {
+        _isCurrencyExpanded.value = newValue
     }
 
-    fun onAccountNameChanged(newName: String){
+    fun onAccountNameChanged(newName: String) {
         _accountName.value = newName
 
     }
 
-    fun onAccountBalanceChanged(newBalance: String){
+    fun onAccountBalanceChanged(newBalance: String) {
         _accountBalance.value = newBalance
 
+    }
+    fun onClearFields() {
+        _accountName.value = ""
+        _accountBalance.value = ""
     }
     private val currencies = listOf(
         // Lista completa de todas las divisas del mundo, ordenadas alfabéticamente por código:
