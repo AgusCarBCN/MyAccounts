@@ -4,6 +4,8 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.dao.AccountDao
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dao.CategoryDao
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryEntry
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import javax.inject.Inject
 
 class CategoryRepository @Inject constructor(private val categoryDao: CategoryDao)  {
@@ -18,4 +20,6 @@ class CategoryRepository @Inject constructor(private val categoryDao: CategoryDa
     suspend fun getAllCategories(): List<Category> {
         return categoryDao.getAllCategories()
     }
+
+
 }

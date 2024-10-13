@@ -10,18 +10,5 @@ data class Account(
     @ColumnInfo("id")  val id: Int = 0,
     @ColumnInfo("name") val name: String,
     @ColumnInfo("balance")var balance: Double
-) {
-
-
-
-    // Método para actualizar el balance
-   /* fun updateBalance(newBalance: Double) {
-        if (newBalance >= 0) {
-            balance = newBalance
-        } else {
-            throw IllegalArgumentException("El saldo no puede ser negativo")
-        }
-    }*/
-
-}
+)
 

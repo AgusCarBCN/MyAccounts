@@ -32,8 +32,9 @@ object RoomModule {
     @Singleton
     fun provideCategoryDao(database: AppDataBase) = database.getCategoryDao()
 
-  /*  @Provides
+    @Provides
     @Singleton
-    fun provideAccountRepo(accountDao:AccountDao)=AccountRepository(accountDao)
-*/
+    fun provideEntryDao(database: AppDataBase) = database.getEntryDao()
+
+
 }
