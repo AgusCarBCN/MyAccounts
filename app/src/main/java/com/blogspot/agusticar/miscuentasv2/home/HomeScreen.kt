@@ -51,6 +51,8 @@ fun HomeScreen(
 
     // Observa el estado de la lista de cuentas
     val accounts by createAccountsViewModel.listOfAccounts.observeAsState(null)
+    // Observa el estado de la lista de cuentas
+
     val currencyCode by createAccountsViewModel.currencyCode.observeAsState("")
     val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
     // Formatear la cantidad en la moneda especificada

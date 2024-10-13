@@ -82,7 +82,6 @@ fun MainScreen(
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
     createProfileViewModel: CreateProfileViewModel,
-    tutorialViewModel:TutorialViewModel,
     settingViewModel:SettingViewModel
 
 ) {
@@ -93,6 +92,8 @@ fun MainScreen(
     val titleAmount by mainViewModel.selectedTitle.collectAsState()
     val isIncome by mainViewModel.isIncome.collectAsState()
 
+    val categories by createAccountsViewModel.listOfCategories.observeAsState(listOf())
+
     val userName by createProfileViewModel.name.observeAsState("")
     var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
 
@@ -101,7 +102,9 @@ fun MainScreen(
         if (drawerState.isOpen) {
             drawerState.close() // Cierra el drawer cuando se selecciona una opción
         }
+
     }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = { DrawerContent(mainViewModel, createProfileViewModel,drawerState) },
@@ -135,7 +138,11 @@ fun MainScreen(
                             SettingScreen(settingViewModel,mainViewModel)
                             title=R.string.settingstitle}
                         IconOptions.INCOME_OPTIONS -> {
-                            CategorySelector(mainViewModel,true)
+                            LaunchedEffect(Unit) {
+                                createAccountsViewModel.getCategories(true)
+
+                            }
+                            CategorySelector(mainViewModel,categories,true)
                         title=R.string.newincome}
                         IconOptions.TRANSFER -> {Transfer()
                         title=R.string.transfer}
@@ -158,7 +165,13 @@ fun MainScreen(
                             title=R.string.abouttitle
                         }
                         IconOptions.EXPENSE_OPTIONS -> {
-                            CategorySelector(mainViewModel,false)
+                            LaunchedEffect(Unit) {
+                                createAccountsViewModel.getCategories(false)
+
+                            }
+                            CategorySelector(mainViewModel,categories,false)
+
+
                             title=R.string.newexpense
                         }
 

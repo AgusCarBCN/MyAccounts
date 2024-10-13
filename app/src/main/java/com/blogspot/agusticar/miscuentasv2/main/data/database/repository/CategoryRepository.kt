@@ -21,5 +21,9 @@ class CategoryRepository @Inject constructor(private val categoryDao: CategoryDa
         return categoryDao.getAllCategories()
     }
 
+    //3. Obtener categorias por gasto o ingreso
 
+    suspend fun getCategoriesByStatus(status:Boolean): List<Category> {
+        return categoryDao.getCategoriesByAmountStatus(status)
+    }
 }

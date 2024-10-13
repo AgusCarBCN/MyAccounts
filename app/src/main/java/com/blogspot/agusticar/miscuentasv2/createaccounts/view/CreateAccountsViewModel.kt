@@ -13,6 +13,8 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.GetAllCategoriesUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.GetCategoriesByStatusUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.InsertCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
@@ -27,10 +29,10 @@ class CreateAccountsViewModel @Inject constructor(
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
     private val getAccounts: GetAllAccountsUseCase,
-    private val insertCategory: InsertCategoryUseCase
+    private val insertCategory: InsertCategoryUseCase,
+    private val getCategories: GetCategoriesByStatusUseCase
 
 ) : ViewModel() {
-
 
 
     private val _isCurrencyExpanded = MutableLiveData<Boolean>()
@@ -46,10 +48,10 @@ class CreateAccountsViewModel @Inject constructor(
     private val _accountBalance = MutableLiveData<String>()
     val accountBalance: LiveData<String> = _accountBalance
 
-    private val _listOfAccounts = MutableLiveData <List<Account>>()
+    private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
 
-    private val _listOfCategories = MutableLiveData <List<Category>>()
+    private val _listOfCategories = MutableLiveData<List<Category>>()
     val listOfCategories: LiveData<List<Category>> = _listOfCategories
 
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
@@ -63,19 +65,32 @@ class CreateAccountsViewModel @Inject constructor(
 
         }
     }
-    private fun initCategories(){
-        try{
+
+    private fun initCategories() {
+        try {
             viewModelScope.launch(Dispatchers.IO) {
-                categories.forEach { item->
+                categories.forEach { item ->
                     insertCategory.invoke(item)
                 }
             }
-        }catch (e: Exception){
-                e.message
+        } catch (e: Exception) {
+            e.message
         }
     }
 
-    fun addAccount(account:Account){
+    fun getCategories(status: Boolean) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                _listOfCategories.postValue(getCategories.invoke(status))
+                //_listOfCategories.postValue(categoryRepository.getAllCategories())
+                Log.d("Categorias creadas", "Categorias cargadas")
+            }
+        } catch (e: Exception) {
+            Log.d("Categorias", "Error al cargar")
+        }
+    }
+
+    fun addAccount(account: Account) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 addAccount.invoke(account)
@@ -84,7 +99,7 @@ class CreateAccountsViewModel @Inject constructor(
                 resetFields()
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
     }
@@ -96,7 +111,7 @@ class CreateAccountsViewModel @Inject constructor(
                 //_listOfAccounts.postValue( accountRepository.getAllAccounts())
                 Log.d("Cuentas creadas", "Cuentas cargadas")
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Log.d("Cuentas", "Error al cargar")
         }
 
@@ -301,7 +316,7 @@ class CreateAccountsViewModel @Inject constructor(
         Currency("ZWL", "Zimbabwean Dollar", R.drawable.zw)
     )
 
-
+    /*
     private val categories = listOf(
         Category(
             iconResource = R.drawable.ic_category_salary,
@@ -542,4 +557,246 @@ class CreateAccountsViewModel @Inject constructor(
     )
 
 
+}*/
+    val categories = listOf(
+        Category(
+            iconResource = R.drawable.ic_category_salary,
+            name = R.string.salary,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_dividens,
+            name = R.string.dividens,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_rent,
+            name = R.string.rental,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_freelances,
+            name = R.string.freelance,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sales,
+            name = R.string.sales,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_donation,
+            name = R.string.subsidies,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_lotery,
+            name = R.string.lotery,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherincomes,
+            name = R.string.otherincomes,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_premium,
+            name = R.string.awards,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_winasset,
+            name = R.string.benefit_assets,  // Usando el recurso de string
+            isIncome = true
+        ),
+
+        Category(
+            iconResource = R.drawable.ic_category_grocery,
+            name = R.string.food,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_mortgage,
+            name = R.string.morgage,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_electricity,
+            name = R.string.electricitybill,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_water,
+            name = R.string.waterbill,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_gasbill,
+            name = R.string.gasbill,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_publictansport,
+            name = R.string.publictransport,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_fuelcar,
+            name = R.string.fuel_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherinsurance,
+            name = R.string.insurances,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_healthbill,
+            name = R.string.health,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_leiure,
+            name = R.string.entertainment,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_subscriptions,
+            name = R.string.subscriptions,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_vacation,
+            name = R.string.vacations_travel_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_clothing,
+            name = R.string.clothing,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_education,
+            name = R.string.courses_books_materials_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_house,
+            name = R.string.house,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_repaircar,
+            name = R.string.car,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sport,
+            name = R.string.gym,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_pet,
+            name = R.string.pets,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_personalcare,
+            name = R.string.personal_care_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_gif,
+            name = R.string.gifts_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_donation,
+            name = R.string.donations_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_lostasset,
+            name = R.string.lost_assets,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_books,
+            name = R.string.books,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_music,
+            name = R.string.music,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_hobies,
+            name = R.string.hobbies,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_tax,
+            name = R.string.taxes,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_loan,
+            name = R.string.loans,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_electronic,
+            name = R.string.electronics,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_coffe,
+            name = R.string.coffee,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_tabac,
+            name = R.string.tobacco,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sportsuplement,
+            name = R.string.supplements,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_bike,
+            name = R.string.motorcycle,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_garden,
+            name = R.string.garden,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_teraphy,
+            name = R.string.therapies,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_alcohol,
+            name = R.string.alcohol,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_game,
+            name = R.string.gambling,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherincomes,
+            name = R.string.other_expenses,  // Usando el recurso de string
+            isIncome = false
+        )
+    )
 }
+
+
+

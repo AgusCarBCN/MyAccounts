@@ -11,6 +11,6 @@ data class Category(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id")  val id: Int = 0,
     @ColumnInfo("iconResource") val iconResource: Int,
-    @ColumnInfo("name") val name: String,
+    @ColumnInfo("name") val name: Int,
     @ColumnInfo("isIncome") val isIncome: Boolean
 )

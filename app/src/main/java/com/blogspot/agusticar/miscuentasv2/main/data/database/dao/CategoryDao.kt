@@ -18,5 +18,10 @@ interface CategoryDao {
     @Query("SELECT * FROM CategoryEntity")
     suspend fun getAllCategories(): List<Category>
 
+    // Método parametrizable para obtener categorías según el estado de isIncome
+    @Query("SELECT * FROM CategoryEntity WHERE isIncome = :isIncome")
+    suspend fun getCategoriesByAmountStatus(isIncome: Boolean): List<Category>
+
+
 
 }
