@@ -11,6 +11,8 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.repository.AccountRepository
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.GetAllAccountsUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +24,8 @@ import javax.inject.Inject
 class CreateAccountsViewModel @Inject constructor(
     private val getCurrencyCode: GetCurrencyCodeUseCase,
     private val setCurrencyCode: SetCurrencyCodeUseCase,
-    private val accountRepository: AccountRepository
+    private val addAccount:InsertAccountUseCase,
+    private val getAccounts: GetAllAccountsUseCase
 ) : ViewModel() {
 
 
@@ -58,7 +61,8 @@ class CreateAccountsViewModel @Inject constructor(
     fun addAccount(account:Account){
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                accountRepository.insertAccount(account)
+                addAccount.invoke(account)
+                // accountRepository.insertAccount(account)
                 Log.d("Cuenta", "Cuenta creada")
                 resetFields()
             }
@@ -71,7 +75,8 @@ class CreateAccountsViewModel @Inject constructor(
     fun getAllAccounts() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                _listOfAccounts.postValue( accountRepository.getAllAccounts())
+                _listOfAccounts.postValue(getAccounts.invoke())
+                //_listOfAccounts.postValue( accountRepository.getAllAccounts())
                 Log.d("Cuentas creadas", "Cuentas cargadas")
             }
         }catch (e:Exception){

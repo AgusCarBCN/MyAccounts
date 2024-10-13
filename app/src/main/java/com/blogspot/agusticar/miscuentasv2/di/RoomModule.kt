@@ -28,8 +28,8 @@ object RoomModule {
     @Singleton
     fun provideAccountDao(database: AppDataBase) = database.getAccountDao()
 
-    @Provides
+  /*  @Provides
     @Singleton
     fun provideAccountRepo(accountDao:AccountDao)=AccountRepository(accountDao)
-
+*/
 }
