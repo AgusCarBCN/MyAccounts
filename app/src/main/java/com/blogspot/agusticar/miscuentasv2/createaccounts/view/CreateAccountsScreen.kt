@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,12 +26,9 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
-
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
-
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -60,7 +56,7 @@ fun CreateAccountsComponent(
         val isCurrencyExpanded by createAccountsViewModel.isCurrencyExpanded.observeAsState(false)
         val accountName by createAccountsViewModel.accountName.observeAsState("")
         val accountBalance by createAccountsViewModel.accountBalance.observeAsState("")
-        val pattern = remember { Regex("^\\d+(\\.\\d+)?$") }
+
 
 
         Text(
@@ -179,7 +175,6 @@ fun CreateAccountsComponent(
 
 // Función para validar si la cadena es un número decimal válido
 fun isValidDecimal(text: String): Boolean {
-    //return text.isEmpty() || text.matches(Regex("^\\d*\\.?\\d*\$"))
 
     return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
 }

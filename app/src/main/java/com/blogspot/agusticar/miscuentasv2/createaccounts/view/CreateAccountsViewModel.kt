@@ -6,14 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.GetAllCategoriesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.GetCategoriesByStatusUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.InsertCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
@@ -94,7 +92,6 @@ class CreateAccountsViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 addAccount.invoke(account)
-                // accountRepository.insertAccount(account)
                 Log.d("Cuenta", "Cuenta creada")
                 resetFields()
             }
@@ -108,7 +105,7 @@ class CreateAccountsViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 _listOfAccounts.postValue(getAccounts.invoke())
-                //_listOfAccounts.postValue( accountRepository.getAllAccounts())
+
                 Log.d("Cuentas creadas", "Cuentas cargadas")
             }
         } catch (e: Exception) {
@@ -558,7 +555,7 @@ class CreateAccountsViewModel @Inject constructor(
 
 
 }*/
-    val categories = listOf(
+    private val categories = listOf(
         Category(
             iconResource = R.drawable.ic_category_salary,
             name = R.string.salary,  // Usando el recurso de string

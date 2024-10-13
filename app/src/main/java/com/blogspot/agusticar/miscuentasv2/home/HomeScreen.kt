@@ -11,13 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,17 +26,10 @@ import com.blogspot.agusticar.miscuentasv2.components.AccountCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
-import com.blogspot.agusticar.miscuentasv2.main.data.database.repository.AccountRepository
 import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.internal.format
 import java.text.NumberFormat
 import java.util.Locale
-import javax.inject.Inject
 import kotlin.math.abs
 
 

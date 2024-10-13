@@ -51,7 +51,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
@@ -69,7 +68,6 @@ import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
-import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -78,7 +76,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    navigationController: NavHostController,
+
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
     createProfileViewModel: CreateProfileViewModel,
@@ -107,7 +105,7 @@ fun MainScreen(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel,drawerState) },
+        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
@@ -116,7 +114,7 @@ fun MainScreen(
                 { TopBarApp(scope, drawerState,title,
                     (if(selectedScreen==IconOptions.HOME) userName else "").toString()
                 ) },
-                { BottomAppBar(mainViewModel, navigationController) },
+                { BottomAppBar(mainViewModel) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here
@@ -214,7 +212,7 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState,title:Int,
 
 
 @Composable
-private fun BottomAppBar(viewModel: MainViewModel, navigationController: NavHostController) {
+private fun BottomAppBar(viewModel: MainViewModel) {
 
     BottomAppBar(
         containerColor = LocalCustomColorsPalette.current.barBackground,
@@ -243,8 +241,7 @@ private fun BottomAppBar(viewModel: MainViewModel, navigationController: NavHost
 @Composable
 private fun DrawerContent(
     viewModel: MainViewModel,
-    createProfileViewModel: CreateProfileViewModel,
-    drawerState: DrawerState
+    createProfileViewModel: CreateProfileViewModel
 ) {
 
     Card(
@@ -254,11 +251,7 @@ private fun DrawerContent(
             .background(color = Color.Transparent)
 
     ) {
-        // Creamos una fuente de interacciones para el IconButton
-        val interactionSource = remember { MutableInteractionSource() }
-        // Detectamos si el botón está presionado
 
-        val isPressed by interactionSource.collectIsPressedAsState()
         HeadDrawerMenu(createProfileViewModel)
         Column(
             modifier = Modifier

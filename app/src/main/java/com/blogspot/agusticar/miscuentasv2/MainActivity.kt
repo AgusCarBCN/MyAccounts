@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
             val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
             val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
             val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
-            val categories by createAccountViewModel.listOfCategories.observeAsState(null)
+
             MisCuentasv2Theme(darkTheme = switchDarkTheme) {
                 val snackbarHostState = remember {
                     SnackbarHostState()
@@ -139,7 +139,6 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Routes.Home.route) {
                             MainScreen(
-                                navigationController,
                                 mainViewModel,
                                 createAccountViewModel,
                                 createProfileViewModel,
