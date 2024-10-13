@@ -15,14 +15,35 @@ class AccountRepository @Inject constructor(private val accountDao: AccountDao) 
 
     }
 
-
-
-    // 4. Listar todas las cuentas
+    // 2. Listar todas las cuentas
     suspend fun getAllAccounts(): List<Account> {
         return accountDao.getAllAccounts()
     }
 
+    //3.Borrar una cuenta
+    suspend fun deleteAccount(account: Account) {
+        accountDao.deleteAccount(account)
+    }
 
+    // 4. Borrar todas las cuentas
+    suspend fun deleteAllAccounts() {
+        accountDao.deleteAllAccounts()
+    }
+
+    // 5. Obtener una cuenta específica por ID
+    suspend fun getAccountById(accountId: Int): Account? {
+        return accountDao.getAccountById(accountId)
+    }
+
+    // 6. Actualizar el nombre de una cuenta
+    suspend fun updateAccountName(accountId: Int, newName: String) {
+        accountDao.updateAccountName(accountId, newName)
+    }
+
+    // 7. Actualizar el balance de una cuenta
+    suspend fun updateAccountBalance(accountId: Int, newBalance: Double) {
+        accountDao.updateAccountBalance(accountId, newBalance)
+    }
 
 
 }

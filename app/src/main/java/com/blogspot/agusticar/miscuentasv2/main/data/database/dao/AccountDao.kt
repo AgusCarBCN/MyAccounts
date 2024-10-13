@@ -3,7 +3,6 @@ package com.blogspot.agusticar.miscuentasv2.main.data.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 
@@ -15,34 +14,31 @@ interface AccountDao {
 
     // 1. Añadir una cuenta
     @Insert
-    suspend fun insertAccount(account: Account):Long
+    suspend fun insertAccount(account: Account): Long
 
+    // 2. Listar todas las cuentas en la base de datos  (SELECT *)  (FROM AccountEntity)  (LIMIT 1)  (WHERE id = :accountId)  (ORDER BY id DESC)  (GROUP BY id)  (HAVING balance > 1000)  (LIMIT 1 OFFSET 5)  (OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY)  (INNER JOIN table2 ON AccountEntity)
     @Query("SELECT * FROM AccountEntity")
     suspend fun getAllAccounts(): List<Account>
 
-/*    // 2. Borrar una cuenta por objeto
+    // 3. Borrar una cuenta
     @Delete
     suspend fun deleteAccount(account: Account)
 
-    // 3. Borrar todas las cuentas
-    @Query("DELETE FROM account_table")
+    // 4. Borrar todas las cuentas
+    @Query("DELETE FROM AccountEntity")
     suspend fun deleteAllAccounts()
 
-    // 4. Listar todas las cuentas
-    @Query("SELECT * FROM account_table")
-    suspend fun getAllAccounts(): List<Account>
-
     // 5. Obtener una cuenta específica por ID
-    @Query("SELECT * FROM account_table WHERE id = :accountId LIMIT 1")
+    @Query("SELECT * FROM AccountEntity WHERE id = :accountId LIMIT 1")
     suspend fun getAccountById(accountId: Int): Account?
 
     // 6. Actualizar el nombre de una cuenta
-    @Query("UPDATE account_table SET name = :newName WHERE id = :accountId")
+    @Query("UPDATE AccountEntity SET name = :newName WHERE id = :accountId")
     suspend fun updateAccountName(accountId: Int, newName: String)
 
     // 7. Actualizar el balance de una cuenta
-    @Query("UPDATE account_table SET balance = :newBalance WHERE id = :accountId")
+    @Query("UPDATE AccountEntity SET balance = :newBalance WHERE id = :accountId")
     suspend fun updateAccountBalance(accountId: Int, newBalance: Double)
 
-*/
+
 }
