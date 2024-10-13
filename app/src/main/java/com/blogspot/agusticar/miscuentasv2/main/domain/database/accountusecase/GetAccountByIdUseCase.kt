@@ -1,4 +1,4 @@
-package com.blogspot.agusticar.miscuentasv2.main.domain.database
+package com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase
 
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.repository.AccountRepository

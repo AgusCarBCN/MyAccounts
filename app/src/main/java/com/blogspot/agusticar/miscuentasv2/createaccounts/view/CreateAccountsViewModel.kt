@@ -6,13 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blogspot.agusticar.miscuentasv2.MisCuentasApp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
-import com.blogspot.agusticar.miscuentasv2.main.data.database.repository.AccountRepository
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.GetAllAccountsUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.InsertAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.InsertCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +25,10 @@ import javax.inject.Inject
 class CreateAccountsViewModel @Inject constructor(
     private val getCurrencyCode: GetCurrencyCodeUseCase,
     private val setCurrencyCode: SetCurrencyCodeUseCase,
-    private val addAccount:InsertAccountUseCase,
-    private val getAccounts: GetAllAccountsUseCase
+    private val addAccount: InsertAccountUseCase,
+    private val getAccounts: GetAllAccountsUseCase,
+    private val insertCategory: InsertCategoryUseCase
+
 ) : ViewModel() {
 
 
@@ -46,6 +49,9 @@ class CreateAccountsViewModel @Inject constructor(
     private val _listOfAccounts = MutableLiveData <List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
 
+    private val _listOfCategories = MutableLiveData <List<Category>>()
+    val listOfCategories: LiveData<List<Category>> = _listOfCategories
+
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
 
@@ -55,6 +61,17 @@ class CreateAccountsViewModel @Inject constructor(
             _isCurrencyExpanded.value = false
 
 
+        }
+    }
+    private fun initCategories(){
+        try{
+            viewModelScope.launch(Dispatchers.IO) {
+                categories.forEach { item->
+                    insertCategory.invoke(item)
+                }
+            }
+        }catch (e: Exception){
+                e.message
         }
     }
 
@@ -98,6 +115,7 @@ class CreateAccountsViewModel @Inject constructor(
     fun setCurrencyCode(currencyCode: String) {
         viewModelScope.launch {
             setCurrencyCode.invoke(currencyCode)
+            initCategories()
 
         }
     }
@@ -124,10 +142,7 @@ class CreateAccountsViewModel @Inject constructor(
         _accountBalance.value = newBalance
 
     }
-    fun onClearFields() {
-        _accountName.value = ""
-        _accountBalance.value = ""
-    }
+
     private val currencies = listOf(
         // Lista completa de todas las divisas del mundo, ordenadas alfabéticamente por código:
 
@@ -285,5 +300,246 @@ class CreateAccountsViewModel @Inject constructor(
         Currency("ZMW", "Zambian Kwacha", R.drawable.zm),
         Currency("ZWL", "Zimbabwean Dollar", R.drawable.zw)
     )
+
+
+    private val categories = listOf(
+        Category(
+            iconResource = R.drawable.ic_category_salary,
+            name = "Salary",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_dividens,
+            name = "Dividends",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_rent,
+            name = "Rental",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_freelances,
+            name = "Freelance",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sales,
+            name = "Sales",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_donation,
+            name = "Subsidies",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_lotery,
+            name = "Lottery",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherincomes,
+            name = "Other Incomes",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_premium,
+            name = "Awards",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_winasset,
+            name = "Benefit Assets",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_grocery,
+            name = "Food",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_mortgage,
+            name = "Mortgage",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_electricity,
+            name = "Electricity Bill",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_water,
+            name = "Water Bill",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_gasbill,
+            name = "Gas Bill",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_publictansport,
+            name = "Public Transport",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_fuelcar,
+            name = "Fuel",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherinsurance,
+            name = "Insurances",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_healthbill,
+            name = "Health",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_leiure,
+            name = "Entertainment",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_subscriptions,
+            name = "Subscriptions",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_vacation,
+            name = "Vacations & Travel",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_clothing,
+            name = "Clothing",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_education,
+            name = "Courses, Books & Materials",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_house,
+            name = "House",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_repaircar,
+            name = "Car",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sport,
+            name = "Gym",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_pet,
+            name = "Pets",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_personalcare,
+            name = "Personal Care",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_gif,
+            name = "Gifts",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_donation,
+            name = "Donations",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_lostasset,
+            name = "Lost Assets",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_books,
+            name = "Books",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_music,
+            name = "Music",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_hobies,
+            name = "Hobbies",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_tax,
+            name = "Taxes",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_loan,
+            name = "Loans",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_electronic,
+            name = "Electronics",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_coffe,
+            name = "Coffee",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_tabac,
+            name = "Tobacco",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sportsuplement,
+            name = "Supplements",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_bike,
+            name = "Motorcycle",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_garden,
+            name = "Garden",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_teraphy,
+            name = "Therapies",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_alcohol,
+            name = "Alcohol",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_game,
+            name = "Gambling",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherincomes, // Note: Repeated resource for other incomes icon
+            name = "Other Expenses",
+            isIncome = false
+        )
+
+    )
+
 
 }

@@ -14,7 +14,7 @@ interface AccountDao {
 
     // 1. Añadir una cuenta
     @Insert
-    suspend fun insertAccount(account: Account): Long
+    suspend fun insertAccount(account: Account)
 
     // 2. Listar todas las cuentas en la base de datos  (SELECT *)  (FROM AccountEntity)  (LIMIT 1)  (WHERE id = :accountId)  (ORDER BY id DESC)  (GROUP BY id)  (HAVING balance > 1000)  (LIMIT 1 OFFSET 5)  (OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY)  (INNER JOIN table2 ON AccountEntity)
     @Query("SELECT * FROM AccountEntity")
