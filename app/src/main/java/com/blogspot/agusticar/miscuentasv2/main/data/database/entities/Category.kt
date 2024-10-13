@@ -4,16 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("category_table")
+
+@Entity("CategoryEntity")
 data class Category(
+
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo("id") private val id: Int = 0,
-    @ColumnInfo("name") private val name: String
-) {
-
-    val categoryId: Int
-        get() = id
-    val categoryName: String
-        get() = name
-
-}
+    @ColumnInfo("id")  val id: Int = 0,
+    @ColumnInfo("iconResource") val iconResource: Int,
+    @ColumnInfo("name") val name: Int,
+    @ColumnInfo("isIncome") val isIncome: Boolean
+)

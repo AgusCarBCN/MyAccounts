@@ -1,32 +1,56 @@
 package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 
-import androidx.compose.ui.input.key.Key.Companion.U
+
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetCurrencyCodeUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetCurrencySymbolUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetCurrencyCodeUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetSymbolCurrencyUseCase
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.GetCategoriesByStatusUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.InsertCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:GetCurrencyCodeUseCase,
-    private val setCurrencyCode:SetCurrencyCodeUseCase,
-    private val getCurrencySymbol:GetCurrencySymbolUseCase,
-    private val setCurrencySymbol:SetSymbolCurrencyUseCase) : ViewModel() {
+class CreateAccountsViewModel @Inject constructor(
+    private val getCurrencyCode: GetCurrencyCodeUseCase,
+    private val setCurrencyCode: SetCurrencyCodeUseCase,
+    private val addAccount: InsertAccountUseCase,
+    private val getAccounts: GetAllAccountsUseCase,
+    private val insertCategory: InsertCategoryUseCase,
+    private val getCategories: GetCategoriesByStatusUseCase
 
+) : ViewModel() {
+
+
+    private val _isCurrencyExpanded = MutableLiveData<Boolean>()
+    val isCurrencyExpanded: LiveData<Boolean> = _isCurrencyExpanded
 
     private val _currencyCode = MutableLiveData<String>()
     val currencyCode: LiveData<String> = _currencyCode
 
-    private val _currencySymbol = MutableLiveData<String>()
-    val currencySymbol: LiveData<String> = _currencySymbol
+    // LiveData para los campos de texto
+    private val _accountName = MutableLiveData<String>()
+    val accountName: LiveData<String> = _accountName
+
+    private val _accountBalance = MutableLiveData<String>()
+    val accountBalance: LiveData<String> = _accountBalance
+
+    private val _listOfAccounts = MutableLiveData<List<Account>>()
+    val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
+
+    private val _listOfCategories = MutableLiveData<List<Category>>()
+    val listOfCategories: LiveData<List<Category>> = _listOfCategories
 
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
@@ -34,9 +58,65 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
     init {
         viewModelScope.launch {
             _currencyCode.value = getCurrencyCode()
-            _currencySymbol.value = getCurrencySymbol()
+            _isCurrencyExpanded.value = false
+
 
         }
+    }
+
+    private fun initCategories() {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                categories.forEach { item ->
+                    insertCategory.invoke(item)
+                }
+            }
+        } catch (e: Exception) {
+            e.message
+        }
+    }
+
+    fun getCategories(status: Boolean) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                _listOfCategories.postValue(getCategories.invoke(status))
+                //_listOfCategories.postValue(categoryRepository.getAllCategories())
+                Log.d("Categorias creadas", "Categorias cargadas")
+            }
+        } catch (e: Exception) {
+            Log.d("Categorias", "Error al cargar")
+        }
+    }
+
+    fun addAccount(account: Account) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                addAccount.invoke(account)
+                Log.d("Cuenta", "Cuenta creada")
+                resetFields()
+            }
+
+        } catch (e: Exception) {
+            Log.d("Cuenta", "Error: ${e.message}")
+        }
+    }
+
+    fun getAllAccounts() {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                _listOfAccounts.postValue(getAccounts.invoke())
+
+                Log.d("Cuentas creadas", "Cuentas cargadas")
+            }
+        } catch (e: Exception) {
+            Log.d("Cuentas", "Error al cargar")
+        }
+
+    }
+
+    private fun resetFields() {
+        _accountName.postValue("") // Vaciar el nombre de la cuenta
+        _accountBalance.postValue("") // Vaciar el balance de la cuenta
     }
 
     fun onCurrencySelectedChange(currencySelected: String) {
@@ -44,99 +124,37 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
 
     }
 
-    fun setCurrencySymbol(currencyCode: String) {
-
+    fun setCurrencyCode(currencyCode: String) {
         viewModelScope.launch {
             setCurrencyCode.invoke(currencyCode)
-            val symbol = getSymbol(currencyCode)
-            setCurrencySymbol.invoke(symbol)
+            initCategories()
 
         }
     }
 
 
     fun getListOfCurrencyCode(): List<Currency> {
-        _currencyCodeList.value = currencies
-        return currencies
+        //Ordeno la lista por la descripción de la divisa
+        val sortedCurrencies = currencies.sortedBy { it.currencyDescription }
+        _currencyCodeList.value = sortedCurrencies
+
+        return sortedCurrencies
     }
 
-    private fun getSymbol(currency: String): String {
-        _currencySymbol.value = currencySymbols[currency]
-        return currencySymbols[currency] ?: "USD"
+    fun onExpandedChange(newValue: Boolean) {
+        _isCurrencyExpanded.value = newValue
     }
 
-   /* private val currencySymbols = mapOf(
-        "USD" to "$",       // Dólar estadounidense
-        "EUR" to "€",       // Euro
-        "JPY" to "¥",       // Yen japonés
-        "GBP" to "£",       // Libra esterlina
-        "AUD" to "A$",      // Dólar australiano
-        "CAD" to "C$",      // Dólar canadiense
-        "CHF" to "CHF",     // Franco suizo
-        "CNY" to "¥",       // Yuan chino
-        "SEK" to "kr",      // Corona sueca
-        "NZD" to "NZ$",     // Dólar neozelandés
-        "MXN" to "$",       // Peso mexicano
-        "SGD" to "S$",      // Dólar de Singapur
-        "HKD" to "HK$",     // Dólar de Hong Kong
-        "NOK" to "kr",      // Corona noruega
-        "RUB" to "₽",       // Rublo ruso
-        "INR" to "₹",       // Rupia india
-        "BRL" to "R$",      // Real brasileño
-        "ZAR" to "R",       // Rand sudafricano
-        "DKK" to "kr",      // Corona danesa
-        "PLN" to "zł",      // Zloty polaco
-        "THB" to "฿",       // Baht tailandés
-        "AED" to "د.إ",     // Dirham de los Emiratos Árabes Unidos
-        "MYR" to "RM",      // Ringgit malayo
-        "PHP" to "₱",       // Peso filipino
-        "ILS" to "₪",       // Shekel israelí
-        "TRY" to "₺",       // Lira turca
-        "CLP" to "$",       // Peso chileno
-        "COP" to "$",       // Peso colombiano
-        "PEN" to "S/.",     // Sol peruano
-        "VND" to "₫",     // Dong vietnamita
-        "ARS" to "$",     //Peso argentino
-        "KRW" to "₩",  //South Korean won
-        "HNL" to "L"   //Honduras
-    )*/
+    fun onAccountNameChanged(newName: String) {
+        _accountName.value = newName
 
-    /*  private val currencies = listOf(
-        Currency("USD", "US Dollar", R.drawable.us),
-        Currency("EUR", "Euro", R.drawable.eu),
-        Currency("JPY", "Yen japonés", R.drawable.jp),
-        Currency("GBP", "British Pound", R.drawable.gb),
-        Currency("AUD", "Australian Dollar", R.drawable.au),
-        Currency("CAD", "Canadian Dollar", R.drawable.ca),
-        Currency("CHF", "Swiss Franc", R.drawable.ch),
-        Currency("CNY", "Yuan chino", R.drawable.cn),
-        Currency("SEK", "Swedish Krona", R.drawable.se),
-        Currency("NZD", "New Zealand Dollar", R.drawable.nz),
-        Currency("MXN", "Peso mexicano", R.drawable.mx),
-        Currency("SGD", "Singapore Dollar", R.drawable.sg),
-        Currency("HKD", "Hong Kong Dollar", R.drawable.hk),
-        Currency("NOK", "Norwegian Krone", R.drawable.no),
-        Currency("RUB", "Russian Ruble", R.drawable.ru),
-        Currency("INR", "Indian Rupee", R.drawable.`in`),
-        Currency("BRL", "Real brasileño", R.drawable.br),
-        Currency("ZAR", "South African Rand", R.drawable.za),
-        Currency("DKK", "Danish Krone", R.drawable.dk),
-        Currency("PLN", "Polish Zloty", R.drawable.pl),
-        Currency("THB", "Thai Baht", R.drawable.th),
-        Currency("AED", "UAE Dirham", R.drawable.sa),
-        Currency("MYR", "Malaysian Ringgit", R.drawable.my),
-        Currency("PHP", "Peso filipino", R.drawable.ph),
-        Currency("ILS", "Israeli Shekel", R.drawable.il),
-        Currency("TRY", "Turkish Lira", R.drawable.tr),
-        Currency("CLP", "Peso chileno", R.drawable.cl),
-        Currency("COP", "Peso colombiano", R.drawable.co),
-        Currency("PEN", "Sol peruano", R.drawable.pe),
-        Currency("VND", "Vietnamese Dong", R.drawable.vn),
-        Currency("ARS", "Peso Argentino", R.drawable.ar),
-        Currency("KRW", "South Korean Won", R.drawable.kr),
-        Currency("HNL","Lempira de Honduras", R.drawable.hn)
-    )
-}*/
+    }
+
+    fun onAccountBalanceChanged(newBalance: String) {
+        _accountBalance.value = newBalance
+
+    }
+
     private val currencies = listOf(
         // Lista completa de todas las divisas del mundo, ordenadas alfabéticamente por código:
 
@@ -294,166 +312,488 @@ class CreateAccountsViewModel @Inject constructor(private val getCurrencyCode:Ge
         Currency("ZMW", "Zambian Kwacha", R.drawable.zm),
         Currency("ZWL", "Zimbabwean Dollar", R.drawable.zw)
     )
-    private val currencySymbols = mapOf(
-        // Lista original:
-        "USD" to "$",       // Dólar estadounidense
-        "EUR" to "€",       // Euro
-        "JPY" to "¥",       // Yen japonés
-        "GBP" to "£",       // Libra esterlina
-        "AUD" to "A$",      // Dólar australiano
-        "CAD" to "C$",      // Dólar canadiense
-        "CHF" to "CHF",     // Franco suizo
-        "CNY" to "¥",       // Yuan chino
-        "SEK" to "kr",      // Corona sueca
-        "NZD" to "NZ$",     // Dólar neozelandés
-        "MXN" to "$",       // Peso mexicano
-        "SGD" to "S$",      // Dólar de Singapur
-        "HKD" to "HK$",     // Dólar de Hong Kong
-        "NOK" to "kr",      // Corona noruega
-        "RUB" to "₽",       // Rublo ruso
-        "INR" to "₹",       // Rupia india
-        "BRL" to "R$",      // Real brasileño
-        "ZAR" to "R",       // Rand sudafricano
-        "DKK" to "kr",      // Corona danesa
-        "PLN" to "zł",      // Zloty polaco
-        "THB" to "฿",       // Baht tailandés
-        "AED" to "د.إ",     // Dirham de los Emiratos Árabes Unidos
-        "MYR" to "RM",      // Ringgit malayo
-        "PHP" to "₱",       // Peso filipino
-        "ILS" to "₪",       // Shekel israelí
-        "TRY" to "₺",       // Lira turca
-        "CLP" to "$",       // Peso chileno
-        "COP" to "$",       // Peso colombiano
-        "PEN" to "S/.",     // Sol peruano
-        "VND" to "₫",       // Dong vietnamita
-        "ARS" to "$",       // Peso argentino
-        "KRW" to "₩",       // Won surcoreano
-        "HNL" to "L",       // Lempira de Honduras
 
-        // Divisas adicionales:
-        "AFN" to "؋",       // Afgani afgano
-        "ALL" to "L",       // Lek albanés
-        "AMD" to "֏",       // Dram armenio
-        "ANG" to "ƒ",       // Florín antillano neerlandés
-        "AOA" to "Kz",      // Kwanza angoleño
-        "AWG" to "ƒ",       // Florín arubeño
-        "AZN" to "₼",       // Manat azerbaiyano
-        "BAM" to "KM",      // Marco convertible bosnioherzegovino
-        "BBD" to "Bds$",    // Dólar de Barbados
-        "BDT" to "৳",       // Taka bangladesí
-        "BHD" to ".د.ب",    // Dinar bahreiní
-        "BIF" to "FBu",     // Franco burundés
-        "BMD" to "$",       // Dólar bermudeño
-        "BND" to "B$",      // Dólar de Brunéi
-        "BOB" to "Bs.",     // Boliviano
-        "BSD" to "$",       // Dólar bahameño
-        "BTN" to "Nu.",     // Ngultrum butanés
-        "BWP" to "P",       // Pula botsuano
-        "BYN" to "Br",      // Rublo bielorruso
-        "BZD" to "$",       // Dólar beliceño
-        "CDF" to "FC",      // Franco congoleño
-        "CRC" to "₡",       // Colón costarricense
-        "CUP" to "₱",       // Peso cubano
-        "CVE" to "$",       // Escudo caboverdiano
-        "CZK" to "Kč",      // Corona checa
-        "DJF" to "Fdj",     // Franco yibutiano
-        "DOP" to "RD$",     // Peso dominicano
-        "DZD" to "دج",      // Dinar argelino
-        "EGP" to "£",       // Libra egipcia
-        "ERN" to "Nfk",     // Nakfa eritreo
-        "ETB" to "Br",      // Birr etíope
-        "FJD" to "$",       // Dólar fiyiano
-        "FKP" to "£",       // Libra malvinense
-        "FOK" to "kr",      // Corona feroesa
-        "GEL" to "₾",       // Lari georgiano
-        "GHS" to "₵",       // Cedi ghanés
-        "GIP" to "£",       // Libra gibraltareña
-        "GMD" to "D",       // Dalasi gambiano
-        "GNF" to "FG",      // Franco guineano
-        "GTQ" to "Q",       // Quetzal guatemalteco
-        "GYD" to "$",       // Dólar guyanés
-        "HRK" to "kn",      // Kuna croata
-        "HTG" to "G",       // Gourde haitiano
-        "HUF" to "Ft",      // Forint húngaro
-        "IDR" to "Rp",      // Rupia indonesia
-        "IQD" to "ع.د",     // Dinar iraquí
-        "IRR" to "﷼",      // Rial iraní
-        "ISK" to "kr",      // Corona islandesa
-        "JMD" to "J$",      // Dólar jamaiquino
-        "JOD" to "د.ا",    // Dinar jordano
-        "KES" to "KSh",     // Chelín keniano
-        "KGS" to "с",       // Som kirguís
-        "KHR" to "៛",      // Riel camboyano
-        "KMF" to "CF",      // Franco comorense
-        "KPW" to "₩",       // Won norcoreano
-        "KWD" to "د.ك",     // Dinar kuwaití
-        "KYD" to "$",       // Dólar de las Islas Caimán
-        "KZT" to "₸",       // Tenge kazajo
-        "LAK" to "₭",      // Kip laosiano
-        "LBP" to "ل.ل",     // Libra libanesa
-        "LKR" to "Rs",      // Rupia de Sri Lanka
-        "LRD" to "$",       // Dólar liberiano
-        "LSL" to "L",       // Loti lesotense
-        "LYD" to "ل.د",     // Dinar libio
-        "MAD" to "MAD",     // Dirham marroquí
-        "MDL" to "L",       // Leu moldavo
-        "MGA" to "Ar",      // Ariary malgache
-        "MKD" to "ден",     // Denar macedonio
-        "MMK" to "Ks",      // Kyat birmano
-        "MNT" to "₮",      // Tugrik mongol
-        "MOP" to "MOP$",    // Pataca de Macao
-        "MRU" to "UM",      // Ouguiya mauritana
-        "MUR" to "₨",      // Rupia mauriciana
-        "MVR" to "Rf",      // Rufiyaa maldiva
-        "MWK" to "MK",      // Kwacha malauí
-        "MZN" to "MT",      // Metical mozambiqueño
-        "NAD" to "$",       // Dólar namibio
-        "NGN" to "₦",      // Naira nigeriana
-        "NIO" to "C$",      // Córdoba nicaragüense
-        "NPR" to "₨",      // Rupia nepalí
-        "OMR" to "ر.ع.",   // Rial omaní
-        "PAB" to "B/.",     // Balboa panameño
-        "PGK" to "K",       // Kina de Papúa Nueva Guinea
-        "PKR" to "₨",      // Rupia pakistaní
-        "PYG" to "₲",      // Guaraní paraguayo
-        "QAR" to "ر.ق",     // Riyal catarí
-        "RON" to "lei",     // Leu rumano
-        "RSD" to "дин",     // Dinar serbio
-        "RWF" to "FRw",     // Franco ruandés
-        "SAR" to "ر.س",     // Riyal saudí
-        "SBD" to "$",       // Dólar de las Islas Salomón
-        "SCR" to "₨",      // Rupia seychelense
-        "SDG" to "ج.س.",   // Libra sudanesa
-        "SHP" to "£",       // Libra de Santa Helena
-        "SLL" to "Le",      // Leone de Sierra Leona
-        "SOS" to "Sh",      // Chelín somalí
-        "SRD" to "$",       // Dólar surinamés
-        "SSP" to "£",       // Libra sursudanesa
-        "STN" to "Db",      // Dobra de Santo Tomé y Príncipe
-        "SYP" to "£",       // Libra siria
-        "SZL" to "L",       // Lilangeni de Suazilandia
-        "TJS" to "SM",      // Somoni tayiko
-        "TMT" to "T",       // Manat turcomano
-        "TND" to "د.ت",    // Dinar tunecino
-        "TOP" to "T$",      // Paʻanga tongano
-        "TTD" to "TT$",     // Dólar de Trinidad y Tobago
-        "TWD" to "NT$",     // Nuevo dólar taiwanés
-        "TZS" to "Sh",      // Chelín tanzano
-        "UAH" to "₴",      // Grivna ucraniana
-        "UGX" to "Sh",      // Chelín ugandés
-        "UYU" to "$U",      // Peso uruguayo
-        "UZS" to "лв",      // Som uzbeko
-        "VES" to "Bs.S",    // Bolívar venezolano
-        "VUV" to "VT",      // Vatu vanuatuense
-        "WST" to "WS$",     // Tala samoano
-        "XAF" to "FCFA",    // Franco CFA de África Central
-        "XCD" to "$",       // Dólar del Caribe Oriental
-        "XOF" to "CFA",     // Franco CFA de África Occidental
-        "XPF" to "₣",      // Franco CFP
-        "YER" to "﷼",      // Rial yemení
-        "ZMW" to "ZK",      // Kwacha zambiano
-        "ZWL" to "$",       // Dólar zimbabuense
+    /*
+    private val categories = listOf(
+        Category(
+            iconResource = R.drawable.ic_category_salary,
+            name = "Salary",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_dividens,
+            name = "Dividends",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_rent,
+            name = "Rental",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_freelances,
+            name = "Freelance",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sales,
+            name = "Sales",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_donation,
+            name = "Subsidies",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_lotery,
+            name = "Lottery",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherincomes,
+            name = "Other Incomes",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_premium,
+            name = "Awards",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_winasset,
+            name = "Benefit Assets",
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_grocery,
+            name = "Food",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_mortgage,
+            name = "Mortgage",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_electricity,
+            name = "Electricity Bill",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_water,
+            name = "Water Bill",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_gasbill,
+            name = "Gas Bill",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_publictansport,
+            name = "Public Transport",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_fuelcar,
+            name = "Fuel",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherinsurance,
+            name = "Insurances",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_healthbill,
+            name = "Health",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_leiure,
+            name = "Entertainment",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_subscriptions,
+            name = "Subscriptions",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_vacation,
+            name = "Vacations & Travel",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_clothing,
+            name = "Clothing",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_education,
+            name = "Courses, Books & Materials",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_house,
+            name = "House",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_repaircar,
+            name = "Car",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sport,
+            name = "Gym",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_pet,
+            name = "Pets",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_personalcare,
+            name = "Personal Care",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_gif,
+            name = "Gifts",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_donation,
+            name = "Donations",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_lostasset,
+            name = "Lost Assets",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_books,
+            name = "Books",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_music,
+            name = "Music",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_hobies,
+            name = "Hobbies",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_tax,
+            name = "Taxes",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_loan,
+            name = "Loans",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_electronic,
+            name = "Electronics",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_coffe,
+            name = "Coffee",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_tabac,
+            name = "Tobacco",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sportsuplement,
+            name = "Supplements",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_bike,
+            name = "Motorcycle",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_garden,
+            name = "Garden",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_teraphy,
+            name = "Therapies",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_alcohol,
+            name = "Alcohol",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_game,
+            name = "Gambling",
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherincomes, // Note: Repeated resource for other incomes icon
+            name = "Other Expenses",
+            isIncome = false
+        )
+
     )
 
 
+}*/
+    private val categories = listOf(
+        Category(
+            iconResource = R.drawable.ic_category_salary,
+            name = R.string.salary,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_dividens,
+            name = R.string.dividens,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_rent,
+            name = R.string.rental,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_freelances,
+            name = R.string.freelance,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sales,
+            name = R.string.sales,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_donation,
+            name = R.string.subsidies,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_lotery,
+            name = R.string.lotery,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherincomes,
+            name = R.string.otherincomes,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_premium,
+            name = R.string.awards,  // Usando el recurso de string
+            isIncome = true
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_winasset,
+            name = R.string.benefit_assets,  // Usando el recurso de string
+            isIncome = true
+        ),
+
+        Category(
+            iconResource = R.drawable.ic_category_grocery,
+            name = R.string.food,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_mortgage,
+            name = R.string.morgage,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_electricity,
+            name = R.string.electricitybill,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_water,
+            name = R.string.waterbill,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_gasbill,
+            name = R.string.gasbill,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_publictansport,
+            name = R.string.publictransport,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_fuelcar,
+            name = R.string.fuel_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherinsurance,
+            name = R.string.insurances,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_healthbill,
+            name = R.string.health,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_leiure,
+            name = R.string.entertainment,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_subscriptions,
+            name = R.string.subscriptions,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_vacation,
+            name = R.string.vacations_travel_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_clothing,
+            name = R.string.clothing,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_education,
+            name = R.string.courses_books_materials_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_house,
+            name = R.string.house,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_repaircar,
+            name = R.string.car,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sport,
+            name = R.string.gym,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_pet,
+            name = R.string.pets,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_personalcare,
+            name = R.string.personal_care_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_gif,
+            name = R.string.gifts_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_donation,
+            name = R.string.donations_title,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_lostasset,
+            name = R.string.lost_assets,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_books,
+            name = R.string.books,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_music,
+            name = R.string.music,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_hobies,
+            name = R.string.hobbies,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_tax,
+            name = R.string.taxes,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_loan,
+            name = R.string.loans,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_electronic,
+            name = R.string.electronics,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_coffe,
+            name = R.string.coffee,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_tabac,
+            name = R.string.tobacco,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_sportsuplement,
+            name = R.string.supplements,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_bike,
+            name = R.string.motorcycle,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_garden,
+            name = R.string.garden,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_teraphy,
+            name = R.string.therapies,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_alcohol,
+            name = R.string.alcohol,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_game,
+            name = R.string.gambling,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_otherincomes,
+            name = R.string.other_expenses,  // Usando el recurso de string
+            isIncome = false
+        )
+    )
 }
+
+
+

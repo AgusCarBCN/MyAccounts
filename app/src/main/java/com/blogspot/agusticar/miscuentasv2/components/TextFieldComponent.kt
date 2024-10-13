@@ -41,10 +41,8 @@ fun TextFieldComponent(
     TextField(
         value = inputText,
         onValueChange = {
-            // Lógica para cambiar "a" por "A"
-            //onTextChange(if (it.contains("a")) it.replace("a", "A") else it)
             onTextChange(it)
-            //equivale a  newValue -> onTextChange(newValue)
+
         },
         label = { Text(text = label) },
         shape = RoundedCornerShape(10.dp),
@@ -101,7 +99,7 @@ private fun getBoardType(type: BoardType): KeyboardType {
         BoardType.PHONE -> KeyboardType.Phone
         BoardType.TEXT -> KeyboardType.Text
         BoardType.URI -> KeyboardType.Uri
-        BoardType.DECIMAL -> KeyboardType.Password
+        BoardType.DECIMAL -> KeyboardType.Decimal
 
     }
 }

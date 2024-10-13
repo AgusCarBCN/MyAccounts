@@ -230,5 +230,7 @@
     <string name="originaccount">Select an origin account</string>
     <string name="destinationaccount">Select destination account</string>
     <string name="amountentrie">Enter an amount</string>
+    <string name="noaccounts">There are no accounts created yet</string>
+    <string name="youraccounts">Your accounts</string>
 </resources>
 

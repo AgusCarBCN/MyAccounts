@@ -6,6 +6,7 @@ enum class IconOptions {
     SETTINGS,
     PROFILE,
     NEW_AMOUNT,
+    CHANGE_CURRENCY,
     INCOME_OPTIONS,
     EXPENSE_OPTIONS,
     TRANSFER,

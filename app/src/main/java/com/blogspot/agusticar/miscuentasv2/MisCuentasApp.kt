@@ -1,6 +1,8 @@
 package com.blogspot.agusticar.miscuentasv2
 
 import android.app.Application
+import androidx.room.Room
+import com.blogspot.agusticar.miscuentasv2.main.data.database.AppDataBase
 import dagger.hilt.android.HiltAndroidApp
 
 /**
@@ -8,5 +10,7 @@ import dagger.hilt.android.HiltAndroidApp
  * está configurada para trabajar con Hilt para la inyección de dependencias.
  */
 @HiltAndroidApp
-class MisCuentasApp:Application() {
+class MisCuentasApp : Application() {
+
+
 }

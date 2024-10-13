@@ -51,24 +51,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
+import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
+import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
-import com.blogspot.agusticar.miscuentasv2.prueba.Test
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
-import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -76,12 +75,11 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun HomeScreen(
-    navigationController: NavHostController,
+fun MainScreen(
+
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
     createProfileViewModel: CreateProfileViewModel,
-    tutorialViewModel:TutorialViewModel,
     settingViewModel:SettingViewModel
 
 ) {
@@ -92,6 +90,8 @@ fun HomeScreen(
     val titleAmount by mainViewModel.selectedTitle.collectAsState()
     val isIncome by mainViewModel.isIncome.collectAsState()
 
+    val categories by createAccountsViewModel.listOfCategories.observeAsState(listOf())
+
     val userName by createProfileViewModel.name.observeAsState("")
     var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
 
@@ -100,10 +100,12 @@ fun HomeScreen(
         if (drawerState.isOpen) {
             drawerState.close() // Cierra el drawer cuando se selecciona una opción
         }
+
     }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel,drawerState) },
+        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
@@ -112,7 +114,7 @@ fun HomeScreen(
                 { TopBarApp(scope, drawerState,title,
                     (if(selectedScreen==IconOptions.HOME) userName else "").toString()
                 ) },
-                { BottomAppBar(mainViewModel, navigationController) },
+                { BottomAppBar(mainViewModel) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here
@@ -123,7 +125,7 @@ fun HomeScreen(
                 }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            Test(createAccountsViewModel)
+                            HomeScreen(createAccountsViewModel)
                             title=R.string.greeting
                         }
                         IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)
@@ -131,10 +133,14 @@ fun HomeScreen(
                         }
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> {
-                            SettingScreen(settingViewModel)
+                            SettingScreen(settingViewModel,mainViewModel)
                             title=R.string.settingstitle}
                         IconOptions.INCOME_OPTIONS -> {
-                            CategorySelector(mainViewModel,true)
+                            LaunchedEffect(Unit) {
+                                createAccountsViewModel.getCategories(true)
+
+                            }
+                            CategorySelector(mainViewModel,categories,true)
                         title=R.string.newincome}
                         IconOptions.TRANSFER -> {Transfer()
                         title=R.string.transfer}
@@ -157,7 +163,13 @@ fun HomeScreen(
                             title=R.string.abouttitle
                         }
                         IconOptions.EXPENSE_OPTIONS -> {
-                            CategorySelector(mainViewModel,false)
+                            LaunchedEffect(Unit) {
+                                createAccountsViewModel.getCategories(false)
+
+                            }
+                            CategorySelector(mainViewModel,categories,false)
+
+
                             title=R.string.newexpense
                         }
 
@@ -165,6 +177,8 @@ fun HomeScreen(
                             NewAmount(isIncome, iconAmount ,titleAmount)
                             title=titleAmount
                         }
+
+                        IconOptions.CHANGE_CURRENCY -> CurrencySelector(createAccountsViewModel)
                     }
 
                 }
@@ -198,7 +212,7 @@ private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState,title:Int,
 
 
 @Composable
-private fun BottomAppBar(viewModel: MainViewModel, navigationController: NavHostController) {
+private fun BottomAppBar(viewModel: MainViewModel) {
 
     BottomAppBar(
         containerColor = LocalCustomColorsPalette.current.barBackground,
@@ -227,8 +241,7 @@ private fun BottomAppBar(viewModel: MainViewModel, navigationController: NavHost
 @Composable
 private fun DrawerContent(
     viewModel: MainViewModel,
-    createProfileViewModel: CreateProfileViewModel,
-    drawerState: DrawerState
+    createProfileViewModel: CreateProfileViewModel
 ) {
 
     Card(
@@ -238,11 +251,7 @@ private fun DrawerContent(
             .background(color = Color.Transparent)
 
     ) {
-        // Creamos una fuente de interacciones para el IconButton
-        val interactionSource = remember { MutableInteractionSource() }
-        // Detectamos si el botón está presionado
 
-        val isPressed by interactionSource.collectIsPressedAsState()
         HeadDrawerMenu(createProfileViewModel)
         Column(
             modifier = Modifier
@@ -276,7 +285,6 @@ private fun DrawerContent(
 fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
     val selectedImageUriSaved by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
-    //val name by createProfileViewModel.name.observeAsState("user")
 
 
     createProfileViewModel.loadImageUri()
@@ -290,9 +298,10 @@ fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
 
     ) {
         Box(modifier = Modifier.weight(0.4f)) {
-        selectedImageUriSaved?.let { UserImage(it) }
+        selectedImageUriSaved?.let { UserImage(it,80) }
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 
@@ -308,6 +317,8 @@ fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
         }*/
 
 
+=======
+>>>>>>> develop
     }
 
 }

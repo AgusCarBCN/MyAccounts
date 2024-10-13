@@ -30,6 +30,7 @@ fun CategoryEntries(isIncome:Boolean,title:String,iconResource:Int,modifier:Modi
         if(isIncome) LocalCustomColorsPalette.current.iconIncomeInit
         else LocalCustomColorsPalette.current.iconExpenseInit
     val targetColor= if(isIncome) LocalCustomColorsPalette.current.iconIncomeTarget
+
     else LocalCustomColorsPalette.current.iconExpenseTarget
         // Asegúrate de que la columna ocupe todo el espacio de la tarjeta
         Column(

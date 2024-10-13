@@ -16,15 +16,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.RowComponent
 import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
 @Composable
 
-fun SettingScreen(settingViewModel: SettingViewModel) {
+fun SettingScreen(settingViewModel: SettingViewModel,mainViewModel: MainViewModel) {
 
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
@@ -95,7 +99,7 @@ fun SettingScreen(settingViewModel: SettingViewModel) {
         RowComponent(title = stringResource(id = R.string.changecurrency),
             description = stringResource(id = R.string.deschangecurrency),
             iconResource = R.drawable.exchange,
-            onClick = {})
+            onClick = {mainViewModel.selectScreen(IconOptions.CHANGE_CURRENCY)})
     }
 }
 

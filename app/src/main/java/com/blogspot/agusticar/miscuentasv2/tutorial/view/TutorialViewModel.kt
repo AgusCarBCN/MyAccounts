@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetShowTutorialUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.GetToLoginUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.datastoreusecase.SetShowTutorialUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetShowTutorialUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetToLoginUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetShowTutorialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
