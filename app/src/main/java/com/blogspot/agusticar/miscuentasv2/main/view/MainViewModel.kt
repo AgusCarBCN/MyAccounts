@@ -25,10 +25,12 @@ class MainViewModel @Inject constructor() : ViewModel() {
     private val _selectedIcon = MutableStateFlow(R.drawable.ic_category_salary)
     private val _selectedTitle= MutableStateFlow(R.string.salary)
     private val _isIncome= MutableStateFlow(true)
+    private val _showExitDialog=MutableStateFlow(false)
 
     val selectedIcon: MutableStateFlow<Int> = _selectedIcon
     val selectedTitle: MutableStateFlow<Int> = _selectedTitle
     val isIncome: MutableStateFlow<Boolean> = _isIncome
+    val showExitDialog: MutableStateFlow<Boolean> = _showExitDialog
 
         // Función que permite cambiar la pantalla seleccionada.
     // Utiliza viewModelScope para lanzar una corrutina y emitir un nuevo valor.
@@ -46,6 +48,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
             _selectedIcon.emit(iconResource)
             _selectedTitle.emit(stringResource)
             _isIncome.emit(isIncome)
+        }
+    }
+    fun showExitDialog(newValue:Boolean){
+        viewModelScope.launch {
+            _showExitDialog.emit(newValue)
         }
     }
 

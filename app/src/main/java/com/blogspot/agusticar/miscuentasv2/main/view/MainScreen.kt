@@ -39,6 +39,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -51,10 +52,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
+import com.blogspot.agusticar.miscuentasv2.components.ExitAppDialog
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
@@ -73,27 +76,28 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-
 @Composable
 fun MainScreen(
 
     mainViewModel: MainViewModel,
     createAccountsViewModel: CreateAccountsViewModel,
     createProfileViewModel: CreateProfileViewModel,
-    settingViewModel:SettingViewModel
+    settingViewModel: SettingViewModel
 
 ) {
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
     val iconAmount by mainViewModel.selectedIcon.collectAsState()
     val titleAmount by mainViewModel.selectedTitle.collectAsState()
     val isIncome by mainViewModel.isIncome.collectAsState()
+    val showDialog by mainViewModel.showExitDialog.collectAsState()
 
     val categories by createAccountsViewModel.listOfCategories.observeAsState(listOf())
 
     val userName by createProfileViewModel.name.observeAsState("")
-    var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
+    var title: Int by remember { mutableIntStateOf(R.string.hometitle) }
 
     // Usar LaunchedEffect para cerrar el drawer cuando cambia la pantalla seleccionada
     LaunchedEffect(key1 = selectedScreen) {
@@ -111,71 +115,95 @@ fun MainScreen(
             // Main content goes here
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                { TopBarApp(scope, drawerState,title,
-                    (if(selectedScreen==IconOptions.HOME) userName else "").toString()
-                ) },
+                {
+                    TopBarApp(
+                        scope, drawerState, title,
+                        (if (selectedScreen == IconOptions.HOME) userName else "").toString()
+                    )
+                },
                 { BottomAppBar(mainViewModel) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
-                ) {if(selectedScreen!=IconOptions.EXIT){
-                    createProfileViewModel.onButtonProfileNoSelected()
-                }
+                ) {
+                    if (selectedScreen != IconOptions.EXIT) {
+                        createProfileViewModel.onButtonProfileNoSelected()
+                    }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
                             HomeScreen(createAccountsViewModel)
-                            title=R.string.greeting
+                            title = R.string.greeting
                         }
-                        IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)
-                            title=R.string.profiletitle
+
+                        IconOptions.PROFILE -> {
+                            ProfileScreen(createProfileViewModel)
+                            title = R.string.profiletitle
                         }
+
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> {
-                            SettingScreen(settingViewModel,mainViewModel)
-                            title=R.string.settingstitle}
+                            SettingScreen(settingViewModel, mainViewModel)
+                            title = R.string.settingstitle
+                        }
+
                         IconOptions.INCOME_OPTIONS -> {
                             LaunchedEffect(Unit) {
                                 createAccountsViewModel.getCategories(true)
 
                             }
-                            CategorySelector(mainViewModel,categories,true)
-                        title=R.string.newincome}
-                        IconOptions.TRANSFER -> {Transfer()
-                        title=R.string.transfer}
+                            CategorySelector(mainViewModel, categories, true)
+                            title = R.string.newincome
+                        }
+
+                        IconOptions.TRANSFER -> {
+                            Transfer()
+                            title = R.string.transfer
+                        }
+
                         IconOptions.BARCHART -> TODO()
                         IconOptions.CALCULATOR -> TODO()
                         IconOptions.SETTING_ACCOUNTS -> TODO()
-                        IconOptions.ABOUT ->{ AboutScreen(mainViewModel)
-                            title=R.string.abouttitle
+                        IconOptions.ABOUT -> {
+                            AboutScreen(mainViewModel)
+                            title = R.string.abouttitle
                         }
+
                         IconOptions.POLICY -> TODO()
                         IconOptions.EXIT -> {
                             // Obtén el contexto actual de la aplicación
                             val context = LocalContext.current
                             // Verifica si el contexto es una actividad
                             val activity = context as? Activity
-                            activity?.finish()
+
+                            ExitAppDialog(showDialog =showDialog,
+                                onConfirm = {
+                                    activity?.finish()},
+                                onDismiss = { mainViewModel.showExitDialog(false)
+                                mainViewModel.selectScreen(IconOptions.HOME)})
+
                         }
+
                         IconOptions.ABOUT_DESCRIPTION -> {
                             AboutApp()
-                            title=R.string.abouttitle
+                            title = R.string.abouttitle
                         }
+
                         IconOptions.EXPENSE_OPTIONS -> {
                             LaunchedEffect(Unit) {
                                 createAccountsViewModel.getCategories(false)
 
                             }
-                            CategorySelector(mainViewModel,categories,false)
+                            CategorySelector(mainViewModel, categories, false)
 
 
-                            title=R.string.newexpense
+                            title = R.string.newexpense
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(isIncome, iconAmount ,titleAmount)
-                            title=titleAmount
+                            NewAmount(isIncome, iconAmount, titleAmount)
+                            title = titleAmount
                         }
 
                         IconOptions.CHANGE_CURRENCY -> CurrencySelector(createAccountsViewModel)
@@ -189,10 +217,10 @@ fun MainScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState,title:Int,name:String) {
+private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState, title: Int, name: String) {
 
     TopAppBar(
-        title = { Text(text = stringResource(id = title)+" "+name)},
+        title = { Text(text = stringResource(id = title) + " " + name) },
         navigationIcon = {
             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                 Icon(
@@ -242,6 +270,7 @@ private fun BottomAppBar(viewModel: MainViewModel) {
 private fun DrawerContent(
     viewModel: MainViewModel,
     createProfileViewModel: CreateProfileViewModel
+
 ) {
 
     Card(
@@ -275,7 +304,9 @@ private fun DrawerContent(
             })
             ClickableRow(
                 OptionItem(R.string.exitapp, R.drawable.exitapp),
-                onClick = { viewModel.selectScreen(IconOptions.EXIT) })
+                onClick = {viewModel.selectScreen(IconOptions.EXIT)
+                    viewModel.showExitDialog(true)
+                     })
         }
     }
 }
@@ -292,13 +323,13 @@ fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .background(LocalCustomColorsPalette.current.headDrawerColor),
-                Arrangement.SpaceEvenly,
+        Arrangement.SpaceEvenly,
         Alignment.CenterVertically
 
 
     ) {
         Box(modifier = Modifier.weight(0.4f)) {
-        selectedImageUriSaved?.let { UserImage(it,80) }
+            selectedImageUriSaved?.let { UserImage(it, 80) }
         }
 
     }

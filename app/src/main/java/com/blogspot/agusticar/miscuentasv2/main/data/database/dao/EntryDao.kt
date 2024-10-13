@@ -40,8 +40,12 @@ interface EntryDao {
     suspend fun getEntriesByDate(specificDate: String): List<Entry>
 
     // 8. Obtener entradas con saldo mayor o igual a un cierto monto (ordenadas por fecha descendiente)
-    @Query("SELECT * FROM EntryEntity WHERE balance >= :minAmount ORDER BY date DESC")
+    @Query("SELECT * FROM EntryEntity WHERE amount >= :minAmount ORDER BY date DESC")
     suspend fun getEntriesByAmount(minAmount: Double): List<Entry>
+
+    // 9. Obtener entradas de una cuenta específica (ordenadas por fecha descendiente)
+    @Query("SELECT * FROM EntryEntity WHERE accountId = :accountId")
+    suspend fun getEntriesForAccount(accountId: Int): List<Entry>
 
     @Transaction
     @Query("SELECT * FROM EntryEntity WHERE categoryId = :categoryId ORDER BY date DESC")

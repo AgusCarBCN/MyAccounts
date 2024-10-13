@@ -230,4 +230,7 @@
     <string name="amountentrie">Enter an amount</string>
     <string name="noaccounts">There are no accounts created yet</string>
     <string name="youraccounts">Your accounts</string>
+    <!--Dialog-->
+    <string name="cancelButton">Cancel</string>
+    <string name="exitinfo">Are you sure you want log out?</string>
 </resources>

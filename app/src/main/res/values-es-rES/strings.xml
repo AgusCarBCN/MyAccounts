@@ -230,4 +230,7 @@
     <string name="amountentrie">Introduce una cantidad</string>
     <string name="noaccounts">No hay cuentas creadas todavia.</string>
     <string name="youraccounts">Tus cuentas</string>
+    <!--Dialog-->
+    <string name="cancelButton">Cancelar</string>
+    <string name="exitinfo">¿Estas seguro que quieres cerrar la sesión?</string>
 </resources>
