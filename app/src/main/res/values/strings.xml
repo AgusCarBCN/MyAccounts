@@ -231,6 +231,7 @@
     <!--Dialog-->
     <string name="cancelButton">Cancel</string>
     <string name="exitinfo">Are you sure you want log out?</string>
+    <string name="titleexit">Confirm exit</string>
 
 </resources>
 

@@ -233,4 +233,5 @@
     <!--Dialog-->
     <string name="cancelButton">Cancelar</string>
     <string name="exitinfo">¿Estas seguro que quieres cerrar la sesión?</string>
+    <string name="titleexit">Confirma salida</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +33,12 @@ fun ExitAppDialog(
     if (showDialog) {
         AlertDialog(containerColor= LocalCustomColorsPalette.current.drawerColor,
             onDismissRequest = { onDismiss() },
+
+            title={Text(stringResource(id = R.string.exitinfo),
+                fontSize=18.sp,
+                fontWeight = FontWeight.Bold,
+                color = LocalCustomColorsPalette.current.textColor)},
+
             text={Text(stringResource(id = R.string.exitinfo),
                 fontSize=18.sp,
                 color = LocalCustomColorsPalette.current.textColor)}
