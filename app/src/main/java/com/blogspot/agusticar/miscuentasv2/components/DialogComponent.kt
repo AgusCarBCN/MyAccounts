@@ -34,8 +34,8 @@ fun ExitAppDialog(
         AlertDialog(containerColor= LocalCustomColorsPalette.current.drawerColor,
             onDismissRequest = { onDismiss() },
 
-            title={Text(stringResource(id = R.string.exitinfo),
-                fontSize=18.sp,
+            title={Text(stringResource(id = R.string.titleexit),
+                fontSize=20.sp,
                 fontWeight = FontWeight.Bold,
                 color = LocalCustomColorsPalette.current.textColor)},
 
