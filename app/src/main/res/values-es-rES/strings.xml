@@ -228,4 +228,6 @@
     <string name="originaccount">Selecciona cuenta de origen</string>
     <string name="destinationaccount">Selecciona cuenta destino</string>
     <string name="amountentrie">Introduce una cantidad</string>
+    <string name="noaccounts">No hay cuentas creadas todavia.</string>
+    <string name="youraccounts">Tus cuentas</string>
 </resources>

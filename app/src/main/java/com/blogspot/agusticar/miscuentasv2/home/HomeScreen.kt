@@ -20,7 +20,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
@@ -64,19 +67,23 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,  // Centra los elementos verticalmente
         horizontalAlignment = Alignment.CenterHorizontally  // Centra los elementos horizontalmente
     ) {
-        Row(modifier = Modifier.padding(top = 20.dp)) {
-            HeadCard(modifier = Modifier.weight(0.5f), numberFormat.format(income), true)
-            Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
-            HeadCard(modifier = Modifier.weight(0.5f), numberFormat.format(expenses), false)
-        }
-
-        Spacer(modifier = Modifier.width(5.dp))
-        HeadSetting(title = "Tus cuentas", size = 20)
-
-        // Si la lista de cuentas está cargando o vacía, muestra un indicador de carga o un mensaje
         if (accounts.isNullOrEmpty()) {
-            Text(text = "No cuentas creadas")
-        }else{
+            Text(text = stringResource(id = R.string.noaccounts),
+                color = LocalCustomColorsPalette.current.textColor,
+                fontSize = 18.sp)
+        }
+        else{
+            Row(modifier = Modifier.padding(top = 20.dp)) {
+                HeadCard(modifier = Modifier.weight(0.5f), numberFormat.format(abs(income)), true)
+                Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
+                HeadCard(modifier = Modifier.weight(0.5f), numberFormat.format(abs(expenses)), false)
+            }
+
+            Spacer(modifier = Modifier.width(5.dp))
+            HeadSetting(title = stringResource(id = R.string.youraccounts), size = 20)
+
+            // Si la lista de cuentas está cargando o vacía, muestra un indicador de carga o un mensaje
+
 
             // Mostrar las cuentas si están disponibles
             LazyColumn(
@@ -87,7 +94,7 @@ fun HomeScreen(
                 items(accounts!!) { account -> // Solo utiliza accounts
                     AccountCard(
                         numberFormat.format(abs(account.balance)),
-                        account.name,true
+                        account.name, true
 
                     )  // Crea un card para cada cuenta en la lista
                     Spacer(modifier = Modifier.height(10.dp))  // Espacio entre cada card (separación)
@@ -95,7 +102,8 @@ fun HomeScreen(
             }
         }
     }
-}
+ }
+
 
 
 
