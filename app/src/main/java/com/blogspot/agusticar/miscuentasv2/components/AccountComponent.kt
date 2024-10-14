@@ -41,7 +41,7 @@ fun AccountSelector(title:String,accountViewModel:AccountsViewModel) {
     accountViewModel.getAllAccounts()
     // Observa el estado de la lista de cuentas
     val accounts by accountViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
-
+    val accountSelected by accountViewModel.accountSelected.observeAsState()
     // Inicializamos el estado del VerticalPager con el número de páginas igual al tamaño de la lista de monedas.
 
     val pagerState = rememberPagerState(pageCount = { accounts.size })
@@ -109,6 +109,8 @@ fun AccountSelector(title:String,accountViewModel:AccountsViewModel) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
+                    //Se actualiza la cuenta seleccionada en viewModel
+                    accountViewModel.onAccountSelected(accounts[page])
                     val balanceFormat=accountViewModel.numberFormat(accounts[page].balance)
                     // Texto de la moneda
                     Text(

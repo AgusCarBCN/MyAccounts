@@ -39,9 +39,13 @@ fun NewAmount(viewModel:AccountsViewModel)
     val descriptionEntry by viewModel.name.observeAsState("")
     val amountEntry by viewModel.amount.observeAsState("")
     val categorySelected by viewModel.categorySelected.observeAsState(null)
+    val accountSelected by viewModel.accountSelected.observeAsState()
+
+    val idAccount=accountSelected?.id?:1
     val status= categorySelected?.isIncome?:false
     val iconResource=categorySelected?.iconResource?:0
     val titleResource=categorySelected?.name?:0
+
     //Snackbar messages
     val newIncomeMessage= message(resource = R.string.newincomecreated)
     val newExpenseMessage= message(resource = R.string.newexpensecreated)
@@ -83,10 +87,11 @@ fun NewAmount(viewModel:AccountsViewModel)
             onClickButton = {
                 scope.launch (Dispatchers.IO){
                     viewModel.addEntry(Entry(description =descriptionEntry,
-                        amount=amountEntry.toDoubleOrNull()?:0.0,
+                        amount=if(status)amountEntry.toDoubleOrNull()?:0.0
+                        else (amountEntry.toDoubleOrNull()?:0.0)*(-1),
                         date = Date().dateFormat(),
-                        categoryId = titleResource,
-                        accountId = 1
+                        categoryId = iconResource,
+                        accountId = idAccount
                         ))
 
                     SnackBarController.sendEvent(event = SnackBarEvent(if(status) newIncomeMessage

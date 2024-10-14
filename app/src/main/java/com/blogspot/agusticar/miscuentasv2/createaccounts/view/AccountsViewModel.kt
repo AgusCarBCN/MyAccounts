@@ -54,6 +54,10 @@ class AccountsViewModel @Inject constructor(
     private val _categorySeleted = MutableLiveData<Category>()
     val categorySelected: LiveData<Category> = _categorySeleted
 
+    //LiveData para cuenta seleccionada
+
+    private val _accountSeleted = MutableLiveData<Account>()
+    val accountSelected: LiveData<Account> = _accountSeleted
 
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
@@ -68,7 +72,6 @@ class AccountsViewModel @Inject constructor(
         viewModelScope.launch {
             _currencyCode.value = getCurrencyCode()
             _isCurrencyExpanded.value = false
-
 
         }
     }
@@ -97,7 +100,7 @@ class AccountsViewModel @Inject constructor(
     fun addEntry(entry: Entry) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                addEntry(entry)
+                addEntry.invoke(entry)
                 resetFields()
             }
         } catch (e: Exception) {
@@ -110,7 +113,6 @@ class AccountsViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 _listOfAccounts.postValue(getAccounts.invoke())
-
                 Log.d("Cuentas creadas", "Cuentas cargadas")
             }
         } catch (e: Exception) {
@@ -131,7 +133,10 @@ class AccountsViewModel @Inject constructor(
 
     fun onCategorySelected(categorySelected: Category) {
         _categorySeleted.value = categorySelected
+    }
 
+    fun onAccountSelected(accountSelected: Account) {
+        _accountSeleted.value = accountSelected
     }
 
     fun setCurrencyCode(currencyCode: String) {
