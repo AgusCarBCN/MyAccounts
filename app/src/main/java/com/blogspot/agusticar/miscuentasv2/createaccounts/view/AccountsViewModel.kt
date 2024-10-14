@@ -13,6 +13,7 @@ import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountBalance
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
@@ -31,7 +32,8 @@ class AccountsViewModel @Inject constructor(
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
     private val addEntry:InsertEntryUseCase,
-    private val getAccounts: GetAllAccountsUseCase
+    private val getAccounts: GetAllAccountsUseCase,
+    private val updateBalance: UpdateAccountBalance
 
 ) : ViewModel() {
 
@@ -56,8 +58,8 @@ class AccountsViewModel @Inject constructor(
 
     //LiveData para cuenta seleccionada
 
-    private val _accountSeleted = MutableLiveData<Account>()
-    val accountSelected: LiveData<Account> = _accountSeleted
+    private val _accountSelected = MutableLiveData<Account>()
+    val accountSelected: LiveData<Account> = _accountSelected
 
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
@@ -99,15 +101,29 @@ class AccountsViewModel @Inject constructor(
     }
     fun addEntry(entry: Entry) {
         try {
+
             viewModelScope.launch(Dispatchers.IO) {
+                val account=_accountSelected.value
+                var balance=account?.balance?:0.0
+                val id=account?.id?:0
+                balance+=entry.amount
                 addEntry.invoke(entry)
+                updateAccountBalance(id,balance)
                 resetFields()
             }
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
     }
-
+    private fun updateAccountBalance(accountId: Int, newBalance: Double) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                updateBalance.invoke(accountId, abs(newBalance))
+            }
+        } catch (e: Exception) {
+            Log.d("Cuenta", "Error: ${e.message}")
+        }
+    }
 
     fun getAllAccounts() {
         try {
@@ -136,7 +152,7 @@ class AccountsViewModel @Inject constructor(
     }
 
     fun onAccountSelected(accountSelected: Account) {
-        _accountSeleted.value = accountSelected
+        _accountSelected.value = accountSelected
     }
 
     fun setCurrencyCode(currencyCode: String) {
