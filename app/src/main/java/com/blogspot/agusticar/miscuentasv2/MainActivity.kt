@@ -3,6 +3,8 @@ package com.blogspot.agusticar.miscuentasv2
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -25,6 +27,7 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
+import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
@@ -52,6 +55,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
+
         enableEdgeToEdge()
 
         setContent {
@@ -63,6 +68,8 @@ class MainActivity : ComponentActivity() {
             val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
 
             MisCuentasv2Theme(darkTheme = switchDarkTheme) {
+
+
                 val snackbarHostState = remember {
                     SnackbarHostState()
                 }
@@ -95,6 +102,8 @@ class MainActivity : ComponentActivity() {
                         SnackbarHost(hostState = snackbarHostState)
                     }
                 ) { innerPadding ->
+
+
                     NavHost(
                         navController = navigationController,
                         startDestination = if (showTutorial) Routes.Tutorial.route

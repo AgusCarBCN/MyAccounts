@@ -27,12 +27,9 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 @Composable
 
 fun SettingScreen(settingViewModel: SettingViewModel,mainViewModel: MainViewModel) {
-
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
-
-
 
     Column(
         modifier = Modifier

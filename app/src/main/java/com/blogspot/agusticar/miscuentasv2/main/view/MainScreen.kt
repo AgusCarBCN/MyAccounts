@@ -2,6 +2,8 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 import android.app.Activity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -84,12 +86,15 @@ fun MainScreen(
 
 ) {
 
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
     val showDialog by mainViewModel.showExitDialog.collectAsState()
-
-
+    //Boton de atrás te lleva al Home
+    BackHandler(true) {
+    mainViewModel.selectScreen(IconOptions.HOME)
+    }
 
     val userName by profileViewModel.name.observeAsState("")
     var title: Int by remember { mutableIntStateOf(R.string.hometitle) }
