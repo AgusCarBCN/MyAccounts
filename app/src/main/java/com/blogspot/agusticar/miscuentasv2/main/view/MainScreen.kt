@@ -58,13 +58,12 @@ import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.ExitAppDialog
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
-import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
-import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmountViewModel
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
@@ -79,10 +78,9 @@ import kotlinx.coroutines.launch
 fun MainScreen(
 
     mainViewModel: MainViewModel,
-    createAccountsViewModel: CreateAccountsViewModel,
-    createProfileViewModel: CreateProfileViewModel,
-    settingViewModel: SettingViewModel,
-    newAmountViewModel: NewAmountViewModel
+    accountsViewModel: AccountsViewModel,
+    profileViewModel: ProfileViewModel,
+    settingViewModel: SettingViewModel
 
 ) {
 
@@ -94,9 +92,9 @@ fun MainScreen(
     val isIncome by mainViewModel.isIncome.collectAsState()
     val showDialog by mainViewModel.showExitDialog.collectAsState()
 
-    val categories by createAccountsViewModel.listOfCategories.observeAsState(listOf())
+    val categories by accountsViewModel.listOfCategories.observeAsState(listOf())
 
-    val userName by createProfileViewModel.name.observeAsState("")
+    val userName by profileViewModel.name.observeAsState("")
     var title: Int by remember { mutableIntStateOf(R.string.hometitle) }
 
     // Usar LaunchedEffect para cerrar el drawer cuando cambia la pantalla seleccionada
@@ -109,7 +107,7 @@ fun MainScreen(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel) },
+        drawerContent = { DrawerContent(mainViewModel, profileViewModel) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
@@ -129,16 +127,16 @@ fun MainScreen(
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     if (selectedScreen != IconOptions.EXIT) {
-                        createProfileViewModel.onButtonProfileNoSelected()
+                        profileViewModel.onButtonProfileNoSelected()
                     }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            HomeScreen(createAccountsViewModel)
+                            HomeScreen(accountsViewModel)
                             title = R.string.greeting
                         }
 
                         IconOptions.PROFILE -> {
-                            ProfileScreen(createProfileViewModel)
+                            ProfileScreen(profileViewModel)
                             title = R.string.profiletitle
                         }
 
@@ -150,7 +148,7 @@ fun MainScreen(
 
                         IconOptions.INCOME_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                createAccountsViewModel.getCategories(true)
+                                accountsViewModel.getCategories(true)
 
                             }
                             CategorySelector(mainViewModel, categories, true)
@@ -192,7 +190,7 @@ fun MainScreen(
 
                         IconOptions.EXPENSE_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                createAccountsViewModel.getCategories(false)
+                                accountsViewModel.getCategories(false)
 
                             }
                             CategorySelector(mainViewModel, categories, false)
@@ -202,11 +200,11 @@ fun MainScreen(
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(isIncome, iconAmount, titleAmount,newAmountViewModel)
+                            NewAmount(isIncome, iconAmount, titleAmount,accountsViewModel)
                             title = titleAmount
                         }
 
-                        IconOptions.CHANGE_CURRENCY -> CurrencySelector(createAccountsViewModel)
+                        IconOptions.CHANGE_CURRENCY -> CurrencySelector(accountsViewModel)
                     }
 
                 }
@@ -269,7 +267,7 @@ private fun BottomAppBar(viewModel: MainViewModel) {
 @Composable
 private fun DrawerContent(
     viewModel: MainViewModel,
-    createProfileViewModel: CreateProfileViewModel
+    profileViewModel: ProfileViewModel
 
 ) {
 
@@ -281,7 +279,7 @@ private fun DrawerContent(
 
     ) {
 
-        HeadDrawerMenu(createProfileViewModel)
+        HeadDrawerMenu(profileViewModel)
         Column(
             modifier = Modifier
                 .background(LocalCustomColorsPalette.current.drawerColor)
@@ -313,12 +311,12 @@ private fun DrawerContent(
 
 //Implementacion de la cabecerera del menu desplegable izquierda
 @Composable
-fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
+fun HeadDrawerMenu(profileViewModel: ProfileViewModel) {
 
-    val selectedImageUriSaved by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
+    val selectedImageUriSaved by profileViewModel.selectedImageUriSaved.observeAsState(null)
 
 
-    createProfileViewModel.loadImageUri()
+    profileViewModel.loadImageUri()
     Row(
         modifier = Modifier
             .fillMaxWidth()

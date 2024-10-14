@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateAccountsViewModel @Inject constructor(
+class AccountsViewModel @Inject constructor(
     private val getCurrencyCode: GetCurrencyCodeUseCase,
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
@@ -40,11 +40,11 @@ class CreateAccountsViewModel @Inject constructor(
     val currencyCode: LiveData<String> = _currencyCode
 
     // LiveData para los campos de texto
-    private val _accountName = MutableLiveData<String>()
-    val accountName: LiveData<String> = _accountName
+    private val _name = MutableLiveData<String>()
+    val name: LiveData<String> = _name
 
-    private val _accountBalance = MutableLiveData<String>()
-    val accountBalance: LiveData<String> = _accountBalance
+    private val _amount = MutableLiveData<String>()
+    val amount: LiveData<String> = _amount
 
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
@@ -115,8 +115,8 @@ class CreateAccountsViewModel @Inject constructor(
     }
 
     private fun resetFields() {
-        _accountName.postValue("") // Vaciar el nombre de la cuenta
-        _accountBalance.postValue("") // Vaciar el balance de la cuenta
+        _name.postValue("") // Vaciar el nombre de la cuenta
+        _amount.postValue("") // Vaciar el balance de la cuenta
     }
 
     fun onCurrencySelectedChange(currencySelected: String) {
@@ -145,15 +145,22 @@ class CreateAccountsViewModel @Inject constructor(
         _isCurrencyExpanded.value = newValue
     }
 
-    fun onAccountNameChanged(newName: String) {
-        _accountName.value = newName
+    fun onNameChanged(newName: String) {
+        _name.value = newName
 
     }
 
-    fun onAccountBalanceChanged(newBalance: String) {
-        _accountBalance.value = newBalance
-
+    fun onAmountChanged(newBalance: String) {
+        if (isValidDecimal(newBalance)) {
+            _amount.value = newBalance
+        }
     }
+
+    private fun isValidDecimal(text: String): Boolean {
+
+        return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
+    }
+
 
     private val currencies = listOf(
         // Lista completa de todas las divisas del mundo, ordenadas alfabéticamente por código:

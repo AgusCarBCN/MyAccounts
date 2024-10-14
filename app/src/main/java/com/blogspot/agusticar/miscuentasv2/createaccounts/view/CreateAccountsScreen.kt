@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 @Composable
 
 fun CreateAccountsComponent(
-    createAccountsViewModel: CreateAccountsViewModel,
+    accountsViewModel: AccountsViewModel,
     navToLogin: () -> Unit,
     navToBack: () -> Unit
 ) {
@@ -52,10 +52,10 @@ fun CreateAccountsComponent(
     ) {
         val (titleCreateAccount, inputData) = createRefs()
         val scope = rememberCoroutineScope()
-        val currencyCode by createAccountsViewModel.currencyCode.observeAsState("EUR")
-        val isCurrencyExpanded by createAccountsViewModel.isCurrencyExpanded.observeAsState(false)
-        val accountName by createAccountsViewModel.accountName.observeAsState("")
-        val accountBalance by createAccountsViewModel.accountBalance.observeAsState("")
+        val currencyCode by accountsViewModel.currencyCode.observeAsState("EUR")
+        val isCurrencyExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
+        val accountName by accountsViewModel.name.observeAsState("")
+        val accountBalance by accountsViewModel.amount.observeAsState("")
 
 
 
@@ -102,7 +102,7 @@ fun CreateAccountsComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = R.string.amountName),
                     accountName,
-                    onTextChange = { createAccountsViewModel.onAccountNameChanged(it) },
+                    onTextChange = { accountsViewModel.onNameChanged(it) },
                     BoardType.TEXT,
                     false
                 )
@@ -111,10 +111,7 @@ fun CreateAccountsComponent(
                     stringResource(id = R.string.enteramount),
                     accountBalance,
                     onTextChange = {
-                        if (isValidDecimal(it)) {
-                            //Solo se actualiza si es válido
-                            createAccountsViewModel.onAccountBalanceChanged(it)
-                        }
+                        accountsViewModel.onAmountChanged(it)
                     },
                     BoardType.DECIMAL,
                     false
@@ -124,16 +121,21 @@ fun CreateAccountsComponent(
                     modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
-                        try{
-                        scope.launch(Dispatchers.IO){
-                            val amountDecimal=accountBalance.toDoubleOrNull()?:0.0
-                            createAccountsViewModel.addAccount(Account(name=accountName, balance = amountDecimal))
-                            //createAccountsViewModel.onClearFields()
-                            Log.d("Cuenta", "Cuenta creada")
-                            println("Cuenta creada")
+                        try {
+                            scope.launch(Dispatchers.IO) {
+                                val amountDecimal = accountBalance.toDoubleOrNull() ?: 0.0
+                                accountsViewModel.addAccount(
+                                    Account(
+                                        name = accountName,
+                                        balance = amountDecimal
+                                    )
+                                )
+                                //createAccountsViewModel.onClearFields()
+                                Log.d("Cuenta", "Cuenta creada")
+                                println("Cuenta creada")
 
-                        }}
-                        catch(e: Exception){
+                            }
+                        } catch (e: Exception) {
                             Log.d("Cuenta", "Error: ${e.message}")
                             println("Error al cargar ${e.message}")
                         }
@@ -143,7 +145,7 @@ fun CreateAccountsComponent(
                 )
             }
 
-            CurrencySelector(createAccountsViewModel)
+            CurrencySelector(accountsViewModel)
             if (!isCurrencyExpanded) {
                 ModelButton(text = stringResource(id = R.string.confirmButton),
                     R.dimen.text_title_medium,
@@ -152,7 +154,7 @@ fun CreateAccountsComponent(
                     onClickButton = {
                         scope.launch {
                             Log.d("valor a guardar", "Code: $currencyCode")
-                            createAccountsViewModel.setCurrencyCode(currencyCode)
+                            accountsViewModel.setCurrencyCode(currencyCode)
                         }
                         navToLogin()
 
@@ -165,7 +167,7 @@ fun CreateAccountsComponent(
                     true,
                     onClickButton = {
                         navToBack()
-                        // navigationController.navigate(Routes.CreateProfile.route)
+
                     }
                 )
             }
@@ -173,8 +175,3 @@ fun CreateAccountsComponent(
     }
 }
 
-// Función para validar si la cadena es un número decimal válido
-fun isValidDecimal(text: String): Boolean {
-
-    return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
-}

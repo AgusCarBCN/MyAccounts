@@ -29,15 +29,15 @@ import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
-import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileImageWithCamera
+import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
 import kotlinx.coroutines.launch
 
 
 @Composable
 
-fun ProfileScreen(createViewModel: CreateProfileViewModel) {
+fun ProfileScreen(createViewModel: ProfileViewModel) {
     val updatedMessages = listOf(
         stringResource(id = R.string.userNameUpdated),  // Aquí obtienes el texto real del recurso
         stringResource(id = R.string.nameUpdated),

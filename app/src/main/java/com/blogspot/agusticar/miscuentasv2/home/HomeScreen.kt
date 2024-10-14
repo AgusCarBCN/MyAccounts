@@ -25,7 +25,7 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
-import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import java.text.NumberFormat
@@ -35,22 +35,22 @@ import kotlin.math.abs
 
 @Composable
 fun HomeScreen(
-    createAccountsViewModel: CreateAccountsViewModel
+    accountsViewModel: AccountsViewModel
 ) {
     val income = 3000.43
     val expenses = -1200.78
 
     // Observa el estado de la lista de cuentas
-    val accounts by createAccountsViewModel.listOfAccounts.observeAsState(null)
+    val accounts by accountsViewModel.listOfAccounts.observeAsState(null)
     // Observa el estado de la lista de cuentas
 
-    val currencyCode by createAccountsViewModel.currencyCode.observeAsState("")
+    val currencyCode by accountsViewModel.currencyCode.observeAsState("")
     val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
     // Formatear la cantidad en la moneda especificada
     val numberFormat = NumberFormat.getCurrencyInstance(locale)
     // Iniciar la carga de cuentas solo cuando el Composable se inicia
     LaunchedEffect(Unit) {
-        createAccountsViewModel.getAllAccounts()
+        accountsViewModel.getAllAccounts()
     }
 
     Column(

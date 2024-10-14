@@ -22,6 +22,7 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.Dispatchers
@@ -29,10 +30,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 
-fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:NewAmountViewModel)
+fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:AccountsViewModel)
 {
     val scope = rememberCoroutineScope()
-    val description by viewModel.description.observeAsState("")
+    val description by viewModel.name.observeAsState("")
     val amount by viewModel.amount.observeAsState("")
 
     val initColor=
@@ -53,7 +54,7 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:NewA
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.desamount),
             description,
-            onTextChange = { viewModel.ondescriptionChanged(it)},
+            onTextChange = { viewModel.onNameChanged(it)},
             BoardType.TEXT,
             false
         )

@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
+fun CreateProfileComponent(createViewModel:ProfileViewModel,
                            navToBackLogin:()->Unit,
                            navToCreateAccounts:()->Unit) {
 
@@ -161,7 +161,7 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
 
 @Composable
 
-fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
+fun ProfileImageWithCamera(viewModel: ProfileViewModel) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val selectedImageUriSelected by viewModel.selectedImageUri.observeAsState( null)
