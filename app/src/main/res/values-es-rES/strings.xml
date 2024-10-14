@@ -120,6 +120,9 @@
     <string name="nameUpdated">Nombre actualizado</string>
     <string name="passwordUpdated">Contraseña actualizada</string>
     <string name="photoUpdated">Foto de perfil actualizada</string>
+    <string name="newaccountcreated">Has creado una nueva cuenta</string>
+    <string name="newincomecreated">Has insertado un nuevo ingreso</string>
+    <string name="newexpensecreated">Has insertado un nuevo gasto</string>
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>

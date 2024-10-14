@@ -23,10 +23,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +59,7 @@ fun CreateAccountsComponent(
         val isCurrencyExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
         val accountName by accountsViewModel.name.observeAsState("")
         val accountBalance by accountsViewModel.amount.observeAsState("")
-
+        val newAccountCreated= message(resource = R.string.newaccountcreated)
 
 
         Text(
@@ -130,9 +133,7 @@ fun CreateAccountsComponent(
                                         balance = amountDecimal
                                     )
                                 )
-                                //createAccountsViewModel.onClearFields()
-                                Log.d("Cuenta", "Cuenta creada")
-                                println("Cuenta creada")
+                                SnackBarController.sendEvent(event = SnackBarEvent(newAccountCreated))
 
                             }
                         } catch (e: Exception) {

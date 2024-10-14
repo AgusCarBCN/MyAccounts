@@ -38,6 +38,7 @@ import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.launch
 
@@ -67,6 +68,7 @@ fun LoginComponent(
     val scope = rememberCoroutineScope()
     /* Se usa para gestionar el estado del Snackbar. Esto te permite mostrar y controlar el Snackbar
      desde cualquier parte de tu UI.*/
+    val messageInvalidLogin= message(resource = R.string.inValidLogin)
 
     loginViewModel.getLoginImage()
     ConstraintLayout(
@@ -153,7 +155,7 @@ fun LoginComponent(
                             navToMain()
                         } else{
                             scope.launch {
-                                SnackBarController.sendEvent(event = SnackBarEvent("Invalid Login"))
+                                SnackBarController.sendEvent(event = SnackBarEvent(messageInvalidLogin))
                             }
                         }
 
@@ -235,10 +237,7 @@ fun LoginComponent(
             }
         }
     }
-    /*Se agregó SnackbarHost al final de LoginComponent, que es necesario para mostrar el Snackbar.
-    El SnackbarHost debe estar en el árbol de composables.*/
 
-   // ComposeModifiedSnackbar(state = state)
 }
 
 

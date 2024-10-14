@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,22 +31,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import java.text.NumberFormat
-import java.util.Locale
+
 
 @Composable
-fun AccountSelector(title:String) {
+fun AccountSelector(title:String,accountViewModel:AccountsViewModel) {
+
+    accountViewModel.getAllAccounts()
+    // Observa el estado de la lista de cuentas
+    val accounts by accountViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
 
     // Inicializamos el estado del VerticalPager con el número de páginas igual al tamaño de la lista de monedas.
-    val pagerState = rememberPagerState(pageCount = { 10 })
+
+    val pagerState = rememberPagerState(pageCount = { accounts.size })
     var previousPage by remember { mutableStateOf(0) }
     val toDown = R.drawable.arrow_down
     val toUp = R.drawable.arrow_up
     var isDraggingUp by remember { mutableStateOf(true) } // Inicializamos la flecha apuntando hacia arriba
-    val numberFormat = NumberFormat.getCurrencyInstance(
-        Locale.US)
-    val numberFormat2 = NumberFormat.getCurrencyInstance(Locale("ru", "RU"))
+
     Column(
         modifier = Modifier
             .width(320.dp)
@@ -105,9 +109,10 @@ fun AccountSelector(title:String) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
+                    val balanceFormat=accountViewModel.numberFormat(accounts[page].balance)
                     // Texto de la moneda
                     Text(
-                        text = "Santander ${numberFormat2.format(3000)}  ", // Descripción de la moneda
+                        text = "${accounts[page].name}          $balanceFormat", // Descripción de la moneda
                         fontSize = 18.sp,
                         color = LocalCustomColorsPalette.current.textColor, // Color del texto
                         textAlign = TextAlign.Center // Alinear el texto a la izquierda
@@ -129,13 +134,11 @@ fun AccountSelector(title:String) {
 
                     previousPage = page
 
-                    Log.d("page", "Page: $page, isDraggingUp: $isDraggingUp")
-                    Log.d(
-                        "previouspage",
-                        "PreviousPage: $previousPage, isDraggingUp: $isDraggingUp"
-                    )
+
+
                 }
             }
         }
     }
 }
+

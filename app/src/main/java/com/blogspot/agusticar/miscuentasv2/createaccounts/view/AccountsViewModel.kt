@@ -10,10 +10,12 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.GetCategoriesByStatusUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.InsertCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
@@ -30,6 +32,7 @@ class AccountsViewModel @Inject constructor(
     private val getCurrencyCode: GetCurrencyCodeUseCase,
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
+    private val addEntry:InsertEntryUseCase,
     private val getAccounts: GetAllAccountsUseCase,
     private val insertCategory: InsertCategoryUseCase,
     private val getCategories: GetCategoriesByStatusUseCase
@@ -50,8 +53,6 @@ class AccountsViewModel @Inject constructor(
     private val _amount = MutableLiveData<String>()
     val amount: LiveData<String> = _amount
 
-    private val _amountFormat = MutableLiveData<String>()
-    val amountFormat: LiveData<String> = _amountFormat
 
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
@@ -102,11 +103,21 @@ class AccountsViewModel @Inject constructor(
                 Log.d("Cuenta", "Cuenta creada")
                 resetFields()
             }
-
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
     }
+    fun addEntry(entry: Entry) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                addEntry(entry)
+                resetFields()
+            }
+        } catch (e: Exception) {
+            Log.d("Cuenta", "Error: ${e.message}")
+        }
+    }
+
 
     fun getAllAccounts() {
         try {

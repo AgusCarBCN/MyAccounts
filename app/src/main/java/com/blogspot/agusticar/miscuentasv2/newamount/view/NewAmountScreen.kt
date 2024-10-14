@@ -22,20 +22,27 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.Date
 
 @Composable
 
 fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:AccountsViewModel)
 {
     val scope = rememberCoroutineScope()
-    val description by viewModel.name.observeAsState("")
-    val amount by viewModel.amount.observeAsState("")
-
+    val descriptionEntry by viewModel.name.observeAsState("")
+    val amountEntry by viewModel.amount.observeAsState("")
+    val entryDate=LocalDate.now()
+    //Snackbar messages
+    val newIncomeMessage= message(resource = R.string.newincomecreated)
+    val newExpenseMessage= message(resource = R.string.newexpensecreated)
     val initColor=
         if(isIncome) LocalCustomColorsPalette.current.iconIncomeInit
         else LocalCustomColorsPalette.current.iconExpenseInit
@@ -53,7 +60,7 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:Acco
         TextFieldComponent(
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.desamount),
-            description,
+            descriptionEntry,
             onTextChange = { viewModel.onNameChanged(it)},
             BoardType.TEXT,
             false
@@ -61,20 +68,27 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:Acco
         TextFieldComponent(
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.enternote),
-            amount,
+            amountEntry,
             onTextChange = {viewModel.onAmountChanged(it) },
             BoardType.DECIMAL,
             false
         )
-        AccountSelector(stringResource(id = R.string.selectanaccount))
+        AccountSelector(stringResource(id = R.string.selectanaccount),viewModel)
         ModelButton(text = stringResource(id =if(isIncome) R.string.newincome else R.string.newexpense),
             R.dimen.text_title_small,
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {
                 scope.launch (Dispatchers.IO){
-                    SnackBarController.sendEvent(event = SnackBarEvent("Invalid Login"))
-                    //viewModel.addEntry(Entry(description=titleResource,))
+                    viewModel.addEntry(Entry(description =descriptionEntry,
+                        amount=amountEntry.toDoubleOrNull()?:0.0,
+                        date = Date().dateFormat(),
+                        categoryId = titleResource,
+                        accountId = 1
+                        ))
+
+                    SnackBarController.sendEvent(event = SnackBarEvent(if(isIncome) newIncomeMessage
+                    else newExpenseMessage))
                 }
 
             }
