@@ -26,9 +26,6 @@ object RoomModule {
     @Singleton
     fun provideAccountDao(database: AppDataBase) = database.getAccountDao()
 
-    @Provides
-    @Singleton
-    fun provideCategoryDao(database: AppDataBase) = database.getCategoryDao()
 
     @Provides
     @Singleton

@@ -29,24 +29,26 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.util.Date
 
 @Composable
 
-fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:AccountsViewModel)
+fun NewAmount(viewModel:AccountsViewModel)
 {
     val scope = rememberCoroutineScope()
     val descriptionEntry by viewModel.name.observeAsState("")
     val amountEntry by viewModel.amount.observeAsState("")
-    val entryDate=LocalDate.now()
+    val categorySelected by viewModel.categorySelected.observeAsState(null)
+    val status= categorySelected?.isIncome?:false
+    val iconResource=categorySelected?.iconResource?:0
+    val titleResource=categorySelected?.name?:0
     //Snackbar messages
     val newIncomeMessage= message(resource = R.string.newincomecreated)
     val newExpenseMessage= message(resource = R.string.newexpensecreated)
     val initColor=
-        if(isIncome) LocalCustomColorsPalette.current.iconIncomeInit
+        if(status) LocalCustomColorsPalette.current.iconIncomeInit
         else LocalCustomColorsPalette.current.iconExpenseInit
-    val targetColor= if(isIncome) LocalCustomColorsPalette.current.iconIncomeTarget
+    val targetColor= if(status) LocalCustomColorsPalette.current.iconIncomeTarget
     else LocalCustomColorsPalette.current.iconExpenseTarget
     Column(
         modifier = Modifier
@@ -74,7 +76,7 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:Acco
             false
         )
         AccountSelector(stringResource(id = R.string.selectanaccount),viewModel)
-        ModelButton(text = stringResource(id =if(isIncome) R.string.newincome else R.string.newexpense),
+        ModelButton(text = stringResource(id =if(status) R.string.newincome else R.string.newexpense),
             R.dimen.text_title_small,
             modifier = Modifier.width(320.dp),
             true,
@@ -87,7 +89,7 @@ fun NewAmount(isIncome:Boolean,iconResource:Int,titleResource:Int,viewModel:Acco
                         accountId = 1
                         ))
 
-                    SnackBarController.sendEvent(event = SnackBarEvent(if(isIncome) newIncomeMessage
+                    SnackBarController.sendEvent(event = SnackBarEvent(if(status) newIncomeMessage
                     else newExpenseMessage))
                 }
 

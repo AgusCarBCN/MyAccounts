@@ -29,11 +29,11 @@ interface EntryDao {
 
     // 5. Obtener una entrada por ID
     @Query("SELECT * FROM EntryEntity WHERE id = :entryId")
-    suspend fun getEntryById(entryId: Int): Entry?
+    suspend fun getEntryById(entryId: Long): Entry?
 
     // 6. Cambiar descripción de una entrada
     @Query("UPDATE EntryEntity SET description = :newDescription WHERE id = :entryId")
-    suspend fun updateEntryDescription(entryId: Int, newDescription: String)
+    suspend fun updateEntryDescription(entryId: Long, newDescription: String)
 
     // 7. Obtener entradas por fecha específica (ordenadas por fecha descendiente)
     @Query("SELECT * FROM EntryEntity WHERE date = :specificDate ORDER BY date DESC")

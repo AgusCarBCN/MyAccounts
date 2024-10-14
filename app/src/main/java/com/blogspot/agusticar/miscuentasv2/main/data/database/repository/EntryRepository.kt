@@ -28,12 +28,12 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
     }
 
     // 5. Obtener una entrada por su ID
-    suspend fun getEntryById(entryId: Int): Entry? {
+    suspend fun getEntryById(entryId: Long): Entry? {
         return entryDao.getEntryById(entryId)
     }
 
     // 6. Actualizar la descripción de una entrada por su ID
-    suspend fun updateEntryDescription(entryId: Int, newDescription: String) {
+    suspend fun updateEntryDescription(entryId: Long, newDescription: String) {
         entryDao.updateEntryDescription(entryId, newDescription)
     }
 

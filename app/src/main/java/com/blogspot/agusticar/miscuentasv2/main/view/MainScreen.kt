@@ -87,12 +87,9 @@ fun MainScreen(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
-    val iconAmount by mainViewModel.selectedIcon.collectAsState()
-    val titleAmount by mainViewModel.selectedTitle.collectAsState()
-    val isIncome by mainViewModel.isIncome.collectAsState()
     val showDialog by mainViewModel.showExitDialog.collectAsState()
 
-    val categories by accountsViewModel.listOfCategories.observeAsState(listOf())
+
 
     val userName by profileViewModel.name.observeAsState("")
     var title: Int by remember { mutableIntStateOf(R.string.hometitle) }
@@ -151,7 +148,7 @@ fun MainScreen(
                                 accountsViewModel.getCategories(true)
 
                             }
-                            CategorySelector(mainViewModel, categories, true)
+                            CategorySelector(mainViewModel, accountsViewModel, true)
                             title = R.string.newincome
                         }
 
@@ -193,15 +190,15 @@ fun MainScreen(
                                 accountsViewModel.getCategories(false)
 
                             }
-                            CategorySelector(mainViewModel, categories, false)
+                            CategorySelector(mainViewModel, accountsViewModel,false)
 
 
                             title = R.string.newexpense
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(isIncome, iconAmount, titleAmount,accountsViewModel)
-                            title = titleAmount
+                            NewAmount(accountsViewModel)
+
                         }
 
                         IconOptions.CHANGE_CURRENCY -> CurrencySelector(accountsViewModel)
