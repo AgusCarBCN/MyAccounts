@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadCard
@@ -41,14 +42,8 @@ fun HomeScreen(
     val expenses = -1200.78
 
     // Observa el estado de la lista de cuentas
-    val accounts by accountsViewModel.listOfAccounts.observeAsState(null)
-    // Observa el estado de la lista de cuentas
+    val accounts by accountsViewModel.listOfAccounts.observeAsState(null)   // Observa el estado de la lista de cuentas
 
-    val currencyCode by accountsViewModel.currencyCode.observeAsState("")
-    val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
-    // Formatear la cantidad en la moneda especificada
-    val numberFormat = NumberFormat.getCurrencyInstance(locale)
-    // Iniciar la carga de cuentas solo cuando el Composable se inicia
     LaunchedEffect(Unit) {
         accountsViewModel.getAllAccounts()
     }
@@ -67,9 +62,9 @@ fun HomeScreen(
         }
         else{
             Row(modifier = Modifier.padding(top = 20.dp)) {
-                HeadCard(modifier = Modifier.weight(0.5f), numberFormat.format(abs(income)), true)
+                HeadCard(modifier = Modifier.weight(0.5f),accountsViewModel.numberFormat(income), true)
                 Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
-                HeadCard(modifier = Modifier.weight(0.5f), numberFormat.format(abs(expenses)), false)
+                HeadCard(modifier = Modifier.weight(0.5f), accountsViewModel.numberFormat(expenses), false)
             }
 
             Spacer(modifier = Modifier.width(5.dp))
@@ -86,9 +81,8 @@ fun HomeScreen(
             ) {
                 items(accounts!!) { account -> // Solo utiliza accounts
                     AccountCard(
-                        numberFormat.format(abs(account.balance)),
+                        accountsViewModel.numberFormat(account.balance),
                         account.name, true
-
                     )  // Crea un card para cada cuenta en la lista
                     Spacer(modifier = Modifier.height(10.dp))  // Espacio entre cada card (separación)
                 }

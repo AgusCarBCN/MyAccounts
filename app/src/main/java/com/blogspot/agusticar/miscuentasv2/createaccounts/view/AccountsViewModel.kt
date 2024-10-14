@@ -16,10 +16,14 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryUseCase.InsertCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
+import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class AccountsViewModel @Inject constructor(
@@ -45,6 +49,9 @@ class AccountsViewModel @Inject constructor(
 
     private val _amount = MutableLiveData<String>()
     val amount: LiveData<String> = _amount
+
+    private val _amountFormat = MutableLiveData<String>()
+    val amountFormat: LiveData<String> = _amountFormat
 
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
@@ -156,11 +163,23 @@ class AccountsViewModel @Inject constructor(
         }
     }
 
+    fun numberFormat(amount: Double): String {
+
+        val locale = currencyLocales[_currencyCode.value] ?: Locale.GERMAN
+        // Formatear la cantidad en la moneda especificada
+        val numberFormat = NumberFormat.getCurrencyInstance(locale)
+        // Iniciar la carga de cuentas solo cuando el Composable se inicia
+        return numberFormat.format(
+            abs(amount)
+        )
+    }
+
+
     private fun isValidDecimal(text: String): Boolean {
 
         return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
     }
-
+    //Función para darle formato de la divisa actual a una cantidad de dinero
 
     private val currencies = listOf(
         // Lista completa de todas las divisas del mundo, ordenadas alfabéticamente por código:
