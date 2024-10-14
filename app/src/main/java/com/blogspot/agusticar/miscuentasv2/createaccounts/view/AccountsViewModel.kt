@@ -2,11 +2,14 @@ package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 
 
 import android.util.Log
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
@@ -61,6 +64,15 @@ class AccountsViewModel @Inject constructor(
     private val _accountSelected = MutableLiveData<Account>()
     val accountSelected: LiveData<Account> = _accountSelected
 
+    //LiveDatas de transferencia entre cuentas
+
+    private val _originAccount = MutableLiveData<Account>()
+    val originAccount: LiveData<Account> = _originAccount
+
+    private val _destinationAccount = MutableLiveData<Account>()
+    val destinationAccount: LiveData<Account> = _destinationAccount
+
+
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
 
@@ -99,21 +111,53 @@ class AccountsViewModel @Inject constructor(
             Log.d("Cuenta", "Error: ${e.message}")
         }
     }
-    fun addEntry(entry: Entry) {
+    fun transferEntry(
+                      originEntry:Entry,
+                      destinationEntry:Entry):Int {
+        var success=1
+        val originAccount=_originAccount.value
+        val destinationAccount=_destinationAccount.value
+        if(isValidTransfer()){
+            viewModelScope.launch(Dispatchers.IO){
+                var balanceOrigin=originAccount?.balance?:0.0
+                var balanceDestination=destinationAccount?.balance?:0.0
+                if(balanceOrigin>=originEntry.amount){
+                    //Actualización de balances de cuentas en base de datos
+                    balanceOrigin-=originEntry.amount
+                    addEntry.invoke(originEntry)
+                    updateAccountBalance(originAccount?.id?:0, balanceOrigin)
+                    balanceDestination+=destinationEntry.amount
+                    addEntry.invoke(destinationEntry)
+                    updateAccountBalance(destinationAccount?.id?:0, balanceDestination)
+                } else {
+                    success=0
+                }
+            }
+        }else{
+            success=2
+        }
+        return success
+    }
+    fun addEntry(entry: Entry):Int {
+        var success=1
         try {
-
             viewModelScope.launch(Dispatchers.IO) {
                 val account=_accountSelected.value
                 var balance=account?.balance?:0.0
-                val id=account?.id?:0
-                balance+=entry.amount
-                addEntry.invoke(entry)
-                updateAccountBalance(id,balance)
+                if(balance>=entry.amount) {
+                    val id = account?.id ?: 0
+                    balance += entry.amount
+                    addEntry.invoke(entry)
+                    updateAccountBalance(id, balance)
+                }else{
+                    success=0
+                }
                 resetFields()
             }
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
+        return success
     }
     private fun updateAccountBalance(accountId: Int, newBalance: Double) {
         try {
@@ -153,6 +197,13 @@ class AccountsViewModel @Inject constructor(
 
     fun onAccountSelected(accountSelected: Account) {
         _accountSelected.value = accountSelected
+    }
+
+    fun onOriginAccountSelected(accountSelected: Account) {
+        _originAccount.value = accountSelected
+    }
+    fun onDestinationAccountSelected(accountSelected: Account) {
+        _destinationAccount.value = accountSelected
     }
 
     fun setCurrencyCode(currencyCode: String) {
@@ -197,6 +248,7 @@ class AccountsViewModel @Inject constructor(
         )
     }
 
+    private fun isValidTransfer():Boolean=_originAccount.value?.id==_destinationAccount.value?.id
 
     private fun isValidDecimal(text: String): Boolean {
 

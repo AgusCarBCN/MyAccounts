@@ -158,7 +158,7 @@ fun MainScreen(
                         }
 
                         IconOptions.TRANSFER -> {
-                            Transfer()
+                            Transfer(accountsViewModel)
                             title = R.string.transfer
                         }
 
