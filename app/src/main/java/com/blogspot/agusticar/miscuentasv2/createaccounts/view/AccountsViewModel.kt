@@ -154,25 +154,18 @@ class AccountsViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 addEntry.invoke(entry)
                 updateEntry(accountId, entry.amount,isTransferDestination)
+                if(entry.amount>=0.0){
+                    getTotalIncomes()
+                }else{
+                    getTotalExpenses()
+                }
                 resetFields()
             }
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
     }
-    private fun updateTotal(amount:Double){
-        var totalIncomes=_totalIncomes.value?:0.0
-        var totalExpenses=_totalExpenses.value?:0.0
-        if(amount>=0){
-           totalIncomes+=amount
-            _totalIncomes.value=totalIncomes
-        }else{
-            totalExpenses+=amount
-            _totalExpenses.value=totalExpenses
 
-        }
-
-    }
 
     private fun updateAccountBalance(accountId: Int, newBalance: Double) {
         try {

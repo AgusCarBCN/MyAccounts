@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -82,7 +83,7 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean) {
         )
         Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
         Text(
-            text = "Ver ingresos",
+            text = if(isIncome) "ver ingresos" else "ver gastos",
             modifier = Modifier
                 .padding(5.dp)
                 .fillMaxWidth(),
@@ -139,7 +140,7 @@ fun AccountCard(amount:String,name:String,isNegative:Boolean){
         Text(
             text = "Ver ingresos y gastos",
             modifier = Modifier
-                .padding(start=10.dp)
+                .padding(start = 10.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Start,
             fontSize = 16.sp,
