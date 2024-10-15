@@ -49,6 +49,9 @@ fun NewAmount(viewModel:AccountsViewModel)
     //Snackbar messages
     val newIncomeMessage= message(resource = R.string.newincomecreated)
     val newExpenseMessage= message(resource = R.string.newexpensecreated)
+    val amountOverBalanceMessage= message(resource = R.string.overbalance)
+    var operationStatus=1
+
     val initColor=
         if(status) LocalCustomColorsPalette.current.iconIncomeInit
         else LocalCustomColorsPalette.current.iconExpenseInit
@@ -85,18 +88,36 @@ fun NewAmount(viewModel:AccountsViewModel)
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {
-                scope.launch (Dispatchers.IO){
-                    viewModel.addEntry(Entry(description =descriptionEntry,
-                        amount=if(status)amountEntry.toDoubleOrNull()?:0.0
-                        else (amountEntry.toDoubleOrNull()?:0.0)*(-1),
-                        date = Date().dateFormat(),
-                        categoryId = iconResource,
-                        accountId = idAccount
-                        ))
-
-                    SnackBarController.sendEvent(event = SnackBarEvent(if(status) newIncomeMessage
-                    else newExpenseMessage))
+                operationStatus = if(!status){
+                    if(viewModel.isValidExpense(amountEntry.toDoubleOrNull()?:0.0)){
+                        1
+                    }else {
+                        0
+                    }
+                }else{
+                    1
                 }
+                    scope.launch(Dispatchers.IO) {
+                        if(operationStatus==1) {
+                            viewModel.addEntry(
+                                Entry(
+                                    description = descriptionEntry,
+                                    amount = if (status) amountEntry.toDoubleOrNull() ?: 0.0
+                                    else (amountEntry.toDoubleOrNull() ?: 0.0) * (-1),
+                                    date = Date().dateFormat(),
+                                    categoryId = iconResource,
+                                    accountId = idAccount
+                                )
+                            )
+                            if (status) {
+                                SnackBarController.sendEvent(event = SnackBarEvent(newIncomeMessage))
+                            } else {
+                                SnackBarController.sendEvent(event = SnackBarEvent(newExpenseMessage))
+                            }
+                        }else{
+                            SnackBarController.sendEvent(event = SnackBarEvent(amountOverBalanceMessage))
+                        }
+                    }
 
             }
         )

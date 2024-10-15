@@ -34,7 +34,7 @@ class AccountsViewModel @Inject constructor(
     private val getCurrencyCode: GetCurrencyCodeUseCase,
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
-    private val addEntry:InsertEntryUseCase,
+    private val addEntry: InsertEntryUseCase,
     private val getAccounts: GetAllAccountsUseCase,
     private val updateBalance: UpdateAccountBalance
 
@@ -66,9 +66,6 @@ class AccountsViewModel @Inject constructor(
 
     //LiveDatas de transferencia entre cuentas
 
-    private val _originAccount = MutableLiveData<Account>()
-    val originAccount: LiveData<Account> = _originAccount
-
     private val _destinationAccount = MutableLiveData<Account>()
     val destinationAccount: LiveData<Account> = _destinationAccount
 
@@ -92,10 +89,10 @@ class AccountsViewModel @Inject constructor(
 
 
     fun getCategories(status: Boolean) {
-        if(status){
-            _listOfCategories.value=incomeCategories
-        }else{
-            _listOfCategories.value=expenseCategories
+        if (status) {
+            _listOfCategories.value = incomeCategories
+        } else {
+            _listOfCategories.value = expenseCategories
         }
     }
 
@@ -111,54 +108,55 @@ class AccountsViewModel @Inject constructor(
             Log.d("Cuenta", "Error: ${e.message}")
         }
     }
-    fun transferEntry(
-                      originEntry:Entry,
-                      destinationEntry:Entry):Int {
-        var success=1
-        val originAccount=_originAccount.value
-        val destinationAccount=_destinationAccount.value
-        if(isValidTransfer()){
-            viewModelScope.launch(Dispatchers.IO){
-                var balanceOrigin=originAccount?.balance?:0.0
-                var balanceDestination=destinationAccount?.balance?:0.0
-                if(balanceOrigin>=originEntry.amount){
-                    //Actualización de balances de cuentas en base de datos
-                    balanceOrigin-=originEntry.amount
-                    addEntry.invoke(originEntry)
-                    updateAccountBalance(originAccount?.id?:0, balanceOrigin)
-                    balanceDestination+=destinationEntry.amount
-                    addEntry.invoke(destinationEntry)
-                    updateAccountBalance(destinationAccount?.id?:0, balanceDestination)
-                } else {
-                    success=0
-                }
-            }
-        }else{
-            success=2
-        }
-        return success
-    }
-    fun addEntry(entry: Entry):Int {
-        var success=1
+
+    fun transferMoney(fromAccountId: Int, toAccountId: Int, amount: Double) {
+
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val account=_accountSelected.value
-                var balance=account?.balance?:0.0
-                if(balance>=entry.amount) {
-                    val id = account?.id ?: 0
-                    balance += entry.amount
-                    addEntry.invoke(entry)
-                    updateAccountBalance(id, balance)
-                }else{
-                    success=0
+                val fromAccount = _accountSelected.value
+                val toAccount = _destinationAccount.value
+
+                val fromBalance = fromAccount?.balance ?: 0.0
+                val toBalance = toAccount?.balance ?: 0.0
+
+                // Verifica que la cuenta de origen tenga suficiente saldo
+                if (fromBalance >= abs(amount)) {
+                    // Resta el monto de la cuenta de origen
+                    val newFromBalance = fromBalance - amount
+
+                    // Suma el monto a la cuenta de destino
+                    val newToBalance = toBalance + amount
+
+                    // Actualiza los saldos en ambas cuentas
+                    updateAccountBalance(fromAccountId, newFromBalance)
+                    updateAccountBalance(toAccountId, newToBalance)
                 }
+            }
+            resetFields()
+
+        } catch (e: Exception) {
+            Log.d("Cuenta", "Error: ${e.message}")
+        }
+    }
+
+
+    fun addEntry(entry: Entry) {
+
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                val account = _accountSelected.value
+                var balance = account?.balance ?: 0.0
+                val id = account?.id ?: 0
+                balance += entry.amount
+                addEntry.invoke(entry)
+                updateAccountBalance(id, balance)
                 resetFields()
             }
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
-        return success
     }
+
     private fun updateAccountBalance(accountId: Int, newBalance: Double) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
@@ -199,12 +197,10 @@ class AccountsViewModel @Inject constructor(
         _accountSelected.value = accountSelected
     }
 
-    fun onOriginAccountSelected(accountSelected: Account) {
-        _originAccount.value = accountSelected
-    }
     fun onDestinationAccountSelected(accountSelected: Account) {
         _destinationAccount.value = accountSelected
     }
+
 
     fun setCurrencyCode(currencyCode: String) {
         viewModelScope.launch {
@@ -248,8 +244,8 @@ class AccountsViewModel @Inject constructor(
         )
     }
 
-    private fun isValidTransfer():Boolean=_originAccount.value?.id==_destinationAccount.value?.id
-
+    fun isValidTransfer(): Boolean = _accountSelected.value?.id != _destinationAccount.value?.id
+    fun isValidExpense(amount: Double): Boolean = (_accountSelected.value?.balance ?: 0.0) >= amount
     private fun isValidDecimal(text: String): Boolean {
 
         return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))

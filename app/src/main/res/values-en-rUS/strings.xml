@@ -122,6 +122,10 @@
     <string name="newaccountcreated">You have created a new account</string>
     <string name="newincomecreated">You have inserted a new income</string>
     <string name="newexpensecreated">You have inserted a new expense</string>
+    <string name="transferdone">Transfer done</string>
+    <string name="overbalance">Amount over balance</string>
+    <string name="transferfrom">Expense by transfer</string>
+    <string name="transferTo">Income by transfer</string>
     <!--TopBar titles-->
     <string name="hometitle">Home</string>
     <string name="searchtitle">Search</string>

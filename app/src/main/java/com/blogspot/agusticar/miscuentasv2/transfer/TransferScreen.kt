@@ -17,12 +17,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -37,9 +40,17 @@ fun Transfer(viewModel: AccountsViewModel)
 {
     val originAccount by viewModel.accountSelected.observeAsState()
     val destinationAccount by viewModel.accountSelected.observeAsState()
+    val amountTransfer by viewModel.amount.observeAsState("")
     val scope = rememberCoroutineScope()
     val idOrigin=originAccount?.id?:1
     val idDestination=destinationAccount?.id?:1
+
+    val transferFrom= stringResource(id = R.string.transferfrom)
+    val transferTo= stringResource(id = R.string.transferTo)
+    //SnackBarMessage
+    val amountOverBalanceMessage= message(resource = R.string.overbalance)
+    val transferSuccessMessage= message(resource = R.string.transferdone)
+    var operationStatus=1
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,28 +71,16 @@ fun Transfer(viewModel: AccountsViewModel)
             BoardType.DECIMAL,
             false
         )
-        AccountSelector(stringResource(id = R.string.originaccount),viewModel,origin = true)
-        AccountSelector(stringResource(id = R.string.destinationaccount),viewModel, destination = true)
+        AccountSelector(stringResource(id = R.string.originaccount),viewModel)
+        AccountSelector(stringResource(id = R.string.destinationaccount),viewModel,true)
         
         ModelButton(text = stringResource(id = R.string.confirmButton),
             R.dimen.text_title_small,
             modifier = Modifier.width(320.dp),
-            true,
+            viewModel.isValidTransfer(),
             onClickButton = {
-                scope.launch (Dispatchers.IO) {
-                    viewModel.transferEntry(
-                        Entry(description =  "transfer",
-                            amount=-2000.0,
-                            date = Date().dateFormat(),
-                            categoryId = R.drawable.transferoption,
-                            accountId = idOrigin),
-                        Entry(description =  "transfer",
-                            amount=+2000.0,
-                            date = Date().dateFormat(),
-                            categoryId = R.drawable.transferoption,
-                            accountId = idDestination))
                 }
-            }
+
         )
         ModelButton(text = stringResource(id = R.string.backButton),
             R.dimen.text_title_small,

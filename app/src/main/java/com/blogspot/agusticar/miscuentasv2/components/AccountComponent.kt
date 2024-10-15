@@ -36,7 +36,7 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
 @Composable
-fun AccountSelector(title:String,accountViewModel:AccountsViewModel,origin:Boolean=false,destination:Boolean=false) {
+fun AccountSelector(title:String,accountViewModel:AccountsViewModel,isAccountDestination:Boolean = false) {
 
     accountViewModel.getAllAccounts()
     // Observa el estado de la lista de cuentas
@@ -110,9 +110,7 @@ fun AccountSelector(title:String,accountViewModel:AccountsViewModel,origin:Boole
                 )
                 {
                     //Se actualiza la cuenta seleccionada en viewModel
-                    if(origin){
-                        accountViewModel.onOriginAccountSelected(accounts[page])
-                    }else if(destination){
+                    if(isAccountDestination){
                         accountViewModel.onDestinationAccountSelected(accounts[page])
                     }else {
                         accountViewModel.onAccountSelected(accounts[page])

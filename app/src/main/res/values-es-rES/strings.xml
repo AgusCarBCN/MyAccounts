@@ -123,6 +123,10 @@
     <string name="newaccountcreated">Has creado una nueva cuenta</string>
     <string name="newincomecreated">Has insertado un nuevo ingreso</string>
     <string name="newexpensecreated">Has insertado un nuevo gasto</string>
+    <string name="transferdone">Transferencia hecha</string>
+    <string name="overbalance">Importe por encima de saldo</string>
+    <string name="transferfrom">Gasto por transferencia</string>
+    <string name="transferTo">Ingreso por transferencia</string>
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>
