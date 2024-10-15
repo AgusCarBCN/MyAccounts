@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.internal.illegalDecoyCallException
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -24,7 +23,8 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
+import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
@@ -33,17 +33,20 @@ import java.util.Date
 
 @Composable
 
-fun Transfer(viewModel: AccountsViewModel) {
-    val originAccount by viewModel.accountSelected.observeAsState()
-    val destinationAccount by viewModel.destinationAccount.observeAsState()
-    val amountTransfer by viewModel.amount.observeAsState("")
-    val confirmButton by viewModel.isConfirmTransfer.observeAsState(false)
+fun Transfer(accountViewModel: AccountsViewModel,
+             entryViewModel: EntriesViewModel
+             ) {
+
+    val originAccount by accountViewModel.accountSelected.observeAsState()
+    val destinationAccount by accountViewModel.destinationAccount.observeAsState()
+    val amountTransfer by entryViewModel.entryAmount.observeAsState("")
+    val confirmButton by accountViewModel.isConfirmTransfer.observeAsState(false)
     val scope = rememberCoroutineScope()
     val idOrigin = originAccount?.id ?: 1
     val idDestination = destinationAccount?.id ?: 1
     val amount=amountTransfer.toDoubleOrNull() ?: 0.0
-
-    viewModel.isValidTransfer()
+    val negativeAmount=(-1)*(amountTransfer.toDoubleOrNull() ?: 0.0)
+    accountViewModel.isValidTransfer()
     val transferFrom = stringResource(id = R.string.transferfrom)
     val transferTo = stringResource(id = R.string.transferTo)
     //SnackBarMessage
@@ -68,44 +71,45 @@ fun Transfer(viewModel: AccountsViewModel) {
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.amountentrie),
             amountTransfer,
-            onTextChange = {viewModel.onAmountChanged(it) },
+            onTextChange = {entryViewModel.onAmountChanged(it) },
             BoardType.DECIMAL,
             false
         )
-        AccountSelector(stringResource(id = R.string.originaccount), viewModel)
-        AccountSelector(stringResource(id = R.string.destinationaccount), viewModel, true)
+        AccountSelector(stringResource(id = R.string.originaccount), accountViewModel)
+        AccountSelector(stringResource(id = R.string.destinationaccount), accountViewModel, true)
 
         ModelButton(text = stringResource(id = R.string.confirmButton),
             R.dimen.text_title_small,
             modifier = Modifier.width(320.dp),
             confirmButton,
             onClickButton = {
-                operationStatus = if(viewModel.isValidExpense(amount)){
+                operationStatus = if(accountViewModel.isValidExpense(amount)){
                     1
                 }else{
                     -1
                 }
                 scope.launch(Dispatchers.IO) {
                     if (operationStatus == 1) {
-                        viewModel.addEntry(idOrigin,
-                            Entry(
-                                description = transferFrom,
-                                amount = (amount) * (-1),
-                                date = Date().dateFormat(),
-                                categoryId = R.drawable.transferoption,
-                                accountId = idOrigin
+                        entryViewModel.addEntry(
+                            EntryDTO(
+                                transferFrom,
+                                negativeAmount,
+                                 Date().dateFormat(),
+                                R.drawable.transferoption,
+                                 idOrigin
                             )
                         )
-                        viewModel.addEntry(idDestination,
-                            Entry(
+                        entryViewModel.addEntry(
+                            EntryDTO(
                                 description = transferTo,
                                 amount = amount,
                                 date = Date().dateFormat(),
                                 categoryId = R.drawable.transferoption,
                                 accountId = idDestination
-                            ),true
+                            )
                         )
-
+                        accountViewModel.updateEntry(idOrigin, negativeAmount,false )
+                        accountViewModel.updateEntry(idDestination, amount,true )
                     }
                     if(operationStatus==1){
                         SnackBarController.sendEvent(event = SnackBarEvent(transferSuccessMessage))

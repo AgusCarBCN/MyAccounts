@@ -2,6 +2,7 @@ package com.blogspot.agusticar.miscuentasv2.main.data.database.repository
 
 
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dao.EntryDao
+import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import javax.inject.Inject
 
@@ -17,6 +18,34 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
 
     suspend fun getSumExpenses() =
         entryDao.getSumOfExpenseEntries()?:0.0
+
+    suspend fun insertEntryDTO(entryDTO: EntryDTO) {
+        val entry = entryDtoToEntry(entryDTO)
+        entryDao.insertEntry(entry)
+    }
+
+    private fun entryDtoToEntry(dto: EntryDTO): Entry {
+        return Entry(
+            description = dto.description,
+            amount = dto.amount,
+            date = dto.date,
+            categoryId = dto.categoryId,
+            accountId = dto.accountId
+            // id será generado automáticamente, así que no lo incluimos aquí
+        )
+    }
+
+    private fun entryToEntryDto(entry: Entry): EntryDTO {
+        return EntryDTO(
+            description = entry.description,
+            amount = entry.amount,
+            date = entry.date,
+            categoryId = entry.categoryId,
+            accountId = entry.accountId
+            // No necesitamos el id
+        )
+    }
+
 
     /*
 

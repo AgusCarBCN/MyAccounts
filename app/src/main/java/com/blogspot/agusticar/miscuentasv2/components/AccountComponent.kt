@@ -33,15 +33,17 @@ import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
 
 
 @Composable
 fun AccountSelector(title:String,accountViewModel:AccountsViewModel,isAccountDestination:Boolean = false) {
 
-    accountViewModel.getAllAccounts()
+
     // Observa el estado de la lista de cuentas
     val accounts by accountViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
-
+    val currencyCode by accountViewModel.currencyCode.observeAsState("USD")
+    accountViewModel.getAllAccounts()
     // Inicializamos el estado del VerticalPager con el número de páginas igual al tamaño de la lista de monedas.
 
     val pagerState = rememberPagerState(pageCount = { accounts.size })
@@ -115,7 +117,7 @@ fun AccountSelector(title:String,accountViewModel:AccountsViewModel,isAccountDes
                     }else {
                         accountViewModel.onAccountSelected(accounts[page])
                     }
-                    val balanceFormat=accountViewModel.numberFormat(accounts[page].balance)
+                    val balanceFormat= Utils.numberFormat(accounts[page].balance,currencyCode)
                     // Texto de la moneda
                     Text(
                         text = "${accounts[page].name}          $balanceFormat", // Descripción de la moneda

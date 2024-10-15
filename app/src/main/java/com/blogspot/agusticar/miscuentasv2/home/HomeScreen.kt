@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -21,25 +20,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import java.text.NumberFormat
-import java.util.Locale
-import kotlin.math.abs
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
 
 
 @Composable
 fun HomeScreen(
-    accountsViewModel: AccountsViewModel
+    accountsViewModel: AccountsViewModel,
+    entriesViewModel: EntriesViewModel
 ) {
-    val incomes by accountsViewModel.totalIncomes.observeAsState(0.0)
-    val expenses by accountsViewModel.totalExpenses.observeAsState(0.0)
+    val incomes by entriesViewModel.totalIncomes.observeAsState(0.0)
+    val expenses by entriesViewModel.totalExpenses.observeAsState(0.0)
+    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+    accountsViewModel.getAllAccounts()
     // Observa el estado de la lista de cuentas
     val accounts by accountsViewModel.listOfAccounts.observeAsState(null)   // Observa el estado de la lista de cuentas
 
@@ -58,12 +57,12 @@ fun HomeScreen(
         else{
             Row(modifier = Modifier.padding(top = 20.dp)) {
                 HeadCard(modifier = Modifier.weight(0.5f),
-                    accountsViewModel.numberFormat(incomes),
+                    Utils.numberFormat(incomes,currencyCode),
                     true,
                     onClickCard={})
                 Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
                 HeadCard(modifier = Modifier.weight(0.5f),
-                    accountsViewModel.numberFormat(expenses),
+                    Utils.numberFormat(expenses,currencyCode),
                     false,
                     onClickCard={})
             }
@@ -83,7 +82,7 @@ fun HomeScreen(
             ) {
                 items(accounts!!) { account -> // Solo utiliza accounts
                     AccountCard(
-                        accountsViewModel.numberFormat(account.balance),
+                        Utils.numberFormat(account.balance,currencyCode),
                         account.name,
                         true,
                         onClickCard = {  }

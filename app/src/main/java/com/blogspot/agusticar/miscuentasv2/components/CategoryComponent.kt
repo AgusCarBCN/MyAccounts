@@ -28,6 +28,7 @@ fun CategoryEntries(category: Category, modifier:Modifier, onClickItem:() -> Uni
 
     val targetColor= if(category.isIncome) LocalCustomColorsPalette.current.iconIncomeTarget
 
+
     else LocalCustomColorsPalette.current.iconExpenseTarget
 
         // Asegúrate de que la columna ocupe todo el espacio de la tarjeta

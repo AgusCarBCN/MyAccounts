@@ -3,8 +3,6 @@ package com.blogspot.agusticar.miscuentasv2
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -27,13 +25,13 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
-import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.view.MainScreen
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
@@ -47,6 +45,7 @@ class MainActivity : ComponentActivity() {
     private val tutorialViewModel: TutorialViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val accountViewModel: AccountsViewModel by viewModels()
+    private val entriesViewModel: EntriesViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val settingViewModel: SettingViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
@@ -151,7 +150,8 @@ class MainActivity : ComponentActivity() {
                                 mainViewModel,
                                 accountViewModel,
                                 profileViewModel,
-                                settingViewModel
+                                settingViewModel,
+                                entriesViewModel
                             )
 
                         }

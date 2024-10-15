@@ -2,7 +2,6 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 import android.app.Activity
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -69,6 +68,7 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -82,7 +82,8 @@ fun MainScreen(
     mainViewModel: MainViewModel,
     accountsViewModel: AccountsViewModel,
     profileViewModel: ProfileViewModel,
-    settingViewModel: SettingViewModel
+    settingViewModel: SettingViewModel,
+    entriesViewModel: EntriesViewModel
 
 ) {
 
@@ -133,7 +134,7 @@ fun MainScreen(
                     }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            HomeScreen(accountsViewModel)
+                            HomeScreen(accountsViewModel,entriesViewModel)
                             title = R.string.greeting
                         }
 
@@ -150,15 +151,15 @@ fun MainScreen(
 
                         IconOptions.INCOME_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                accountsViewModel.getCategories(true)
+                                entriesViewModel.getCategories(true)
 
                             }
-                            CategorySelector(mainViewModel, accountsViewModel, true)
+                            CategorySelector(mainViewModel, entriesViewModel, true)
                             title = R.string.newincome
                         }
 
                         IconOptions.TRANSFER -> {
-                            Transfer(accountsViewModel)
+                            Transfer(accountsViewModel,entriesViewModel)
                             title = R.string.transfer
                         }
 
@@ -192,17 +193,17 @@ fun MainScreen(
 
                         IconOptions.EXPENSE_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                accountsViewModel.getCategories(false)
+                                entriesViewModel.getCategories(false)
 
                             }
-                            CategorySelector(mainViewModel, accountsViewModel,false)
+                            CategorySelector(mainViewModel, entriesViewModel,false)
 
 
                             title = R.string.newexpense
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(accountsViewModel)
+                            NewAmount(entriesViewModel,accountsViewModel)
 
                         }
 

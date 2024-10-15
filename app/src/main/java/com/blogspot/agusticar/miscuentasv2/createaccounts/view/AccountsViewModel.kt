@@ -20,6 +20,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCode
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,11 +34,8 @@ class AccountsViewModel @Inject constructor(
     private val getCurrencyCode: GetCurrencyCodeUseCase,
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
-    private val addEntry: InsertEntryUseCase,
     private val getAccounts: GetAllAccountsUseCase,
     private val updateBalance: UpdateAccountBalance,
-    private val getTotalIncomes:GetSumTotalIncomesUseCase,
-    private val getTotalExpenses: GetSumTotalExpensesUseCase
 
 ) : ViewModel() {
 
@@ -57,23 +55,10 @@ class AccountsViewModel @Inject constructor(
     private val _amount = MutableLiveData<String>()
     val amount: LiveData<String> = _amount
 
-    //LiveData para categoria seleccionada
-
-    private val _categorySeleted = MutableLiveData<Category>()
-    val categorySelected: LiveData<Category> = _categorySeleted
-
     //LiveData para cuenta seleccionada
 
     private val _accountSelected = MutableLiveData<Account>()
     val accountSelected: LiveData<Account> = _accountSelected
-
-    //LiveData para actualizar gastos e ingresos
-
-    private val _totalIncomes = MutableLiveData<Double>()
-    val totalIncomes: LiveData<Double> = _totalIncomes
-
-    private val _totalExpenses = MutableLiveData<Double>()
-    val totalExpenses: LiveData<Double> = _totalExpenses
 
     //LiveDatas de transferencia entre cuentas
 
@@ -83,9 +68,6 @@ class AccountsViewModel @Inject constructor(
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
 
-    private val _listOfCategories = MutableLiveData<List<Category>>()
-    val listOfCategories: LiveData<List<Category>> = _listOfCategories
-
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
 
@@ -94,18 +76,8 @@ class AccountsViewModel @Inject constructor(
             _currencyCode.value = getCurrencyCode()
             _isCurrencyExpanded.value = false
             getAllAccounts()
-            getTotalExpenses()
-            getTotalIncomes()
-
-        }
-    }
 
 
-    fun getCategories(status: Boolean) {
-        if (status) {
-            _listOfCategories.value = incomeCategories
-        } else {
-            _listOfCategories.value = expenseCategories
         }
     }
 
@@ -123,7 +95,7 @@ class AccountsViewModel @Inject constructor(
     }
 
 
-    private fun updateEntry(accountId: Int, amount: Double,isTransferDestination:Boolean) {
+    fun updateEntry(accountId: Int, amount: Double,isTransferDestination:Boolean) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val account = _accountSelected.value
@@ -131,41 +103,31 @@ class AccountsViewModel @Inject constructor(
                 val balance = account?.balance ?: 0.0
                 val balanceDestination=accountDestination?.balance?:0.0
                 if(!isTransferDestination) {
+                    Log.d("Update", "amount ${amount}")
+                    Log.d("Update", "balance ${balance}")
                     val newBalance = balance + amount
+                    Log.d("Update", "newbalance ${newBalance}")
                     // Actualiza los saldos en ambas cuentas
                     updateAccountBalance(accountId, newBalance)
+
                 }else{
+                    Log.d("Update", "amount ${amount}")
+                    Log.d("Update", "balance ${balanceDestination}")
                     val newBalanceDestination = balanceDestination + amount
+                    Log.d("Update", "newbalance ${newBalanceDestination}")
                     // Actualiza los saldos en ambas cuentas
                     updateAccountBalance(accountId, newBalanceDestination)
+
                 }
 
             }
-            resetFields()
+
 
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
 
     }
-
-    fun addEntry(accountId:Int,entry: Entry,isTransferDestination:Boolean=false) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                addEntry.invoke(entry)
-                updateEntry(accountId, entry.amount,isTransferDestination)
-                if(entry.amount>=0.0){
-                    getTotalIncomes()
-                }else{
-                    getTotalExpenses()
-                }
-                resetFields()
-            }
-        } catch (e: Exception) {
-            Log.d("Cuenta", "Error: ${e.message}")
-        }
-    }
-
 
     private fun updateAccountBalance(accountId: Int, newBalance: Double) {
         try {
@@ -199,9 +161,6 @@ class AccountsViewModel @Inject constructor(
 
     }
 
-    fun onCategorySelected(categorySelected: Category) {
-        _categorySeleted.value = categorySelected
-    }
 
     fun onAccountSelected(accountSelected: Account) {
         _accountSelected.value = accountSelected
@@ -239,21 +198,11 @@ class AccountsViewModel @Inject constructor(
     }
 
     fun onAmountChanged(newBalance: String) {
-        if (isValidDecimal(newBalance)) {
+        if (Utils.isValidDecimal(newBalance)) {
             _amount.value = newBalance
         }
     }
 
-    fun numberFormat(amount: Double): String {
-
-        val locale = currencyLocales[_currencyCode.value] ?: Locale.GERMAN
-        // Formatear la cantidad en la moneda especificada
-        val numberFormat = NumberFormat.getCurrencyInstance(locale)
-        // Iniciar la carga de cuentas solo cuando el Composable se inicia
-        return numberFormat.format(
-            abs(amount)
-        )
-    }
 
 
     fun isValidTransfer() {
@@ -264,27 +213,9 @@ class AccountsViewModel @Inject constructor(
 
 
     fun isValidExpense(amount: Double): Boolean = (_accountSelected.value?.balance ?: 0.0) >= amount
-    private fun isValidDecimal(text: String): Boolean {
 
-        return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
-    }
-    private fun getTotalExpenses(){
 
-        viewModelScope.launch(Dispatchers.IO) {
-           val totalExpenses=getTotalExpenses.invoke()
-            _totalExpenses.postValue(totalExpenses)
-        }
 
-    }
-
-    private fun getTotalIncomes(){
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val totalIncomes=getTotalIncomes.invoke()
-            _totalIncomes.postValue(totalIncomes)
-        }
-
-    }
 
     //Función para darle formato de la divisa actual a una cantidad de dinero
 
@@ -447,245 +378,6 @@ class AccountsViewModel @Inject constructor(
     )
 
 
-    private val incomeCategories = listOf(
-        Category(
-            iconResource = R.drawable.ic_category_salary,
-            name = R.string.salary,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_dividens,
-            name = R.string.dividens,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_rent,
-            name = R.string.rental,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_freelances,
-            name = R.string.freelance,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_sales,
-            name = R.string.sales,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_donation,
-            name = R.string.subsidies,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_lotery,
-            name = R.string.lotery,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_otherincomes,
-            name = R.string.otherincomes,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_premium,
-            name = R.string.awards,  // Usando el recurso de string
-            isIncome = true
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_winasset,
-            name = R.string.benefit_assets,  // Usando el recurso de string
-            isIncome = true
-        ),
-    )
-    private val expenseCategories = listOf(
-        Category(
-            iconResource = R.drawable.ic_category_grocery,
-            name = R.string.food,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_mortgage,
-            name = R.string.morgage,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_electricity,
-            name = R.string.electricitybill,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_water,
-            name = R.string.waterbill,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_gasbill,
-            name = R.string.gasbill,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_publictansport,
-            name = R.string.publictransport,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_fuelcar,
-            name = R.string.fuel_title,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_otherinsurance,
-            name = R.string.insurances,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_healthbill,
-            name = R.string.health,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_leiure,
-            name = R.string.entertainment,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_subscriptions,
-            name = R.string.subscriptions,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_vacation,
-            name = R.string.vacations_travel_title,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_clothing,
-            name = R.string.clothing,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_education,
-            name = R.string.courses_books_materials_title,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_house,
-            name = R.string.house,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_repaircar,
-            name = R.string.car,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_sport,
-            name = R.string.gym,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_pet,
-            name = R.string.pets,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_personalcare,
-            name = R.string.personal_care_title,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_gif,
-            name = R.string.gifts_title,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_donation,
-            name = R.string.donations_title,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_lostasset,
-            name = R.string.lost_assets,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_books,
-            name = R.string.books,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_music,
-            name = R.string.music,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_hobies,
-            name = R.string.hobbies,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_tax,
-            name = R.string.taxes,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_loan,
-            name = R.string.loans,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_electronic,
-            name = R.string.electronics,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_coffe,
-            name = R.string.coffee,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_tabac,
-            name = R.string.tobacco,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_sportsuplement,
-            name = R.string.supplements,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_bike,
-            name = R.string.motorcycle,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_garden,
-            name = R.string.garden,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_teraphy,
-            name = R.string.therapies,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_alcohol,
-            name = R.string.alcohol,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_game,
-            name = R.string.gambling,  // Usando el recurso de string
-            isIncome = false
-        ),
-        Category(
-            iconResource = R.drawable.ic_category_otherincomes,
-            name = R.string.other_expenses,  // Usando el recurso de string
-            isIncome = false
-        )
-    )
 }
 
 

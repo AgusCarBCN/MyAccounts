@@ -20,12 +20,12 @@ import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 
 @Composable
 
-fun CategorySelector(mainViewModel: MainViewModel, accountViewModel:AccountsViewModel, status:Boolean) {
+fun CategorySelector(mainViewModel: MainViewModel, entriesViewModel:EntriesViewModel, status:Boolean) {
 
 
-    val listOfCategories by accountViewModel.listOfCategories.observeAsState(listOf())
+    val listOfCategories by entriesViewModel.listOfCategories.observeAsState(listOf())
     //Obtengo lista de categorias por status
-    accountViewModel.getCategories(status)
+    entriesViewModel.getCategories(status)
     HeadSetting(title = (if(status) stringResource(id = R.string.chooseincome) else stringResource(
         id = R.string.chooseexpense)), size = 24)
         LazyVerticalGrid(
@@ -39,7 +39,7 @@ fun CategorySelector(mainViewModel: MainViewModel, accountViewModel:AccountsView
                 modifier = Modifier
                     .padding(10.dp),
                 onClickItem = {mainViewModel.selectScreen(IconOptions.NEW_AMOUNT)
-                   accountViewModel.onCategorySelected(listOfCategories[index])
+                   entriesViewModel.onCategorySelected(listOfCategories[index])
                 })
         }
     }

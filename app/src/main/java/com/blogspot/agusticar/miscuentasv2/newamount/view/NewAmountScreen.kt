@@ -1,5 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.newamount.view
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +25,7 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
+import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
@@ -33,24 +34,27 @@ import java.util.Date
 
 @Composable
 
-fun NewAmount(viewModel:AccountsViewModel)
+fun NewAmount(entryViewModel:EntriesViewModel,
+              accountViewModel:AccountsViewModel)
+
 {
     val scope = rememberCoroutineScope()
-    val descriptionEntry by viewModel.name.observeAsState("")
-    val amountEntry by viewModel.amount.observeAsState("")
-    val categorySelected by viewModel.categorySelected.observeAsState(null)
-    val accountSelected by viewModel.accountSelected.observeAsState()
+    val descriptionEntry by entryViewModel.entryName.observeAsState("")
+    val amountEntry by entryViewModel.entryAmount.observeAsState("")
+    val categorySelected by entryViewModel.categorySelected.observeAsState(null)
+    val accountSelected by accountViewModel.accountSelected.observeAsState()
 
     val idAccount=accountSelected?.id?:1
     val status= categorySelected?.isIncome?:false
     val iconResource=categorySelected?.iconResource?:0
     val titleResource=categorySelected?.name?:0
-
+    val amount=amountEntry.toDoubleOrNull() ?: 0.0
+    val negativeAmount=(-1)*(amountEntry.toDoubleOrNull() ?: 0.0)
     //Snackbar messages
     val newIncomeMessage= message(resource = R.string.newincomecreated)
     val newExpenseMessage= message(resource = R.string.newexpensecreated)
     val amountOverBalanceMessage= message(resource = R.string.overbalance)
-    var operationStatus=1
+    var operationStatus: Int
 
     val initColor=
         if(status) LocalCustomColorsPalette.current.iconIncomeInit
@@ -70,7 +74,7 @@ fun NewAmount(viewModel:AccountsViewModel)
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.desamount),
             descriptionEntry,
-            onTextChange = { viewModel.onNameChanged(it)},
+            onTextChange = { entryViewModel.onEntryNameChanged(it)},
             BoardType.TEXT,
             false
         )
@@ -78,18 +82,18 @@ fun NewAmount(viewModel:AccountsViewModel)
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.enternote),
             amountEntry,
-            onTextChange = {viewModel.onAmountChanged(it) },
+            onTextChange = {entryViewModel.onAmountChanged(it) },
             BoardType.DECIMAL,
             false
         )
-        AccountSelector(stringResource(id = R.string.selectanaccount),viewModel)
+        AccountSelector(stringResource(id = R.string.selectanaccount),accountViewModel)
         ModelButton(text = stringResource(id =if(status) R.string.newincome else R.string.newexpense),
             R.dimen.text_title_small,
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {
                 operationStatus = if(!status){
-                    if(viewModel.isValidExpense(amountEntry.toDoubleOrNull()?:0.0)){
+                    if(accountViewModel.isValidExpense(amountEntry.toDoubleOrNull()?:0.0)){
                         1
                     }else {
                         0
@@ -97,18 +101,21 @@ fun NewAmount(viewModel:AccountsViewModel)
                 }else{
                     1
                 }
+                Log.d("Update","status: $status")
                     scope.launch(Dispatchers.IO) {
                         if(operationStatus==1) {
-                            viewModel.addEntry(idAccount,
-                                Entry(
-                                    description = descriptionEntry,
-                                    amount = if (status) amountEntry.toDoubleOrNull() ?: 0.0
-                                    else (amountEntry.toDoubleOrNull() ?: 0.0) * (-1),
+                            entryViewModel.addEntry(
+                                EntryDTO(
+                                    descriptionEntry,
+                                    if (status) amount
+                                    else negativeAmount,
                                     date = Date().dateFormat(),
                                     categoryId = iconResource,
                                     accountId = idAccount
                                 )
                             )
+                            accountViewModel.updateEntry(idAccount,if(status)amount else negativeAmount,false)
+
                             if (status) {
                                 SnackBarController.sendEvent(event = SnackBarEvent(newIncomeMessage))
                             } else {
@@ -118,6 +125,7 @@ fun NewAmount(viewModel:AccountsViewModel)
                             SnackBarController.sendEvent(event = SnackBarEvent(amountOverBalanceMessage))
                         }
                     }
+
 
             }
         )
