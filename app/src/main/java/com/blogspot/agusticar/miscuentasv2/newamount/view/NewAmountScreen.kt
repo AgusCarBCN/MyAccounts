@@ -99,7 +99,7 @@ fun NewAmount(viewModel:AccountsViewModel)
                 }
                     scope.launch(Dispatchers.IO) {
                         if(operationStatus==1) {
-                            viewModel.addEntry(
+                            viewModel.addEntry(idAccount,
                                 Entry(
                                     description = descriptionEntry,
                                     amount = if (status) amountEntry.toDoubleOrNull() ?: 0.0

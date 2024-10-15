@@ -2,17 +2,13 @@ package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 
 
 import android.util.Log
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
-import com.blogspot.agusticar.miscuentasv2.SnackBarController
-import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
-import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
@@ -20,6 +16,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.U
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
+import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +37,8 @@ class AccountsViewModel @Inject constructor(
 
 ) : ViewModel() {
 
+    private val _isConfirmTransfer = MutableLiveData<Boolean>()
+    val isConfirmTransfer: LiveData<Boolean> = _isConfirmTransfer
 
     private val _isCurrencyExpanded = MutableLiveData<Boolean>()
     val isCurrencyExpanded: LiveData<Boolean> = _isCurrencyExpanded
@@ -68,7 +67,6 @@ class AccountsViewModel @Inject constructor(
 
     private val _destinationAccount = MutableLiveData<Account>()
     val destinationAccount: LiveData<Account> = _destinationAccount
-
 
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
@@ -109,27 +107,22 @@ class AccountsViewModel @Inject constructor(
         }
     }
 
-    fun transferMoney(fromAccountId: Int, toAccountId: Int, amount: Double) {
 
+    private fun updateEntry(accountId: Int, amount: Double,isTransferDestination:Boolean) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val fromAccount = _accountSelected.value
-                val toAccount = _destinationAccount.value
-
-                val fromBalance = fromAccount?.balance ?: 0.0
-                val toBalance = toAccount?.balance ?: 0.0
-
-                // Verifica que la cuenta de origen tenga suficiente saldo
-                if (fromBalance >= abs(amount)) {
-                    // Resta el monto de la cuenta de origen
-                    val newFromBalance = fromBalance - amount
-
-                    // Suma el monto a la cuenta de destino
-                    val newToBalance = toBalance + amount
-
+                val account = _accountSelected.value
+                val accountDestination=_destinationAccount.value
+                val balance = account?.balance ?: 0.0
+                val balanceDestination=accountDestination?.balance?:0.0
+                if(!isTransferDestination) {
+                    val newBalance = balance + amount
                     // Actualiza los saldos en ambas cuentas
-                    updateAccountBalance(fromAccountId, newFromBalance)
-                    updateAccountBalance(toAccountId, newToBalance)
+                    updateAccountBalance(accountId, newBalance)
+                }else{
+                    val newBalanceDestination = balanceDestination + amount
+                    // Actualiza los saldos en ambas cuentas
+                    updateAccountBalance(accountId, newBalanceDestination)
                 }
             }
             resetFields()
@@ -137,19 +130,14 @@ class AccountsViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
+
     }
 
-
-    fun addEntry(entry: Entry) {
-
+    fun addEntry(accountId:Int,entry: Entry,isTransferDestination:Boolean=false) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val account = _accountSelected.value
-                var balance = account?.balance ?: 0.0
-                val id = account?.id ?: 0
-                balance += entry.amount
                 addEntry.invoke(entry)
-                updateAccountBalance(id, balance)
+                updateEntry(accountId, entry.amount,isTransferDestination)
                 resetFields()
             }
         } catch (e: Exception) {
@@ -160,7 +148,7 @@ class AccountsViewModel @Inject constructor(
     private fun updateAccountBalance(accountId: Int, newBalance: Double) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                updateBalance.invoke(accountId, abs(newBalance))
+                updateBalance.invoke(accountId, newBalance)
             }
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
@@ -196,6 +184,7 @@ class AccountsViewModel @Inject constructor(
     fun onAccountSelected(accountSelected: Account) {
         _accountSelected.value = accountSelected
     }
+
 
     fun onDestinationAccountSelected(accountSelected: Account) {
         _destinationAccount.value = accountSelected
@@ -244,7 +233,14 @@ class AccountsViewModel @Inject constructor(
         )
     }
 
-    fun isValidTransfer(): Boolean = _accountSelected.value?.id != _destinationAccount.value?.id
+
+    fun isValidTransfer() {
+
+        _isConfirmTransfer.value = _accountSelected.value?.id != _destinationAccount.value?.id
+
+    }
+
+
     fun isValidExpense(amount: Double): Boolean = (_accountSelected.value?.balance ?: 0.0) >= amount
     private fun isValidDecimal(text: String): Boolean {
 
