@@ -16,10 +16,13 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,13 +53,13 @@ fun UserImage(uri: Uri,size:Int)
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxSize() // La imagen ocupa todo el Card
+                .fillMaxSize()
         )
     }
 }
 
 @Composable
-fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean) {
+fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> Unit) {
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -70,7 +73,7 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean) {
 
         ),
         modifier = Modifier
-            .size(width = 180.dp, height = 100.dp)
+            .size(width = 180.dp, height = 120.dp)
     ) {
         Text(
             text =amount,
@@ -78,25 +81,31 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean) {
                 .padding(top = 12.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
-            fontSize = 24.sp,
+            fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
-        Text(
-            text = if(isIncome) "ver ingresos" else "ver gastos",
-            modifier = Modifier
-                .padding(5.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            color= LocalCustomColorsPalette.current.textHeadColor
+        Spacer(modifier = Modifier.height(20.dp)) // Espacio entre el texto y el botón
+
+        TextButton(
+            onClick = {
+                onClickCard()
+            },
+            content = {
+                Text(modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxWidth(),
+                    text = stringResource(id =if(isIncome) R.string.seeincome else  R.string.seeexpense),
+                    fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
+                    textAlign = TextAlign.Center,
+                    color = LocalCustomColorsPalette.current.textHeadColor
+                )
+            }
         )
+
     }
 }
 @Composable
-fun AccountCard(amount:String,name:String,isNegative:Boolean){
-
-
+fun AccountCard(amount:String,name:String,isNegative:Boolean,onClickCard: () -> Unit){
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -122,30 +131,38 @@ fun AccountCard(amount:String,name:String,isNegative:Boolean){
                     .padding(10.dp)
                     .weight(0.6f),
                 textAlign = TextAlign.Start,
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 color= LocalCustomColorsPalette.current.textHeadColor
             )
-            Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
+            Spacer(modifier = Modifier.height(12.dp)) // Espacio entre el texto y el botón
             Text(
                 text =amount,
                 modifier = Modifier
                     .padding(10.dp)
                     .weight(0.4f),
                 textAlign = TextAlign.End,
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
         }
         Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
-        Text(
-            text = "Ver ingresos y gastos",
-            modifier = Modifier
-                .padding(start = 10.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Start,
-            fontSize = 16.sp,
-            color= LocalCustomColorsPalette.current.textHeadColor
+
+        TextButton(
+            onClick = {
+            onClickCard()
+            },
+            content = {
+                Text(modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxWidth(),
+                    text = stringResource(id =R.string.seeall),
+                    fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
+                    textAlign = TextAlign.Start,
+                    color = LocalCustomColorsPalette.current.textHeadColor
+                )
+            }
         )
+
     }
 
 }

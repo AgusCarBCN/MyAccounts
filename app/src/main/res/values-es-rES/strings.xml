@@ -20,6 +20,11 @@
     <string name="goodafternoon">Buenas tardes</string>
     <string name="goodevening">Buenas noches</string>
 
+    <!--Home-->
+    <string name="seeincome">Ver ingresos</string>
+    <string name="seeexpense">Ver gastos</string>
+    <string name="seeall">Ver ingresos y gastos</string>
+
     <!--On Boarding-->
 
     <string name="wellcomeOnBoarding">Bienvenido a MisCuentasApp</string>

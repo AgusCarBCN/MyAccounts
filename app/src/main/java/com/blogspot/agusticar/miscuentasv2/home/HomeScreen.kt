@@ -57,13 +57,20 @@ fun HomeScreen(
         }
         else{
             Row(modifier = Modifier.padding(top = 20.dp)) {
-                HeadCard(modifier = Modifier.weight(0.5f),accountsViewModel.numberFormat(incomes), true)
+                HeadCard(modifier = Modifier.weight(0.5f),
+                    accountsViewModel.numberFormat(incomes),
+                    true,
+                    onClickCard={})
                 Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
-                HeadCard(modifier = Modifier.weight(0.5f), accountsViewModel.numberFormat(expenses), false)
+                HeadCard(modifier = Modifier.weight(0.5f),
+                    accountsViewModel.numberFormat(expenses),
+                    false,
+                    onClickCard={})
             }
 
             Spacer(modifier = Modifier.width(5.dp))
-            HeadSetting(title = stringResource(id = R.string.youraccounts), size = 20)
+            HeadSetting(title = stringResource(id = R.string.youraccounts),
+                size = 22)
 
             // Si la lista de cuentas está cargando o vacía, muestra un indicador de carga o un mensaje
 
@@ -77,7 +84,9 @@ fun HomeScreen(
                 items(accounts!!) { account -> // Solo utiliza accounts
                     AccountCard(
                         accountsViewModel.numberFormat(account.balance),
-                        account.name, true
+                        account.name,
+                        true,
+                        onClickCard = {  }
                     )  // Crea un card para cada cuenta en la lista
                     Spacer(modifier = Modifier.height(10.dp))  // Espacio entre cada card (separación)
                 }
