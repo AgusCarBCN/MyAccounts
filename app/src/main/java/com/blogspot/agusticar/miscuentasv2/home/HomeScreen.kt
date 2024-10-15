@@ -38,15 +38,10 @@ import kotlin.math.abs
 fun HomeScreen(
     accountsViewModel: AccountsViewModel
 ) {
-    val income = 3000.43
-    val expenses = -1200.78
-
+    val incomes by accountsViewModel.totalIncomes.observeAsState(0.0)
+    val expenses by accountsViewModel.totalExpenses.observeAsState(0.0)
     // Observa el estado de la lista de cuentas
     val accounts by accountsViewModel.listOfAccounts.observeAsState(null)   // Observa el estado de la lista de cuentas
-
-    LaunchedEffect(Unit) {
-        accountsViewModel.getAllAccounts()
-    }
 
     Column(
         modifier = Modifier
@@ -62,7 +57,7 @@ fun HomeScreen(
         }
         else{
             Row(modifier = Modifier.padding(top = 20.dp)) {
-                HeadCard(modifier = Modifier.weight(0.5f),accountsViewModel.numberFormat(income), true)
+                HeadCard(modifier = Modifier.weight(0.5f),accountsViewModel.numberFormat(incomes), true)
                 Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
                 HeadCard(modifier = Modifier.weight(0.5f), accountsViewModel.numberFormat(expenses), false)
             }

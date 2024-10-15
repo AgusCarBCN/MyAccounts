@@ -55,7 +55,7 @@ fun UserImage(uri: Uri,size:Int)
 }
 
 @Composable
-fun HeadCard(modifier:Modifier,amount:String,isNegative:Boolean) {
+fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean) {
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -63,7 +63,7 @@ fun HeadCard(modifier:Modifier,amount:String,isNegative:Boolean) {
         ),
         colors = CardColors(
             containerColor = LocalCustomColorsPalette.current.drawerColor,
-            contentColor = if(isNegative)LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
+            contentColor = if(isIncome)LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
             disabledContainerColor = LocalCustomColorsPalette.current.drawerColor,
             disabledContentColor = LocalCustomColorsPalette.current.incomeColor
 

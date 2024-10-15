@@ -13,6 +13,8 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountBalance
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
@@ -33,7 +35,9 @@ class AccountsViewModel @Inject constructor(
     private val addAccount: InsertAccountUseCase,
     private val addEntry: InsertEntryUseCase,
     private val getAccounts: GetAllAccountsUseCase,
-    private val updateBalance: UpdateAccountBalance
+    private val updateBalance: UpdateAccountBalance,
+    private val getTotalIncomes:GetSumTotalIncomesUseCase,
+    private val getTotalExpenses: GetSumTotalExpensesUseCase
 
 ) : ViewModel() {
 
@@ -63,6 +67,14 @@ class AccountsViewModel @Inject constructor(
     private val _accountSelected = MutableLiveData<Account>()
     val accountSelected: LiveData<Account> = _accountSelected
 
+    //LiveData para actualizar gastos e ingresos
+
+    private val _totalIncomes = MutableLiveData<Double>()
+    val totalIncomes: LiveData<Double> = _totalIncomes
+
+    private val _totalExpenses = MutableLiveData<Double>()
+    val totalExpenses: LiveData<Double> = _totalExpenses
+
     //LiveDatas de transferencia entre cuentas
 
     private val _destinationAccount = MutableLiveData<Account>()
@@ -81,6 +93,9 @@ class AccountsViewModel @Inject constructor(
         viewModelScope.launch {
             _currencyCode.value = getCurrencyCode()
             _isCurrencyExpanded.value = false
+            getAllAccounts()
+            getTotalExpenses()
+            getTotalIncomes()
 
         }
     }
@@ -124,6 +139,7 @@ class AccountsViewModel @Inject constructor(
                     // Actualiza los saldos en ambas cuentas
                     updateAccountBalance(accountId, newBalanceDestination)
                 }
+
             }
             resetFields()
 
@@ -143,6 +159,19 @@ class AccountsViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
         }
+    }
+    private fun updateTotal(amount:Double){
+        var totalIncomes=_totalIncomes.value?:0.0
+        var totalExpenses=_totalExpenses.value?:0.0
+        if(amount>=0){
+           totalIncomes+=amount
+            _totalIncomes.value=totalIncomes
+        }else{
+            totalExpenses+=amount
+            _totalExpenses.value=totalExpenses
+
+        }
+
     }
 
     private fun updateAccountBalance(accountId: Int, newBalance: Double) {
@@ -246,6 +275,24 @@ class AccountsViewModel @Inject constructor(
 
         return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
     }
+    private fun getTotalExpenses(){
+
+        viewModelScope.launch(Dispatchers.IO) {
+           val totalExpenses=getTotalExpenses.invoke()
+            _totalExpenses.postValue(totalExpenses)
+        }
+
+    }
+
+    private fun getTotalIncomes(){
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val totalIncomes=getTotalIncomes.invoke()
+            _totalIncomes.postValue(totalIncomes)
+        }
+
+    }
+
     //Función para darle formato de la divisa actual a una cantidad de dinero
 
     private val currencies = listOf(

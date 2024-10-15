@@ -51,4 +51,13 @@ interface EntryDao {
     @Query("SELECT * FROM EntryEntity WHERE categoryId = :categoryId ORDER BY date DESC")
     suspend fun getEntriesByCategory(categoryId: Int): List<Entry>
 
+    //Devuelve la suma de ingresos totales
+    @Transaction
+    @Query("SELECT SUM(amount) FROM EntryEntity WHERE amount >= 0")
+    suspend fun getSumOfIncomeEntries(): Double?
+
+    @Transaction
+    @Query("SELECT SUM(amount) FROM EntryEntity WHERE amount < 0")
+    suspend fun getSumOfExpenseEntries(): Double?
+
 }

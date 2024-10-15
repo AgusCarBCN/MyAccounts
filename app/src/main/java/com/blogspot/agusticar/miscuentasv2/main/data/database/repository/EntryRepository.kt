@@ -11,6 +11,14 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
     suspend fun insertEntry(entry: Entry) {
         entryDao.insertEntry(entry)
     }
+    suspend fun getSumIncomes():Double =
+        entryDao.getSumOfIncomeEntries()?:0.0
+
+
+    suspend fun getSumExpenses() =
+        entryDao.getSumOfExpenseEntries()?:0.0
+
+    /*
 
     // 2. Borrar una entrada por su ID
     suspend fun deleteEntry(entry: Entry) {
@@ -56,4 +64,7 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
     suspend fun getEntriesByCategory(categoryId: Int): List<Entry> {
         return entryDao.getEntriesByCategory(categoryId)
     }
+
+    */
+
 }
