@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryDTOUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EntriesViewModel @Inject constructor(
-    private val addEntryDTO: InsertEntryDTOUseCase,
+    private val addEntry: InsertEntryUseCase,
     private val getTotalIncomes: GetSumTotalIncomesUseCase,
     private val getTotalExpenses: GetSumTotalExpensesUseCase,
     private val getAllEntries: GetAllExpensesUseCase,
@@ -89,10 +91,10 @@ class EntriesViewModel @Inject constructor(
     }
 
 
-    fun addEntry(entry: EntryDTO) {
+    fun addEntry(entry: Entry) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                addEntryDTO.invoke(entry)
+                addEntry.invoke(entry)
                 if (entry.amount >= 0.0) {
                     getTotalIncomes()
                 } else {

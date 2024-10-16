@@ -1,7 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.newamount.view
 
 import android.util.Log
-import androidx.activity.compose.BackHandler
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +26,7 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -51,6 +51,7 @@ fun NewAmount(mainViewModel: MainViewModel,
 
     accountViewModel.getAllAccounts()
     val idAccount=accountSelected?.id?:1
+    val accountName=accountSelected?.name?:""
     val status= categorySelected?.isIncome?:false
     val iconResource=categorySelected?.iconResource?:0
     val titleResource=categorySelected?.name?:0
@@ -111,14 +112,15 @@ fun NewAmount(mainViewModel: MainViewModel,
                     scope.launch(Dispatchers.IO) {
                         if(operationStatus==1) {
                             entryViewModel.addEntry(
-                                EntryDTO(
-                                    descriptionEntry,
-                                    if (status) amount
+                                Entry(
+                                    description = descriptionEntry,
+                                    amount=if (status) amount
                                     else negativeAmount,
                                     date = Date().dateFormat(),
                                     categoryId = iconResource,
                                     categoryName = titleResource,
                                     accountId = idAccount
+
                                 )
                             )
                             accountViewModel.updateEntry(idAccount,if(status)amount else negativeAmount,false)

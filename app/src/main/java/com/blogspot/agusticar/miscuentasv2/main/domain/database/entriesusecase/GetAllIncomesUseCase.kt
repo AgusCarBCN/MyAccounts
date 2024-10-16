@@ -7,6 +7,6 @@ import javax.inject.Inject
 class GetAllIncomesUseCase   @Inject constructor(private val repository: EntryRepository){
 
     suspend operator fun invoke():List<EntryDTO> =
-        repository.getAllIncomes()
+        repository.getAllIncomesDTO()
 
 }

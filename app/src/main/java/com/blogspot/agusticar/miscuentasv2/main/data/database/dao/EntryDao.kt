@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import java.time.LocalDate
 @Dao
@@ -70,5 +71,47 @@ interface EntryDao {
     @Query("SELECT SUM(amount) FROM EntryEntity WHERE amount < 0")
     suspend fun getSumOfExpenseEntries(): Double?
 
+
+    @Query("""
+    SELECT e.description,
+           e.amount,
+           e.date,
+           e.categoryName,
+           e.categoryId,
+           e.accountId,
+           a.name 
+    FROM EntryEntity e
+    INNER JOIN AccountEntity a ON e.accountId = a.id
+    WHERE e.amount >= 0
+""")
+    suspend fun getAllIncomesDTO(): List<EntryDTO>
+
+    @Query("""
+    SELECT e.description,
+           e.amount,
+           e.date,
+           e.categoryName,
+           e.categoryId,
+           e.accountId,
+           a.name 
+    FROM EntryEntity e
+    INNER JOIN AccountEntity a ON e.accountId = a.id
+    WHERE e.amount < 0
+""")
+    suspend fun getAllExpensesDTO(): List<EntryDTO>
+
+    @Query("""
+    SELECT e.description,
+           e.amount,
+           e.date,
+           e.categoryName,
+           e.categoryId,
+           e.accountId,
+           a.name 
+    FROM EntryEntity e
+    INNER JOIN AccountEntity a ON e.accountId = a.id
+   
+""")
+    suspend fun getAllEntriesDTO(): List<EntryDTO>
 
 }

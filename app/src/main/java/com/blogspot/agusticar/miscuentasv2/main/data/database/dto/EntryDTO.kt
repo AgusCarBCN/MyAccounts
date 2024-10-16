@@ -9,5 +9,6 @@ data class EntryDTO(
     val date: String = Date().dateFormat(),
     val categoryId: Int,
     val categoryName: Int,
-    val accountId: Int
+    val accountId: Int,
+    val name:String
 )

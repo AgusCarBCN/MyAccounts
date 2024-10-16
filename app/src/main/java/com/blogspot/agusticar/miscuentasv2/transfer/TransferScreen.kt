@@ -24,6 +24,7 @@ import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
@@ -95,22 +96,22 @@ fun Transfer(
                 scope.launch(Dispatchers.IO) {
                     if (operationStatus == 1) {
                         entryViewModel.addEntry(
-                            EntryDTO(
-                                transferFrom,
-                                negativeAmount,
-                                Date().dateFormat(),
-                                R.drawable.transferoption,
-                                R.string.transferfrom,
-                                idAccountFrom
+                            Entry(
+                                description = transferFrom,
+                                amount = negativeAmount,
+                                date = Date().dateFormat(),
+                                categoryName = R.drawable.transferoption,
+                                categoryId = R.string.transferfrom,
+                                accountId = idAccountFrom
                             )
                         )
                         entryViewModel.addEntry(
-                            EntryDTO(
+                            Entry(
                                 description = transferTo,
                                 amount = amount,
                                 date = Date().dateFormat(),
-                                categoryId = R.drawable.transferoption,
-                                R.string.transferTo,
+                                categoryName = R.drawable.transferoption,
+                                categoryId = R.string.transferTo,
                                 accountId = idAccountTo
                             )
                         )

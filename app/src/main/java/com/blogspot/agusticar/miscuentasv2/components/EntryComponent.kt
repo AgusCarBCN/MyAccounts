@@ -73,10 +73,7 @@ fun EntryList(listOfEntries: List<EntryDTO>, currencyCode: String) {
             // Mostrar los elementos de ese grupo
             items(entries) { entry ->
                 ItemEntry(
-                    description = entry.description,
-                    categoryDescription = entry.categoryName,
-                    categoryIcon = entry.categoryId,
-                    amount = entry.amount,
+                    entry,
                     currencyCode = currencyCode
                 )
             }
@@ -87,10 +84,7 @@ fun EntryList(listOfEntries: List<EntryDTO>, currencyCode: String) {
 
 @Composable
 
-fun ItemEntry(description:String,
-              categoryDescription:Int,
-              categoryIcon:Int,
-              amount:Double,
+fun ItemEntry(entry:EntryDTO,
               currencyCode:String){
     
     Column {
@@ -100,7 +94,7 @@ fun ItemEntry(description:String,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text =  description,
+                text =  entry.description,
                 modifier = Modifier
                     .weight(0.6f),
                 textAlign = TextAlign.Start,
@@ -109,10 +103,10 @@ fun ItemEntry(description:String,
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text =Utils.numberFormat(amount,currencyCode),
+                text =Utils.numberFormat(entry.amount,currencyCode),
                 modifier = Modifier
                     .weight(0.4f),
-                color= if(amount>=0)LocalCustomColorsPalette.current.incomeColor
+                color= if(entry.amount>=0)LocalCustomColorsPalette.current.incomeColor
                 else LocalCustomColorsPalette.current.expenseColor,
                 textAlign = TextAlign.End,
                 fontSize = 20.sp,
@@ -125,18 +119,28 @@ fun ItemEntry(description:String,
             verticalAlignment = Alignment.CenterVertically
         ) {
            Icon(modifier = Modifier.size(24.dp),
-               painter = painterResource(id = categoryIcon),
+               painter = painterResource(id = entry.categoryId),
                contentDescription ="icon" ,
                tint= LocalCustomColorsPalette.current.textColor)
             Spacer(modifier = Modifier.height(20.dp)) // Espacio entre el texto y el botón
             Text(
-                text = stringResource(id = categoryDescription),
+                text = stringResource(id = entry.categoryName),
                 modifier = Modifier
                     .padding(10.dp)
                     .weight(0.4f),
                 color= LocalCustomColorsPalette.current.textColor,
                 textAlign = TextAlign.Start,
                 fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text =entry.name,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .weight(0.4f),
+                color= LocalCustomColorsPalette.current.textColor,
+                textAlign = TextAlign.End,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
 
