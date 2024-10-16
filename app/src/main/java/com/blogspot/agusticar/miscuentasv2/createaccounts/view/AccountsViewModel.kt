@@ -6,30 +6,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
-import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.TransferUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountBalance
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
-import com.blogspot.agusticar.miscuentasv2.main.model.Category
-import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.NumberFormat
-import java.util.Locale
 import javax.inject.Inject
-import kotlin.math.abs
 
 @HiltViewModel
 class AccountsViewModel @Inject constructor(
@@ -42,8 +32,8 @@ class AccountsViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    private val _isEnableButtons = MutableLiveData<Boolean>()
-    val isEnableButtons: LiveData<Boolean> = _isEnableButtons
+    private val _isEnableButton = MutableLiveData<Boolean>()
+    val isEnableButton: LiveData<Boolean> = _isEnableButton
 
     private val _isConfirmTransfer = MutableLiveData<Boolean>()
     val isConfirmTransfer: LiveData<Boolean> = _isConfirmTransfer
@@ -177,12 +167,13 @@ class AccountsViewModel @Inject constructor(
 
     }
 
-    private fun resetFields() {
+    fun resetFields() {
         _name.postValue("") // Vaciar el nombre de la cuenta
         _amount.postValue("") // Vaciar el balance de la cuenta
         _accountSelected.postValue(null)
         _destinationAccount.postValue(null)
         _isConfirmTransfer.postValue(false)
+        _isEnableButton.postValue(false)
     }
 
     fun onCurrencySelectedChange(currencySelected: String) {
@@ -228,7 +219,7 @@ class AccountsViewModel @Inject constructor(
             _amount.value = newBalance
         }
         _name.value = newName
-        _isEnableButtons.value=enableButton(newName,newBalance)
+        _isEnableButton.value=enableButton(newName,newBalance)
     }
 
 
