@@ -92,7 +92,7 @@ fun HomeScreen(
                     AccountCard(
                         Utils.numberFormat(account.balance,currencyCode),
                         account.name,
-                        true,
+                        R.string.seeall,
                         onClickCard = { mainViewModel.selectScreen(IconOptions.ENTRIES)
                             entriesViewModel.getAllEntriesByAccount(account.id) }
                     )  // Crea un card para cada cuenta en la lista

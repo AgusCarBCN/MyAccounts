@@ -89,10 +89,12 @@ fun SettingScreen(settingViewModel: SettingViewModel,
             iconResource = R.drawable.add,
             onClick = { navToCreateAccounts()
             accountsViewModel.onDisableCurrencySelector()})
-        RowComponent(title = stringResource(id = R.string.rename_account),
-            description = stringResource(id = R.string.desrename_account),
+        RowComponent(title = stringResource(id = R.string.edit_account),
+            description = stringResource(id = R.string.desedit_account),
             iconResource = R.drawable.edit,
-            onClick = {})
+            onClick = {
+                mainViewModel.selectScreen(IconOptions.EDIT_ACCOUNTS)
+            })
         RowComponent(title = stringResource(id = R.string.delete_data_account),
             description = stringResource(id = R.string.desdelete_data_account),
             iconResource = R.drawable.baseline_delete_24,

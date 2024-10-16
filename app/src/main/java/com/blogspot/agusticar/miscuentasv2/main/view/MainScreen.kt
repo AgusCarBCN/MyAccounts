@@ -65,11 +65,12 @@ import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
+import com.blogspot.agusticar.miscuentasv2.setting.AccountList
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
-import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
 import com.blogspot.agusticar.miscuentasv2.tutorial.model.OptionItem
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -85,7 +86,7 @@ fun MainScreen(
     profileViewModel: ProfileViewModel,
     settingViewModel: SettingViewModel,
     entriesViewModel: EntriesViewModel,
-    navToCreateAccounts:()->Unit
+    navToCreateAccounts: () -> Unit
 
 ) {
 
@@ -101,7 +102,7 @@ fun MainScreen(
     }
     //Boton de atrás te lleva al Home
     BackHandler(true) {
-    mainViewModel.selectScreen(IconOptions.HOME)
+        mainViewModel.selectScreen(IconOptions.HOME)
     }
 
     val userName by profileViewModel.name.observeAsState("")
@@ -141,7 +142,7 @@ fun MainScreen(
                     }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            HomeScreen(mainViewModel,accountsViewModel,entriesViewModel)
+                            HomeScreen(mainViewModel, accountsViewModel, entriesViewModel)
                             title = R.string.greeting
                         }
 
@@ -152,7 +153,8 @@ fun MainScreen(
 
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> {
-                            SettingScreen(settingViewModel,
+                            SettingScreen(
+                                settingViewModel,
                                 mainViewModel,
                                 accountsViewModel,
                                 navToCreateAccounts,
@@ -170,7 +172,7 @@ fun MainScreen(
                         }
 
                         IconOptions.TRANSFER -> {
-                            Transfer(mainViewModel,accountsViewModel,entriesViewModel)
+                            Transfer(mainViewModel, accountsViewModel, entriesViewModel)
                             title = R.string.transfer
                         }
 
@@ -189,11 +191,14 @@ fun MainScreen(
                             // Verifica si el contexto es una actividad
                             val activity = context as? Activity
 
-                            ExitAppDialog(showDialog =showDialog,
+                            ExitAppDialog(showDialog = showDialog,
                                 onConfirm = {
-                                    activity?.finish()},
-                                onDismiss = { mainViewModel.showExitDialog(false)
-                                mainViewModel.selectScreen(IconOptions.HOME)})
+                                    activity?.finish()
+                                },
+                                onDismiss = {
+                                    mainViewModel.showExitDialog(false)
+                                    mainViewModel.selectScreen(IconOptions.HOME)
+                                })
 
                         }
 
@@ -207,14 +212,14 @@ fun MainScreen(
                                 entriesViewModel.getCategories(false)
 
                             }
-                            CategorySelector(mainViewModel, entriesViewModel,false)
+                            CategorySelector(mainViewModel, entriesViewModel, false)
 
 
                             title = R.string.newexpense
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(mainViewModel,entriesViewModel,accountsViewModel)
+                            NewAmount(mainViewModel, entriesViewModel, accountsViewModel)
 
                         }
 
@@ -222,6 +227,11 @@ fun MainScreen(
                         IconOptions.ENTRIES -> {
                             EntryList(entries, currencyCode)
                             title = R.string.yourentries
+                        }
+
+                        IconOptions.EDIT_ACCOUNTS -> {
+                            AccountList(accountsViewModel,mainViewModel, entriesViewModel,R.string.modify)
+                            title=R.string.edit_account
                         }
                     }
 
@@ -320,9 +330,10 @@ private fun DrawerContent(
             })
             ClickableRow(
                 OptionItem(R.string.exitapp, R.drawable.exitapp),
-                onClick = {viewModel.selectScreen(IconOptions.EXIT)
+                onClick = {
+                    viewModel.selectScreen(IconOptions.EXIT)
                     viewModel.showExitDialog(true)
-                     })
+                })
         }
     }
 }

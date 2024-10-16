@@ -105,7 +105,10 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> 
     }
 }
 @Composable
-fun AccountCard(amount:String,name:String,isNegative:Boolean,onClickCard: () -> Unit){
+fun AccountCard(amount:String,
+                name:String,
+                textButton:Int,
+                onClickCard: () -> Unit){
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -113,7 +116,7 @@ fun AccountCard(amount:String,name:String,isNegative:Boolean,onClickCard: () -> 
         ),
         colors = CardColors(
             containerColor = LocalCustomColorsPalette.current.drawerColor,
-            contentColor = if(isNegative )LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
+            contentColor = LocalCustomColorsPalette.current.incomeColor ,
             disabledContainerColor = LocalCustomColorsPalette.current.drawerColor,
             disabledContentColor = LocalCustomColorsPalette.current.incomeColor
 
@@ -155,7 +158,7 @@ fun AccountCard(amount:String,name:String,isNegative:Boolean,onClickCard: () -> 
                 Text(modifier = Modifier
                     .padding(5.dp)
                     .fillMaxWidth(),
-                    text = stringResource(id =R.string.seeall),
+                    text = stringResource(id =textButton),
                     fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
                     textAlign = TextAlign.Start,
                     color = LocalCustomColorsPalette.current.textColor
@@ -166,3 +169,4 @@ fun AccountCard(amount:String,name:String,isNegative:Boolean,onClickCard: () -> 
     }
 
 }
+
