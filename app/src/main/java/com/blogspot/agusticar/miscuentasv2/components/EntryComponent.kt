@@ -64,7 +64,7 @@ fun EntryList(listOfEntries: List<EntryDTO>, currencyCode: String) {
                         text = Utils.toDateEntry(date),
                         textAlign = TextAlign.Start,
                         fontSize = 18.sp,
-                        color = LocalCustomColorsPalette.current.textHeadColor,
+                        color = LocalCustomColorsPalette.current.textColor,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -89,7 +89,7 @@ fun ItemEntry(entry:EntryDTO,
     
     Column {
 
-        Row(modifier = Modifier.padding(start=15.dp, end=15.dp, top=5.dp),
+        Row(modifier = Modifier.padding(start=15.dp, end=20.dp, top=5.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -99,6 +99,7 @@ fun ItemEntry(entry:EntryDTO,
                     .weight(0.6f),
                 textAlign = TextAlign.Start,
                 fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
                 color= LocalCustomColorsPalette.current.textHeadColor
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -114,7 +115,7 @@ fun ItemEntry(entry:EntryDTO,
             )
 
         }
-        Row(modifier = Modifier.padding(start=10.dp, end=10.dp, top=5.dp),
+        Row(modifier = Modifier.padding(start=15.dp, end=20.dp, top=5.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {

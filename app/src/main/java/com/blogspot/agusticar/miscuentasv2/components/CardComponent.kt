@@ -97,7 +97,7 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> 
                     text = stringResource(id =if(isIncome) R.string.seeincome else  R.string.seeexpense),
                     fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
                     textAlign = TextAlign.Center,
-                    color = LocalCustomColorsPalette.current.textHeadColor
+                    color = LocalCustomColorsPalette.current.textColor
                 )
             }
         )
@@ -132,7 +132,7 @@ fun AccountCard(amount:String,name:String,isNegative:Boolean,onClickCard: () -> 
                     .weight(0.6f),
                 textAlign = TextAlign.Start,
                 fontSize = 22.sp,
-                color= LocalCustomColorsPalette.current.textHeadColor
+                color= LocalCustomColorsPalette.current.textColor
             )
             Spacer(modifier = Modifier.height(12.dp)) // Espacio entre el texto y el botón
             Text(
@@ -158,7 +158,7 @@ fun AccountCard(amount:String,name:String,isNegative:Boolean,onClickCard: () -> 
                     text = stringResource(id =R.string.seeall),
                     fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
                     textAlign = TextAlign.Start,
-                    color = LocalCustomColorsPalette.current.textHeadColor
+                    color = LocalCustomColorsPalette.current.textColor
                 )
             }
         )
