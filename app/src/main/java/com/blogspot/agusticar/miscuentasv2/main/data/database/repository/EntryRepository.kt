@@ -23,6 +23,23 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
         val entry = entryDtoToEntry(entryDTO)
         entryDao.insertEntry(entry)
     }
+    suspend fun getAllEntries():List<EntryDTO> {
+        val entries = entryDao.getAllEntries()
+        return entries.map { entryToEntryDto(it) }
+    }
+
+    suspend fun getAllIncomes():List<EntryDTO> {
+        val entries = entryDao.getAllIncomes()
+        return entries.map { entryToEntryDto(it) }
+    }
+
+    suspend fun getAllExpenses():List<EntryDTO> {
+        val entries = entryDao.getAllExpenses()
+        return entries.map { entryToEntryDto(it) }
+    }
+
+
+
 
     private fun entryDtoToEntry(dto: EntryDTO): Entry {
         return Entry(
@@ -30,6 +47,7 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
             amount = dto.amount,
             date = dto.date,
             categoryId = dto.categoryId,
+            categoryName = dto.categoryName,
             accountId = dto.accountId
             // id será generado automáticamente, así que no lo incluimos aquí
         )
@@ -41,6 +59,7 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
             amount = entry.amount,
             date = entry.date,
             categoryId = entry.categoryId,
+            categoryName = entry.categoryName,
             accountId = entry.accountId
             // No necesitamos el id
         )

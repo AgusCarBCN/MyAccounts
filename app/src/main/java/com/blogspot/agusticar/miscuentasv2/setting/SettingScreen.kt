@@ -60,7 +60,7 @@ fun SettingScreen(settingViewModel: SettingViewModel,mainViewModel: MainViewMode
             onClickSwitch = {settingViewModel.onSwitchNotificationsClicked(it)}
         )
 
-        SpacerSetting()
+        SpacerApp()
 
         HeadSetting(title = stringResource(id = R.string.backup), 20)
 
@@ -74,7 +74,7 @@ fun SettingScreen(settingViewModel: SettingViewModel,mainViewModel: MainViewMode
             onClick = {})
 
 
-        SpacerSetting()
+        SpacerApp()
 
         HeadSetting(title = stringResource(id = R.string.accountsetting), 20)
 
@@ -99,7 +99,7 @@ fun SettingScreen(settingViewModel: SettingViewModel,mainViewModel: MainViewMode
 }
 
 @Composable
-private fun SpacerSetting() {
+fun SpacerApp() {
     Spacer(
         modifier = Modifier
             .fillMaxWidth()

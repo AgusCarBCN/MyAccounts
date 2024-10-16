@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllExpensesUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryDTOUseCase
@@ -21,7 +23,11 @@ import javax.inject.Inject
 class EntriesViewModel @Inject constructor(
     private val addEntryDTO: InsertEntryDTOUseCase,
     private val getTotalIncomes: GetSumTotalIncomesUseCase,
-    private val getTotalExpenses: GetSumTotalExpensesUseCase
+    private val getTotalExpenses: GetSumTotalExpensesUseCase,
+    private val getAllEntries: GetAllExpensesUseCase,
+    private val getAllIncomes:GetAllIncomesUseCase,
+    private val getAllExpenses:GetAllExpensesUseCase
+
 ) : ViewModel() {
 
     private val _totalIncomes = MutableLiveData<Double>()
@@ -54,12 +60,34 @@ class EntriesViewModel @Inject constructor(
     private val _listOfCategories = MutableLiveData<List<Category>>()
     val listOfCategories: LiveData<List<Category>> = _listOfCategories
 
+    //LiveData para la lista de Categorias
+    private val _listOfEntries = MutableLiveData<List<EntryDTO>>()
+    val listOfEntries: LiveData<List<EntryDTO>> = _listOfEntries
 
     init {
         getTotalIncomes()
         getTotalExpenses()
 
     }
+    private fun getAllEntries(){
+        viewModelScope.launch(Dispatchers.IO) {
+            val entries=getAllEntries.invoke()
+            _listOfEntries.postValue(entries)
+        }
+    }
+    fun getAllIncomes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val entries=getAllIncomes.invoke()
+            _listOfEntries.postValue(entries)
+        }
+    }
+    fun getAllExpenses() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val entries=getAllExpenses.invoke()
+            _listOfEntries.postValue(entries)
+        }
+    }
+
 
     fun addEntry(entry: EntryDTO) {
         viewModelScope.launch(Dispatchers.IO) {

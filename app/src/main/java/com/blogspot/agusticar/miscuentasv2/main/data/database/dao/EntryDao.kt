@@ -27,6 +27,16 @@ interface EntryDao {
     @Query("SELECT * FROM EntryEntity ORDER BY date DESC")
     suspend fun getAllEntries(): List<Entry>
 
+    // 5. Obtener todas los ingresos
+    @Query("SELECT * FROM EntryEntity WHERE amount>=0")
+    suspend fun getAllIncomes(): List<Entry>
+
+    // 6. Obtener todos los gastos
+
+    @Query("SELECT * FROM EntryEntity WHERE amount<0")
+    suspend fun getAllExpenses(): List<Entry>
+
+
     // 5. Obtener una entrada por ID
     @Query("SELECT * FROM EntryEntity WHERE id = :entryId")
     suspend fun getEntryById(entryId: Long): Entry?

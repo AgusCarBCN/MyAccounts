@@ -16,5 +16,6 @@ enum class IconOptions {
     ABOUT,
     ABOUT_DESCRIPTION,
     POLICY,
-    EXIT
+    EXIT,
+    ENTRIES
 }

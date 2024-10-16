@@ -100,6 +100,7 @@ fun Transfer(
                                 negativeAmount,
                                 Date().dateFormat(),
                                 R.drawable.transferoption,
+                                R.string.transferfrom,
                                 idAccountFrom
                             )
                         )
@@ -109,6 +110,7 @@ fun Transfer(
                                 amount = amount,
                                 date = Date().dateFormat(),
                                 categoryId = R.drawable.transferoption,
+                                R.string.transferTo,
                                 accountId = idAccountTo
                             )
                         )

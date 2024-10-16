@@ -117,6 +117,7 @@ fun NewAmount(mainViewModel: MainViewModel,
                                     else negativeAmount,
                                     date = Date().dateFormat(),
                                     categoryId = iconResource,
+                                    categoryName = titleResource,
                                     accountId = idAccount
                                 )
                             )

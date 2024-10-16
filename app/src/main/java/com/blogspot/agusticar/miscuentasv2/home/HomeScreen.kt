@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -22,9 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountCard
+import com.blogspot.agusticar.miscuentasv2.components.EntryList
 import com.blogspot.agusticar.miscuentasv2.components.HeadCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -32,6 +36,7 @@ import com.blogspot.agusticar.miscuentasv2.utils.Utils
 
 @Composable
 fun HomeScreen(
+    mainViewModel: MainViewModel,
     accountsViewModel: AccountsViewModel,
     entriesViewModel: EntriesViewModel
 ) {
@@ -59,19 +64,20 @@ fun HomeScreen(
                 HeadCard(modifier = Modifier.weight(0.5f),
                     Utils.numberFormat(incomes,currencyCode),
                     true,
-                    onClickCard={})
+                    onClickCard={mainViewModel.selectScreen(IconOptions.ENTRIES)
+                    entriesViewModel.getAllIncomes()
+                    })
                 Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
                 HeadCard(modifier = Modifier.weight(0.5f),
                     Utils.numberFormat(expenses,currencyCode),
                     false,
-                    onClickCard={})
+                    onClickCard={mainViewModel.selectScreen(IconOptions.ENTRIES)
+                    entriesViewModel.getAllExpenses()})
             }
 
             Spacer(modifier = Modifier.width(5.dp))
             HeadSetting(title = stringResource(id = R.string.youraccounts),
                 size = 22)
-
-            // Si la lista de cuentas está cargando o vacía, muestra un indicador de carga o un mensaje
 
 
             // Mostrar las cuentas si están disponibles

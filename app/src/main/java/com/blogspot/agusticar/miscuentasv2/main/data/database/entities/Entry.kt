@@ -26,5 +26,6 @@ data class Entry(
     @ColumnInfo(name = "amount") var amount: Double,
     @ColumnInfo(name = "date") val date: String = Date().dateFormat(),
     @ColumnInfo(name = "categoryId") val categoryId: Int, //Recurso de icono para identificar categorias de entradas
+    @ColumnInfo(name = "categoryName") val categoryName: Int, //Recurso de icono para identificar categorias de entradas
     @ColumnInfo(name = "accountId") val accountId: Int // Relación uno a muchos con Account
 )

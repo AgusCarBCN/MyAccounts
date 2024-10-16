@@ -56,6 +56,7 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
+import com.blogspot.agusticar.miscuentasv2.components.EntryList
 import com.blogspot.agusticar.miscuentasv2.components.ExitAppDialog
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
@@ -92,6 +93,11 @@ fun MainScreen(
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
     val showDialog by mainViewModel.showExitDialog.collectAsState()
+    val entries by entriesViewModel.listOfEntries.observeAsState(listOf())
+    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+    LaunchedEffect(Unit) {
+        entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
+    }
     //Boton de atrás te lleva al Home
     BackHandler(true) {
     mainViewModel.selectScreen(IconOptions.HOME)
@@ -134,7 +140,7 @@ fun MainScreen(
                     }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            HomeScreen(accountsViewModel,entriesViewModel)
+                            HomeScreen(mainViewModel,accountsViewModel,entriesViewModel)
                             title = R.string.greeting
                         }
 
@@ -208,6 +214,10 @@ fun MainScreen(
                         }
 
                         IconOptions.CHANGE_CURRENCY -> CurrencySelector(accountsViewModel)
+                        IconOptions.ENTRIES -> {
+
+                            EntryList(entries, currencyCode)
+                        }
                     }
 
                 }
