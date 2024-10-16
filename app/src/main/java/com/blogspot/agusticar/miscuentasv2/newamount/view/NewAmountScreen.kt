@@ -43,7 +43,10 @@ fun NewAmount(entryViewModel:EntriesViewModel,
     val amountEntry by entryViewModel.entryAmount.observeAsState("")
     val categorySelected by entryViewModel.categorySelected.observeAsState(null)
     val accountSelected by accountViewModel.accountSelected.observeAsState()
-
+    // Observa el estado de la lista de cuentas
+    val accounts by accountViewModel.listOfAccounts.observeAsState(listOf())
+    val currencyCode by accountViewModel.currencyCode.observeAsState("USD")
+    accountViewModel.getAllAccounts()
     val idAccount=accountSelected?.id?:1
     val status= categorySelected?.isIncome?:false
     val iconResource=categorySelected?.iconResource?:0

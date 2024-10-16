@@ -6,12 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.TransferUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountBalance
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
@@ -36,6 +38,7 @@ class AccountsViewModel @Inject constructor(
     private val addAccount: InsertAccountUseCase,
     private val getAccounts: GetAllAccountsUseCase,
     private val updateBalance: UpdateAccountBalance,
+    private val transferAmount:TransferUseCase
 
 ) : ViewModel() {
 
@@ -57,13 +60,13 @@ class AccountsViewModel @Inject constructor(
 
     //LiveData para cuenta seleccionada
 
-    private val _accountSelected = MutableLiveData<Account>()
-    val accountSelected: LiveData<Account> = _accountSelected
+    private val _accountSelected = MutableLiveData<Account?>()
+    val accountSelected: MutableLiveData<Account?> = _accountSelected
 
     //LiveDatas de transferencia entre cuentas
 
-    private val _destinationAccount = MutableLiveData<Account>()
-    val destinationAccount: LiveData<Account> = _destinationAccount
+    private val _destinationAccount = MutableLiveData<Account?>()
+    val destinationAccount: MutableLiveData<Account?> = _destinationAccount
 
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
@@ -89,8 +92,21 @@ class AccountsViewModel @Inject constructor(
                 Log.d("Cuenta", "Cuenta creada")
                 resetFields()
             }
+
         } catch (e: Exception) {
             Log.d("Cuenta", "Error: ${e.message}")
+        }
+    }
+
+    fun transferAmount(accountFromId:Int,accountToId: Int,amount:Double){
+
+        try{
+            viewModelScope.launch(Dispatchers.IO) {
+                transferAmount.invoke(accountFromId, accountToId, amount)
+                resetFields()
+            }
+        }catch (e: Exception){
+            Log.d("Transaction", "Error: ${e.message}")
         }
     }
 
@@ -154,6 +170,9 @@ class AccountsViewModel @Inject constructor(
     private fun resetFields() {
         _name.postValue("") // Vaciar el nombre de la cuenta
         _amount.postValue("") // Vaciar el balance de la cuenta
+        _accountSelected.postValue(null)
+        _destinationAccount.postValue(null)
+        _isConfirmTransfer.postValue(false)
     }
 
     fun onCurrencySelectedChange(currencySelected: String) {

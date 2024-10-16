@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 
 /*Permiten que una función pueda ser pausada y reanudada en un contexto de corutinas,
@@ -39,6 +40,18 @@ interface AccountDao {
     // 7. Actualizar el balance de una cuenta
     @Query("UPDATE AccountEntity SET balance = :newBalance WHERE id = :accountId")
     suspend fun updateAccountBalance(accountId: Int, newBalance: Double)
+
+    @Transaction
+    suspend fun transferFunds(fromAccountId: Int, toAccountId: Int, amount: Double) {
+        val fromAccount = getAccountById(fromAccountId)
+        val toAccount = getAccountById(toAccountId)
+
+        val updatedFromBalance = (fromAccount?.balance ?: 0.0) - amount
+        val updatedToBalance = (toAccount?.balance ?: 0.0) + amount
+
+        updateAccountBalance(fromAccountId, updatedFromBalance)
+        updateAccountBalance(toAccountId, updatedToBalance)
+    }
 
 
 }

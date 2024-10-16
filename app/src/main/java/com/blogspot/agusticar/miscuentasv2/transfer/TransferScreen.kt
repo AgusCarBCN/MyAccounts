@@ -37,13 +37,13 @@ fun Transfer(accountViewModel: AccountsViewModel,
              entryViewModel: EntriesViewModel
              ) {
 
-    val originAccount by accountViewModel.accountSelected.observeAsState()
-    val destinationAccount by accountViewModel.destinationAccount.observeAsState()
+    val accountFrom by accountViewModel.accountSelected.observeAsState()
+    val accountTo by accountViewModel.destinationAccount.observeAsState()
     val amountTransfer by entryViewModel.entryAmount.observeAsState("")
     val confirmButton by accountViewModel.isConfirmTransfer.observeAsState(false)
     val scope = rememberCoroutineScope()
-    val idOrigin = originAccount?.id ?: 1
-    val idDestination = destinationAccount?.id ?: 1
+    val accountIdFrom = accountFrom?.id ?: 1
+    val accountIdTo = accountTo?.id ?: 1
     val amount=amountTransfer.toDoubleOrNull() ?: 0.0
     val negativeAmount=(-1)*(amountTransfer.toDoubleOrNull() ?: 0.0)
     accountViewModel.isValidTransfer()
@@ -96,7 +96,7 @@ fun Transfer(accountViewModel: AccountsViewModel,
                                 negativeAmount,
                                  Date().dateFormat(),
                                 R.drawable.transferoption,
-                                 idOrigin
+                                 accountIdFrom
                             )
                         )
                         entryViewModel.addEntry(
@@ -105,11 +105,11 @@ fun Transfer(accountViewModel: AccountsViewModel,
                                 amount = amount,
                                 date = Date().dateFormat(),
                                 categoryId = R.drawable.transferoption,
-                                accountId = idDestination
+                                accountId = accountIdTo
                             )
                         )
-                        accountViewModel.updateEntry(idOrigin, negativeAmount,false )
-                        accountViewModel.updateEntry(idDestination, amount,true )
+                        accountViewModel.transferAmount(accountIdFrom,accountIdTo,amount)
+
                     }
                     if(operationStatus==1){
                         SnackBarController.sendEvent(event = SnackBarEvent(transferSuccessMessage))

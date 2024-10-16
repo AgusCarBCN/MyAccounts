@@ -42,6 +42,10 @@ class AccountRepository @Inject constructor(private val accountDao: AccountDao) 
     suspend fun updateAccountBalance(accountId: Int, newBalance: Double) {
         accountDao.updateAccountBalance(accountId, newBalance)
     }
+    //8.Transferencia entre cuentas
+    suspend fun transferFunds(fromAccountId: Int, toAccountId: Int, amount: Double) {
+        accountDao.transferFunds(fromAccountId, toAccountId, amount)
+    }
 
 
 }
