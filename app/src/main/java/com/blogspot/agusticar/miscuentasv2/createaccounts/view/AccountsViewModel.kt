@@ -224,11 +224,11 @@ class AccountsViewModel @Inject constructor(
 
 
 
-    fun isValidTransfer() {
+    /*fun isValidTransfer() {
 
         _isConfirmTransfer.value = _accountSelected.value?.id != _destinationAccount.value?.id
 
-    }
+    }*/
 
 
     fun isValidExpense(amount: Double): Boolean = (_accountSelected.value?.balance ?: 0.0) >= amount

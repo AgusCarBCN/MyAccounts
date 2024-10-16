@@ -60,4 +60,5 @@ interface EntryDao {
     @Query("SELECT SUM(amount) FROM EntryEntity WHERE amount < 0")
     suspend fun getSumOfExpenseEntries(): Double?
 
+
 }

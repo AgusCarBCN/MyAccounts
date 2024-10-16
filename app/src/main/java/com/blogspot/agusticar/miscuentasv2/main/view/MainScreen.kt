@@ -159,7 +159,7 @@ fun MainScreen(
                         }
 
                         IconOptions.TRANSFER -> {
-                            Transfer(accountsViewModel,entriesViewModel)
+                            Transfer(mainViewModel,accountsViewModel,entriesViewModel)
                             title = R.string.transfer
                         }
 
@@ -203,7 +203,7 @@ fun MainScreen(
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(entriesViewModel,accountsViewModel)
+                            NewAmount(mainViewModel,entriesViewModel,accountsViewModel)
 
                         }
 
@@ -317,7 +317,6 @@ private fun DrawerContent(
 fun HeadDrawerMenu(profileViewModel: ProfileViewModel) {
 
     val selectedImageUriSaved by profileViewModel.selectedImageUriSaved.observeAsState(null)
-
 
     profileViewModel.loadImageUri()
     Row(

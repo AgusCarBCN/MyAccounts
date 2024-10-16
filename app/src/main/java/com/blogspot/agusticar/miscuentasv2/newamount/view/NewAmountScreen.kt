@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.newamount.view
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,8 @@ import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
+import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +37,8 @@ import java.util.Date
 
 @Composable
 
-fun NewAmount(entryViewModel:EntriesViewModel,
+fun NewAmount(mainViewModel: MainViewModel,
+              entryViewModel:EntriesViewModel,
               accountViewModel:AccountsViewModel)
 
 {
@@ -42,10 +46,9 @@ fun NewAmount(entryViewModel:EntriesViewModel,
     val descriptionEntry by entryViewModel.entryName.observeAsState("")
     val amountEntry by entryViewModel.entryAmount.observeAsState("")
     val categorySelected by entryViewModel.categorySelected.observeAsState(null)
+    val enableConfirmButton by entryViewModel.enableConfirmButton.observeAsState(false)
     val accountSelected by accountViewModel.accountSelected.observeAsState()
-    // Observa el estado de la lista de cuentas
-    val accounts by accountViewModel.listOfAccounts.observeAsState(listOf())
-    val currencyCode by accountViewModel.currencyCode.observeAsState("USD")
+
     accountViewModel.getAllAccounts()
     val idAccount=accountSelected?.id?:1
     val status= categorySelected?.isIncome?:false
@@ -77,7 +80,7 @@ fun NewAmount(entryViewModel:EntriesViewModel,
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.desamount),
             descriptionEntry,
-            onTextChange = { entryViewModel.onEntryNameChanged(it)},
+            onTextChange = { entryViewModel.onTextFieldsChanged(it, amountEntry) },
             BoardType.TEXT,
             false
         )
@@ -85,7 +88,7 @@ fun NewAmount(entryViewModel:EntriesViewModel,
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.enternote),
             amountEntry,
-            onTextChange = {entryViewModel.onAmountChanged(it) },
+            onTextChange = { entryViewModel.onTextFieldsChanged(descriptionEntry,it)},
             BoardType.DECIMAL,
             false
         )
@@ -93,7 +96,7 @@ fun NewAmount(entryViewModel:EntriesViewModel,
         ModelButton(text = stringResource(id =if(status) R.string.newincome else R.string.newexpense),
             R.dimen.text_title_small,
             modifier = Modifier.width(320.dp),
-            true,
+            enableConfirmButton,
             onClickButton = {
                 operationStatus = if(!status){
                     if(accountViewModel.isValidExpense(amountEntry.toDoubleOrNull()?:0.0)){
@@ -128,8 +131,6 @@ fun NewAmount(entryViewModel:EntriesViewModel,
                             SnackBarController.sendEvent(event = SnackBarEvent(amountOverBalanceMessage))
                         }
                     }
-
-
             }
         )
         ModelButton(text = stringResource(id = R.string.backButton),
@@ -137,7 +138,7 @@ fun NewAmount(entryViewModel:EntriesViewModel,
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {
-
+               mainViewModel.selectScreen(IconOptions.HOME)
             }
         )
     }

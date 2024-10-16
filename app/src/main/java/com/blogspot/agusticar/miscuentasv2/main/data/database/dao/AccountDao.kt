@@ -52,6 +52,4 @@ interface AccountDao {
         updateAccountBalance(fromAccountId, updatedFromBalance)
         updateAccountBalance(toAccountId, updatedToBalance)
     }
-
-
 }

@@ -46,7 +46,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginComponent(
     loginViewModel: LoginViewModel,
-    modifier: Modifier, navToMain: () -> Unit,
+    modifier: Modifier,
+    navToMain: () -> Unit,
 ) {
 
     val image by loginViewModel.selectedImageUriSaved.observeAsState(initial = null)

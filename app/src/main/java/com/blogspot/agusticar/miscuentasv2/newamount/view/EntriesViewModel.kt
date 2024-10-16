@@ -30,6 +30,14 @@ class EntriesViewModel @Inject constructor(
     private val _totalExpenses = MutableLiveData<Double>()
     val totalExpenses: LiveData<Double> = _totalExpenses
 
+    //LiveData para la habilitación del boton
+    private val _enableConfirmButton = MutableLiveData<Boolean>()
+    val enableConfirmButton: LiveData<Boolean> = _enableConfirmButton
+
+    //LiveData para la habilitación del boton
+    private val _enableConfirmTransferButton = MutableLiveData<Boolean>()
+    val enableConfirmTransferButton: LiveData<Boolean> = _enableConfirmTransferButton
+
     // LiveData para los campos de texto
     private val _entryName = MutableLiveData<String>()
     val entryName: LiveData<String> = _entryName
@@ -57,7 +65,6 @@ class EntriesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 addEntryDTO.invoke(entry)
-                //updateAccountBalance(entry.accountId, entry.amount, isTransferDestination)
                 if (entry.amount >= 0.0) {
                     getTotalIncomes()
                 } else {
@@ -69,18 +76,25 @@ class EntriesViewModel @Inject constructor(
             resetFields()
         }
     }
-
-
-    fun onAmountChanged(newAmount: String) {
+    fun onTextFieldsChanged(newDescription:String,newAmount:String){
         // Validar y actualizar el valor de amount
         if (Utils.isValidDecimal(newAmount)) {
             _entryAmount.value = newAmount
         }
+        _entryName.value=newDescription
+        _enableConfirmButton.value = enableButton(newDescription,newAmount)
     }
-    fun onEntryNameChanged(newName: String) {
-        // Validar y actualizar el valor de name
-        _entryName.value = newName
+
+    fun onAmountChanged(idAccountFrom:Int,idAccountTo:Int,newAmount: String) {
+        // Validar y actualizar el valor de amount
+        if (Utils.isValidDecimal(newAmount)) {
+            _entryAmount.value = newAmount
+        }
+        _enableConfirmTransferButton.value = enableButtonTransfer(idAccountFrom,idAccountTo,newAmount)
+
+
     }
+
     fun onCategorySelected(categorySelected: Category) {
         _categorySelected.value = categorySelected
     }
@@ -91,6 +105,9 @@ class EntriesViewModel @Inject constructor(
         } else {
             _listOfCategories.value = expenseCategories
         }
+    }
+    fun onChangeTransferButton(newValue:Boolean){
+        _enableConfirmTransferButton.postValue(newValue)
     }
 
     private fun getTotalIncomes() {
@@ -107,12 +124,17 @@ class EntriesViewModel @Inject constructor(
         }
     }
 
-
-
     private fun resetFields() {
         _entryName.postValue("") // Vaciar el nombre de la cuenta
         _entryAmount.postValue("") // Vaciar el balance de la cuenta
     }
+
+
+    private fun enableButton(description: String, amount: String): Boolean =
+        description.isNotBlank() && amount.isNotEmpty() && description.isNotBlank() && amount.isNotBlank()
+
+    private fun enableButtonTransfer( idAccountFrom:Int,idAccountTo:Int,amount: String): Boolean =
+        amount.isNotEmpty() && amount.isNotBlank() && idAccountFrom!=idAccountTo
 
     private val incomeCategories = listOf(
         Category(
