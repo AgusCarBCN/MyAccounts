@@ -3,6 +3,7 @@ package com.blogspot.agusticar.miscuentasv2.components
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,31 +35,55 @@ import com.blogspot.agusticar.miscuentasv2.utils.Utils
 
 
 
+
 @Composable
-
-fun EntryList(listOfEntries:List<EntryDTO>,currencyCode:String)
-{
-
+fun EntryList(listOfEntries: List<EntryDTO>, currencyCode: String) {
+    // Agrupar las entradas por fecha
+    val groupedEntries = listOfEntries.groupBy { it.date }  // Asumiendo que it.date es un String o LocalDate
 
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
+
     ) {
-        items(listOfEntries) { entry ->
-            ItemEntry(
-                description =entry.description ,
-                categoryDescription =entry.categoryName ,
-                categoryIcon =entry.categoryId ,
-                amount =entry.amount ,
-                currencyCode = currencyCode,
-                date =entry.date
-            )
-            Log.d("Entry", entry.description)
+        groupedEntries.forEach { (date, entries) ->
+            // Mostrar una cabecera sticky para la fecha
+            stickyHeader {
+                Column(modifier = Modifier.fillMaxWidth()
+                    .height(70.dp)
+                    .background(LocalCustomColorsPalette.current.backgroundPrimary),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                    Text(
+                        modifier = Modifier
+                            .background(LocalCustomColorsPalette.current.backgroundPrimary)
+                            .fillParentMaxWidth()
+                            .padding(start=15.dp),
+                        text = Utils.toDateEntry(date),
+                        textAlign = TextAlign.Start,
+                        fontSize = 18.sp,
+                        color = LocalCustomColorsPalette.current.textHeadColor,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            // Mostrar los elementos de ese grupo
+            items(entries) { entry ->
+                ItemEntry(
+                    description = entry.description,
+                    categoryDescription = entry.categoryName,
+                    categoryIcon = entry.categoryId,
+                    amount = entry.amount,
+                    currencyCode = currencyCode
+                )
+            }
         }
     }
-
 }
+
 
 @Composable
 
@@ -66,43 +91,36 @@ fun ItemEntry(description:String,
               categoryDescription:Int,
               categoryIcon:Int,
               amount:Double,
-              currencyCode:String,date:String){
+              currencyCode:String){
     
     Column {
-        Text(text = Utils.toDateEntry(date),
-            textAlign = TextAlign.Start,
-            fontSize = 18.sp,
-            color = LocalCustomColorsPalette.current.textColor,
-            fontWeight = FontWeight.Bold
-        )
-        Row(modifier = Modifier.padding(5.dp),
+
+        Row(modifier = Modifier.padding(start=15.dp, end=15.dp, top=5.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text =  description,
                 modifier = Modifier
-                    .padding(10.dp)
                     .weight(0.6f),
                 textAlign = TextAlign.Start,
-                fontSize = 18.sp,
+                fontSize = 20.sp,
                 color= LocalCustomColorsPalette.current.textHeadColor
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text =Utils.numberFormat(amount,currencyCode),
                 modifier = Modifier
-                    .padding(10.dp)
                     .weight(0.4f),
                 color= if(amount>=0)LocalCustomColorsPalette.current.incomeColor
                 else LocalCustomColorsPalette.current.expenseColor,
                 textAlign = TextAlign.End,
-                fontSize = 18.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
 
         }
-        Row(modifier = Modifier.padding(5.dp),
+        Row(modifier = Modifier.padding(start=10.dp, end=10.dp, top=5.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -110,7 +128,7 @@ fun ItemEntry(description:String,
                painter = painterResource(id = categoryIcon),
                contentDescription ="icon" ,
                tint= LocalCustomColorsPalette.current.textColor)
-            Spacer(modifier = Modifier.height(12.dp)) // Espacio entre el texto y el botón
+            Spacer(modifier = Modifier.height(20.dp)) // Espacio entre el texto y el botón
             Text(
                 text = stringResource(id = categoryDescription),
                 modifier = Modifier
