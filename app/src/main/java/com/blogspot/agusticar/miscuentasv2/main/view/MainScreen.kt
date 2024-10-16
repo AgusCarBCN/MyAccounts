@@ -84,7 +84,8 @@ fun MainScreen(
     accountsViewModel: AccountsViewModel,
     profileViewModel: ProfileViewModel,
     settingViewModel: SettingViewModel,
-    entriesViewModel: EntriesViewModel
+    entriesViewModel: EntriesViewModel,
+    navToCreateAccounts:()->Unit
 
 ) {
 
@@ -151,7 +152,11 @@ fun MainScreen(
 
                         IconOptions.SEARCH -> TODO()
                         IconOptions.SETTINGS -> {
-                            SettingScreen(settingViewModel, mainViewModel)
+                            SettingScreen(settingViewModel,
+                                mainViewModel,
+                                accountsViewModel,
+                                navToCreateAccounts,
+                            )
                             title = R.string.settingstitle
                         }
 
@@ -215,8 +220,8 @@ fun MainScreen(
 
                         IconOptions.CHANGE_CURRENCY -> CurrencySelector(accountsViewModel)
                         IconOptions.ENTRIES -> {
-
                             EntryList(entries, currencyCode)
+                            title = R.string.yourentries
                         }
                     }
 

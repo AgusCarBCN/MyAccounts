@@ -42,11 +42,17 @@ class AccountsViewModel @Inject constructor(
 
 ) : ViewModel() {
 
+    private val _isEnableButtons = MutableLiveData<Boolean>()
+    val isEnableButtons: LiveData<Boolean> = _isEnableButtons
+
     private val _isConfirmTransfer = MutableLiveData<Boolean>()
     val isConfirmTransfer: LiveData<Boolean> = _isConfirmTransfer
 
     private val _isCurrencyExpanded = MutableLiveData<Boolean>()
     val isCurrencyExpanded: LiveData<Boolean> = _isCurrencyExpanded
+
+    private val _enableCurrencySelector = MutableLiveData<Boolean>()
+    val enableCurrencySelector: LiveData<Boolean> = _enableCurrencySelector
 
     private val _currencyCode = MutableLiveData<String>()
     val currencyCode: LiveData<String> = _currencyCode
@@ -166,6 +172,10 @@ class AccountsViewModel @Inject constructor(
         }
 
     }
+    fun onDisableCurrencySelector(){
+        _enableCurrencySelector.postValue(false)
+
+    }
 
     private fun resetFields() {
         _name.postValue("") // Vaciar el nombre de la cuenta
@@ -211,29 +221,24 @@ class AccountsViewModel @Inject constructor(
         _isCurrencyExpanded.value = newValue
     }
 
-    fun onNameChanged(newName: String) {
-        _name.value = newName
 
-    }
 
-    fun onAmountChanged(newBalance: String) {
+    fun onTextFieldsChanged(newName:String,newBalance: String) {
         if (Utils.isValidDecimal(newBalance)) {
             _amount.value = newBalance
         }
+        _name.value = newName
+        _isEnableButtons.value=enableButton(newName,newBalance)
     }
 
 
 
-    /*fun isValidTransfer() {
-
-        _isConfirmTransfer.value = _accountSelected.value?.id != _destinationAccount.value?.id
-
-    }*/
 
 
     fun isValidExpense(amount: Double): Boolean = (_accountSelected.value?.balance ?: 0.0) >= amount
 
-
+    private fun enableButton(description: String, amount: String): Boolean =
+        description.isNotBlank() && amount.isNotEmpty() && description.isNotBlank() && amount.isNotBlank()
 
 
     //Función para darle formato de la divisa actual a una cantidad de dinero

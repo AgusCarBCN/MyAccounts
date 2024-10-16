@@ -19,14 +19,20 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.RowComponent
 import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
 @Composable
 
-fun SettingScreen(settingViewModel: SettingViewModel,mainViewModel: MainViewModel) {
+fun SettingScreen(settingViewModel: SettingViewModel,
+                  mainViewModel: MainViewModel,
+                  accountsViewModel: AccountsViewModel,
+                  navToCreateAccounts:()->Unit
+                  ) {
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
@@ -81,7 +87,8 @@ fun SettingScreen(settingViewModel: SettingViewModel,mainViewModel: MainViewMode
         RowComponent(title = stringResource(id = R.string.add_an_account),
             description = stringResource(id = R.string.desadd_an_account),
             iconResource = R.drawable.add,
-            onClick = {})
+            onClick = { navToCreateAccounts()
+            accountsViewModel.onDisableCurrencySelector()})
         RowComponent(title = stringResource(id = R.string.rename_account),
             description = stringResource(id = R.string.desrename_account),
             iconResource = R.drawable.edit,

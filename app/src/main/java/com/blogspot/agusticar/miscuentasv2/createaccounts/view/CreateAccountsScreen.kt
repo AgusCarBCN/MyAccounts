@@ -3,6 +3,7 @@ package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ import com.blogspot.agusticar.miscuentasv2.SnackBarController
 import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
+import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
@@ -46,8 +48,6 @@ fun CreateAccountsComponent(
     navToLogin: () -> Unit,
     navToBack: () -> Unit
 ) {
-
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -57,41 +57,73 @@ fun CreateAccountsComponent(
         val scope = rememberCoroutineScope()
         val currencyCode by accountsViewModel.currencyCode.observeAsState("EUR")
         val isCurrencyExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
+        val isEnableButtons by accountsViewModel.isEnableButtons.observeAsState(false)
         val accountName by accountsViewModel.name.observeAsState("")
         val accountBalance by accountsViewModel.amount.observeAsState("")
-        val newAccountCreated= message(resource = R.string.newaccountcreated)
+        val newAccountCreated = message(resource = R.string.newaccountcreated)
+        val enableCurrencySelector by accountsViewModel.enableCurrencySelector.observeAsState(true)
 
-
-        Text(
+        /*Text(
             modifier = Modifier
-                .padding(top = 30.dp)
-                .constrainAs(titleCreateAccount) {
+                .padding(top = 40.dp)
+                /*.constrainAs(titleCreateAccount) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(inputData.top)
-                },
+                }*/,
             text = if (!isCurrencyExpanded) stringResource(id = R.string.createAccount) else "",
             fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
             fontWeight = FontWeight.Bold, // Estilo de texto en negrita
             textAlign = TextAlign.Center,
             color = LocalCustomColorsPalette.current.textColor
-        )
+        )*/
 
 
         Column(
-            modifier = Modifier
+           /* modifier = Modifier
                 .constrainAs(inputData) {
                     top.linkTo(titleCreateAccount.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
-                },
+
+                }*/
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
             if (!isCurrencyExpanded) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 50.dp)
+                    /*.constrainAs(titleCreateAccount) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(inputData.top)
+                    }*/,
+                    text = if (!isCurrencyExpanded) stringResource(id = R.string.createAccount) else "",
+                    fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
+                    fontWeight = FontWeight.Bold, // Estilo de texto en negrita
+                    textAlign = TextAlign.Center,
+                    color = LocalCustomColorsPalette.current.textColor
+                )
+                if (!enableCurrencySelector) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(60.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        IconAnimated(
+                            iconResource = R.drawable.configaccountoption, sizeIcon = 120,
+                            LocalCustomColorsPalette.current.imageTutorialInit,
+                            LocalCustomColorsPalette.current.imageTutorialTarget
+                        )
+                    }
+                }
+
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.createaccountmsg),
@@ -105,7 +137,7 @@ fun CreateAccountsComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = R.string.amountName),
                     accountName,
-                    onTextChange = { accountsViewModel.onNameChanged(it) },
+                    onTextChange = { accountsViewModel.onTextFieldsChanged(it,accountBalance) },
                     BoardType.TEXT,
                     false
                 )
@@ -114,7 +146,7 @@ fun CreateAccountsComponent(
                     stringResource(id = R.string.enteramount),
                     accountBalance,
                     onTextChange = {
-                        accountsViewModel.onAmountChanged(it)
+                        accountsViewModel.onTextFieldsChanged(accountName,it)
                     },
                     BoardType.DECIMAL,
                     false
@@ -122,7 +154,7 @@ fun CreateAccountsComponent(
                 ModelButton(text = stringResource(id = R.string.addAccount),
                     R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
-                    true,
+                    isEnableButtons,
                     onClickButton = {
                         try {
                             scope.launch(Dispatchers.IO) {
@@ -145,13 +177,14 @@ fun CreateAccountsComponent(
                     }
                 )
             }
-
-            CurrencySelector(accountsViewModel)
+            if (enableCurrencySelector) {
+                CurrencySelector(accountsViewModel)
+            }
             if (!isCurrencyExpanded) {
                 ModelButton(text = stringResource(id = R.string.confirmButton),
                     R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
-                    true,
+                    isEnableButtons,
                     onClickButton = {
                         scope.launch {
                             Log.d("valor a guardar", "Code: $currencyCode")

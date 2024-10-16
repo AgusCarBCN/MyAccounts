@@ -151,7 +151,11 @@ class MainActivity : ComponentActivity() {
                                 accountViewModel,
                                 profileViewModel,
                                 settingViewModel,
-                                entriesViewModel
+                                entriesViewModel,
+                                navToCreateAccounts = {
+                                    navigationController.navigate(Routes.CreateAccounts.route)
+                                }
+
                             )
 
                         }

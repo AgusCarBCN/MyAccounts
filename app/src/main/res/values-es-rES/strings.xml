@@ -24,7 +24,7 @@
     <string name="seeincome">Ver ingresos</string>
     <string name="seeexpense">Ver gastos</string>
     <string name="seeall">Ver ingresos y gastos</string>
-
+    <string name="yourentries">Tus registros</string>
     <!--On Boarding-->
 
     <string name="wellcomeOnBoarding">Bienvenido a MisCuentasApp</string>

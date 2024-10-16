@@ -23,7 +23,7 @@
     <string name="seeincome">See incomes</string>
     <string name="seeexpense">See expenses</string>
     <string name="seeall">See incomes and expenses</string>
-
+    <string name="yourentries">Your notes</string>
 
     <!--String onBoarding -->
     <string name="wellcomeOnBoarding">Wellcome to MyAccountsApp</string>
