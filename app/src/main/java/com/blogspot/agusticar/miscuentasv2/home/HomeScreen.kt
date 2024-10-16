@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,12 +80,13 @@ fun HomeScreen(
             HeadSetting(title = stringResource(id = R.string.youraccounts),
                 size = 22)
 
-
             // Mostrar las cuentas si están disponibles
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+
             ) {
                 items(accounts!!) { account -> // Solo utiliza accounts
                     AccountCard(
@@ -94,7 +96,7 @@ fun HomeScreen(
                         onClickCard = { mainViewModel.selectScreen(IconOptions.ENTRIES)
                             entriesViewModel.getAllEntriesByAccount(account.id) }
                     )  // Crea un card para cada cuenta en la lista
-                    Spacer(modifier = Modifier.height(10.dp))  // Espacio entre cada card (separación)
+                    Spacer(modifier = Modifier.height(20.dp))  // Espacio entre cada card (separación)
                 }
             }
         }
