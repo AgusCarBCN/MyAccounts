@@ -91,7 +91,8 @@ fun HomeScreen(
                         Utils.numberFormat(account.balance,currencyCode),
                         account.name,
                         true,
-                        onClickCard = {  }
+                        onClickCard = { mainViewModel.selectScreen(IconOptions.ENTRIES)
+                            entriesViewModel.getAllEntriesByAccount(account.id) }
                     )  // Crea un card para cada cuenta en la lista
                     Spacer(modifier = Modifier.height(10.dp))  // Espacio entre cada card (separación)
                 }

@@ -8,11 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllEntriesByAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryDTOUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -28,7 +28,8 @@ class EntriesViewModel @Inject constructor(
     private val getTotalExpenses: GetSumTotalExpensesUseCase,
     private val getAllEntries: GetAllExpensesUseCase,
     private val getAllIncomes:GetAllIncomesUseCase,
-    private val getAllExpenses:GetAllExpensesUseCase
+    private val getAllExpenses:GetAllExpensesUseCase,
+    private val getAllEntriesByAccount: GetAllEntriesByAccountUseCase
 
 ) : ViewModel() {
 
@@ -86,6 +87,13 @@ class EntriesViewModel @Inject constructor(
     fun getAllExpenses() {
         viewModelScope.launch(Dispatchers.IO) {
             val entries=getAllExpenses.invoke()
+            _listOfEntries.postValue(entries)
+        }
+    }
+
+    fun getAllEntriesByAccount(accountId:Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            val entries=getAllEntriesByAccount.invoke(accountId)
             _listOfEntries.postValue(entries)
         }
     }

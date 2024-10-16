@@ -10,5 +10,5 @@ data class EntryDTO(
     val categoryId: Int,
     val categoryName: Int,
     val accountId: Int,
-    val name:String
+    val name:String=""
 )

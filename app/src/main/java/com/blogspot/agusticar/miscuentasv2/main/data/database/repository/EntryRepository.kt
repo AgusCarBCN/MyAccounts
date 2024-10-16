@@ -42,6 +42,8 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
     suspend fun getAllIncomesDTO():List<EntryDTO> = entryDao.getAllIncomesDTO()
 
     suspend fun getAllExpensesDTO():List<EntryDTO> = entryDao.getAllExpensesDTO()
+
+    suspend fun getAllEntriesDTOByAccount(accountId:Int):List<EntryDTO> =entryDao.getAllEntriesByAccountDTO(accountId)
     }
 
 

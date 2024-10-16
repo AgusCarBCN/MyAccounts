@@ -54,9 +54,7 @@ interface EntryDao {
     @Query("SELECT * FROM EntryEntity WHERE amount >= :minAmount ORDER BY date DESC")
     suspend fun getEntriesByAmount(minAmount: Double): List<Entry>
 
-    // 9. Obtener entradas de una cuenta específica (ordenadas por fecha descendiente)
-    @Query("SELECT * FROM EntryEntity WHERE accountId = :accountId")
-    suspend fun getEntriesForAccount(accountId: Int): List<Entry>
+
 
     @Transaction
     @Query("SELECT * FROM EntryEntity WHERE categoryId = :categoryId ORDER BY date DESC")
@@ -114,4 +112,20 @@ interface EntryDao {
 """)
     suspend fun getAllEntriesDTO(): List<EntryDTO>
 
+    @Query("""
+    SELECT e.description,
+           e.amount,
+           e.date,
+           e.categoryName,
+           e.categoryId,
+           e.accountId,
+           a.name 
+    FROM EntryEntity e
+    INNER JOIN AccountEntity a ON e.accountId = a.id
+   WHERE accountId = :accountId
+""")
+    suspend fun getAllEntriesByAccountDTO(accountId:Int): List<EntryDTO>
+
+
 }
+
