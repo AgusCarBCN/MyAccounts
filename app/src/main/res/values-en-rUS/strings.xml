@@ -131,6 +131,9 @@
     <string name="overbalance">Amount over balance</string>
     <string name="transferfrom">Expense by transfer</string>
     <string name="transferTo">Income by transfer</string>
+    <string name="namechanged">You have changed the account name</string>
+    <string name="amountchanged">You have changed the account balance</string>
+
     <!--TopBar titles-->
     <string name="hometitle">Home</string>
     <string name="searchtitle">Search</string>

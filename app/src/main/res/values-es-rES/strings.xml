@@ -134,6 +134,8 @@
     <string name="overbalance">Importe por encima de saldo</string>
     <string name="transferfrom">Gasto por transferencia</string>
     <string name="transferTo">Ingreso por transferencia</string>
+    <string name="namechanged">Has cambiado el nombre de la cuenta</string>
+    <string name="amountchanged">Has cambiado el sado de la cuenta</string>
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>
@@ -178,7 +180,6 @@
     <string name="contactme">Contactame</string>
     <string name="visitmygithub">Visita mi github</string>
     <string name="newexpense">Nuevo gasto</string>
-
     <!--newAmount-->
     <string name="selectanaccount">Escoje una cuenta</string>
     <string name="chooseexpense">Elije un tipo de gasto</string>

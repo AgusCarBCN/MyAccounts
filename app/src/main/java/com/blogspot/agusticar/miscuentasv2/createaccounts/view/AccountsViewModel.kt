@@ -37,6 +37,13 @@ class AccountsViewModel @Inject constructor(
     private val _isEnableButton = MutableLiveData<Boolean>()
     val isEnableButton: LiveData<Boolean> = _isEnableButton
 
+    private val _isEnableChangeNameButton = MutableLiveData<Boolean>()
+    val isEnableChangeNameButton: LiveData<Boolean> = _isEnableChangeNameButton
+
+    private val _isEnableChangeBalanceButton = MutableLiveData<Boolean>()
+    val isEnableChangeBalanceButton: LiveData<Boolean> = _isEnableChangeBalanceButton
+
+
     private val _isConfirmTransfer = MutableLiveData<Boolean>()
     val isConfirmTransfer: LiveData<Boolean> = _isConfirmTransfer
 
@@ -222,6 +229,17 @@ class AccountsViewModel @Inject constructor(
         }
         _name.value = newName
         _isEnableButton.value=enableButton(newName,newBalance)
+    }
+
+    fun onTextNameChanged(newName:String){
+        _name.value = newName
+        _isEnableChangeNameButton.value=true
+
+    }
+
+    fun onTextBalanceChanged(newBalance:String){
+        _amount.value = newBalance
+        _isEnableChangeBalanceButton.value=true
     }
 
     fun deleteAccount(account:Account){

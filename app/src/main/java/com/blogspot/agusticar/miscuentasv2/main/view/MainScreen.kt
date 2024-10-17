@@ -69,6 +69,7 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.setting.AccountList
+import com.blogspot.agusticar.miscuentasv2.setting.ModifyAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
@@ -257,7 +258,7 @@ fun MainScreen(
                         }
 
                         IconOptions.EDIT_ACCOUNTS -> {
-                            TODO()
+                            ModifyAccountsComponent(accountsViewModel)
                         }
 
                         IconOptions.BARCHART -> TODO()
