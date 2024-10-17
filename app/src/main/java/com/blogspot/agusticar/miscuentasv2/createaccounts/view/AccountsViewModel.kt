@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.DeleteAccountByIdUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.TransferUseCase
@@ -28,7 +29,8 @@ class AccountsViewModel @Inject constructor(
     private val addAccount: InsertAccountUseCase,
     private val getAccounts: GetAllAccountsUseCase,
     private val updateBalance: UpdateAccountBalance,
-    private val transferAmount:TransferUseCase
+    private val transferAmount:TransferUseCase,
+    private val deleteAccount: DeleteAccountByIdUseCase
 
 ) : ViewModel() {
 
@@ -222,7 +224,18 @@ class AccountsViewModel @Inject constructor(
         _isEnableButton.value=enableButton(newName,newBalance)
     }
 
+    fun deleteAccount(account:Account){
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                deleteAccount.invoke(account.id)
+                Log.d("Cuenta", "Cuenta eliminada")
+                resetFields()
+            }
 
+        } catch (e: Exception) {
+            Log.d("Cuenta", "Error: ${e.message}")
+        }
+    }
 
 
 

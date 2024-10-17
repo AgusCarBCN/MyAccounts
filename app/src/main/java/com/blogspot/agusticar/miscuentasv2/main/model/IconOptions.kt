@@ -14,6 +14,7 @@ enum class IconOptions {
     BARCHART,
     CALCULATOR,
     SETTING_ACCOUNTS,
+    DELETE_ACCOUNT,
     ABOUT,
     ABOUT_DESCRIPTION,
     POLICY,

@@ -162,6 +162,15 @@ class EntriesViewModel @Inject constructor(
         }
     }
 
+    fun updateEntries(){
+        viewModelScope.launch(Dispatchers.IO) {
+
+            _totalExpenses.postValue(getTotalExpenses.invoke())
+            _totalIncomes.postValue(getTotalIncomes.invoke())
+        }
+
+    }
+
     private fun resetFields() {
         _entryName.postValue("") // Vaciar el nombre de la cuenta
         _entryAmount.postValue("") // Vaciar el balance de la cuenta

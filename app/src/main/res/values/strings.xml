@@ -86,6 +86,7 @@
     <string name="selectedcurrency">Selected currency: </string>
     <!--Settings-->
     <string name="modify">Modify this account</string>
+    <string name="deleteaccount">Delete this account</string>
     <string name="appsettings">App Settings</string>
     <string name="theme">App theme</string>
     <string name="enableonboarding">Onboarding</string>
@@ -246,6 +247,8 @@
     <string name="cancelButton">Cancel</string>
     <string name="exitinfo">Are you sure you want log out?</string>
     <string name="titleexit">Confirm exit</string>
+    <string name="deleteinfo">¿Are you sure you want delete an account?</string>
+    <string name="titledelete">Confirm delete account</string>
 
 </resources>
 

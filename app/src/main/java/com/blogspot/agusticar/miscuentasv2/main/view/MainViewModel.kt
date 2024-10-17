@@ -2,6 +2,7 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,9 +25,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
 
     private val _showExitDialog=MutableStateFlow(false)
-
-
     val showExitDialog: MutableStateFlow<Boolean> = _showExitDialog
+
+    private val _showDeleteAccountDialog= MutableStateFlow(false)
+    val showDeleteAccountDialog: MutableStateFlow<Boolean> = _showDeleteAccountDialog
+
 
         // Función que permite cambiar la pantalla seleccionada.
     // Utiliza viewModelScope para lanzar una corrutina y emitir un nuevo valor.
@@ -44,6 +47,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
             _showExitDialog.emit(newValue)
         }
     }
+    fun showDeleteAccountDialog(newValue:Boolean) {
 
+        viewModelScope.launch {
+            _showDeleteAccountDialog.emit(newValue)
+        }
+    }
 }
 

@@ -57,8 +57,8 @@ import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
-import com.blogspot.agusticar.miscuentasv2.components.ExitAppDialog
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
+import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
@@ -94,9 +94,12 @@ fun MainScreen(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
-    val showDialog by mainViewModel.showExitDialog.collectAsState()
+    val showExitDialog by mainViewModel.showExitDialog.collectAsState()
+    val showDeleteAccountDialog by mainViewModel.showDeleteAccountDialog.collectAsState()
     val entries by entriesViewModel.listOfEntries.observeAsState(listOf())
     val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+    val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
+    val selectedAccount by accountsViewModel.accountSelected.observeAsState()
     LaunchedEffect(Unit) {
         entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
     }
@@ -176,22 +179,49 @@ fun MainScreen(
                             title = R.string.transfer
                         }
 
-                        IconOptions.BARCHART -> TODO()
-                        IconOptions.CALCULATOR -> TODO()
-                        IconOptions.SETTING_ACCOUNTS -> TODO()
+                        IconOptions.SETTING_ACCOUNTS -> {
+                            AccountList(
+                                mainViewModel,
+                                accountsViewModel,
+                                settingAccountOption
+                            )
+                            title = R.string.accountsetting
+
+                        }
+                        IconOptions.DELETE_ACCOUNT -> {
+                            ModelDialog(R.string.titledelete,
+                                R.string.deleteinfo,
+                                showDialog = showDeleteAccountDialog,
+                                onConfirm = {
+                                selectedAccount?.let { accountsViewModel.deleteAccount(it) }
+                                    entriesViewModel.updateEntries()
+                                    mainViewModel.showDeleteAccountDialog(false)
+                                    mainViewModel.selectScreen(IconOptions.HOME)
+
+                                },
+                                onDismiss = {
+                                    mainViewModel.showDeleteAccountDialog(false)
+                                    mainViewModel.selectScreen(IconOptions.HOME)
+                                })
+
+                        }
                         IconOptions.ABOUT -> {
                             AboutScreen(mainViewModel)
                             title = R.string.abouttitle
                         }
 
-                        IconOptions.POLICY -> TODO()
+                        IconOptions.POLICY ->{
+                            TODO()
+                        }
                         IconOptions.EXIT -> {
                             // Obtén el contexto actual de la aplicación
                             val context = LocalContext.current
                             // Verifica si el contexto es una actividad
                             val activity = context as? Activity
 
-                            ExitAppDialog(showDialog = showDialog,
+                            ModelDialog(R.string.exitapp,
+                                R.string.exitinfo,
+                                showDialog = showExitDialog,
                                 onConfirm = {
                                     activity?.finish()
                                 },
@@ -210,11 +240,8 @@ fun MainScreen(
                         IconOptions.EXPENSE_OPTIONS -> {
                             LaunchedEffect(Unit) {
                                 entriesViewModel.getCategories(false)
-
                             }
                             CategorySelector(mainViewModel, entriesViewModel, false)
-
-
                             title = R.string.newexpense
                         }
 
@@ -230,9 +257,12 @@ fun MainScreen(
                         }
 
                         IconOptions.EDIT_ACCOUNTS -> {
-                            AccountList(accountsViewModel,mainViewModel, entriesViewModel,R.string.modify)
-                            title=R.string.edit_account
+                            TODO()
                         }
+
+                        IconOptions.BARCHART -> TODO()
+                        IconOptions.CALCULATOR -> TODO()
+
                     }
 
                 }

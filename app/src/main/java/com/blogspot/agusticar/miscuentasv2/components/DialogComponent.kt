@@ -15,7 +15,9 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
 @Composable
-fun ExitAppDialog(
+fun ModelDialog(
+    title:Int,
+    message:Int,
     showDialog: Boolean,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
@@ -25,12 +27,12 @@ fun ExitAppDialog(
         AlertDialog(containerColor= LocalCustomColorsPalette.current.drawerColor,
             onDismissRequest = { onDismiss() },
 
-            title={Text(stringResource(id = R.string.titleexit),
+            title={Text(stringResource(id = title),
                 fontSize=20.sp,
                 fontWeight = FontWeight.Bold,
                 color = LocalCustomColorsPalette.current.textColor)},
 
-            text={Text(stringResource(id = R.string.exitinfo),
+            text={Text(stringResource(id = message),
                 fontSize=18.sp,
                 color = LocalCustomColorsPalette.current.textColor)}
             ,

@@ -45,6 +45,7 @@ fun HomeScreen(
     val expenses by entriesViewModel.totalExpenses.observeAsState(0.0)
     val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
     accountsViewModel.getAllAccounts()
+    entriesViewModel.updateEntries()
     // Observa el estado de la lista de cuentas
     val accounts by accountsViewModel.listOfAccounts.observeAsState(null)   // Observa el estado de la lista de cuentas
 

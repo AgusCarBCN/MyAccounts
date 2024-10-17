@@ -13,6 +13,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetEnableNotifi
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetEnableTutorialUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetShowTutorialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,6 +47,12 @@ class SettingViewModel @Inject constructor(
     private val _showTutorial = MutableLiveData<Boolean>()
     val showTutorial: LiveData<Boolean> = _showTutorial
 
+    //Live data para mostrar lista de cuentas con opcion para borrar o modificar
+    private val _deleteAccountOption = MutableLiveData<Boolean>()
+    val deleteAccountOption: LiveData<Boolean> = _deleteAccountOption
+
+
+
     init {
 
         getSwitchTutorial()
@@ -71,6 +78,9 @@ class SettingViewModel @Inject constructor(
         }
 
 
+    }
+    fun onSelectAccountOption(delete:Boolean){
+        _deleteAccountOption.value=delete
     }
 
     fun onSwitchNotificationsClicked(checked: Boolean) {
@@ -108,4 +118,5 @@ class SettingViewModel @Inject constructor(
             _switchNotifications.value = getNotificationsTutorial.invoke()
         }
     }
+
 }

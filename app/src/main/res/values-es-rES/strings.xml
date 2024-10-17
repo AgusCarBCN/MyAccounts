@@ -86,6 +86,7 @@
 
     <!--Ajustes-->
     <string name="modify">Modifica esta cuenta</string>
+    <string name="deleteaccount">Borra esta cuenta</string>
     <string name="appsettings">Ajustes generales</string>
     <string name="destheme">Escoje entre tema claro o oscuro.</string>
     <string name="desenableonboarding">Activa o desactiva el tutorial de inicio.</string>
@@ -245,5 +246,7 @@
     <!--Dialog-->
     <string name="cancelButton">Cancelar</string>
     <string name="exitinfo">¿Estas seguro que quieres cerrar la sesión?</string>
+    <string name="deleteinfo">¿Estas seguro que quieres borrar la cuenta?</string>
+    <string name="titledelete">Confirma borrar cuenta</string>
     <string name="titleexit">Confirma salida</string>
 </resources>

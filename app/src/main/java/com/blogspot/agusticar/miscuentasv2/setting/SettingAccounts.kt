@@ -23,59 +23,63 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
-import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 
 @Composable
-fun AccountList(accountsViewModel: AccountsViewModel,
-                mainViewModel: MainViewModel,
-                entriesViewModel: EntriesViewModel,
-                textButton:Int,
-)
+fun AccountList(
+    mainViewModel: MainViewModel,
+    accountsViewModel: AccountsViewModel,
+    option: Boolean
+) {
+    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+    accountsViewModel.getAllAccounts()
+    // Observa el estado de la lista de cuentas
+    val accounts by accountsViewModel.listOfAccounts.observeAsState(null)   // Observa el estado de la lista de cuentas
 
-    {
-        val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
-        accountsViewModel.getAllAccounts()
-        // Observa el estado de la lista de cuentas
-        val accounts by accountsViewModel.listOfAccounts.observeAsState(null)   // Observa el estado de la lista de cuentas
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(LocalCustomColorsPalette.current.backgroundPrimary),
+        verticalArrangement = Arrangement.Center,  // Centra los elementos verticalmente
+        horizontalAlignment = Alignment.CenterHorizontally  // Centra los elementos horizontalmente
+    ) {
+        if (accounts.isNullOrEmpty()) {
+            Text(
+                text = stringResource(id = R.string.noaccounts),
+                color = LocalCustomColorsPalette.current.textColor,
+                fontSize = 18.sp
+            )
+        } else {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(LocalCustomColorsPalette.current.backgroundPrimary),
-            verticalArrangement = Arrangement.Center,  // Centra los elementos verticalmente
-            horizontalAlignment = Alignment.CenterHorizontally  // Centra los elementos horizontalmente
-        ) {
-            if (accounts.isNullOrEmpty()) {
-                Text(text = stringResource(id = R.string.noaccounts),
-                    color = LocalCustomColorsPalette.current.textColor,
-                    fontSize = 18.sp)
-            }
-            else{
+            HeadSetting(
+                title = stringResource(id = R.string.youraccounts),
+                size = 22
+            )
+            // Mostrar las cuentas si están disponibles
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
 
-                HeadSetting(title = stringResource(id = R.string.youraccounts),
-                    size = 22)
-                // Mostrar las cuentas si están disponibles
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
 
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-
-                    ) {
-                    items(accounts!!) { account -> // Solo utiliza accounts
-                        AccountCard(
-                            Utils.numberFormat(account.balance,currencyCode),
-                            account.name,
-                            textButton,
-                            onClickCard = {
-
+                ) {
+                items(accounts!!) { account -> // Solo utiliza accounts
+                    AccountCard(
+                        Utils.numberFormat(account.balance, currencyCode),
+                        account.name,
+                        if (option) R.string.deleteaccount else R.string.modify,
+                        onClickCard = {
+                        mainViewModel.selectScreen(if(option)IconOptions.DELETE_ACCOUNT else IconOptions.EDIT_ACCOUNTS)
+                            accountsViewModel.onAccountSelected(account)
+                            if(option){
+                                mainViewModel.showDeleteAccountDialog(true)
                             }
-                        )  // Crea un card para cada cuenta en la lista
-                        Spacer(modifier = Modifier.height(20.dp))  // Espacio entre cada card (separación)
-                    }
+                        }
+                    )  // Crea un card para cada cuenta en la lista
+                    Spacer(modifier = Modifier.height(20.dp))  // Espacio entre cada card (separación)
                 }
             }
         }
+    }
 }
