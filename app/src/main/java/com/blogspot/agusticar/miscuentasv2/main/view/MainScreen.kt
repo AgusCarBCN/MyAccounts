@@ -258,7 +258,8 @@ fun MainScreen(
                         }
 
                         IconOptions.EDIT_ACCOUNTS -> {
-                            ModifyAccountsComponent(accountsViewModel)
+                            ModifyAccountsComponent(mainViewModel,
+                                accountsViewModel)
                         }
 
                         IconOptions.BARCHART -> TODO()

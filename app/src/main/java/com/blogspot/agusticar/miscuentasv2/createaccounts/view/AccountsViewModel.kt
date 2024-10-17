@@ -13,7 +13,8 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.D
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.TransferUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountBalance
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountBalanceUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountNameUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -28,9 +29,10 @@ class AccountsViewModel @Inject constructor(
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
     private val getAccounts: GetAllAccountsUseCase,
-    private val updateBalance: UpdateAccountBalance,
     private val transferAmount:TransferUseCase,
-    private val deleteAccount: DeleteAccountByIdUseCase
+    private val deleteAccount: DeleteAccountByIdUseCase,
+    private val updateName:UpdateAccountNameUseCase,
+    private val updateBalance:UpdateAccountBalanceUseCase
 
 ) : ViewModel() {
 
@@ -254,7 +256,22 @@ class AccountsViewModel @Inject constructor(
             Log.d("Cuenta", "Error: ${e.message}")
         }
     }
+    fun upDateAccountName(idAccount:Int,newName:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            updateName.invoke(idAccount,newName)
+            Log.d("Cuenta", "Nombre actualizado")
+            _isEnableChangeNameButton.postValue(false)
+        }
+    }
+    fun upDateAccountBalance(idAccount:Int,newBalance:Double){
+        viewModelScope.launch(Dispatchers.IO) {
 
+             updateBalance.invoke(idAccount,newBalance)
+            Log.d("Cuenta", "Nombre actualizado")
+            _isEnableChangeNameButton.postValue(false)
+
+        }
+    }
 
 
     fun isValidExpense(amount: Double): Boolean = (_accountSelected.value?.balance ?: 0.0) >= amount

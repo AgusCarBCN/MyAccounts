@@ -108,6 +108,7 @@ fun AccountList(
 
 @Composable
 fun ModifyAccountsComponent(
+    mainViewModel: MainViewModel,
     accountsViewModel: AccountsViewModel,
 
     ) {
@@ -116,9 +117,14 @@ fun ModifyAccountsComponent(
     val nameButtonChange by accountsViewModel.isEnableChangeNameButton.observeAsState(false)
     val balanceButtonChange by accountsViewModel.isEnableChangeBalanceButton.observeAsState(false)
     val accountSelected by accountsViewModel.accountSelected.observeAsState()
-
     val accountNameInit = accountSelected?.name ?: ""
     val accountBalanceInit = accountSelected?.balance ?: 0.0
+    val accountId=accountSelected?.id?:0
+
+    val name by accountsViewModel.name.observeAsState(accountNameInit)
+    val balance by accountsViewModel.amount.observeAsState(accountBalanceInit.toString())
+
+
     //SnackBarMessage
     val nameChanged = message(resource = R.string.namechanged)
     val balanceChanged = message(resource = R.string.amountchanged)
@@ -140,7 +146,7 @@ fun ModifyAccountsComponent(
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.amountName),
-            accountNameInit,
+            name,
             onTextChange = { accountsViewModel.onTextNameChanged(it) },
             BoardType.TEXT,
             false
@@ -152,6 +158,7 @@ fun ModifyAccountsComponent(
             onClickButton = {
                 try {
                     scope.launch(Dispatchers.IO) {
+                        accountsViewModel.upDateAccountName(accountId,name)
                         SnackBarController.sendEvent(event = SnackBarEvent(nameChanged))
                     }
                 } catch (e: Exception) {
@@ -165,7 +172,7 @@ fun ModifyAccountsComponent(
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.enteramount),
-            accountBalanceInit.toString(),
+           balance,
             onTextChange = {
                 accountsViewModel.onTextBalanceChanged(it)
             },
@@ -182,7 +189,10 @@ fun ModifyAccountsComponent(
             onClickButton = {
                 try {
                     scope.launch(Dispatchers.IO) {
+                        val newBalance=balance.toDoubleOrNull()?:0.0
+                        accountsViewModel.upDateAccountBalance(accountId,newBalance)
                         SnackBarController.sendEvent(event = SnackBarEvent(balanceChanged))
+
                     }
                 } catch (e: Exception) {
                     Log.d("Cuenta", "Error: ${e.message}")
@@ -197,7 +207,8 @@ fun ModifyAccountsComponent(
             modifier = Modifier.width(360.dp),
             true,
             onClickButton = {
-                accountsViewModel.resetFields()
+                mainViewModel.selectScreen(IconOptions.HOME)
+
 
 
             }
