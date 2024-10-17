@@ -83,6 +83,7 @@
     <string name="selectedcurrency">Selected currency: </string>
     <!--Settings-->
     <string name="modify">Modify this account</string>
+    <string name="delete_data_account">Delete the account and all its records</string>
     <string name="deleteaccount">Delete this account</string>
     <string name="edit_account">Modify an account</string>
     <string name="desedit_account"> Change the name and balance of your accounts.</string>
@@ -100,12 +101,11 @@
     <string name="desload">Load the backup file of your road records.</string>
     <string name="desdeleteall">Delete all records.</string>
     <string name="backup">Backup management</string>
-    <string name="delete_data_account">Delete data from an account</string>
     <string name="delete_an_account">Delete an account</string>
     <string name="delete_all">Delete all</string>
     <string name="add_an_account">Add an account</string>
     <string name="desdelete_data_account">Delete all the transactions you have made in an account.</string>
-    <string name="desdelete_an_account">Delete the account along with all its records.</string>
+    <string name="desdelete_an_account">Delete an account along with all its records.</string>
     <string name="desdelete_all">Delete all accounts and all their records inside.</string>
     <string name="desadd_an_account">Add a new account to the application.</string>
     <string name="changecurrency">Change currency</string>

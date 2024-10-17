@@ -101,14 +101,14 @@
     <string name="desload">Carga el archivo de seguridad de los registros de tus vias.</string>
     <string name="desdeleteall">Borra todos los registros.</string>
     <string name="backup">Gestión de copias de seguridad</string>
-    <string name="delete_data_account">Borrar los registros de una cuenta</string>
+    <string name="delete_data_account">Borra una cuenta y todos sus registros</string>
     <string name="delete_an_account">Borra una cuenta</string>
     <string name="delete_all">Borra todo</string>
     <string name="edit_account">Modifica una cuenta</string>
     <string name="desedit_account">Cambia el nombre y el balance de tus cuentas.</string>
     <string name="add_an_account">Añade una cuenta</string>
     <string name="desdelete_data_account">Borrar todos los movimientos que has realizado en una cuenta.</string>
-    <string name="desdelete_an_account">Borra la cuenta con todos los registros.</string>
+    <string name="desdelete_an_account">Borra una cuenta con todos sus registros.</string>
     <string name="desdelete_all">Borra todas las cuentas y todos sus registros dentro.</string>
     <string name="desadd_an_account">Añade una nueva cuenta a la aplicación</string>
     <string name="changecurrency">Cambia la divisa.</string>

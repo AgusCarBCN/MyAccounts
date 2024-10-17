@@ -96,8 +96,8 @@ fun SettingScreen(settingViewModel: SettingViewModel,
                 settingViewModel.onSelectAccountOption(false)
                 mainViewModel.selectScreen(IconOptions.SETTING_ACCOUNTS)
             })
-        RowComponent(title = stringResource(id = R.string.delete_data_account),
-            description = stringResource(id = R.string.desdelete_data_account),
+        RowComponent(title = stringResource(id = R.string.delete_an_account),
+            description = stringResource(id = R.string.desdelete_an_account),
             iconResource = R.drawable.baseline_delete_24,
             onClick = {
                 settingViewModel.onSelectAccountOption(true)
