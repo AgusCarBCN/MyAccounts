@@ -77,7 +77,7 @@ class EntriesViewModel @Inject constructor(
     init {
         getTotalIncomes()
         getTotalExpenses()
-
+        getAllEntriesDataBase()
     }
     private fun getAllEntries(){
         viewModelScope.launch(Dispatchers.IO) {

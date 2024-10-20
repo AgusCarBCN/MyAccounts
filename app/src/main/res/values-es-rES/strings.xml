@@ -251,7 +251,7 @@
     <string name="titledelete">Confirma borrar cuenta</string>
     <string name="titleexit">Confirma salida</string>
     <!--backup-->
-    <string name="exportData">Exportar datos</string>
+    <string name="exportData">Datos guardados en fichero: </string>
     <string name="filename">Dar un nombre al archivo CSV</string>
     <string name="filenamelabel">Nombre fichero CSV</string>
     <string name="download">Descargando fichero  </string>

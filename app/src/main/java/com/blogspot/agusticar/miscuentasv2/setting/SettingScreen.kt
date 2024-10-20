@@ -1,5 +1,9 @@
 package com.blogspot.agusticar.miscuentasv2.setting
 
+import android.app.Activity
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,10 +16,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.documentfile.provider.DocumentFile
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.RowComponent
 import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
@@ -23,7 +32,12 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
+import kotlinx.coroutines.launch
+import java.util.Date
 
 
 @Composable
@@ -31,12 +45,31 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 fun SettingScreen(settingViewModel: SettingViewModel,
                   mainViewModel: MainViewModel,
                   accountsViewModel: AccountsViewModel,
+                  entriesViewModel: EntriesViewModel,
                   navToCreateAccounts:()->Unit
                   ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
-
+    val entries by entriesViewModel.listOfEntriesDataBase.observeAsState(listOf())
+    val date= Date().dateFormat()
+    val fileName="backup$date"
+    val messageExport= stringResource(id = R.string.exportData)+fileName
+    val pickerExportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+               val directory = DocumentFile.fromTreeUri(context, uri) // Direct assignment
+                if (directory != null && directory.isDirectory) {
+                    Utils.writeCsvFile(entries.toMutableList(),context,fileName,directory)
+                    scope.launch { SnackBarController.sendEvent(event = SnackBarEvent(messageExport))}
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +106,8 @@ fun SettingScreen(settingViewModel: SettingViewModel,
         RowComponent(title = stringResource(id = R.string.createbackup),
             description = stringResource(id = R.string.desbackup),
             iconResource = R.drawable.backup,
-            onClick = {mainViewModel.selectScreen(IconOptions.CREATE_BACKUP)})
+            onClick = {val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                pickerExportLauncher.launch(intent)})
         RowComponent(title = stringResource(id = R.string.loadbackup),
             description = stringResource(id = R.string.desload),
             iconResource = R.drawable.download,
