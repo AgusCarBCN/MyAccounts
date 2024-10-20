@@ -87,6 +87,7 @@ fun CurrencySelector(accountsViewModel: AccountsViewModel) {
                     CurrencyListItem(currency) {
                         // Acción al seleccionar la moneda
                         accountsViewModel.onCurrencySelectedChange(currency.currencyCode)
+                        accountsViewModel.setCurrencyCode(currencyCode)
                         // Cambia el estado a colapsado
                         accountsViewModel.onExpandedChange(false)
                     }

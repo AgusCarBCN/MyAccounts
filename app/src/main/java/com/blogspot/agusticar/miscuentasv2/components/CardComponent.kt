@@ -84,7 +84,7 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> 
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.height(20.dp)) // Espacio entre el texto y el botón
+        Spacer(modifier = Modifier.height(10.dp)) // Espacio entre el texto y el botón
 
         TextButton(
             onClick = {
