@@ -57,6 +57,7 @@ import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
+import com.blogspot.agusticar.miscuentasv2.components.FileOperationsExport
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
@@ -264,7 +265,11 @@ fun MainScreen(
 
                         IconOptions.BARCHART -> TODO()
                         IconOptions.CALCULATOR -> TODO()
-
+                        IconOptions.CREATE_BACKUP -> FileOperationsExport(
+                            entriesViewModel ,
+                            settingViewModel
+                        )
+                        IconOptions.LOAD_BACKUP -> TODO()
                     }
 
                 }

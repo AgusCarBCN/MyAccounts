@@ -51,7 +51,13 @@ class SettingViewModel @Inject constructor(
     private val _deleteAccountOption = MutableLiveData<Boolean>()
     val deleteAccountOption: LiveData<Boolean> = _deleteAccountOption
 
+    // LiveData para el campo de nombre de fichero
+    private val _fileName = MutableLiveData<String>()
+    val fileName: LiveData<String> = _fileName
 
+    // Este LiveData controla el estado de si mostrar el Dialogo de exportar fichero csv
+    private val _showExportDialog = MutableLiveData<Boolean>()
+    val showExportDialog: LiveData<Boolean> = _showExportDialog
 
     init {
 
@@ -91,7 +97,13 @@ class SettingViewModel @Inject constructor(
 
 
     }
+    fun onFileNameChanged(newName:String){
+        _fileName.value = newName
 
+    }
+    fun onShowExportDialog(newValue:Boolean){
+        _showExportDialog.value = newValue
+    }
 
     // Obtener el estado del tutorial cuando inicie la aplicación
     fun getShowTutorial() {

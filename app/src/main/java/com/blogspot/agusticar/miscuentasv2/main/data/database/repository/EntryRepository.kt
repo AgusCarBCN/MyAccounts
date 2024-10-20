@@ -23,10 +23,10 @@ class EntryRepository  @Inject constructor(private val entryDao: EntryDao){
         val entry = entryDtoToEntry(entryDTO)
         entryDao.insertEntry(entry)
     }
-    suspend fun getAllEntries():List<EntryDTO> {
-        val entries = entryDao.getAllEntries()
-        return entries.map { entryToEntryDto(it) }
-    }
+    suspend fun getAllEntries():List<Entry> =
+
+        entryDao.getAllEntries()
+
 
     suspend fun getAllIncomes():List<EntryDTO> {
         val entries = entryDao.getAllIncomes()

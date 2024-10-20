@@ -251,6 +251,11 @@
     <string name="titleexit">Confirm exit</string>
     <string name="deleteinfo">¿Are you sure you want delete an account?</string>
     <string name="titledelete">Confirm delete account</string>
-
+    <!--backup-->
+    <string name="exportData">Export data</string>
+    <string name="filename">Give a name to CSV file</string>
+    <string name="download">Download file </string>
+    <string name="upload">Backup file </string>
+    <string name="filenamelabel">CSV file name</string>
 </resources>
 

@@ -19,5 +19,7 @@ enum class IconOptions {
     ABOUT_DESCRIPTION,
     POLICY,
     EXIT,
-    ENTRIES
+    ENTRIES,
+    CREATE_BACKUP,
+    LOAD_BACKUP
 }

@@ -73,7 +73,7 @@ fun SettingScreen(settingViewModel: SettingViewModel,
         RowComponent(title = stringResource(id = R.string.createbackup),
             description = stringResource(id = R.string.desbackup),
             iconResource = R.drawable.backup,
-            onClick = {})
+            onClick = {mainViewModel.selectScreen(IconOptions.CREATE_BACKUP)})
         RowComponent(title = stringResource(id = R.string.loadbackup),
             description = stringResource(id = R.string.desload),
             iconResource = R.drawable.download,

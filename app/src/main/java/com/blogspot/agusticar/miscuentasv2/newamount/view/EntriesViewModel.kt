@@ -9,6 +9,7 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllEntriesByAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllEntriesDatabaseUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
@@ -27,6 +28,7 @@ class EntriesViewModel @Inject constructor(
     private val getTotalIncomes: GetSumTotalIncomesUseCase,
     private val getTotalExpenses: GetSumTotalExpensesUseCase,
     private val getAllEntries: GetAllExpensesUseCase,
+    private val getAllEntriesDB:GetAllEntriesDatabaseUseCase,
     private val getAllIncomes:GetAllIncomesUseCase,
     private val getAllExpenses:GetAllExpensesUseCase,
     private val getAllEntriesByAccount: GetAllEntriesByAccountUseCase
@@ -67,6 +69,11 @@ class EntriesViewModel @Inject constructor(
     private val _listOfEntries = MutableLiveData<List<EntryDTO>>()
     val listOfEntries: LiveData<List<EntryDTO>> = _listOfEntries
 
+    //LiveData para la lista desde base de datos
+    private val _listOfEntriesDataBase = MutableLiveData<List<Entry>>()
+    val listOfEntriesDataBase: LiveData<List<Entry>> = _listOfEntriesDataBase
+
+
     init {
         getTotalIncomes()
         getTotalExpenses()
@@ -76,6 +83,12 @@ class EntriesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val entries=getAllEntries.invoke()
             _listOfEntries.postValue(entries)
+        }
+    }
+    fun getAllEntriesDataBase(){
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _listOfEntriesDataBase.postValue(getAllEntriesDB.invoke())
         }
     }
     fun getAllIncomes() {

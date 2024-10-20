@@ -1,8 +1,17 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -53,6 +62,73 @@ fun ModelDialog(
                     onClickButton = {
                         onDismiss()
                     } )
+            }
+        )
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ModelDialogWithTextField(
+    title: Int,
+    message: Int,
+    showDialog: Boolean,
+    textFieldValue: String,
+    onValueChange: (String) -> Unit,  // Callback para actualizar el valor del TextField
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    if (showDialog) {
+        AlertDialog(
+            containerColor = LocalCustomColorsPalette.current.drawerColor,
+            onDismissRequest = { onDismiss() },
+            title = {
+                Text(
+                    stringResource(id = title),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = LocalCustomColorsPalette.current.textColor
+                )
+            },
+            text = {
+                Column {
+                    Text(
+                        text = stringResource(id = message),
+                        fontSize = 18.sp,
+                        color = LocalCustomColorsPalette.current.textColor
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TextFieldComponent(modifier=Modifier.size(100.dp),
+                        label= stringResource(id = R.string.filenamelabel),
+                        textFieldValue,
+                        onTextChange = onValueChange,
+                        BoardType.TEXT,
+                        false
+                        )
+
+                }
+            },
+            confirmButton = {
+                ModelButton(
+                    text = stringResource(id = R.string.confirmButton),
+                    R.dimen.text_body_medium,
+                    modifier = Modifier.width(130.dp),
+                    true,
+                    onClickButton = {
+                        onConfirm()
+                    }
+                )
+            },
+            dismissButton = {
+                ModelButton(
+                    text = stringResource(id = R.string.cancelButton),
+                    R.dimen.text_body_medium,
+                    modifier = Modifier.width(130.dp),
+                    true,
+                    onClickButton = {
+                        onDismiss()
+                    }
+                )
             }
         )
     }

@@ -250,4 +250,11 @@
     <string name="deleteinfo">¿Estas seguro que quieres borrar la cuenta?</string>
     <string name="titledelete">Confirma borrar cuenta</string>
     <string name="titleexit">Confirma salida</string>
+    <!--backup-->
+    <string name="exportData">Exportar datos</string>
+    <string name="filename">Dar un nombre al archivo CSV</string>
+    <string name="filenamelabel">Nombre fichero CSV</string>
+    <string name="download">Descargando fichero  </string>
+    <string name="upload">Copia de fichero de seguridad </string>
+
 </resources>
