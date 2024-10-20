@@ -417,6 +417,18 @@ class EntriesViewModel @Inject constructor(
             isIncome = false
         ),
         Category(
+            iconResource = R.drawable.ic_category_restaurant,
+            name = R.string.restaurants,  // Usando el recurso de string
+            isIncome = false
+        ),
+        Category(
+            iconResource = R.drawable.ic_category_kids,
+            name = R.string.children,  // Usando el recurso de string
+            isIncome = false
+        ),
+
+
+        Category(
             iconResource = R.drawable.ic_category_otherincomes,
             name = R.string.other_expenses,  // Usando el recurso de string
             isIncome = false
