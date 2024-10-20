@@ -65,6 +65,13 @@ class AccountsViewModel @Inject constructor(
     private val _amount = MutableLiveData<String>()
     val amount: LiveData<String> = _amount
 
+    // LiveData para los campos de cuentas modificadas
+    private val _newName = MutableLiveData<String>()
+    val newName: LiveData<String> = _newName
+
+    private val _newAmount = MutableLiveData<String>()
+    val newAmount: LiveData<String> = _newAmount
+
     //LiveData para cuenta seleccionada
 
     private val _accountSelected = MutableLiveData<Account?>()
@@ -195,6 +202,10 @@ class AccountsViewModel @Inject constructor(
 
     fun onAccountSelected(accountSelected: Account) {
         _accountSelected.value = accountSelected
+        val nameAccountSelected=accountSelected.name
+        val amountAccountSelected=accountSelected.balance
+        _newName.postValue(nameAccountSelected)
+        _newAmount.postValue(amountAccountSelected.toString())
     }
 
 
@@ -234,13 +245,13 @@ class AccountsViewModel @Inject constructor(
     }
 
     fun onTextNameChanged(newName:String){
-        _name.value = newName
+        _newName.value = newName
         _isEnableChangeNameButton.value=true
 
     }
 
     fun onTextBalanceChanged(newBalance:String){
-        _amount.value = newBalance
+        _newAmount.value = newBalance
         _isEnableChangeBalanceButton.value=true
     }
 
@@ -257,10 +268,13 @@ class AccountsViewModel @Inject constructor(
         }
     }
     fun upDateAccountName(idAccount:Int,newName:String){
+
+
         viewModelScope.launch(Dispatchers.IO) {
             updateName.invoke(idAccount,newName)
             Log.d("Cuenta", "Nombre actualizado")
             _isEnableChangeNameButton.postValue(false)
+
         }
     }
     fun upDateAccountBalance(idAccount:Int,newBalance:Double){
@@ -269,6 +283,7 @@ class AccountsViewModel @Inject constructor(
              updateBalance.invoke(idAccount,newBalance)
             Log.d("Cuenta", "Nombre actualizado")
             _isEnableChangeNameButton.postValue(false)
+
 
         }
     }

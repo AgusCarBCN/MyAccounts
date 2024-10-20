@@ -121,8 +121,8 @@ fun ModifyAccountsComponent(
     val accountBalanceInit = accountSelected?.balance ?: 0.0
     val accountId=accountSelected?.id?:0
 
-    val name by accountsViewModel.name.observeAsState(accountNameInit)
-    val balance by accountsViewModel.amount.observeAsState(accountBalanceInit.toString())
+    val name by accountsViewModel.newName.observeAsState(accountNameInit)
+    val balance by accountsViewModel.newAmount.observeAsState(accountBalanceInit.toString())
 
 
     //SnackBarMessage
