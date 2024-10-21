@@ -97,8 +97,8 @@
     <string name="createbackup">Create backup</string>
     <string name="loadbackup">Load backup</string>
     <string name="deleteall">Delete all</string>
-    <string name="desbackup">Save a backup of your road records.</string>
-    <string name="desload">Load the backup file of your road records.</string>
+    <string name="desbackup">Save a backup of your records.</string>
+    <string name="desload">Load the backup file of your records.</string>
     <string name="desdeleteall">Delete all records.</string>
     <string name="backup">Backup management</string>
     <string name="delete_an_account">Delete an account</string>

@@ -97,8 +97,8 @@
     <string name="createbackup">Copia de seguridad</string>
     <string name="loadbackup">Carga archivo de seguridad</string>
     <string name="deleteall">Borra todo</string>
-    <string name="desbackup">Guarda una copia de seguridad de los registros de tus vias.</string>
-    <string name="desload">Carga el archivo de seguridad de los registros de tus vias.</string>
+    <string name="desbackup">Guarda una copia de seguridad de los registros.</string>
+    <string name="desload">Carga el archivo de seguridad de los registros.</string>
     <string name="desdeleteall">Borra todos los registros.</string>
     <string name="backup">Gestión de copias de seguridad</string>
     <string name="delete_data_account">Borra una cuenta y todos sus registros</string>
