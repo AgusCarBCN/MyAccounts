@@ -29,10 +29,12 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.RowComponent
 import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
+import com.blogspot.agusticar.miscuentasv2.setting.model.EntryCSV
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
@@ -54,6 +56,7 @@ fun SettingScreen(settingViewModel: SettingViewModel,
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
     val entries by entriesViewModel.listOfEntriesDataBase.observeAsState(listOf())
+    val entriesCSV= toEntryCSV(entries)
     val date= Date().dateFormat()
     val fileName="backup$date"
     val messageExport= stringResource(id = R.string.exportData)+fileName
@@ -64,7 +67,7 @@ fun SettingScreen(settingViewModel: SettingViewModel,
             result.data?.data?.let { uri ->
                val directory = DocumentFile.fromTreeUri(context, uri) // Direct assignment
                 if (directory != null && directory.isDirectory) {
-                    Utils.writeCsvFile(entries.toMutableList(),context,fileName,directory)
+                    Utils.writeCsvFile(entriesCSV,context,fileName,directory)
                     scope.launch { SnackBarController.sendEvent(event = SnackBarEvent(messageExport))}
                 }
             }
@@ -154,4 +157,19 @@ fun SpacerApp() {
             .background(LocalCustomColorsPalette.current.textColor.copy(alpha = 0.2f)) // Ajusta el valor alpha para la opacidad
             .height(1.dp) // Cambié a height para que la línea sea horizontal, ajusta si es necesario
     )
+}
+@Composable
+fun toEntryCSV(entries:List<Entry>):MutableList<EntryCSV>{
+
+    val entriesCSV= mutableListOf<EntryCSV>()
+    entries.forEach { entry ->
+        entriesCSV.add(EntryCSV(entry.description,
+            stringResource(id = entry.categoryName),
+            entry.amount,
+            entry.date,
+            entry.categoryId,
+            entry.categoryName,
+            entry.accountId))
+    }
+    return entriesCSV
 }

@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
+import com.blogspot.agusticar.miscuentasv2.setting.model.EntryCSV
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import java.io.BufferedReader
@@ -48,7 +49,7 @@ class Utils {
         }
 
         fun writeCsvFile(
-            entries: MutableList<Entry>,
+            entries: MutableList<EntryCSV>,
             context: Context,
             fileName: String,
             directory: DocumentFile
@@ -58,20 +59,20 @@ class Utils {
 
             BufferedWriter(OutputStreamWriter(outputStream)).use { writer ->
                 // Escribir el encabezado del CSV
-                writer.write("Description,Amount,Date,CategoryId,CategoryName,accountId\n")
+                writer.write("Description,Category,Amount,Date,CategoryId,CategoryName,accountId\n")
 
                 //Escribir las rutas en fichero
                 for (entry in entries) {
                     // Asegúrate de que los datos sean válidos antes de escribirlos
                     val csvLine =
                         "${entry.description}," +
+                                "${entry.category}," +
                                 "${entry.amount}," +
                                 "${entry.date}," +
                                 "${entry.categoryId}," +
                                 "${entry.categoryName}," +
                                 "${entry.accountId}\n"
                     writer.write(csvLine)
-
                 }
             }
 
