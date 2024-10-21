@@ -31,7 +31,6 @@ import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
-import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.model.EntryCSV
@@ -44,35 +43,57 @@ import java.util.Date
 
 @Composable
 
-fun SettingScreen(settingViewModel: SettingViewModel,
-                  mainViewModel: MainViewModel,
-                  accountsViewModel: AccountsViewModel,
-                  entriesViewModel: EntriesViewModel,
-                  navToCreateAccounts:()->Unit
-                  ) {
+fun SettingScreen(
+    settingViewModel: SettingViewModel,
+    mainViewModel: MainViewModel,
+    accountsViewModel: AccountsViewModel,
+    entriesViewModel: EntriesViewModel,
+    navToCreateAccounts: () -> Unit
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
     val entries by entriesViewModel.listOfEntriesDataBase.observeAsState(listOf())
-    val entriesCSV= toEntryCSV(entries)
-    val date= Date().dateFormat()
-    val fileName="backup$date"
-    val messageExport= stringResource(id = R.string.exportData)+fileName
+    val entriesCSV = toEntryCSV(entries)
+    val date = Date().dateFormat()
+    val fileName = "backup$date"
+    val messageExport = stringResource(id = R.string.exportData) + fileName
+    val messageImport = stringResource(id = R.string.loadbackup)
     val pickerExportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
-               val directory = DocumentFile.fromTreeUri(context, uri) // Direct assignment
+                val directory = DocumentFile.fromTreeUri(context, uri) // Direct assignment
                 if (directory != null && directory.isDirectory) {
-                    Utils.writeCsvFile(entriesCSV,context,fileName,directory)
-                    scope.launch { SnackBarController.sendEvent(event = SnackBarEvent(messageExport))}
+                    Utils.writeCsvFile(entriesCSV, context, fileName, directory)
+                    scope.launch { SnackBarController.sendEvent(event = SnackBarEvent(messageExport)) }
                 }
             }
         }
     }
+    val pickerImportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                // Abrir el archivo desde el URI y leer el contenido
+
+                val entriesToRead =
+                    Utils.readCsvFile(context, uri) // Método para leer el CSV desde un InputStream
+                for (entry in entriesToRead) {
+                    scope.launch {
+                        entriesViewModel.addEntry(entry)
+                    }
+                }
+                scope.launch { SnackBarController.sendEvent(event = SnackBarEvent(messageImport)) }
+
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -87,19 +108,19 @@ fun SettingScreen(settingViewModel: SettingViewModel,
             title = stringResource(id = R.string.theme),
             description = stringResource(id = R.string.destheme),
             switchDarkTheme,
-            onClickSwitch = {settingViewModel.onSwitchDarkThemeClicked(it)}
+            onClickSwitch = { settingViewModel.onSwitchDarkThemeClicked(it) }
         )
         SwitchComponent(
             title = stringResource(id = R.string.enableonboarding),
             description = stringResource(id = R.string.desenableonboarding),
             switchTutorial,
-            onClickSwitch = {settingViewModel.onSwitchTutorialClicked(it)}
+            onClickSwitch = { settingViewModel.onSwitchTutorialClicked(it) }
         )
         SwitchComponent(
             title = stringResource(id = R.string.enablenotifications),
             description = stringResource(id = R.string.desenableonboarding),
             switchNotifications,
-            onClickSwitch = {settingViewModel.onSwitchNotificationsClicked(it)}
+            onClickSwitch = { settingViewModel.onSwitchNotificationsClicked(it) }
         )
 
         SpacerApp()
@@ -109,12 +130,20 @@ fun SettingScreen(settingViewModel: SettingViewModel,
         RowComponent(title = stringResource(id = R.string.createbackup),
             description = stringResource(id = R.string.desbackup),
             iconResource = R.drawable.backup,
-            onClick = {val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                pickerExportLauncher.launch(intent)})
+            onClick = {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                pickerExportLauncher.launch(intent)
+            })
         RowComponent(title = stringResource(id = R.string.loadbackup),
             description = stringResource(id = R.string.desload),
             iconResource = R.drawable.download,
-            onClick = {})
+            onClick = {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "*/*"
+                pickerImportLauncher.launch(intent)
+
+            })
 
 
         SpacerApp()
@@ -124,8 +153,10 @@ fun SettingScreen(settingViewModel: SettingViewModel,
         RowComponent(title = stringResource(id = R.string.add_an_account),
             description = stringResource(id = R.string.desadd_an_account),
             iconResource = R.drawable.add,
-            onClick = { navToCreateAccounts()
-            accountsViewModel.onDisableCurrencySelector()})
+            onClick = {
+                navToCreateAccounts()
+                accountsViewModel.onDisableCurrencySelector()
+            })
         RowComponent(title = stringResource(id = R.string.edit_account),
             description = stringResource(id = R.string.desedit_account),
             iconResource = R.drawable.edit,
@@ -144,7 +175,7 @@ fun SettingScreen(settingViewModel: SettingViewModel,
         RowComponent(title = stringResource(id = R.string.changecurrency),
             description = stringResource(id = R.string.deschangecurrency),
             iconResource = R.drawable.exchange,
-            onClick = {mainViewModel.selectScreen(IconOptions.CHANGE_CURRENCY)})
+            onClick = { mainViewModel.selectScreen(IconOptions.CHANGE_CURRENCY) })
     }
 }
 
@@ -158,18 +189,23 @@ fun SpacerApp() {
             .height(1.dp) // Cambié a height para que la línea sea horizontal, ajusta si es necesario
     )
 }
-@Composable
-fun toEntryCSV(entries:List<Entry>):MutableList<EntryCSV>{
 
-    val entriesCSV= mutableListOf<EntryCSV>()
+@Composable
+fun toEntryCSV(entries: List<Entry>): MutableList<EntryCSV> {
+
+    val entriesCSV = mutableListOf<EntryCSV>()
     entries.forEach { entry ->
-        entriesCSV.add(EntryCSV(entry.description,
-            stringResource(id = entry.categoryName),
-            entry.amount,
-            entry.date,
-            entry.categoryId,
-            entry.categoryName,
-            entry.accountId))
+        entriesCSV.add(
+            EntryCSV(
+                entry.description,
+                stringResource(id = entry.categoryName),
+                entry.amount,
+                entry.date,
+                entry.categoryId,
+                entry.categoryName,
+                entry.accountId
+            )
+        )
     }
     return entriesCSV
 }
