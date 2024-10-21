@@ -35,7 +35,7 @@ fun AboutScreen(mainViewModel: MainViewModel)
     val appMisCuentasLink =
         "https://play.google.com/store/apps/details?id=carnerero.agustin.cuentaappandroid&hl=es&gl=US"
     val policyLink =
-        "https://climbingcompanion.blogspot.com/p/politica-de-privacidad-fecha-de-entrada.html"
+       "https://agusticar.blogspot.com/2024/01/politicas-de-privacidad.html"
     Column(
         modifier = Modifier
             .fillMaxSize()

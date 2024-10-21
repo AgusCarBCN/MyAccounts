@@ -146,6 +146,7 @@ class EntriesViewModel @Inject constructor(
 
     }
 
+
     fun onCategorySelected(categorySelected: Category) {
         _categorySelected.value = categorySelected
     }

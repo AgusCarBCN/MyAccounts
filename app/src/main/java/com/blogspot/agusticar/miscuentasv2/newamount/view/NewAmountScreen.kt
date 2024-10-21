@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.SnackBarController
 import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
@@ -61,6 +62,7 @@ fun NewAmount(mainViewModel: MainViewModel,
     val newIncomeMessage= message(resource = R.string.newincomecreated)
     val newExpenseMessage= message(resource = R.string.newexpensecreated)
     val amountOverBalanceMessage= message(resource = R.string.overbalance)
+    val noaccounts=message(resource=R.string.noaccounts)
     var operationStatus: Int
 
     val initColor=
@@ -108,7 +110,7 @@ fun NewAmount(mainViewModel: MainViewModel,
                 }else{
                     1
                 }
-                Log.d("Update","status: $status")
+
                     scope.launch(Dispatchers.IO) {
                         if(operationStatus==1) {
                             entryViewModel.addEntry(
@@ -130,8 +132,13 @@ fun NewAmount(mainViewModel: MainViewModel,
                             } else {
                                 SnackBarController.sendEvent(event = SnackBarEvent(newExpenseMessage))
                             }
-                        }else{
+                        }else if(accountSelected==null){
+                            SnackBarController.sendEvent(event = SnackBarEvent(noaccounts))
+
+                        }
+                        else{
                             SnackBarController.sendEvent(event = SnackBarEvent(amountOverBalanceMessage))
+
                         }
                     }
             }
