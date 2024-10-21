@@ -113,6 +113,8 @@
     <string name="desadd_an_account">Add a new account to the application.</string>
     <string name="changecurrency">Change currency</string>
     <string name="deschangecurrency">Change the currency of your accounts.</string>
+    <string name="email">agusticar@gmail.com</string>
+
 <!--Profile-->
     <string name="change">Change</string>
     <string name="name">Name</string>

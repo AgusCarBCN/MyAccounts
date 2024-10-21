@@ -113,6 +113,7 @@
     <string name="desadd_an_account">Añade una nueva cuenta a la aplicación</string>
     <string name="changecurrency">Cambia la divisa.</string>
     <string name="deschangecurrency">Cambia la divisa de tus cuentas.</string>
+    <string name="email">agusticar@gmail.com</string>
     <!--Profile-->
     <string name="change">Cambiar</string>
     <string name="name">Nombre</string>

@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
+import com.blogspot.agusticar.miscuentasv2.about.SendEmail
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 
@@ -213,9 +214,6 @@ fun MainScreen(
                             title = R.string.abouttitle
                         }
 
-                        IconOptions.POLICY ->{
-                            TODO()
-                        }
                         IconOptions.EXIT -> {
                             // Obtén el contexto actual de la aplicación
                             val context = LocalContext.current
@@ -266,8 +264,7 @@ fun MainScreen(
 
                         IconOptions.BARCHART -> TODO()
                         IconOptions.CALCULATOR -> TODO()
-                        IconOptions.CREATE_BACKUP -> TODO()
-                        IconOptions.LOAD_BACKUP -> TODO()
+                        IconOptions.EMAIL -> SendEmail()
                     }
 
                 }

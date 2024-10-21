@@ -17,9 +17,7 @@ enum class IconOptions {
     DELETE_ACCOUNT,
     ABOUT,
     ABOUT_DESCRIPTION,
-    POLICY,
     EXIT,
     ENTRIES,
-    CREATE_BACKUP,
-    LOAD_BACKUP
+    EMAIL
 }
