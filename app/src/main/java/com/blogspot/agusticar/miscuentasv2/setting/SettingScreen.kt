@@ -51,6 +51,7 @@ fun SettingScreen(
     navToCreateAccounts: () -> Unit
 ) {
     val context = LocalContext.current
+    entriesViewModel.getAllEntriesDataBase()
     val scope = rememberCoroutineScope()
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
@@ -197,6 +198,7 @@ fun toEntryCSV(entries: List<Entry>): MutableList<EntryCSV> {
     entries.forEach { entry ->
         entriesCSV.add(
             EntryCSV(
+                entry.id,
                 entry.description,
                 stringResource(id = entry.categoryName),
                 entry.amount,

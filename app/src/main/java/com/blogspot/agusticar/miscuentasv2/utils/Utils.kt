@@ -59,12 +59,12 @@ class Utils {
 
             BufferedWriter(OutputStreamWriter(outputStream)).use { writer ->
                 // Escribir el encabezado del CSV
-                writer.write("Description,Category,Amount,Date,CategoryId,CategoryName,accountId\n")
+                writer.write("Id,Description,Category,Amount,Date,CategoryId,CategoryName,accountId\n")
 
                 //Escribir las rutas en fichero
                 for (entry in entries) {
                     // Asegúrate de que los datos sean válidos antes de escribirlos
-                    val csvLine =
+                    val csvLine = "${entry.id}," +
                         "${entry.description}," +
                                 "${entry.category}," +
                                 "${entry.amount}," +
@@ -90,18 +90,19 @@ class Utils {
                 val csvParser = CSVParser.parse(bufferedReader, CSVFormat.DEFAULT)
 
                 for (record in csvParser) {
-                    try {
-                        val description = record.get(0)
-                        val amount = record.get(2).toDoubleOrNull() ?: 0.0
-                        val date = record.get(3)
-                        val categoryId = record.get(4).toInt()
-                        val categoryName = record.get(5).toInt()
-                        val accountId = record.get(6).toInt()
+                    try {val id=record.get(0).toLong()
+                        val description = record.get(1)
+                        val amount = record.get(3).toDoubleOrNull() ?: 0.0
+                        val date = record.get(4)
+                        val categoryId = record.get(5).toInt()
+                        val categoryName = record.get(6).toInt()
+                        val accountId = record.get(7).toInt()
 
 
                         // Crear objeto route y agregarlo a lista
 
                         val entry = Entry(
+                            id=id,
                             description = description,
                             amount = amount,
                             date = date,
