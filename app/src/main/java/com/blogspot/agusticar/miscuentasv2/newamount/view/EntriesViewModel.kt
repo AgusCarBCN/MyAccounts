@@ -18,7 +18,9 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.I
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -75,8 +77,7 @@ class EntriesViewModel @Inject constructor(
 
 
     init {
-        getTotalIncomes()
-        getTotalExpenses()
+        getTotal()
         getAllEntriesDataBase()
     }
     private fun getAllEntries(){
@@ -162,19 +163,24 @@ class EntriesViewModel @Inject constructor(
         _enableConfirmTransferButton.postValue(newValue)
     }
 
-    private fun getTotalIncomes() {
+
+
+    private fun getTotal() {
         viewModelScope.launch(Dispatchers.IO) {
-            val total = getTotalIncomes.invoke()
-            _totalIncomes.postValue(total)
+            // Ejecutar ambas funciones en paralelo
+            val totalIncomesDeferred = async { getTotalIncomes.invoke() }
+            val totalExpensesDeferred = async { getTotalExpenses.invoke() }
+
+            // Esperar los resultados
+            val totalIncomes = totalIncomesDeferred.await()
+            val totalExpenses = totalExpensesDeferred.await()
+
+            // Publicar los resultados en LiveData
+            _totalIncomes.postValue(totalIncomes)
+            _totalExpenses.postValue(totalExpenses)
         }
     }
 
-    private fun getTotalExpenses() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val total = getTotalExpenses.invoke()
-            _totalExpenses.postValue(total)
-        }
-    }
 
     fun updateEntries(){
         viewModelScope.launch(Dispatchers.IO) {
