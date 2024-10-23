@@ -67,7 +67,7 @@ class EntriesViewModel @Inject constructor(
     private val _listOfCategories = MutableLiveData<List<Category>>()
     val listOfCategories: LiveData<List<Category>> = _listOfCategories
 
-    //LiveData para la lista de Categorias
+    //LiveData para la lista de entradas
     private val _listOfEntries = MutableLiveData<List<EntryDTO>>()
     val listOfEntries: LiveData<List<EntryDTO>> = _listOfEntries
 
@@ -80,12 +80,7 @@ class EntriesViewModel @Inject constructor(
         getTotal()
         getAllEntriesDataBase()
     }
-    private fun getAllEntries(){
-        viewModelScope.launch(Dispatchers.IO) {
-            val entries=getAllEntries.invoke()
-            _listOfEntries.postValue(entries)
-        }
-    }
+
     fun getAllEntriesDataBase(){
 
         viewModelScope.launch(Dispatchers.IO) {
