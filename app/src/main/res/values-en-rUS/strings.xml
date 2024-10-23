@@ -134,7 +134,11 @@
     <string name="transferTo">Income by transfer</string>
     <string name="namechanged">You have changed the account name</string>
     <string name="amountchanged">You have changed the account balance</string>
-
+    <string name="errorexport">Error export file</string>
+    <string name="errorimport">Error import file</string>
+    <string name="erroraccountcreated">Error creating an account</string>
+    <string name="errorwritingdatastore">Error writing to DataStore</string>
+    <string name="errorreadingdatastore">Error reading to DataStore</string>
     <!--TopBar titles-->
     <string name="hometitle">Home</string>
     <string name="searchtitle">Search</string>

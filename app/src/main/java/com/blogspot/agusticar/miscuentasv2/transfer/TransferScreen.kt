@@ -23,7 +23,6 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
@@ -32,6 +31,7 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 
 @Composable
@@ -76,7 +76,7 @@ fun Transfer(
             modifier = Modifier.width(320.dp),
             stringResource(id = R.string.amountentrie),
             amountTransfer,
-            onTextChange = { entryViewModel.onAmountChanged(idAccountTo,idAccountFrom ,it) },
+            onTextChange = { entryViewModel.onAmountChanged(idAccountTo, idAccountFrom, it) },
             BoardType.DECIMAL,
             false
         )
@@ -119,11 +119,22 @@ fun Transfer(
                         entryViewModel.onChangeTransferButton(false)
                     }
                     if (operationStatus == 1) {
-                        SnackBarController.sendEvent(event = SnackBarEvent(transferSuccessMessage))
+                        withContext(Dispatchers.Main) {
+                            SnackBarController.sendEvent(
+                                event = SnackBarEvent(
+                                    transferSuccessMessage
+                                )
+                            )
+                        }
                     } else if (operationStatus == -1) {
-                        SnackBarController.sendEvent(event = SnackBarEvent(amountOverBalanceMessage))
+                        withContext(Dispatchers.Main) {
+                            SnackBarController.sendEvent(
+                                event = SnackBarEvent(
+                                    amountOverBalanceMessage
+                                )
+                            )
+                        }
                     }
-
                 }
             }
         )

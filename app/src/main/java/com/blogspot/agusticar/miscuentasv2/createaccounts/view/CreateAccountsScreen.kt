@@ -1,6 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 
-import android.util.Log
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +35,7 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 //Mapa de divisas y simbolos
@@ -59,9 +60,11 @@ fun CreateAccountsComponent(
         val isEnableButton by accountsViewModel.isEnableButton.observeAsState(false)
         val accountName by accountsViewModel.name.observeAsState("")
         val accountBalance by accountsViewModel.amount.observeAsState("")
-        val newAccountCreated = message(resource = R.string.newaccountcreated)
         val enableCurrencySelector by accountsViewModel.enableCurrencySelector.observeAsState(true)
 
+        val newAccountCreated = message(resource = R.string.newaccountcreated)
+        val errorAccountCreated = message(resource = R.string.erroraccountcreated)
+        val errorWritingDataStore=message(resource = R.string.errorwritingdatastore)
         Column(
 
             verticalArrangement = Arrangement.Center,
@@ -126,8 +129,8 @@ fun CreateAccountsComponent(
                     modifier = Modifier.width(360.dp),
                     isEnableButton,
                     onClickButton = {
-                        try {
-                            scope.launch(Dispatchers.IO) {
+                        scope.launch(Dispatchers.IO) {
+                            try {
                                 val amountDecimal = accountBalance.toDoubleOrNull() ?: 0.0
                                 accountsViewModel.addAccount(
                                     Account(
@@ -135,15 +138,24 @@ fun CreateAccountsComponent(
                                         balance = amountDecimal
                                     )
                                 )
-                                SnackBarController.sendEvent(event = SnackBarEvent(newAccountCreated))
+                                withContext(Dispatchers.Main) {
+                                    SnackBarController.sendEvent(
+                                        event = SnackBarEvent(
+                                            newAccountCreated
+                                        )
+                                    )
+                                }
 
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    SnackBarController.sendEvent(
+                                        event = SnackBarEvent(
+                                            errorAccountCreated
+                                        )
+                                    )
+                                }
                             }
-                        } catch (e: Exception) {
-                            Log.d("Cuenta", "Error: ${e.message}")
-                            println("Error al cargar ${e.message}")
                         }
-
-
                     }
                 )
             }
@@ -157,13 +169,20 @@ fun CreateAccountsComponent(
                         modifier = Modifier.width(360.dp),
                         true,
                         onClickButton = {
-                            scope.launch {
-                                Log.d("valor a guardar", "Code: $currencyCode")
-                                accountsViewModel.setCurrencyCode(currencyCode)
+                            scope.launch(Dispatchers.IO) {
+                                try {
+                                    accountsViewModel.setCurrencyCode(currencyCode)
+                                }catch (e: Exception) {
+                                    withContext(Dispatchers.Main) {
+                                        SnackBarController.sendEvent(
+                                            event = SnackBarEvent(
+                                                errorWritingDataStore
+                                            )
+                                        )
+                                    }
+                                }
                             }
-
                             navToLogin()
-
                         }
                     )
                 }

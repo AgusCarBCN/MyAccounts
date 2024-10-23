@@ -40,6 +40,7 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -155,7 +156,7 @@ fun LoginComponent(
                         if (validateLogin) {
                             navToMain()
                         } else{
-                            scope.launch {
+                            scope.launch(Dispatchers.Main) {
                                 SnackBarController.sendEvent(event = SnackBarEvent(messageInvalidLogin))
                             }
                         }

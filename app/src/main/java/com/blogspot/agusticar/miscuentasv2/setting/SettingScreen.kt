@@ -1,10 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.setting
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.provider.Settings.Global.getString
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -24,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.documentfile.provider.DocumentFile
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.SnackBarController
@@ -41,9 +37,11 @@ import com.blogspot.agusticar.miscuentasv2.setting.model.EntryCSV
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.util.Date
-
 
 
 @Composable
@@ -67,7 +65,8 @@ fun SettingScreen(
     val fileName = "backup$date"
     val messageExport = stringResource(id = R.string.exportData) + fileName
     val messageImport = stringResource(id = R.string.loadbackup)
-
+    val errorExport = stringResource(id = R.string.errorexport)
+    val errorImport = stringResource(id = R.string.errorimport)
 
     val pickerExportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -76,8 +75,20 @@ fun SettingScreen(
             result.data?.data?.let { uri ->
                 val directory = DocumentFile.fromTreeUri(context, uri) // Direct assignment
                 if (directory != null && directory.isDirectory) {
-                    Utils.writeCsvFile(entriesCSV, context, fileName, directory)
-                    scope.launch { SnackBarController.sendEvent(event = SnackBarEvent(messageExport)) }
+
+                    scope.launch(Dispatchers.IO) {
+                        try {
+                            Utils.writeCsvFile(entriesCSV, context, fileName, directory)
+                            withContext(Dispatchers.Main) {
+                                SnackBarController.sendEvent(event = SnackBarEvent(messageExport))
+                            }
+                        } catch (e: IOException) {
+                            withContext(Dispatchers.Main) {
+                                SnackBarController.sendEvent(event = SnackBarEvent(errorExport))
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -87,20 +98,32 @@ fun SettingScreen(
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
-                // Abrir el archivo desde el URI y leer el contenido
-
-                val entriesToRead =
-                    Utils.readCsvFile(context, uri) // Método para leer el CSV desde un InputStream
-                for (entry in entriesToRead) {
-                    scope.launch {
-                        entriesViewModel.addEntry(entry)
+                // Lanzamiento de una corutina en un contexto de IO
+                scope.launch(Dispatchers.IO) {
+                    try {
+                        val entriesToRead =
+                            Utils.readCsvFile(context, uri)
+                        for (entry in entriesToRead) {
+                            entriesViewModel.addEntry(entry)
+                        }
+                        // Cambiamos al hilo principal para mostrar el SnackBar
+                        withContext(Dispatchers.Main) {
+                            SnackBarController.sendEvent(event = SnackBarEvent(messageImport))
+                        }
+                    } catch (e: IOException) {
+                        withContext(Dispatchers.Main) {
+                            SnackBarController.sendEvent(
+                                event = SnackBarEvent(
+                                    errorImport
+                                )
+                            )
+                        }
                     }
                 }
-                scope.launch { SnackBarController.sendEvent(event = SnackBarEvent(messageImport)) }
-
             }
         }
     }
+
 
     Column(
         modifier = Modifier

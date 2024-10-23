@@ -137,6 +137,11 @@
     <string name="transferTo">Ingreso por transferencia</string>
     <string name="namechanged">Has cambiado el nombre de la cuenta</string>
     <string name="amountchanged">Has cambiado el sado de la cuenta</string>
+    <string name="errorexport">Error al exportar fichero</string>
+    <string name="errorimport">Error al importar fichero</string>
+    <string name="erroraccountcreated">Error al crear una cuenta</string>
+    <string name="errorwritingdatastore">Error al escribir en DataStore</string>
+    <string name="errorreadingdatastore">Error al leer en DataStore</string>
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>

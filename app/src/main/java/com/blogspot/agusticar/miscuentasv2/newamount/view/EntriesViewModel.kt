@@ -194,6 +194,7 @@ class EntriesViewModel @Inject constructor(
     private fun resetFields() {
         _entryName.postValue("") // Vaciar el nombre de la cuenta
         _entryAmount.postValue("") // Vaciar el balance de la cuenta
+        _enableConfirmButton.postValue(false) //deshabilitar boton de confirmar
     }
 
 
