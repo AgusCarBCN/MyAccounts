@@ -268,7 +268,7 @@ class AccountsViewModel @Inject constructor(
             updateName.invoke(idAccount,newName)
             Log.d("Account", "Name updated")
             _isEnableChangeNameButton.postValue(false)
-
+            getAllAccounts()
         }
     }
     fun upDateAccountBalance(idAccount:Int,newBalance:Double){
@@ -277,7 +277,7 @@ class AccountsViewModel @Inject constructor(
              updateBalance.invoke(idAccount,newBalance)
             Log.d("Account", "Balance updated")
             _isEnableChangeNameButton.postValue(false)
-
+            getAllAccounts()
 
         }
     }
