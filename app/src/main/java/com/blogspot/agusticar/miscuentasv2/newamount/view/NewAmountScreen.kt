@@ -50,7 +50,6 @@ fun NewAmount(
 
     accountViewModel.getAllAccounts()
     val idAccount = accountSelected?.id ?: 1
-    val accountName = accountSelected?.name ?: ""
     val status = categorySelected?.isIncome ?: false
     val iconResource = categorySelected?.iconResource ?: 0
     val titleResource = categorySelected?.name ?: 0

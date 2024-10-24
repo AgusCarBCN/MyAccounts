@@ -13,18 +13,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountCard
-import com.blogspot.agusticar.miscuentasv2.components.EntryList
 import com.blogspot.agusticar.miscuentasv2.components.HeadCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
@@ -46,7 +43,7 @@ fun HomeScreen(
     val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
 
     // Observa el estado de la lista de cuentas
-    val accounts by accountsViewModel.listOfAccounts.observeAsState(null)   // Observa el estado de la lista de cuentas
+    val accounts by accountsViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
 
     Column(
         modifier = Modifier
@@ -55,7 +52,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,  // Centra los elementos verticalmente
         horizontalAlignment = Alignment.CenterHorizontally  // Centra los elementos horizontalmente
     ) {
-        if (accounts.isNullOrEmpty()) {
+        if (accounts.isEmpty()) {
             Text(text = stringResource(id = R.string.noaccounts),
                 color = LocalCustomColorsPalette.current.textColor,
                 fontSize = 18.sp)
@@ -89,7 +86,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
 
             ) {
-                items(accounts!!) { account -> // Solo utiliza accounts
+                items(accounts) { account -> // Solo utiliza accounts
                     AccountCard(
                         Utils.numberFormat(account.balance,currencyCode),
                         account.name,

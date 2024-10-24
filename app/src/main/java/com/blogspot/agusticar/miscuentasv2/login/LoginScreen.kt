@@ -70,7 +70,7 @@ fun LoginComponent(
     val scope = rememberCoroutineScope()
     /* Se usa para gestionar el estado del Snackbar. Esto te permite mostrar y controlar el Snackbar
      desde cualquier parte de tu UI.*/
-    val messageInvalidLogin= message(resource = R.string.inValidLogin)
+    val messageInvalidLogin= message(resource = string.inValidLogin)
 
     loginViewModel.getLoginImage()
     ConstraintLayout(

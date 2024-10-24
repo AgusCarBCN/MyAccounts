@@ -94,7 +94,6 @@ class AccountsViewModel @Inject constructor(
             _isCurrencyExpanded.value = false
             getAllAccounts()
 
-
         }
     }
 
@@ -103,13 +102,13 @@ class AccountsViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 addAccount.invoke(account)
-                Log.d("Cuenta", "Cuenta creada")
+                Log.d("Account", "Account created successfully")
                 resetFields()
                 getAllAccounts()
             }
 
         } catch (e: Exception) {
-            Log.d("Cuenta", "Error: ${e.message}")
+            Log.d("Account", "Error creating account: ${e.message}")
         }
     }
 
@@ -121,7 +120,7 @@ class AccountsViewModel @Inject constructor(
                 resetFields()
             }
         }catch (e: Exception){
-            Log.d("Transaction", "Error: ${e.message}")
+            Log.d("Transaction", "Error transfer amount: ${e.message}")
         }
     }
 
@@ -134,18 +133,11 @@ class AccountsViewModel @Inject constructor(
                 val balance = account?.balance ?: 0.0
                 val balanceDestination=accountDestination?.balance?:0.0
                 if(!isTransferDestination) {
-                    Log.d("Update", "amount ${amount}")
-                    Log.d("Update", "balance ${balance}")
                     val newBalance = balance + amount
-                    Log.d("Update", "newbalance ${newBalance}")
                     // Actualiza los saldos en ambas cuentas
                     updateAccountBalance(accountId, newBalance)
-
                 }else{
-                    Log.d("Update", "amount ${amount}")
-                    Log.d("Update", "balance ${balanceDestination}")
                     val newBalanceDestination = balanceDestination + amount
-                    Log.d("Update", "newbalance ${newBalanceDestination}")
                     // Actualiza los saldos en ambas cuentas
                     updateAccountBalance(accountId, newBalanceDestination)
 
@@ -155,7 +147,7 @@ class AccountsViewModel @Inject constructor(
 
 
         } catch (e: Exception) {
-            Log.d("Cuenta", "Error: ${e.message}")
+            Log.d("Accounts", "Error update entry: ${e.message}")
         }
 
     }
@@ -166,7 +158,7 @@ class AccountsViewModel @Inject constructor(
                 updateBalance.invoke(accountId, newBalance)
             }
         } catch (e: Exception) {
-            Log.d("Cuenta", "Error: ${e.message}")
+            Log.d("Accounts", "Error update account balance ${e.message}")
         }
     }
 
@@ -174,10 +166,10 @@ class AccountsViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 _listOfAccounts.postValue(getAccounts.invoke())
-                Log.d("Cuentas creadas", "Cuentas cargadas")
+                Log.d("Accounts", "Getting all accounts")
             }
         } catch (e: Exception) {
-            Log.d("Cuentas", "Error al cargar")
+            Log.d("Accounts", "Error getting all accounts")
         }
 
     }
@@ -260,12 +252,13 @@ class AccountsViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 deleteAccount.invoke(account.id)
-                Log.d("Cuenta", "Cuenta eliminada")
+                Log.d("Account", "Account deleted")
                 resetFields()
+                getAllAccounts()
             }
 
         } catch (e: Exception) {
-            Log.d("Cuenta", "Error: ${e.message}")
+            Log.d("Account", "Error deleting account ${e.message}")
         }
     }
     fun upDateAccountName(idAccount:Int,newName:String){
@@ -273,7 +266,7 @@ class AccountsViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             updateName.invoke(idAccount,newName)
-            Log.d("Cuenta", "Nombre actualizado")
+            Log.d("Account", "Name updated")
             _isEnableChangeNameButton.postValue(false)
 
         }
@@ -282,7 +275,7 @@ class AccountsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
              updateBalance.invoke(idAccount,newBalance)
-            Log.d("Cuenta", "Nombre actualizado")
+            Log.d("Account", "Balance updated")
             _isEnableChangeNameButton.postValue(false)
 
 

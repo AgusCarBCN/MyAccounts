@@ -18,7 +18,6 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.I
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +33,6 @@ class EntriesViewModel @Inject constructor(
     private val addEntry: InsertEntryUseCase,
     private val getTotalIncomes: GetSumTotalIncomesUseCase,
     private val getTotalExpenses: GetSumTotalExpensesUseCase,
-    private val getAllEntries: GetAllExpensesUseCase,
     private val getAllEntriesDB:GetAllEntriesDatabaseUseCase,
     private val getAllIncomes:GetAllIncomesUseCase,
     private val getAllExpenses:GetAllExpensesUseCase,
@@ -79,14 +77,6 @@ class EntriesViewModel @Inject constructor(
     // MutableStateFlow para la lista de entradas
     private val _listOfEntriesDB = MutableStateFlow<List<Entry>>(emptyList())
     val listOfEntriesDB: StateFlow<List<Entry>> = _listOfEntriesDB.asStateFlow()
-
-    //LiveData para la lista de entradas
-   /* private val _listOfEntries = MutableLiveData<List<EntryDTO>>()
-    val listOfEntries: LiveData<List<EntryDTO>> = _listOfEntries*/
-
-    //LiveData para la lista desde base de datos
-   /* private val _listOfEntriesDataBase = MutableLiveData<List<Entry>>()
-    val listOfEntriesDataBase: LiveData<List<Entry>> = _listOfEntriesDataBase*/
 
 
     init{
@@ -162,27 +152,6 @@ class EntriesViewModel @Inject constructor(
         }
     }
 
-   /* fun getAllIncomes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val entries=getAllIncomes.invoke()
-            _listOfEntries.postValue(entries)
-        }
-    }
-    fun getAllExpenses() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val entries=getAllExpenses.invoke()
-            _listOfEntries.postValue(entries)
-        }
-    }
-
-    fun getAllEntriesByAccount(accountId:Int){
-        viewModelScope.launch(Dispatchers.IO) {
-            val entries=getAllEntriesByAccount.invoke(accountId)
-            _listOfEntries.postValue(entries)
-        }
-    }*/
-
-
     fun addEntry(entry: Entry) {
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -192,7 +161,6 @@ class EntriesViewModel @Inject constructor(
                 } else {
                     getTotalExpenses()
                 }
-
             resetFields()
             getTotal()
         }
@@ -212,7 +180,6 @@ class EntriesViewModel @Inject constructor(
             _entryAmount.value = newAmount
         }
         _enableConfirmTransferButton.value = enableButtonTransfer(idAccountFrom,idAccountTo,newAmount)
-
 
     }
 
