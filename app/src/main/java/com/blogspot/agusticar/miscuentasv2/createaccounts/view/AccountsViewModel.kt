@@ -105,6 +105,7 @@ class AccountsViewModel @Inject constructor(
                 addAccount.invoke(account)
                 Log.d("Cuenta", "Cuenta creada")
                 resetFields()
+                getAllAccounts()
             }
 
         } catch (e: Exception) {

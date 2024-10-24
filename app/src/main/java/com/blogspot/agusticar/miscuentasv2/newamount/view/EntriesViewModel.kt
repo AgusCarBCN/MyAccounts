@@ -21,6 +21,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -67,27 +72,97 @@ class EntriesViewModel @Inject constructor(
     private val _listOfCategories = MutableLiveData<List<Category>>()
     val listOfCategories: LiveData<List<Category>> = _listOfCategories
 
+    // MutableStateFlow para la lista de entradas
+    private val _listOfEntries = MutableStateFlow<List<EntryDTO>>(emptyList())
+    val listOfEntries: StateFlow<List<EntryDTO>> = _listOfEntries.asStateFlow()
+
+    // MutableStateFlow para la lista de entradas
+    private val _listOfEntriesDB = MutableStateFlow<List<Entry>>(emptyList())
+    val listOfEntriesDB: StateFlow<List<Entry>> = _listOfEntriesDB.asStateFlow()
+
     //LiveData para la lista de entradas
-    private val _listOfEntries = MutableLiveData<List<EntryDTO>>()
-    val listOfEntries: LiveData<List<EntryDTO>> = _listOfEntries
+   /* private val _listOfEntries = MutableLiveData<List<EntryDTO>>()
+    val listOfEntries: LiveData<List<EntryDTO>> = _listOfEntries*/
 
     //LiveData para la lista desde base de datos
-    private val _listOfEntriesDataBase = MutableLiveData<List<Entry>>()
-    val listOfEntriesDataBase: LiveData<List<Entry>> = _listOfEntriesDataBase
+   /* private val _listOfEntriesDataBase = MutableLiveData<List<Entry>>()
+    val listOfEntriesDataBase: LiveData<List<Entry>> = _listOfEntriesDataBase*/
 
 
-    init {
+    init{
         getTotal()
-        getAllEntriesDataBase()
     }
 
     fun getAllEntriesDataBase(){
 
         viewModelScope.launch(Dispatchers.IO) {
-            _listOfEntriesDataBase.postValue(getAllEntriesDB.invoke())
+            flow {
+                val entries = getAllEntriesDB.invoke()
+                emit(entries)
+            }
+                .catch { e ->
+                    // Manejo de errores
+                    _listOfEntriesDB.value = emptyList() // O alguna acción que maneje el error
+                    Log.e("ViewModel", "Error getting incomes: ${e.message}")
+                }
+                .collect { entries ->
+                    _listOfEntriesDB.value = entries
+                }
         }
     }
+    // Método para obtener todos los ingresos
     fun getAllIncomes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            flow {
+                val entries = getAllIncomes.invoke()
+                emit(entries)
+            }
+                .catch { e ->
+                    // Manejo de errores
+                    _listOfEntries.value = emptyList() // O alguna acción que maneje el error
+                    Log.e("ViewModel", "Error getting incomes: ${e.message}")
+                }
+                .collect { entries ->
+                    _listOfEntries.value = entries
+                }
+        }
+    }
+
+    // Método para obtener todos los gastos
+    fun getAllExpenses() {
+        viewModelScope.launch(Dispatchers.IO) {
+            flow {
+                val entries = getAllExpenses.invoke()
+                emit(entries)
+            }
+                .catch { e ->
+                    _listOfEntries.value = emptyList()
+                    Log.e("ViewModel", "Error getting expenses: ${e.message}")
+                }
+                .collect { entries ->
+                    _listOfEntries.value = entries
+                }
+        }
+    }
+
+    // Método para obtener todas las entradas por cuenta
+    fun getAllEntriesByAccount(accountId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            flow {
+                val entries = getAllEntriesByAccount.invoke(accountId)
+                emit(entries)
+            }
+                .catch { e ->
+                    _listOfEntries.value = emptyList()
+                    Log.e("ViewModel", "Error getting entries by account $accountId: ${e.message}")
+                }
+                .collect { entries ->
+                    _listOfEntries.value = entries
+                }
+        }
+    }
+
+   /* fun getAllIncomes() {
         viewModelScope.launch(Dispatchers.IO) {
             val entries=getAllIncomes.invoke()
             _listOfEntries.postValue(entries)
@@ -105,22 +180,21 @@ class EntriesViewModel @Inject constructor(
             val entries=getAllEntriesByAccount.invoke(accountId)
             _listOfEntries.postValue(entries)
         }
-    }
+    }*/
 
 
     fun addEntry(entry: Entry) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
+
                 addEntry.invoke(entry)
                 if (entry.amount >= 0.0) {
                     getTotalIncomes()
                 } else {
                     getTotalExpenses()
                 }
-            } catch (e: Exception) {
-                Log.d("Entradas", "Error: ${e.message}")
-            }
+
             resetFields()
+            getTotal()
         }
     }
     fun onTextFieldsChanged(newDescription:String,newAmount:String){
@@ -177,14 +251,7 @@ class EntriesViewModel @Inject constructor(
     }
 
 
-    fun updateEntries(){
-        viewModelScope.launch(Dispatchers.IO) {
 
-            _totalExpenses.postValue(getTotalExpenses.invoke())
-            _totalIncomes.postValue(getTotalIncomes.invoke())
-        }
-
-    }
 
     private fun resetFields() {
         _entryName.postValue("") // Vaciar el nombre de la cuenta

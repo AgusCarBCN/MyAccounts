@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,7 +60,7 @@ fun SettingScreen(
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
-    val entries by entriesViewModel.listOfEntriesDataBase.observeAsState(listOf())
+    val entries by entriesViewModel.listOfEntriesDB.collectAsState()
     val entriesCSV = toEntryCSV(entries)
     val date = Date().dateFormat()
     val fileName = "backup$date"

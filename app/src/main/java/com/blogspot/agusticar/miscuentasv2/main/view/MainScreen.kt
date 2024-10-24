@@ -99,7 +99,7 @@ fun MainScreen(
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
     val showExitDialog by mainViewModel.showExitDialog.collectAsState()
     val showDeleteAccountDialog by mainViewModel.showDeleteAccountDialog.collectAsState()
-    val entries by entriesViewModel.listOfEntries.observeAsState(listOf())
+    val entries by entriesViewModel.listOfEntries.collectAsState()
     val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
@@ -198,7 +198,6 @@ fun MainScreen(
                                 showDialog = showDeleteAccountDialog,
                                 onConfirm = {
                                 selectedAccount?.let { accountsViewModel.deleteAccount(it) }
-                                    entriesViewModel.updateEntries()
                                     mainViewModel.showDeleteAccountDialog(false)
                                     mainViewModel.selectScreen(IconOptions.HOME)
 

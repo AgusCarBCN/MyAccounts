@@ -44,8 +44,7 @@ fun HomeScreen(
     val incomes by entriesViewModel.totalIncomes.observeAsState(0.0)
     val expenses by entriesViewModel.totalExpenses.observeAsState(0.0)
     val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
-    accountsViewModel.getAllAccounts()
-    entriesViewModel.updateEntries()
+
     // Observa el estado de la lista de cuentas
     val accounts by accountsViewModel.listOfAccounts.observeAsState(null)   // Observa el estado de la lista de cuentas
 
@@ -74,7 +73,8 @@ fun HomeScreen(
                     Utils.numberFormat(expenses,currencyCode),
                     false,
                     onClickCard={mainViewModel.selectScreen(IconOptions.ENTRIES)
-                    entriesViewModel.getAllExpenses()})
+                    entriesViewModel.getAllExpenses()
+                    })
             }
 
             Spacer(modifier = Modifier.width(5.dp))
@@ -95,7 +95,8 @@ fun HomeScreen(
                         account.name,
                         R.string.seeall,
                         onClickCard = { mainViewModel.selectScreen(IconOptions.ENTRIES)
-                            entriesViewModel.getAllEntriesByAccount(account.id) }
+                            entriesViewModel.getAllEntriesByAccount(account.id)
+                        }
                     )  // Crea un card para cada cuenta en la lista
                     Spacer(modifier = Modifier.height(20.dp))  // Espacio entre cada card (separación)
                 }
