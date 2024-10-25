@@ -54,6 +54,10 @@ class EntriesViewModel @Inject constructor(
     private val _enableConfirmTransferButton = MutableLiveData<Boolean>()
     val enableConfirmTransferButton: LiveData<Boolean> = _enableConfirmTransferButton
 
+    //LiveData para la habilitación del boton
+    private val _enableOptionList = MutableLiveData<Boolean>()
+    val enableOptionList: LiveData<Boolean> = _enableOptionList
+
     // LiveData para los campos de texto
     private val _entryName = MutableLiveData<String>()
     val entryName: LiveData<String> = _entryName
@@ -112,9 +116,11 @@ class EntriesViewModel @Inject constructor(
                     _listOfEntries.value = emptyList() // O alguna acción que maneje el error
                     Log.e("ViewModel", "Error getting incomes: ${e.message}")
                 }
-                .collect { entries ->
-                    _listOfEntries.value = entries
+                .collect {/* entries ->
+                    _listOfEntries.value = entries*/
+                    _listOfEntries.value = it
                 }
+
         }
     }
 
@@ -182,7 +188,9 @@ class EntriesViewModel @Inject constructor(
         _enableConfirmTransferButton.value = enableButtonTransfer(idAccountFrom,idAccountTo,newAmount)
 
     }
-
+    fun onEnableByDate(newValue:Boolean){
+        _enableOptionList.postValue(newValue)
+    }
 
     fun onCategorySelected(categorySelected: Category) {
         _categorySelected.value = categorySelected

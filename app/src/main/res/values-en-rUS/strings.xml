@@ -261,4 +261,7 @@
     <string name="download">Download file </string>
     <string name="upload">Backup file </string>
     <string name="filenamelabel">CSV file name</string>
+    <!--entries-->
+    <string name="bydate">By date</string>
+    <string name="bycategory">By category</string>
 </resources>

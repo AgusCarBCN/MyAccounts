@@ -262,5 +262,7 @@
     <string name="filenamelabel">Nombre fichero CSV</string>
     <string name="download">Descargando fichero  </string>
     <string name="upload">Copia de fichero de seguridad </string>
-
+    <!--entries-->
+    <string name="bydate">Por fecha</string>
+    <string name="bycategory">Por categoría</string>
 </resources>

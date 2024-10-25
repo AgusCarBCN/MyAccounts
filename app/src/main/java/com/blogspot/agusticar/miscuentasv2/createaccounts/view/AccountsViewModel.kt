@@ -21,6 +21,7 @@ import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,8 +36,11 @@ class AccountsViewModel @Inject constructor(
     private val updateBalance:UpdateAccountBalanceUseCase
 
 ) : ViewModel() {
-
+    // Variable privada que representa un estado observable y modificable. Solo el ViewModel puede cambiar este valor,
+    // y será utilizado para habilitar o deshabilitar el botón de cambiar nombre.
     private val _isEnableButton = MutableLiveData<Boolean>()
+    // Variable pública expuesta como LiveData, de solo lectura para otros componentes. La UI observará este valor
+    // para reaccionar a los cambios (por ejemplo, habilitar o deshabilitar el botón).
     val isEnableButton: LiveData<Boolean> = _isEnableButton
 
     private val _isEnableChangeNameButton = MutableLiveData<Boolean>()
@@ -92,87 +96,79 @@ class AccountsViewModel @Inject constructor(
         viewModelScope.launch {
             _currencyCode.value = getCurrencyCode()
             _isCurrencyExpanded.value = false
-            getAllAccounts()
-
+            onAccountUpdated()
         }
     }
 
 
     fun addAccount(account: Account) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                addAccount.invoke(account)
-                Log.d("Account", "Account created successfully")
-                resetFields()
-                getAllAccounts()
-            }
-
-        } catch (e: Exception) {
-            Log.d("Account", "Error creating account: ${e.message}")
-        }
-    }
-
-    fun transferAmount(accountFromId:Int,accountToId: Int,amount:Double){
-
-        try{
-            viewModelScope.launch(Dispatchers.IO) {
-                transferAmount.invoke(accountFromId, accountToId, amount)
-                resetFields()
-            }
-        }catch (e: Exception){
-            Log.d("Transaction", "Error transfer amount: ${e.message}")
-        }
-    }
-
-
-    fun updateEntry(accountId: Int, amount: Double,isTransferDestination:Boolean) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                val account = _accountSelected.value
-                val accountDestination=_destinationAccount.value
-                val balance = account?.balance ?: 0.0
-                val balanceDestination=accountDestination?.balance?:0.0
-                if(!isTransferDestination) {
-                    val newBalance = balance + amount
-                    // Actualiza los saldos en ambas cuentas
-                    updateAccountBalance(accountId, newBalance)
-                }else{
-                    val newBalanceDestination = balanceDestination + amount
-                    // Actualiza los saldos en ambas cuentas
-                    updateAccountBalance(accountId, newBalanceDestination)
-
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    addAccount.invoke(account)  // Llama a la función para agregar la cuenta en IO
                 }
-
+                Log.d("Account", "Account created successfully")
+                onAccountUpdated()
+            } catch (e: Exception) {
+                Log.e("Account", "Error creating account: ${e.message}", e)
+                // Aquí puedes notificar a la UI del error usando un LiveData o StateFlow
             }
-
-
-        } catch (e: Exception) {
-            Log.d("Accounts", "Error update entry: ${e.message}")
         }
-
     }
 
-    private fun updateAccountBalance(accountId: Int, newBalance: Double) {
+    fun transferAmount(accountFromId: Int, accountToId: Int, amount: Double) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    transferAmount.invoke(accountFromId, accountToId, amount)
+                }
+                onAccountUpdated()
+            } catch (e: Exception) {
+                Log.e("Transaction", "Error transferring amount: ${e.message}", e)
+            }
+        }
+    }
+
+    fun updateEntry(accountId: Int, amount: Double, isTransferDestination: Boolean) {
+        viewModelScope.launch {
+            try {
+                val account = _accountSelected.value
+                val accountDestination = _destinationAccount.value
+                val newBalance = if (!isTransferDestination) {
+                    (account?.balance ?: 0.0) + amount
+                } else {
+                    (accountDestination?.balance ?: 0.0) + amount
+                }
+                updateAccountBalance(accountId, newBalance)
+            } catch (e: Exception) {
+                Log.e("Accounts", "Error updating entry: ${e.message}", e)
+            }
+        }
+    }
+
+    private suspend fun updateAccountBalance(accountId: Int, newBalance: Double) {
         try {
-            viewModelScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 updateBalance.invoke(accountId, newBalance)
             }
         } catch (e: Exception) {
-            Log.d("Accounts", "Error update account balance ${e.message}")
+            Log.e("Accounts", "Error updating account balance: ${e.message}", e)
         }
     }
 
     fun getAllAccounts() {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                _listOfAccounts.postValue(getAccounts.invoke())
-                Log.d("Accounts", "Getting all accounts")
+        viewModelScope.launch {
+            try {
+                val accounts = withContext(Dispatchers.IO) { getAccounts.invoke() }
+                _listOfAccounts.postValue(accounts)
+                Log.d("Accounts", "Fetched all accounts successfully")
+            } catch (e: Exception) {
+                Log.e("Accounts", "Error fetching all accounts: ${e.message}", e)
             }
-        } catch (e: Exception) {
-            Log.d("Accounts", "Error getting all accounts")
         }
-
     }
+
+
     fun onDisableCurrencySelector(){
         _enableCurrencySelector.postValue(false)
 
@@ -248,38 +244,42 @@ class AccountsViewModel @Inject constructor(
         _isEnableChangeBalanceButton.value=true
     }
 
-    fun deleteAccount(account:Account){
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                deleteAccount.invoke(account.id)
+    fun deleteAccount(account: Account) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    deleteAccount.invoke(account.id)
+                }
                 Log.d("Account", "Account deleted")
-                resetFields()
-                getAllAccounts()
+                onAccountUpdated()
+            } catch (e: Exception) {
+                Log.e("Account", "Error deleting account: ${e.message}", e)
             }
-
-        } catch (e: Exception) {
-            Log.d("Account", "Error deleting account ${e.message}")
         }
     }
-    fun upDateAccountName(idAccount:Int,newName:String){
 
+
+    fun upDateAccountName(idAccount:Int,newName:String){
 
         viewModelScope.launch(Dispatchers.IO) {
             updateName.invoke(idAccount,newName)
             Log.d("Account", "Name updated")
             _isEnableChangeNameButton.postValue(false)
-            getAllAccounts()
+            onAccountUpdated()
         }
     }
     fun upDateAccountBalance(idAccount:Int,newBalance:Double){
         viewModelScope.launch(Dispatchers.IO) {
-
              updateBalance.invoke(idAccount,newBalance)
             Log.d("Account", "Balance updated")
             _isEnableChangeNameButton.postValue(false)
-            getAllAccounts()
-
+           onAccountUpdated()
         }
+    }
+
+    private fun onAccountUpdated() {
+        resetFields()
+        getAllAccounts()
     }
 
 
