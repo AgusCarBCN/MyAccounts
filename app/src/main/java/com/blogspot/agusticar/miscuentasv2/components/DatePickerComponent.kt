@@ -1,0 +1,167 @@
+package com.blogspot.agusticar.miscuentasv2.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerColors
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDateRangePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerDocked(
+    modifier: Modifier,
+    label: Int
+) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+    val selectedDate = datePickerState.selectedDateMillis?.let {
+        convertMillisToDate(it)
+    } ?: ""
+
+    Box(modifier = Modifier.width(160.dp)) {
+        TextField(
+            value = selectedDate,
+            onValueChange = { },
+            label = { Text(stringResource(label)) },
+            readOnly = true,
+            trailingIcon = {
+                IconButton(onClick = { showDatePicker = !showDatePicker }) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Select date"
+                    )
+                }
+            },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp),
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = LocalCustomColorsPalette.current.textColor,
+                focusedIndicatorColor = Color.Transparent,  // Sin borde cuando está enfocado
+                unfocusedIndicatorColor = Color.Transparent,  // Sin borde cuando no está enfocado
+                focusedContainerColor = LocalCustomColorsPalette.current.focusedContainerTextField,
+                unfocusedContainerColor = LocalCustomColorsPalette.current.unfocusedContainerTextField,
+                unfocusedTextColor = LocalCustomColorsPalette.current.textColor,
+                focusedLabelColor = LocalCustomColorsPalette.current.textColor,
+                unfocusedLabelColor = LocalCustomColorsPalette.current.textColor,
+                disabledLabelColor = LocalCustomColorsPalette.current.textColor,
+                disabledTextColor = LocalCustomColorsPalette.current.textColor,
+                unfocusedTrailingIconColor = LocalCustomColorsPalette.current.textColor,
+                focusedTrailingIconColor = LocalCustomColorsPalette.current.textColor
+            )
+        )
+
+        if (showDatePicker) {
+            Popup(
+                onDismissRequest = { showDatePicker = false },
+                alignment = Alignment.TopStart
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(y = 64.dp)
+                        .shadow(elevation = 4.dp)
+                        .background(
+                            LocalCustomColorsPalette.current.drawerColor
+                        )
+                        .padding(16.dp)
+                ) {
+                    DatePicker(
+                        state = datePickerState,
+                        showModeToggle = false,
+                        colors = DatePickerColors(
+                            containerColor = LocalCustomColorsPalette.current.drawerColor,
+                            titleContentColor = LocalCustomColorsPalette.current.textHeadColor,
+                            headlineContentColor = LocalCustomColorsPalette.current.textHeadColor,
+                            weekdayContentColor = LocalCustomColorsPalette.current.textHeadColor,
+                            subheadContentColor = LocalCustomColorsPalette.current.textColor,
+                            navigationContentColor = LocalCustomColorsPalette.current.textHeadColor,
+                            yearContentColor = LocalCustomColorsPalette.current.textHeadColor,
+                            disabledYearContentColor = LocalCustomColorsPalette.current.disableButton,
+                            dayContentColor = LocalCustomColorsPalette.current.textColor,
+                            currentYearContentColor = LocalCustomColorsPalette.current.textHeadColor,
+                            selectedYearContentColor = LocalCustomColorsPalette.current.textHeadColor,
+                            disabledSelectedYearContentColor = LocalCustomColorsPalette.current.disableButton,
+                            disabledSelectedYearContainerColor = LocalCustomColorsPalette.current.disableButton,
+                            selectedYearContainerColor = LocalCustomColorsPalette.current.focusedContainerTextField,
+                            selectedDayContainerColor = LocalCustomColorsPalette.current.textColor,
+                            disabledSelectedDayContainerColor = LocalCustomColorsPalette.current.disableButton,
+                            selectedDayContentColor = LocalCustomColorsPalette.current.textButtonColorPressed,
+                            disabledSelectedDayContentColor = LocalCustomColorsPalette.current.disableButton,
+                            disabledDayContentColor = LocalCustomColorsPalette.current.disableButton,
+                            todayContentColor = LocalCustomColorsPalette.current.textHeadColor,
+                            todayDateBorderColor = LocalCustomColorsPalette.current.disableButton,
+                            dayInSelectionRangeContainerColor = LocalCustomColorsPalette.current.buttonColorPressed,
+                            dayInSelectionRangeContentColor = LocalCustomColorsPalette.current.textButtonColorPressed,
+                            dividerColor = LocalCustomColorsPalette.current.disableButton,
+                            dateTextFieldColors = TextFieldDefaults.colors(
+                                focusedTextColor = LocalCustomColorsPalette.current.textColor,
+                                focusedIndicatorColor = Color.Transparent,  // Sin borde cuando está enfocado
+                                unfocusedIndicatorColor = Color.Transparent,  // Sin borde cuando no está enfocado
+                                focusedContainerColor = LocalCustomColorsPalette.current.focusedContainerTextField,
+                                unfocusedContainerColor = LocalCustomColorsPalette.current.unfocusedContainerTextField,
+                                unfocusedTextColor = LocalCustomColorsPalette.current.textColor,
+                                focusedLabelColor = LocalCustomColorsPalette.current.textColor,
+                                unfocusedLabelColor = LocalCustomColorsPalette.current.textColor,
+                                disabledLabelColor = LocalCustomColorsPalette.current.textColor,
+                                disabledTextColor = LocalCustomColorsPalette.current.textColor,
+                                unfocusedTrailingIconColor = LocalCustomColorsPalette.current.textColor,
+                                focusedTrailingIconColor = LocalCustomColorsPalette.current.textColor
+                            )
+                        )
+                    )
+
+
+                }
+            }
+        }
+    }
+}
+
+
+
+fun convertMillisToDate(millis: Long): String {
+    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    return formatter.format(Date(millis))
+}
+
