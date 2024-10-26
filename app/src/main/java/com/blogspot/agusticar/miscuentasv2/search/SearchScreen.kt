@@ -19,17 +19,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import java.util.Date
 
 @Composable
-@Preview
-fun SearchScreen() {
+fun SearchScreen(accountViewModel:AccountsViewModel) {
     Column( modifier = Modifier
         .fillMaxWidth()
         .padding(top = 30.dp)
@@ -53,11 +54,7 @@ fun SearchScreen() {
                 .clickable {  },
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_calendar_today),
-                    contentDescription = "calendar selector",
-                    tint = LocalCustomColorsPalette.current.iconColor
-                )
+
 
                 TextFieldComponent(
                     modifier = Modifier
@@ -75,11 +72,6 @@ fun SearchScreen() {
                 .clickable {  },
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_calendar_today),
-                    contentDescription = "calendar selector",
-                    tint = LocalCustomColorsPalette.current.iconColor
-                )
 
                 TextFieldComponent(
                     modifier = Modifier
@@ -92,6 +84,7 @@ fun SearchScreen() {
                 )
             }
         }
+        AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.fromamount),

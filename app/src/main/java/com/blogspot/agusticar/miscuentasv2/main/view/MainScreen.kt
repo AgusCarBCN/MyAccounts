@@ -159,7 +159,7 @@ fun MainScreen(
                         }
 
                         IconOptions.SEARCH -> {
-                            SearchScreen()
+                            SearchScreen(accountsViewModel)
                             title = R.string.searchtitle
                         }
                         IconOptions.SETTINGS -> {

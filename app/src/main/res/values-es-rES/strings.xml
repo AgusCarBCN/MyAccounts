@@ -267,8 +267,8 @@
     <string name="bycategory">Por categoría</string>
     <!--search-->
     <string name="searchentries">Buscar entradas(opcional)</string>
-    <string name="fromdate">Desde</string>
-    <string name="todate">Hasta</string>
+    <string name="fromdate">Desde fecha</string>
+    <string name="todate">Hasta fecha</string>
     <string name="fromamount">Desde cantidad(opcional)</string>
     <string name="toamount">Hasta cantidad(opcional)</string>
 </resources>
