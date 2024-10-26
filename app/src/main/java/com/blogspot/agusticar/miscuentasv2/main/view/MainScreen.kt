@@ -70,6 +70,7 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
+import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
 import com.blogspot.agusticar.miscuentasv2.setting.AccountList
 import com.blogspot.agusticar.miscuentasv2.setting.ModifyAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
@@ -157,7 +158,10 @@ fun MainScreen(
                             title = R.string.profiletitle
                         }
 
-                        IconOptions.SEARCH -> TODO()
+                        IconOptions.SEARCH -> {
+                            SearchScreen()
+                            title = R.string.searchtitle
+                        }
                         IconOptions.SETTINGS -> {
                             SettingScreen(
                                 settingViewModel,
@@ -307,7 +311,9 @@ private fun BottomAppBar(viewModel: MainViewModel) {
                 R.drawable.home,
                 onClickButton = { viewModel.selectScreen(IconOptions.HOME) })
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
-            IconButtonApp("Search", R.drawable.search, onClickButton = {})
+            IconButtonApp("Search", R.drawable.search, onClickButton = {
+                viewModel.selectScreen(IconOptions.SEARCH)
+            })
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Settings", R.drawable.settings,
                 onClickButton = { viewModel.selectScreen(IconOptions.SETTINGS) })
