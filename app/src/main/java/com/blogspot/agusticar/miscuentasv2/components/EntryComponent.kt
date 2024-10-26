@@ -60,24 +60,30 @@ fun EntryList(entriesViewModel: EntriesViewModel,listOfEntries: List<EntryDTO>, 
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TextButton(onClick = { entriesViewModel.onEnableByDate(true) }) {
+        if(listOfEntries.isNotEmpty()) {
+            TextButton(onClick = { entriesViewModel.onEnableByDate(true) }) {
+                Text(
+                    text = stringResource(id = R.string.bydate),
+                    color = if (enableByDate) LocalCustomColorsPalette.current.textHeadColor
+                    else LocalCustomColorsPalette.current.textColor,
+                    fontSize = 18.sp
+                )
+            }
+            TextButton(onClick = { entriesViewModel.onEnableByDate(false) }) {
+                Text(
+                    text = stringResource(id = R.string.bycategory),
+                    color = if (enableByDate) LocalCustomColorsPalette.current.textColor
+                    else LocalCustomColorsPalette.current.textHeadColor,
+                    fontSize = 18.sp
+                )
+            }
+        }else{
             Text(
-                text = stringResource(id = R.string.bydate),
-                color = if (enableByDate) LocalCustomColorsPalette.current.textHeadColor
-                else LocalCustomColorsPalette.current.textColor,
+                text = stringResource(id = R.string.noentries),
+                color = LocalCustomColorsPalette.current.textColor,
                 fontSize = 18.sp
             )
         }
-        TextButton(onClick = { entriesViewModel.onEnableByDate(false) }) {
-            Text(
-                text = stringResource(id = R.string.bycategory),
-                color = if (enableByDate) LocalCustomColorsPalette.current.textColor
-                else LocalCustomColorsPalette.current.textHeadColor,
-                fontSize = 18.sp
-            )
-        }
-
-
     }
     LazyColumn(
         modifier = Modifier

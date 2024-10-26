@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +28,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -119,12 +121,26 @@ fun AccountSelector(title:String,accountViewModel:AccountsViewModel,isAccountDes
                     }
                     val balanceFormat= Utils.numberFormat(accounts[page].balance,currencyCode)
                     // Texto de la moneda
-                    Text(
-                        text = "${accounts[page].name}          $balanceFormat", // Descripción de la moneda
-                        fontSize = 18.sp,
-                        color = LocalCustomColorsPalette.current.textColor, // Color del texto
-                        textAlign = TextAlign.Center // Alinear el texto a la izquierda
-                    )
+                    Row (horizontalArrangement =Arrangement.Absolute.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    )  {
+                        Text(
+                            text = accounts[page].name, // Descripción de la moneda
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = LocalCustomColorsPalette.current.textColor, // Color del texto
+                            textAlign = TextAlign.Center // Alinear el texto a la izquierda
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Text(
+                            text = balanceFormat, // Descripción de la moneda
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = LocalCustomColorsPalette.current.incomeColor, // Color del texto
+                            textAlign = TextAlign.Center // Alinear el texto a la izquierda
+                        )
+                    }
+
                 }
             }
 
