@@ -16,8 +16,11 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     private val _selectedOption = MutableLiveData(options[0])
     val selectedOption: LiveData<Int> = _selectedOption
 
-    private val _showDatePicker = MutableLiveData<Boolean>()
-    val showDatePicker: LiveData<Boolean> = _showDatePicker
+    private val _showDatePickerFrom = MutableLiveData<Boolean>()
+    val showDatePickerFrom: LiveData<Boolean> = _showDatePickerFrom
+
+    private val _showDatePickerTo = MutableLiveData<Boolean>()
+    val showDatePickerTo: LiveData<Boolean> = _showDatePickerTo
 
     private val _selectedFromDate = MutableLiveData<String>()
     val selectedFromDate: LiveData<String> = _selectedFromDate
@@ -35,17 +38,24 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     val toAmount: LiveData<String> = _toAmount
 
 
-    fun onShowDatePicker(newValue: Boolean) {
-        _showDatePicker.value = newValue
+    fun onShowDatePicker(newValue: Boolean,isDateFrom:Boolean) {
+        if(isDateFrom){
+            _showDatePickerFrom.value = newValue
+        }else{
+            _showDatePickerTo.value = newValue
+        }
     }
 
-    fun onFromDateSelected(date: String) {
-        _selectedFromDate.value = date
+
+    fun onSelectedDate(date: String,isDateFrom:Boolean) {
+       if(isDateFrom) {
+           _selectedFromDate.value = date
+       }else{
+           _selectedToDate.value = date
+       }
     }
 
-    fun onToDateSelected(date: String) {
-        _selectedToDate.value = date
-    }
+
 
     fun onFromAmountChanged(newAmount: String) {
         // Validar y actualizar el valor de amount

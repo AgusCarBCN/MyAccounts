@@ -43,7 +43,11 @@ fun DatePickerSearch(
     isDateFrom:Boolean
 ) {
     //var showDatePicker by remember { mutableStateOf(false) }
-    val showDatePicker by searchViewModel.showDatePicker.observeAsState(false)
+    val showDatePicker by if(isDateFrom) searchViewModel.showDatePickerFrom.observeAsState(false)
+    else searchViewModel.showDatePickerTo.observeAsState(false)
+    /*val dateSelected by if(isDateFrom) searchViewModel.selectedFromDate.observeAsState("")
+    else searchViewModel.selectedToDate.observeAsState("")*/
+
     val datePickerState = rememberDatePickerState()
     val selectedDate = datePickerState.selectedDateMillis?.let {
         Utils.convertMillisToDate(it)
@@ -52,12 +56,11 @@ fun DatePickerSearch(
     Box(modifier = Modifier.width(160.dp)) {
         TextField(
             value = selectedDate,
-            onValueChange = { if(isDateFrom)searchViewModel.onToDateSelected(selectedDate)
-                            else searchViewModel.onFromDateSelected(selectedDate)},
+            onValueChange = {searchViewModel.onSelectedDate(selectedDate,isDateFrom) },
             label = { Text(stringResource(label)) },
             readOnly = true,
             trailingIcon = {
-                IconButton(onClick = { searchViewModel.onShowDatePicker(true)}) {
+                IconButton(onClick = { searchViewModel.onShowDatePicker(true,isDateFrom)}) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
                         contentDescription = "Select date"
@@ -86,7 +89,7 @@ fun DatePickerSearch(
 
         if (showDatePicker) {
             Popup(
-                onDismissRequest = {searchViewModel.onShowDatePicker(false) },
+                onDismissRequest = {searchViewModel.onShowDatePicker(false,isDateFrom) },
                 alignment = Alignment.TopStart
             ) {
                 Box(
