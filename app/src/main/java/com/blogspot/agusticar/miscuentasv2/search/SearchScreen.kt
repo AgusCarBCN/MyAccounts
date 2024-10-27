@@ -22,12 +22,10 @@ import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.DatePickerSearch
-
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.RadioButtonSearch
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
