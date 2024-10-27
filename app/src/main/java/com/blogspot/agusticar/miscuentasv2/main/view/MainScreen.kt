@@ -112,6 +112,7 @@ fun MainScreen(
     //Boton de atrás te lleva al Home
     BackHandler(true) {
         mainViewModel.selectScreen(IconOptions.HOME)
+        searchViewModel.resetFields()
     }
 
     val userName by profileViewModel.name.observeAsState("")

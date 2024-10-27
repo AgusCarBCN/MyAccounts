@@ -42,7 +42,9 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
     private val _enableSearchButton = MutableLiveData<Boolean>()
     val enableSearchButton: LiveData<Boolean> = _enableSearchButton
-
+init {
+    resetFields()
+}
 
     fun onShowDatePicker(newValue: Boolean,isDateFrom:Boolean) {
         if(isDateFrom){
@@ -110,5 +112,16 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         val from=_fromAmount.value?.toDoubleOrNull()?:0.0
         val to=_toAmount.value?.toDoubleOrNull()?:0.0
         return to>=from
+    }
+    fun resetFields(){
+        _selectedOption.value=options[0]
+        _showDatePickerFrom.value=false
+        _showDatePickerTo.value=false
+        _selectedFromDate.value=Date().dateFormat()
+        _selectedToDate.value=Date().dateFormat()
+        _entryDescription.value=""
+        _fromAmount.value=""
+        _toAmount.value=""
+        _enableSearchButton.value=false
     }
 }
