@@ -146,22 +146,25 @@ interface EntryDao {
        a.name 
 FROM EntryEntity e
 INNER JOIN AccountEntity a ON e.accountId = a.id
- WHERE e.accountId = :accountId      
-   AND e.date >= :dateFrom 
-   AND e.date <= :dateTo      
-   AND ABS(e.amount) >= :amountMin 
-   AND ABS(e.amount) <= :amountMax
-   AND (
-       (:selectedOptions = 2131624295) 
-       OR (:selectedOptions = 2131624297 AND e.amount > 0.0)
-       OR (:selectedOptions = 2131624296 AND e.amount < 0.0)
-   )
+ WHERE e.accountId = :accountId
+           
+        AND e.date >= :dateFrom 
+        AND e.date <= :dateTo      
+        AND ABS(e.amount) >= :amountMin 
+        AND ABS(e.amount) <= :amountMax
+        AND (
+            (:selectedOptions = 2131624295) 
+            OR (:selectedOptions = 2131624297 AND e.amount > 0.0)
+            OR (:selectedOptions = 2131624296 AND e.amount < 0.0)                  
+        )
+         AND (:descriptionAmount LIKE "" OR e.description LIKE :descriptionAmount)
 
 
 """
     )
     suspend fun getFilteredEntriesDTO(
         accountId: Int,
+        descriptionAmount:String,
         dateFrom: String = Date().dateFormat(),
         dateTo: String = Date().dateFormat(),
         amountMin: Double = 0.0,
