@@ -138,23 +138,26 @@ interface EntryDao {
     @Query(
         """
     SELECT e.description,
-           e.amount,
-           e.date,
-           e.categoryName,
-           e.categoryId,
-           e.accountId,
-           a.name 
-    FROM EntryEntity e
-    INNER JOIN AccountEntity a ON e.accountId = a.id
-    WHERE accountId = :accountId
-        AND(:dateFrom IS NULL OR date >= :dateFrom)
-        AND (:dateTo IS NULL OR date <= :dateTo)
-        AND (:amountMin IS  NULL OR amount >= :amountMin OR :amountMax IS NULL OR amount <= :amountMax)
-        AND (
-            :selectedOptions = 2131624295 OR 
-            (:selectedOptions = 2131624297 AND amount > 0.0) OR 
-            (:selectedOptions = 2131624296 AND amount < 0.0)
-        )
+       e.amount,
+       e.date,
+       e.categoryName,
+       e.categoryId,
+       e.accountId,
+       a.name 
+FROM EntryEntity e
+INNER JOIN AccountEntity a ON e.accountId = a.id
+ WHERE e.accountId = :accountId      
+   AND e.date >= :dateFrom 
+   AND e.date <= :dateTo      
+   AND ABS(e.amount) >= :amountMin 
+   AND ABS(e.amount) <= :amountMax
+   AND (
+       (:selectedOptions = 2131624295) 
+       OR (:selectedOptions = 2131624297 AND e.amount > 0.0)
+       OR (:selectedOptions = 2131624296 AND e.amount < 0.0)
+   )
+
+
 """
     )
     suspend fun getFilteredEntriesDTO(
@@ -162,9 +165,9 @@ interface EntryDao {
         dateFrom: String = Date().dateFormat(),
         dateTo: String = Date().dateFormat(),
         amountMin: Double = 0.0,
-        amountMax: Double = Double.MAX_VALUE,
-        selectedOptions: Int = 0
-    ): List<EntryDTO> // 0 = todos, 1 = positivos, -1 = negativos
+        amountMax: Double = 0.0,
+        selectedOptions: Int = 2131624297
+    ): List<EntryDTO>
 
 }
 

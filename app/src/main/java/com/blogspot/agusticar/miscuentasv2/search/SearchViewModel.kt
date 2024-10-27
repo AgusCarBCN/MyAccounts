@@ -125,8 +125,8 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         _selectedFromDate.value = Date().dateFormat()
         _selectedToDate.value = Date().dateFormat()
         _entryDescription.value = ""
-        _fromAmount.value = ""
-        _toAmount.value = ""
+        _fromAmount.value = "0.0"
+        _toAmount.value = "0.0"
         _enableSearchButton.value = false
     }
 }
