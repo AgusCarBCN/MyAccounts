@@ -45,11 +45,21 @@ fun DatePickerSearch(
 
     val showDatePicker by if(isDateFrom) searchViewModel.showDatePickerFrom.observeAsState(false)
     else searchViewModel.showDatePickerTo.observeAsState(false)
+    // Observa la fecha seleccionada según si es "From" o "To"
+    val selectedDate = if (isDateFrom) {
+        searchViewModel.selectedFromDate.observeAsState("")
+    } else {
+        searchViewModel.selectedToDate.observeAsState("")
+    }.value
 
     val datePickerState = rememberDatePickerState()
-    val selectedDate = datePickerState.selectedDateMillis?.let {
-        Utils.convertMillisToDate(it)
-    } ?: ""
+
+    // Actualiza la fecha en el ViewModel al cambiar la selección en DatePicker
+    datePickerState.selectedDateMillis?.let { selectedMillis ->
+        val dateString = Utils.convertMillisToDate(selectedMillis)
+        searchViewModel.onSelectedDate(dateString, isDateFrom)
+        searchViewModel.onShowDatePicker(false, isDateFrom) // Cierra el DatePicker automáticamente
+    }
 
     Box(modifier = Modifier.width(160.dp)) {
         TextField(

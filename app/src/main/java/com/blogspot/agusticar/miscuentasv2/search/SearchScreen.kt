@@ -1,5 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.search
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -108,7 +109,8 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             enableSearchButton,
             onClickButton = {
-
+            Log.d("Date","datefrom: $fromDate")
+                Log.d("Date","dateto: $toDate")
             }
         )
 
