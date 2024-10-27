@@ -154,6 +154,7 @@ fun MainScreen(
                         IconOptions.HOME -> {
                             HomeScreen(mainViewModel, accountsViewModel, entriesViewModel)
                             title = R.string.greeting
+                            searchViewModel.resetFields()
                         }
 
                         IconOptions.PROFILE -> {
