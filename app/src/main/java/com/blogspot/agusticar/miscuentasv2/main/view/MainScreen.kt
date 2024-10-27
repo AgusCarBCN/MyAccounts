@@ -71,6 +71,7 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.AccountList
 import com.blogspot.agusticar.miscuentasv2.setting.ModifyAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
@@ -90,6 +91,7 @@ fun MainScreen(
     profileViewModel: ProfileViewModel,
     settingViewModel: SettingViewModel,
     entriesViewModel: EntriesViewModel,
+    searchViewModel: SearchViewModel,
     navToCreateAccounts: () -> Unit
 
 ) {
@@ -159,7 +161,7 @@ fun MainScreen(
                         }
 
                         IconOptions.SEARCH -> {
-                            SearchScreen(accountsViewModel)
+                            SearchScreen(accountsViewModel,searchViewModel,mainViewModel)
                             title = R.string.searchtitle
                         }
                         IconOptions.SETTINGS -> {

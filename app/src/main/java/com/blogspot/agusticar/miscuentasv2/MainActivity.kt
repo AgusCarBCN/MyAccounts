@@ -32,6 +32,7 @@ import com.blogspot.agusticar.miscuentasv2.main.view.MainScreen
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
@@ -48,6 +49,7 @@ class MainActivity : ComponentActivity() {
     private val entriesViewModel: EntriesViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val settingViewModel: SettingViewModel by viewModels()
+    private val searchViewModel: SearchViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
 
 
@@ -152,6 +154,7 @@ class MainActivity : ComponentActivity() {
                                 profileViewModel,
                                 settingViewModel,
                                 entriesViewModel,
+                                searchViewModel,
                                 navToCreateAccounts = {
                                     navigationController.navigate(Routes.CreateAccounts.route)
                                 }

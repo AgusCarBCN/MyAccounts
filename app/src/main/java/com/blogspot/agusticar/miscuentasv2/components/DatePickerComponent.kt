@@ -12,25 +12,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerColors
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -38,33 +29,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-
-import java.text.SimpleDateFormat
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import java.util.Date
-import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDocked(
+fun DatePickerSearch(
     modifier: Modifier,
-    label: Int
+    label: Int,
+    searchViewModel:SearchViewModel,
+    isDateFrom:Boolean
 ) {
-    var showDatePicker by remember { mutableStateOf(false) }
+    //var showDatePicker by remember { mutableStateOf(false) }
+    val showDatePicker by searchViewModel.showDatePicker.observeAsState(false)
     val datePickerState = rememberDatePickerState()
     val selectedDate = datePickerState.selectedDateMillis?.let {
-        convertMillisToDate(it)
+        Utils.convertMillisToDate(it)
     } ?: ""
 
     Box(modifier = Modifier.width(160.dp)) {
         TextField(
             value = selectedDate,
-            onValueChange = { },
+            onValueChange = { if(isDateFrom)searchViewModel.onDateToSelected(selectedDate)
+                            else searchViewModel.onDateFromSelected(selectedDate)},
             label = { Text(stringResource(label)) },
             readOnly = true,
             trailingIcon = {
-                IconButton(onClick = { showDatePicker = !showDatePicker }) {
+                IconButton(onClick = { searchViewModel.onShowDatePicker(true)}) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
                         contentDescription = "Select date"
@@ -93,7 +88,7 @@ fun DatePickerDocked(
 
         if (showDatePicker) {
             Popup(
-                onDismissRequest = { showDatePicker = false },
+                onDismissRequest = {searchViewModel.onShowDatePicker(false) },
                 alignment = Alignment.TopStart
             ) {
                 Box(
@@ -160,8 +155,5 @@ fun DatePickerDocked(
 
 
 
-fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-    return formatter.format(Date(millis))
-}
+
 
