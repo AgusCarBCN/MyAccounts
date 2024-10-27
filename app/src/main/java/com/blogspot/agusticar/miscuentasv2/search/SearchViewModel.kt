@@ -3,10 +3,18 @@ package com.blogspot.agusticar.miscuentasv2.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor() : ViewModel() {
+
+    // Lista de opciones como identificadores de recursos
+     val options = listOf(R.string.incomeoption, R.string.expenseoption, R.string.alloption)
+
+    // LiveData para la opción seleccionada
+    private val _selectedOption = MutableLiveData(options[0])
+    val selectedOption: LiveData<Int> = _selectedOption
 
     private val _showDatePicker = MutableLiveData<Boolean>()
     val showDatePicker: LiveData<Boolean> = _showDatePicker
@@ -54,5 +62,8 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     fun onEntryDescriptionChanged(newDescription: String) {
         _entryDescription.value = newDescription
     }
-
+    // Método para actualizar la opción seleccionada
+    fun onOptionSelected(option: Int) {
+        _selectedOption.value = option
+    }
 }

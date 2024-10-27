@@ -64,7 +64,7 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             DatePickerSearch(modifier = Modifier.weight(0.5f),R.string.todate,searchViewModel,false)
         }
         AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
-        RadioButtonSearch()
+        RadioButtonSearch(searchViewModel)
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.fromamount),
