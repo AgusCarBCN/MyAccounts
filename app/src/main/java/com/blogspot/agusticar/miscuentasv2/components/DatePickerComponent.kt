@@ -42,11 +42,9 @@ fun DatePickerSearch(
     searchViewModel:SearchViewModel,
     isDateFrom:Boolean
 ) {
-    //var showDatePicker by remember { mutableStateOf(false) }
+
     val showDatePicker by if(isDateFrom) searchViewModel.showDatePickerFrom.observeAsState(false)
     else searchViewModel.showDatePickerTo.observeAsState(false)
-    /*val dateSelected by if(isDateFrom) searchViewModel.selectedFromDate.observeAsState("")
-    else searchViewModel.selectedToDate.observeAsState("")*/
 
     val datePickerState = rememberDatePickerState()
     val selectedDate = datePickerState.selectedDateMillis?.let {

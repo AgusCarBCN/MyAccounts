@@ -10,11 +10,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.DatePickerSearch
@@ -27,6 +30,8 @@ import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Date
 
 
@@ -39,7 +44,12 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
     val toDate by searchViewModel.selectedToDate.observeAsState(Date().dateFormat())
     val fromDate by searchViewModel.selectedFromDate.observeAsState(Date().dateFormat())
     val entryDescription by searchViewModel.entryDescription.observeAsState("")
+    val enableSearchButton by searchViewModel.enableSearchButton.observeAsState(false)
+    val scope = rememberCoroutineScope()
 
+    val messageAmountError= stringResource(id = R.string.amountfromoverdateto)
+    val messageDateError= stringResource(id = R.string.datefromoverdateto)
+    searchViewModel.onEnableSearchButton()
     Column( modifier = Modifier
         .fillMaxWidth()
         .padding(top = 30.dp)
@@ -69,7 +79,9 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.fromamount),
             fromAmount,
-            onTextChange = { searchViewModel.onFromAmountChanged(it) },
+            onTextChange = { searchViewModel.onAmountsFieldsChange(it,toAmount)
+
+                               },
             BoardType.DECIMAL,
             false
         )
@@ -77,14 +89,24 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.toamount),
             toAmount,
-            onTextChange = { searchViewModel.onToAmountChanged(it) },
+            onTextChange = {  searchViewModel.onAmountsFieldsChange(fromAmount,it)
+                scope.launch(Dispatchers.Main) {
+                    if(!searchViewModel.validateAmounts(fromAmount, toAmount)){
+                        SnackBarController.sendEvent(
+                            event = SnackBarEvent(
+                                messageAmountError
+                            )
+                        )
+                    }
+                }
+             },
             BoardType.DECIMAL,
             false
         )
         ModelButton(text = stringResource(id = R.string.search),
             R.dimen.text_title_small,
             modifier = Modifier.width(360.dp),
-            true,
+            enableSearchButton,
             onClickButton = {
 
             }

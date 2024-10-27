@@ -1,10 +1,13 @@
 package com.blogspot.agusticar.miscuentasv2.search
 
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
+import java.util.Date
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor() : ViewModel() {
@@ -37,6 +40,9 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     private val _toAmount = MutableLiveData<String>()
     val toAmount: LiveData<String> = _toAmount
 
+    private val _enableSearchButton = MutableLiveData<Boolean>()
+    val enableSearchButton: LiveData<Boolean> = _enableSearchButton
+
 
     fun onShowDatePicker(newValue: Boolean,isDateFrom:Boolean) {
         if(isDateFrom){
@@ -48,7 +54,8 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
 
     fun onSelectedDate(date: String,isDateFrom:Boolean) {
-       if(isDateFrom) {
+
+        if(isDateFrom) {
            _selectedFromDate.value = date
        }else{
            _selectedToDate.value = date
@@ -57,23 +64,51 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
 
 
-    fun onFromAmountChanged(newAmount: String) {
+
+    fun onAmountsFieldsChange(fromAmount:String,toAmount:String) {
         // Validar y actualizar el valor de amount
-        if (Utils.isValidDecimal(newAmount)) {
-            _fromAmount.value = newAmount
+        if (Utils.isValidDecimal(fromAmount)) {
+            _fromAmount.value = fromAmount
+        }
+        if (Utils.isValidDecimal(toAmount)) {
+            _toAmount.value = toAmount
+        }
+        if(validateAmounts(fromAmount, toAmount)){
+            _enableSearchButton.value=true
+        }else {
+            _enableSearchButton.value=false
         }
     }
-    fun onToAmountChanged(newAmount: String) {
-        // Validar y actualizar el valor de amount
-        if (Utils.isValidDecimal(newAmount)) {
-            _toAmount.value = newAmount
-        }
-    }
+
+
+
     fun onEntryDescriptionChanged(newDescription: String) {
         _entryDescription.value = newDescription
     }
     // Método para actualizar la opción seleccionada
     fun onOptionSelected(option: Int) {
         _selectedOption.value = option
+    }
+
+    fun onEnableSearchButton() {
+        val fromDate=_selectedFromDate.value?: Date().dateFormat()
+        val toDate=_selectedToDate.value?: Date().dateFormat()
+        val fromAmount=_fromAmount.value?:"0.0"
+        val toAmount=_toAmount.value?:"0.0"
+        val enable= validateDates(fromDate,toDate) && validateAmounts(fromAmount,toAmount)
+        _enableSearchButton.value = enable
+
+    }
+
+
+     fun validateDates(fromDateString:String, toDateString:String):Boolean {
+        val fromDate = Utils.convertStringToLocalDate(fromDateString)
+        val toDate = Utils.convertStringToLocalDate(toDateString)
+        return fromDate.isBefore(toDate) || fromDate.isEqual(toDate)
+    }
+    fun validateAmounts(fromAmount:String, toAmount:String):Boolean {
+        val from=_fromAmount.value?.toDoubleOrNull()?:0.0
+        val to=_toAmount.value?.toDoubleOrNull()?:0.0
+        return to>=from
     }
 }

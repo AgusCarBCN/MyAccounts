@@ -143,6 +143,8 @@
     <string name="erroraccountcreated">Error creating an account</string>
     <string name="errorwritingdatastore">Error writing to DataStore</string>
     <string name="errorreadingdatastore">Error reading to DataStore</string>
+    <string name="datefromoverdateto">Date from is over date to</string>
+    <string name="amountfromoverdateto">Amount from is over amount to</string>
 <!--TopBar titles-->
     <string name="hometitle">Home</string>
     <string name="searchtitle">Search</string>

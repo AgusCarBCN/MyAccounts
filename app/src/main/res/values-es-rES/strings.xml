@@ -142,6 +142,9 @@
     <string name="erroraccountcreated">Error al crear una cuenta</string>
     <string name="errorwritingdatastore">Error al escribir en DataStore</string>
     <string name="errorreadingdatastore">Error al leer en DataStore</string>
+    <string name="datefromoverdateto">La fecha inicial es posterior a la fecha final</string>
+    <string name="amountfromoverdateto">El monto inicial es mayor que el monto final</string>
+
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>

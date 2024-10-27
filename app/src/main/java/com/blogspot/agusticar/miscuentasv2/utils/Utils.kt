@@ -14,6 +14,8 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import kotlin.math.abs
@@ -51,6 +53,10 @@ class Utils {
             return dateEntry?.dateFormatDayMonth() ?: ""
 
 
+        }
+        fun convertStringToLocalDate(date: String): LocalDate {
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault())
+            return LocalDate.parse(date, formatter)
         }
 
         fun writeCsvFile(
