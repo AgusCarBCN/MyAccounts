@@ -1,6 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 
-import android.util.Log
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,14 +23,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
+import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
+import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 //Mapa de divisas y simbolos
@@ -39,56 +44,59 @@ import kotlinx.coroutines.launch
 @Composable
 
 fun CreateAccountsComponent(
-    createAccountsViewModel: CreateAccountsViewModel,
+    accountsViewModel: AccountsViewModel,
     navToLogin: () -> Unit,
     navToBack: () -> Unit
 ) {
-
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(LocalCustomColorsPalette.current.backgroundPrimary) // Reemplaza con tu color de fondo
     ) {
-        val (titleCreateAccount, inputData) = createRefs()
+
         val scope = rememberCoroutineScope()
-        val currencyCode by createAccountsViewModel.currencyCode.observeAsState("EUR")
-        val isCurrencyExpanded by createAccountsViewModel.isCurrencyExpanded.observeAsState(false)
-        val accountName by createAccountsViewModel.accountName.observeAsState("")
-        val accountBalance by createAccountsViewModel.accountBalance.observeAsState("")
+        val currencyCode by accountsViewModel.currencyCode.observeAsState("EUR")
+        val isCurrencyExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
+        val isEnableButton by accountsViewModel.isEnableButton.observeAsState(false)
+        val accountName by accountsViewModel.name.observeAsState("")
+        val accountBalance by accountsViewModel.amount.observeAsState("")
+        val enableCurrencySelector by accountsViewModel.enableCurrencySelector.observeAsState(true)
 
-
-
-        Text(
-            modifier = Modifier
-                .padding(top = 30.dp)
-                .constrainAs(titleCreateAccount) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(inputData.top)
-                },
-            text = if (!isCurrencyExpanded) stringResource(id = R.string.createAccount) else "",
-            fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
-            fontWeight = FontWeight.Bold, // Estilo de texto en negrita
-            textAlign = TextAlign.Center,
-            color = LocalCustomColorsPalette.current.textColor
-        )
-
-
+        val newAccountCreated = message(resource = R.string.newaccountcreated)
+        val errorAccountCreated = message(resource = R.string.erroraccountcreated)
+        val errorWritingDataStore=message(resource = R.string.errorwritingdatastore)
         Column(
-            modifier = Modifier
-                .constrainAs(inputData) {
-                    top.linkTo(titleCreateAccount.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                },
+
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
             if (!isCurrencyExpanded) {
+                Text(
+                    modifier = Modifier
+                        .padding(50.dp),
+                    text = if (!isCurrencyExpanded) stringResource(id = R.string.createAccount) else "",
+                    fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_title_medium).toSp() },
+                    fontWeight = FontWeight.Bold, // Estilo de texto en negrita
+                    textAlign = TextAlign.Center,
+                    color = LocalCustomColorsPalette.current.textColor
+                )
+                if (!enableCurrencySelector) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(60.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        IconAnimated(
+                            iconResource = R.drawable.configaccountoption, sizeIcon = 120,
+                            LocalCustomColorsPalette.current.imageTutorialInit,
+                            LocalCustomColorsPalette.current.imageTutorialTarget
+                        )
+                    }
+                }
+
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.createaccountmsg),
@@ -102,7 +110,7 @@ fun CreateAccountsComponent(
                     modifier = Modifier.width(360.dp),
                     stringResource(id = R.string.amountName),
                     accountName,
-                    onTextChange = { createAccountsViewModel.onAccountNameChanged(it) },
+                    onTextChange = { accountsViewModel.onTextFieldsChanged(it, accountBalance) },
                     BoardType.TEXT,
                     false
                 )
@@ -111,10 +119,7 @@ fun CreateAccountsComponent(
                     stringResource(id = R.string.enteramount),
                     accountBalance,
                     onTextChange = {
-                        if (isValidDecimal(it)) {
-                            //Solo se actualiza si es válido
-                            createAccountsViewModel.onAccountBalanceChanged(it)
-                        }
+                        accountsViewModel.onTextFieldsChanged(accountName, it)
                     },
                     BoardType.DECIMAL,
                     false
@@ -122,50 +127,73 @@ fun CreateAccountsComponent(
                 ModelButton(text = stringResource(id = R.string.addAccount),
                     R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
-                    true,
+                    isEnableButton,
                     onClickButton = {
-                        try{
-                        scope.launch(Dispatchers.IO){
-                            val amountDecimal=accountBalance.toDoubleOrNull()?:0.0
-                            createAccountsViewModel.addAccount(Account(name=accountName, balance = amountDecimal))
-                            //createAccountsViewModel.onClearFields()
-                            Log.d("Cuenta", "Cuenta creada")
-                            println("Cuenta creada")
+                        scope.launch(Dispatchers.IO) {
+                            try {
+                                val amountDecimal = accountBalance.toDoubleOrNull() ?: 0.0
+                                accountsViewModel.addAccount(
+                                    Account(
+                                        name = accountName,
+                                        balance = amountDecimal
+                                    )
+                                )
+                                withContext(Dispatchers.Main) {
+                                    SnackBarController.sendEvent(
+                                        event = SnackBarEvent(
+                                            newAccountCreated
+                                        )
+                                    )
+                                }
 
-                        }}
-                        catch(e: Exception){
-                            Log.d("Cuenta", "Error: ${e.message}")
-                            println("Error al cargar ${e.message}")
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    SnackBarController.sendEvent(
+                                        event = SnackBarEvent(
+                                            errorAccountCreated
+                                        )
+                                    )
+                                }
+                            }
                         }
-
-
                     }
                 )
             }
-
-            CurrencySelector(createAccountsViewModel)
+            if (enableCurrencySelector) {
+                CurrencySelector(accountsViewModel)
+            }
             if (!isCurrencyExpanded) {
-                ModelButton(text = stringResource(id = R.string.confirmButton),
-                    R.dimen.text_title_medium,
-                    modifier = Modifier.width(360.dp),
-                    true,
-                    onClickButton = {
-                        scope.launch {
-                            Log.d("valor a guardar", "Code: $currencyCode")
-                            createAccountsViewModel.setCurrencyCode(currencyCode)
+                if (enableCurrencySelector) {
+                    ModelButton(text = stringResource(id = R.string.confirmButton),
+                        R.dimen.text_title_medium,
+                        modifier = Modifier.width(360.dp),
+                        true,
+                        onClickButton = {
+                            scope.launch(Dispatchers.IO) {
+                                try {
+                                    accountsViewModel.setCurrencyCode(currencyCode)
+                                }catch (e: Exception) {
+                                    withContext(Dispatchers.Main) {
+                                        SnackBarController.sendEvent(
+                                            event = SnackBarEvent(
+                                                errorWritingDataStore
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                            navToLogin()
                         }
-                        navToLogin()
-
-                    }
-                )
-
+                    )
+                }
                 ModelButton(text = stringResource(id = R.string.backButton),
                     R.dimen.text_title_medium,
                     modifier = Modifier.width(360.dp),
                     true,
                     onClickButton = {
+                        accountsViewModel.resetFields()
                         navToBack()
-                        // navigationController.navigate(Routes.CreateProfile.route)
+
                     }
                 )
             }
@@ -173,8 +201,3 @@ fun CreateAccountsComponent(
     }
 }
 
-// Función para validar si la cadena es un número decimal válido
-fun isValidDecimal(text: String): Boolean {
-
-    return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
-}

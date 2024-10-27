@@ -13,6 +13,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetEnableNotifi
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetEnableTutorialUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetShowTutorialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,6 +47,18 @@ class SettingViewModel @Inject constructor(
     private val _showTutorial = MutableLiveData<Boolean>()
     val showTutorial: LiveData<Boolean> = _showTutorial
 
+    //Live data para mostrar lista de cuentas con opcion para borrar o modificar
+    private val _deleteAccountOption = MutableLiveData<Boolean>()
+    val deleteAccountOption: LiveData<Boolean> = _deleteAccountOption
+
+    // LiveData para el campo de nombre de fichero
+    private val _fileName = MutableLiveData<String>()
+    val fileName: LiveData<String> = _fileName
+
+    // Este LiveData controla el estado de si mostrar el Dialogo de exportar fichero csv
+    private val _showExportDialog = MutableLiveData<Boolean>()
+    val showExportDialog: LiveData<Boolean> = _showExportDialog
+
     init {
 
         getSwitchTutorial()
@@ -72,6 +85,9 @@ class SettingViewModel @Inject constructor(
 
 
     }
+    fun onSelectAccountOption(delete:Boolean){
+        _deleteAccountOption.value=delete
+    }
 
     fun onSwitchNotificationsClicked(checked: Boolean) {
         viewModelScope.launch {
@@ -81,7 +97,13 @@ class SettingViewModel @Inject constructor(
 
 
     }
+    fun onFileNameChanged(newName:String){
+        _fileName.value = newName
 
+    }
+    fun onShowExportDialog(newValue:Boolean){
+        _showExportDialog.value = newValue
+    }
 
     // Obtener el estado del tutorial cuando inicie la aplicación
     fun getShowTutorial() {
@@ -108,4 +130,5 @@ class SettingViewModel @Inject constructor(
             _switchNotifications.value = getNotificationsTutorial.invoke()
         }
     }
+
 }

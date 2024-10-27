@@ -2,6 +2,7 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,16 +55,25 @@ import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
+import com.blogspot.agusticar.miscuentasv2.about.SendEmail
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
+import com.blogspot.agusticar.miscuentasv2.components.EntryList
+
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
+import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
-import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
-import com.blogspot.agusticar.miscuentasv2.newamount.CategorySelector
-import com.blogspot.agusticar.miscuentasv2.newamount.NewAmount
+import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
+import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
+import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
+import com.blogspot.agusticar.miscuentasv2.setting.AccountList
+import com.blogspot.agusticar.miscuentasv2.setting.ModifyAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.setting.SettingScreen
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
 import com.blogspot.agusticar.miscuentasv2.transfer.Transfer
@@ -73,27 +83,40 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-
 @Composable
 fun MainScreen(
 
     mainViewModel: MainViewModel,
-    createAccountsViewModel: CreateAccountsViewModel,
-    createProfileViewModel: CreateProfileViewModel,
-    settingViewModel:SettingViewModel
+    accountsViewModel: AccountsViewModel,
+    profileViewModel: ProfileViewModel,
+    settingViewModel: SettingViewModel,
+    entriesViewModel: EntriesViewModel,
+    searchViewModel: SearchViewModel,
+    navToCreateAccounts: () -> Unit
 
 ) {
+
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
-    val iconAmount by mainViewModel.selectedIcon.collectAsState()
-    val titleAmount by mainViewModel.selectedTitle.collectAsState()
-    val isIncome by mainViewModel.isIncome.collectAsState()
+    val showExitDialog by mainViewModel.showExitDialog.collectAsState()
+    val showDeleteAccountDialog by mainViewModel.showDeleteAccountDialog.collectAsState()
+    val entries by entriesViewModel.listOfEntries.collectAsState()
+    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+    val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
+    val selectedAccount by accountsViewModel.accountSelected.observeAsState()
+    LaunchedEffect(Unit) {
+        entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
+    }
+    //Boton de atrás te lleva al Home
+    BackHandler(true) {
+        mainViewModel.selectScreen(IconOptions.HOME)
+        searchViewModel.resetFields()
+    }
 
-    val categories by createAccountsViewModel.listOfCategories.observeAsState(listOf())
-
-    val userName by createProfileViewModel.name.observeAsState("")
-    var title: Int by remember{ mutableIntStateOf(R.string.hometitle)}
+    val userName by profileViewModel.name.observeAsState("")
+    var title: Int by remember { mutableIntStateOf(R.string.hometitle) }
 
     // Usar LaunchedEffect para cerrar el drawer cuando cambia la pantalla seleccionada
     LaunchedEffect(key1 = selectedScreen) {
@@ -105,80 +128,150 @@ fun MainScreen(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { DrawerContent(mainViewModel, createProfileViewModel) },
+        drawerContent = { DrawerContent(mainViewModel, profileViewModel) },
         scrimColor = Color.Transparent,
         content = {
             // Main content goes here
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                { TopBarApp(scope, drawerState,title,
-                    (if(selectedScreen==IconOptions.HOME) userName else "").toString()
-                ) },
+                {
+                    TopBarApp(
+                        scope, drawerState, title,
+                        (if (selectedScreen == IconOptions.HOME) userName else "").toString()
+                    )
+                },
                 { BottomAppBar(mainViewModel) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
-                ) {if(selectedScreen!=IconOptions.EXIT){
-                    createProfileViewModel.onButtonProfileNoSelected()
-                }
+                ) {
+                    if (selectedScreen != IconOptions.EXIT) {
+                        profileViewModel.onButtonProfileNoSelected()
+                    }
                     when (selectedScreen) {
                         IconOptions.HOME -> {
-                            HomeScreen(createAccountsViewModel)
-                            title=R.string.greeting
+                            HomeScreen(mainViewModel, accountsViewModel, entriesViewModel)
+                            title = R.string.greeting
+                            searchViewModel.resetFields()
                         }
-                        IconOptions.PROFILE -> {ProfileScreen(createProfileViewModel)
-                            title=R.string.profiletitle
+
+                        IconOptions.PROFILE -> {
+                            ProfileScreen(profileViewModel)
+                            title = R.string.profiletitle
                         }
-                        IconOptions.SEARCH -> TODO()
+
+                        IconOptions.SEARCH -> {
+                            SearchScreen(accountsViewModel,searchViewModel,entriesViewModel,mainViewModel)
+                            title = R.string.searchtitle
+                        }
                         IconOptions.SETTINGS -> {
-                            SettingScreen(settingViewModel,mainViewModel)
-                            title=R.string.settingstitle}
+                            SettingScreen(
+                                settingViewModel,
+                                mainViewModel,
+                                accountsViewModel,
+                                entriesViewModel,
+                                navToCreateAccounts,
+                            )
+                            title = R.string.settingstitle
+                        }
+
                         IconOptions.INCOME_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                createAccountsViewModel.getCategories(true)
+                                entriesViewModel.getCategories(true)
 
                             }
-                            CategorySelector(mainViewModel,categories,true)
-                        title=R.string.newincome}
-                        IconOptions.TRANSFER -> {Transfer()
-                        title=R.string.transfer}
-                        IconOptions.BARCHART -> TODO()
-                        IconOptions.CALCULATOR -> TODO()
-                        IconOptions.SETTING_ACCOUNTS -> TODO()
-                        IconOptions.ABOUT ->{ AboutScreen(mainViewModel)
-                            title=R.string.abouttitle
+                            CategorySelector(mainViewModel, entriesViewModel, true)
+                            title = R.string.newincome
                         }
-                        IconOptions.POLICY -> TODO()
+
+                        IconOptions.TRANSFER -> {
+                            Transfer(mainViewModel, accountsViewModel, entriesViewModel)
+                            title = R.string.transfer
+                        }
+
+                        IconOptions.SETTING_ACCOUNTS -> {
+                            AccountList(
+                                mainViewModel,
+                                accountsViewModel,
+                                settingAccountOption
+                            )
+                            title = R.string.accountsetting
+
+                        }
+                        IconOptions.DELETE_ACCOUNT -> {
+                            ModelDialog(R.string.titledelete,
+                                R.string.deleteinfo,
+                                showDialog = showDeleteAccountDialog,
+                                onConfirm = {
+                                selectedAccount?.let { accountsViewModel.deleteAccount(it) }
+                                    mainViewModel.showDeleteAccountDialog(false)
+                                    mainViewModel.selectScreen(IconOptions.HOME)
+
+                                },
+                                onDismiss = {
+                                    mainViewModel.showDeleteAccountDialog(false)
+                                    mainViewModel.selectScreen(IconOptions.HOME)
+                                })
+
+                        }
+                        IconOptions.ABOUT -> {
+                            AboutScreen(mainViewModel)
+                            title = R.string.abouttitle
+                        }
+
                         IconOptions.EXIT -> {
                             // Obtén el contexto actual de la aplicación
                             val context = LocalContext.current
                             // Verifica si el contexto es una actividad
                             val activity = context as? Activity
-                            activity?.finish()
+
+                            ModelDialog(R.string.exitapp,
+                                R.string.exitinfo,
+                                showDialog = showExitDialog,
+                                onConfirm = {
+                                    activity?.finish()
+                                },
+                                onDismiss = {
+                                    mainViewModel.showExitDialog(false)
+                                    mainViewModel.selectScreen(IconOptions.HOME)
+                                })
+
                         }
+
                         IconOptions.ABOUT_DESCRIPTION -> {
                             AboutApp()
-                            title=R.string.abouttitle
+                            title = R.string.abouttitle
                         }
+
                         IconOptions.EXPENSE_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                createAccountsViewModel.getCategories(false)
-
+                                entriesViewModel.getCategories(false)
                             }
-                            CategorySelector(mainViewModel,categories,false)
-
-
-                            title=R.string.newexpense
+                            CategorySelector(mainViewModel, entriesViewModel, false)
+                            title = R.string.newexpense
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(isIncome, iconAmount ,titleAmount)
-                            title=titleAmount
+                            NewAmount(mainViewModel, entriesViewModel, accountsViewModel)
+
                         }
 
-                        IconOptions.CHANGE_CURRENCY -> CurrencySelector(createAccountsViewModel)
+                        IconOptions.CHANGE_CURRENCY -> CurrencySelector(accountsViewModel)
+                        IconOptions.ENTRIES -> {
+                            EntryList(entriesViewModel,entries, currencyCode)
+                            title = R.string.yourentries
+                        }
+
+                        IconOptions.EDIT_ACCOUNTS -> {
+                            ModifyAccountsComponent(mainViewModel,
+                                accountsViewModel)
+                        }
+
+                        IconOptions.BARCHART -> TODO()
+                        IconOptions.CALCULATOR -> TODO()
+                        IconOptions.EMAIL -> SendEmail()
                     }
 
                 }
@@ -189,10 +282,10 @@ fun MainScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState,title:Int,name:String) {
+private fun TopBarApp(scope: CoroutineScope, drawerState: DrawerState, title: Int, name: String) {
 
     TopAppBar(
-        title = { Text(text = stringResource(id = title)+" "+name)},
+        title = { Text(text = stringResource(id = title) + " " + name) },
         navigationIcon = {
             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                 Icon(
@@ -222,7 +315,9 @@ private fun BottomAppBar(viewModel: MainViewModel) {
                 R.drawable.home,
                 onClickButton = { viewModel.selectScreen(IconOptions.HOME) })
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
-            IconButtonApp("Search", R.drawable.search, onClickButton = {})
+            IconButtonApp("Search", R.drawable.search, onClickButton = {
+                viewModel.selectScreen(IconOptions.SEARCH)
+            })
             Spacer(modifier = Modifier.weight(1f, true)) // Espacio entre íconos
             IconButtonApp("Settings", R.drawable.settings,
                 onClickButton = { viewModel.selectScreen(IconOptions.SETTINGS) })
@@ -241,7 +336,8 @@ private fun BottomAppBar(viewModel: MainViewModel) {
 @Composable
 private fun DrawerContent(
     viewModel: MainViewModel,
-    createProfileViewModel: CreateProfileViewModel
+    profileViewModel: ProfileViewModel
+
 ) {
 
     Card(
@@ -252,7 +348,7 @@ private fun DrawerContent(
 
     ) {
 
-        HeadDrawerMenu(createProfileViewModel)
+        HeadDrawerMenu(profileViewModel)
         Column(
             modifier = Modifier
                 .background(LocalCustomColorsPalette.current.drawerColor)
@@ -275,30 +371,32 @@ private fun DrawerContent(
             })
             ClickableRow(
                 OptionItem(R.string.exitapp, R.drawable.exitapp),
-                onClick = { viewModel.selectScreen(IconOptions.EXIT) })
+                onClick = {
+                    viewModel.selectScreen(IconOptions.EXIT)
+                    viewModel.showExitDialog(true)
+                })
         }
     }
 }
 
 //Implementacion de la cabecerera del menu desplegable izquierda
 @Composable
-fun HeadDrawerMenu(createProfileViewModel: CreateProfileViewModel) {
+fun HeadDrawerMenu(profileViewModel: ProfileViewModel) {
 
-    val selectedImageUriSaved by createProfileViewModel.selectedImageUriSaved.observeAsState(null)
+    val selectedImageUriSaved by profileViewModel.selectedImageUriSaved.observeAsState(null)
 
-
-    createProfileViewModel.loadImageUri()
+    profileViewModel.loadImageUri()
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(LocalCustomColorsPalette.current.headDrawerColor),
-                Arrangement.SpaceEvenly,
+        Arrangement.SpaceEvenly,
         Alignment.CenterVertically
 
 
     ) {
         Box(modifier = Modifier.weight(0.4f)) {
-        selectedImageUriSaved?.let { UserImage(it,80) }
+            selectedImageUriSaved?.let { UserImage(it, 80) }
         }
 
 <<<<<<< HEAD

@@ -21,16 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsComponent
-import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
-import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileViewModel
+import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.login.LoginComponent
 import com.blogspot.agusticar.miscuentasv2.login.LoginViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.Routes
 import com.blogspot.agusticar.miscuentasv2.main.view.MainScreen
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.Tutorial
 import com.blogspot.agusticar.miscuentasv2.tutorial.view.TutorialViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.MisCuentasv2Theme
@@ -42,16 +44,20 @@ class MainActivity : ComponentActivity() {
 
 
     private val tutorialViewModel: TutorialViewModel by viewModels()
-    private val createProfileViewModel: CreateProfileViewModel by viewModels()
-    private val createAccountViewModel: CreateAccountsViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
+    private val accountViewModel: AccountsViewModel by viewModels()
+    private val entriesViewModel: EntriesViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val settingViewModel: SettingViewModel by viewModels()
+    private val searchViewModel: SearchViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
+
         enableEdgeToEdge()
 
         setContent {
@@ -63,6 +69,8 @@ class MainActivity : ComponentActivity() {
             val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
 
             MisCuentasv2Theme(darkTheme = switchDarkTheme) {
+
+
                 val snackbarHostState = remember {
                     SnackbarHostState()
                 }
@@ -95,6 +103,8 @@ class MainActivity : ComponentActivity() {
                         SnackbarHost(hostState = snackbarHostState)
                     }
                 ) { innerPadding ->
+
+
                     NavHost(
                         navController = navigationController,
                         startDestination = if (showTutorial) Routes.Tutorial.route
@@ -115,13 +125,13 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Routes.CreateProfile.route) {
-                            CreateProfileComponent(createProfileViewModel,
+                            CreateProfileComponent(profileViewModel,
                                 navToBackLogin = { navigationController.popBackStack() },
                                 navToCreateAccounts = { navigationController.navigate(Routes.CreateAccounts.route) })
                         }
 
                         composable(Routes.CreateAccounts.route) {
-                            CreateAccountsComponent(createAccountViewModel, navToLogin = {
+                            CreateAccountsComponent(accountViewModel, navToLogin = {
                                 navigationController.navigate(Routes.Login.route)
                             },
                                 navToBack = { navigationController.popBackStack() }
@@ -140,9 +150,15 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.Home.route) {
                             MainScreen(
                                 mainViewModel,
-                                createAccountViewModel,
-                                createProfileViewModel,
-                                settingViewModel
+                                accountViewModel,
+                                profileViewModel,
+                                settingViewModel,
+                                entriesViewModel,
+                                searchViewModel,
+                                navToCreateAccounts = {
+                                    navigationController.navigate(Routes.CreateAccounts.route)
+                                }
+
                             )
 
                         }

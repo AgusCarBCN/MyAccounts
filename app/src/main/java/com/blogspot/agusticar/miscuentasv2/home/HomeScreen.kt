@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -25,33 +24,26 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadCard
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
-import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
+import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import java.text.NumberFormat
-import java.util.Locale
-import kotlin.math.abs
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
 
 
 @Composable
 fun HomeScreen(
-    createAccountsViewModel: CreateAccountsViewModel
+    mainViewModel: MainViewModel,
+    accountsViewModel: AccountsViewModel,
+    entriesViewModel: EntriesViewModel
 ) {
-    val income = 3000.43
-    val expenses = -1200.78
+    val incomes by entriesViewModel.totalIncomes.observeAsState(0.0)
+    val expenses by entriesViewModel.totalExpenses.observeAsState(0.0)
+    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
 
     // Observa el estado de la lista de cuentas
-    val accounts by createAccountsViewModel.listOfAccounts.observeAsState(null)
-    // Observa el estado de la lista de cuentas
-
-    val currencyCode by createAccountsViewModel.currencyCode.observeAsState("")
-    val locale = currencyLocales[currencyCode] ?: Locale.GERMAN
-    // Formatear la cantidad en la moneda especificada
-    val numberFormat = NumberFormat.getCurrencyInstance(locale)
-    // Iniciar la carga de cuentas solo cuando el Composable se inicia
-    LaunchedEffect(Unit) {
-        createAccountsViewModel.getAllAccounts()
-    }
+    val accounts by accountsViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
 
     Column(
         modifier = Modifier
@@ -60,37 +52,50 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,  // Centra los elementos verticalmente
         horizontalAlignment = Alignment.CenterHorizontally  // Centra los elementos horizontalmente
     ) {
-        if (accounts.isNullOrEmpty()) {
+        if (accounts.isEmpty()) {
             Text(text = stringResource(id = R.string.noaccounts),
                 color = LocalCustomColorsPalette.current.textColor,
                 fontSize = 18.sp)
         }
         else{
             Row(modifier = Modifier.padding(top = 20.dp)) {
-                HeadCard(modifier = Modifier.weight(0.5f), numberFormat.format(abs(income)), true)
+                HeadCard(modifier = Modifier.weight(0.5f),
+                    Utils.numberFormat(incomes,currencyCode),
+                    true,
+                    onClickCard={mainViewModel.selectScreen(IconOptions.ENTRIES)
+                    entriesViewModel.getAllIncomes()
+                    })
                 Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
-                HeadCard(modifier = Modifier.weight(0.5f), numberFormat.format(abs(expenses)), false)
+                HeadCard(modifier = Modifier.weight(0.5f),
+                    Utils.numberFormat(expenses,currencyCode),
+                    false,
+                    onClickCard={mainViewModel.selectScreen(IconOptions.ENTRIES)
+                    entriesViewModel.getAllExpenses()
+                    })
             }
 
             Spacer(modifier = Modifier.width(5.dp))
-            HeadSetting(title = stringResource(id = R.string.youraccounts), size = 20)
-
-            // Si la lista de cuentas está cargando o vacía, muestra un indicador de carga o un mensaje
-
+            HeadSetting(title = stringResource(id = R.string.youraccounts),
+                size = 22)
 
             // Mostrar las cuentas si están disponibles
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                items(accounts!!) { account -> // Solo utiliza accounts
-                    AccountCard(
-                        numberFormat.format(abs(account.balance)),
-                        account.name, true
 
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+
+            ) {
+                items(accounts) { account -> // Solo utiliza accounts
+                    AccountCard(
+                        Utils.numberFormat(account.balance,currencyCode),
+                        account.name,
+                        R.string.seeall,
+                        onClickCard = { mainViewModel.selectScreen(IconOptions.ENTRIES)
+                            entriesViewModel.getAllEntriesByAccount(account.id)
+                        }
                     )  // Crea un card para cada cuenta en la lista
-                    Spacer(modifier = Modifier.height(10.dp))  // Espacio entre cada card (separación)
+                    Spacer(modifier = Modifier.height(20.dp))  // Espacio entre cada card (separación)
                 }
             }
         }

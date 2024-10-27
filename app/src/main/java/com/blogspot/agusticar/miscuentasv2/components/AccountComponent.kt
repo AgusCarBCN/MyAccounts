@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,29 +28,35 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import java.text.NumberFormat
-import java.util.Locale
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
+
 
 @Composable
-fun AccountSelector(title:String) {
+fun AccountSelector(title:String,accountViewModel:AccountsViewModel,isAccountDestination:Boolean = false) {
 
+
+    // Observa el estado de la lista de cuentas
+    val accounts by accountViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
+    val currencyCode by accountViewModel.currencyCode.observeAsState("USD")
+    accountViewModel.getAllAccounts()
     // Inicializamos el estado del VerticalPager con el número de páginas igual al tamaño de la lista de monedas.
-    val pagerState = rememberPagerState(pageCount = { 10 })
+
+    val pagerState = rememberPagerState(pageCount = { accounts.size })
     var previousPage by remember { mutableStateOf(0) }
     val toDown = R.drawable.arrow_down
     val toUp = R.drawable.arrow_up
     var isDraggingUp by remember { mutableStateOf(true) } // Inicializamos la flecha apuntando hacia arriba
-    val numberFormat = NumberFormat.getCurrencyInstance(
-        Locale.US)
-    val numberFormat2 = NumberFormat.getCurrencyInstance(Locale("ru", "RU"))
+
     Column(
         modifier = Modifier
-            .width(360.dp)
+            .width(320.dp)
             .background(LocalCustomColorsPalette.current.backgroundPrimary)
             .padding(5.dp),
         verticalArrangement = Arrangement.Center,
@@ -68,6 +76,7 @@ fun AccountSelector(title:String) {
                     id = if (isDraggingUp) toUp else toDown
                 ),
                 contentDescription = "",
+                tint = LocalCustomColorsPalette.current.textColor, // Color del icono
                 modifier = Modifier
                     .width(36.dp)
                     .padding(end = 8.dp) // Espacio entre el icono y el texto
@@ -80,7 +89,6 @@ fun AccountSelector(title:String) {
                 color = LocalCustomColorsPalette.current.textColor,  // Color del texto
                 modifier = Modifier
                     .padding(vertical = 10.dp),
-
                 textAlign = TextAlign.Start // Alinea el texto a la izquierda, cerca del ícono
             )
         }
@@ -105,13 +113,34 @@ fun AccountSelector(title:String) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 )
                 {
+                    //Se actualiza la cuenta seleccionada en viewModel
+                    if(isAccountDestination){
+                        accountViewModel.onDestinationAccountSelected(accounts[page])
+                    }else {
+                        accountViewModel.onAccountSelected(accounts[page])
+                    }
+                    val balanceFormat= Utils.numberFormat(accounts[page].balance,currencyCode)
                     // Texto de la moneda
-                    Text(
-                        text = "Santander ${numberFormat2.format(3000)}  ", // Descripción de la moneda
-                        fontSize = 18.sp,
-                        color = LocalCustomColorsPalette.current.textColor, // Color del texto
-                        textAlign = TextAlign.Center // Alinear el texto a la izquierda
-                    )
+                    Row (horizontalArrangement =Arrangement.Absolute.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    )  {
+                        Text(
+                            text = accounts[page].name, // Descripción de la moneda
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = LocalCustomColorsPalette.current.textColor, // Color del texto
+                            textAlign = TextAlign.Center // Alinear el texto a la izquierda
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Text(
+                            text = balanceFormat, // Descripción de la moneda
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = LocalCustomColorsPalette.current.incomeColor, // Color del texto
+                            textAlign = TextAlign.Center // Alinear el texto a la izquierda
+                        )
+                    }
+
                 }
             }
 
@@ -129,13 +158,11 @@ fun AccountSelector(title:String) {
 
                     previousPage = page
 
-                    Log.d("page", "Page: $page, isDraggingUp: $isDraggingUp")
-                    Log.d(
-                        "previouspage",
-                        "PreviousPage: $previousPage, isDraggingUp: $isDraggingUp"
-                    )
+
+
                 }
             }
         }
     }
 }
+

@@ -2,8 +2,6 @@ package com.blogspot.agusticar.miscuentasv2.main.data.database.repository
 
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dao.AccountDao
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class AccountRepository @Inject constructor(private val accountDao: AccountDao) {
@@ -43,6 +41,10 @@ class AccountRepository @Inject constructor(private val accountDao: AccountDao) 
     // 7. Actualizar el balance de una cuenta
     suspend fun updateAccountBalance(accountId: Int, newBalance: Double) {
         accountDao.updateAccountBalance(accountId, newBalance)
+    }
+    //8.Transferencia entre cuentas
+    suspend fun transferFunds(fromAccountId: Int, toAccountId: Int, amount: Double) {
+        accountDao.transferFunds(fromAccountId, toAccountId, amount)
     }
 
 

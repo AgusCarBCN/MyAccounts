@@ -1,6 +1,7 @@
 [versions]
 agp = "8.5.0"
 coilCompose = "2.4.0"
+commonsCsv = "1.5"
 composeModifiedSnackbar = "1.0.1"
 constraintlayoutCompose = "1.1.0-beta01"
 constraintlayoutVersion = "2.2.0-beta01"
@@ -22,6 +23,7 @@ navigationCompose = "2.8.1"
 roomRuntime = "2.6.1"
 runtimeLivedata = "1.7.2"
 composeMaterial3 = "1.0.0-alpha25"
+documentfile = "1.0.1"
 
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
@@ -36,6 +38,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRunt
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commonsCsv" }
 compose-modified-snackbar = { module = "com.github.saimon4u:Compose-Modified-Snackbar", version.ref = "composeModifiedSnackbar" }
 flagkit = { module = "com.github.madebybowtie:flagkit", version.ref = "flagkit" }
 flags = { module = "com.github.WilfriedA:Flags", version.ref = "flags" }
@@ -56,6 +59,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "composeMaterial3" }
+androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

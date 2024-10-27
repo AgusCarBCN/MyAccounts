@@ -19,8 +19,11 @@
     <string name="goodmornig">Good morning</string>
     <string name="goodafternoon">Good afternoon</string>
     <string name="goodevening">Good evening</string>
-
-
+    <!--Home-->
+    <string name="seeincome">See incomes</string>
+    <string name="seeexpense">See expenses</string>
+    <string name="seeall">See incomes and expenses</string>
+    <string name="yourentries">Your notes</string>
 
     <!--String onBoarding -->
     <string name="wellcomeOnBoarding">Wellcome to MyAccountsApp</string>
@@ -79,6 +82,11 @@
     <string name="selectcurrency">Select a currency for your accounts.</string>
     <string name="selectedcurrency">Selected currency: </string>
     <!--Settings-->
+    <string name="modify">Modify this account</string>
+    <string name="delete_data_account">Delete the account and all its records</string>
+    <string name="deleteaccount">Delete this account</string>
+    <string name="edit_account">Modify an account</string>
+    <string name="desedit_account"> Change the name and balance of your accounts.</string>
     <string name="appsettings">App Settings</string>
     <string name="theme">App theme</string>
     <string name="enableonboarding">Onboarding.</string>
@@ -89,22 +97,20 @@
     <string name="createbackup">Create backup</string>
     <string name="loadbackup">Load backup</string>
     <string name="deleteall">Delete all</string>
-    <string name="desbackup">Save a backup of your road records.</string>
-    <string name="desload">Load the backup file of your road records.</string>
+    <string name="desbackup">Save a backup of your records.</string>
+    <string name="desload">Load the backup file of your records.</string>
     <string name="desdeleteall">Delete all records.</string>
     <string name="backup">Backup management</string>
-    <string name="delete_data_account">Delete data from an account</string>
     <string name="delete_an_account">Delete an account</string>
     <string name="delete_all">Delete all</string>
-    <string name="rename_account">Rename an account</string>
     <string name="add_an_account">Add an account</string>
     <string name="desdelete_data_account">Delete all the transactions you have made in an account.</string>
-    <string name="desdelete_an_account">Delete the account along with all its records.</string>
+    <string name="desdelete_an_account">Delete an account along with all its records.</string>
     <string name="desdelete_all">Delete all accounts and all their records inside.</string>
-    <string name="desrename_account">Give a new name to one of your accounts.</string>
     <string name="desadd_an_account">Add a new account to the application.</string>
     <string name="changecurrency">Change currency</string>
     <string name="deschangecurrency">Change the currency of your accounts.</string>
+    <string name="email">agusticar@gmail.com</string>
     <!--Profile-->
     <string name="change">Change</string>
     <string name="name">Name</string>
@@ -119,6 +125,22 @@
     <string name="nameUpdated">Name updated</string>
     <string name="passwordUpdated">Password updated</string>
     <string name="photoUpdated">Profile photo updated</string>
+    <string name="newaccountcreated">You have created a new account</string>
+    <string name="newincomecreated">You have inserted a new income</string>
+    <string name="newexpensecreated">You have inserted a new expense</string>
+    <string name="transferdone">Transfer done</string>
+    <string name="overbalance">Amount over balance</string>
+    <string name="transferfrom">Expense by transfer</string>
+    <string name="transferTo">Income by transfer</string>
+    <string name="namechanged">You have changed the account name</string>
+    <string name="amountchanged">You have changed the account balance</string>
+    <string name="errorexport">Error export file</string>
+    <string name="errorimport">Error import file</string>
+    <string name="erroraccountcreated">Error creating an account</string>
+    <string name="errorwritingdatastore">Error writing to DataStore</string>
+    <string name="errorreadingdatastore">Error reading to DataStore</string>
+    <string name="datefromoverdateto">Date from is over date to</string>
+    <string name="amountfromoverdateto">Amount from is over amount to</string>
     <!--TopBar titles-->
     <string name="hometitle">Home</string>
     <string name="searchtitle">Search</string>
@@ -192,7 +214,6 @@
     <string name="donations_title">Donations</string>
     <string name="personal_care_title">Personal Care</string>
     <string name="car">Car</string>
-
     <string name="salary">Salary</string>
     <string name="lotery">Lotery</string>
     <string name="dividens">Dividends</string>
@@ -230,4 +251,29 @@
     <string name="amountentrie">Enter an amount</string>
     <string name="noaccounts">There are no accounts created yet</string>
     <string name="youraccounts">Your accounts</string>
+    <!--Dialog-->
+    <string name="cancelButton">Cancel</string>
+    <string name="exitinfo">Are you sure you want log out?</string>
+    <string name="titleexit">Confirm exit</string>
+    <string name="deleteinfo">¿Are you sure you want delete an account?</string>
+    <string name="titledelete">Confirm delete account</string>
+    <!--backup-->
+    <string name="exportData">Export data</string>
+    <string name="filename">Give a name to CSV file</string>
+    <string name="download">Download file </string>
+    <string name="upload">Backup file </string>
+    <string name="filenamelabel">CSV file name</string>
+    <!--entries-->
+    <string name="bydate">By date</string>
+    <string name="bycategory">By category</string>
+    <string name="noentries">There are no entries yet</string>
+    <!--search-->
+    <string name="searchentries">Search entries(optional)</string>
+    <string name="fromdate">From</string>
+    <string name="todate">To</string>
+    <string name="fromamount">From amount(optional)</string>
+    <string name="toamount">To amount(optional)</string>
+    <string name="incomeoption">Incomes</string>
+    <string name="expenseoption">Expenses</string>
+    <string name="alloption">Incomes and Expenses</string>
 </resources>

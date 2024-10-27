@@ -37,29 +37,37 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
-import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.main.model.UserProfile
+import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @Composable
-fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
-                           navToBackLogin:()->Unit,
-                           navToCreateAccounts:()->Unit) {
+fun CreateProfileComponent(
+    createViewModel: ProfileViewModel,
+    navToBackLogin: () -> Unit,
+    navToCreateAccounts: () -> Unit
+) {
 
 
     val name by createViewModel.name.observeAsState("")
     val userName by createViewModel.username.observeAsState("")
     val password by createViewModel.password.observeAsState("")
-    val selectedImageUri by createViewModel.selectedImageUri.observeAsState( null)
+    val selectedImageUri by createViewModel.selectedImageUri.observeAsState(null)
     //val selectedImageUriSaved by createViewModel.selectedImageUri.observeAsState( null)
     val repeatPassword by createViewModel.repeatPassword.observeAsState("")
     val scope = rememberCoroutineScope()
     val enableButton by createViewModel.enableButton.observeAsState(false)
 
+    val errorWritingDataStore = message(resource = R.string.errorwritingdatastore)
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -92,7 +100,14 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.enterName),
                 name,
-                onTextChange = {createViewModel.onTextFieldsChanged(it,userName,password,repeatPassword) },
+                onTextChange = {
+                    createViewModel.onTextFieldsChanged(
+                        it,
+                        userName,
+                        password,
+                        repeatPassword
+                    )
+                },
                 BoardType.TEXT,
                 false
             )
@@ -100,7 +115,14 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.enterUsername),
                 userName,
-                onTextChange ={createViewModel.onTextFieldsChanged(name,it,password,repeatPassword) } ,
+                onTextChange = {
+                    createViewModel.onTextFieldsChanged(
+                        name,
+                        it,
+                        password,
+                        repeatPassword
+                    )
+                },
                 BoardType.TEXT,
                 false
             )
@@ -108,7 +130,14 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.enterPassword),
                 password,
-                onTextChange = {createViewModel.onTextFieldsChanged(name,userName,it,repeatPassword) },
+                onTextChange = {
+                    createViewModel.onTextFieldsChanged(
+                        name,
+                        userName,
+                        it,
+                        repeatPassword
+                    )
+                },
                 BoardType.PASSWORD,
                 true
             )
@@ -116,7 +145,14 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 modifier = Modifier.width(360.dp),
                 stringResource(id = R.string.repeatpassword),
                 repeatPassword,
-                onTextChange = {createViewModel.onTextFieldsChanged(name,userName,password,it) },
+                onTextChange = {
+                    createViewModel.onTextFieldsChanged(
+                        name,
+                        userName,
+                        password,
+                        it
+                    )
+                },
                 BoardType.PASSWORD,
                 true
             )
@@ -126,20 +162,24 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 enableButton,
                 onClickButton = {
                     navToCreateAccounts()
-                    try {
-                        scope.launch {
+
+                    scope.launch(Dispatchers.IO) {
+                        try {
                             createViewModel.setUserDataProfile(
                                 UserProfile(
                                     name, userName, password
                                 )
                             )
                             selectedImageUri?.let { createViewModel.saveImageUri(it) }
-                            //createViewModel.saveImageUri(selectedImageUri!!)}
-                            Log.d("SaveFromCreate", selectedImageUri.toString())
+                        } catch (e: Exception) {
+                            withContext(Dispatchers.Main) {
+                                SnackBarController.sendEvent(
+                                    event = SnackBarEvent(
+                                        errorWritingDataStore
+                                    )
+                                )
+                            }
                         }
-                        Log.d("SaveFromCreate", selectedImageUri.toString())
-                    }catch (e: Exception) {
-                        Log.e("DataStore", "Error writing to DataStore", e)
                     }
                 }
             )
@@ -150,22 +190,19 @@ fun CreateProfileComponent(createViewModel:CreateProfileViewModel,
                 true,
                 onClickButton = {
                     navToBackLogin()
-                    //navigationController.navigate(Routes.Login.route)
                 }
             )
-
         }
-
     }
 }
 
 @Composable
 
-fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
+fun ProfileImageWithCamera(viewModel: ProfileViewModel) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val selectedImageUriSelected by viewModel.selectedImageUri.observeAsState( null)
-    val selectedImageUriSavedFromFile by viewModel.selectedImageUriSaved.observeAsState( null)
+    val selectedImageUriSelected by viewModel.selectedImageUri.observeAsState(null)
+    val selectedImageUriSavedFromFile by viewModel.selectedImageUriSaved.observeAsState(null)
     // Llama a `onImageNoSelected()` si no hay una imagen seleccionada o guardada
     //viewModel.onImageNoSelected()
     // Lanza el selector de imágenes
@@ -173,7 +210,7 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         selectedImageUri = uri
-        selectedImageUri?.let { viewModel.onImageSelected(it)}
+        selectedImageUri?.let { viewModel.onImageSelected(it) }
         Log.d("AfterClickImageSaved", selectedImageUriSavedFromFile.toString())
         Log.d("AfterClickImage", selectedImageUri.toString())
         Log.d("AfterClickImageSelected", selectedImageUriSelected.toString())
@@ -193,9 +230,11 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
             shape = CircleShape, // Hace que el Card sea circular
             // Reemplaza lightYellow
         ) {
-            if(selectedImageUri==null) {
+            if (selectedImageUri == null) {
                 Image(
-                    painter = if(selectedImageUriSavedFromFile==null || selectedImageUriSavedFromFile==Uri.EMPTY)painterResource(id = R.drawable.contabilidad)
+                    painter = if (selectedImageUriSavedFromFile == null || selectedImageUriSavedFromFile == Uri.EMPTY) painterResource(
+                        id = R.drawable.contabilidad
+                    )
                     else rememberAsyncImagePainter(model = selectedImageUriSavedFromFile), // Reemplaza con tu imagen de placeholder
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
@@ -212,13 +251,14 @@ fun ProfileImageWithCamera(viewModel: CreateProfileViewModel) {
                             .data(uri)
                             .crossfade(true)
                             .build()
-                    ) ,
+                    ),
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize() // La imagen ocupa todo el Card
 
-                )}
+                )
+            }
         }
 
         // Ícono de cámara superpuesto en la esquina inferior izquierda

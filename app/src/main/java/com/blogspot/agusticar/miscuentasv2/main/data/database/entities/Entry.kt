@@ -10,19 +10,22 @@ import java.util.Date
 
 @Entity(
     tableName = "EntryEntity",
-    foreignKeys = [ForeignKey(
-        entity = Category::class, // La entidad a la que se refiere
-        parentColumns = ["id"], // La columna de la tabla padre
-        childColumns = ["categoryId"], // La columna en Entry que hace referencia a Category
-        onDelete = ForeignKey.CASCADE // Si se elimina una categoría, se eliminarán las entradas relacionadas
-    )]
+    foreignKeys = [
+        ForeignKey(
+            entity = Account::class, // Relación uno a muchos con Account
+            parentColumns = ["id"], // La columna id de Account
+            childColumns = ["accountId"], // Referencia a accountId en Entry
+            onDelete = ForeignKey.CASCADE // Si se elimina una cuenta, se eliminan las entradas relacionadas
+        )
+    ]
 )
-
 data class Entry(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo("id")  val id: Int = 0,
-    @ColumnInfo("description") val description: String,
-    @ColumnInfo("balance")var amount: Double,
-    @ColumnInfo("date") val date: String = Date().dateFormat(),
-    @ColumnInfo(name = "categoryId") val categoryId: Int // Clave foránea que refiere a Category
+    @ColumnInfo(name = "id") val id: Long = 0,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "amount") var amount: Double,
+    @ColumnInfo(name = "date") val date: String = Date().dateFormat(),
+    @ColumnInfo(name = "categoryId") val categoryId: Int, //Recurso de icono para identificar categorias de entradas
+    @ColumnInfo(name = "categoryName") val categoryName: Int, //Recurso de icono para identificar categorias de entradas
+    @ColumnInfo(name = "accountId") val accountId: Int // Relación uno a muchos con Account
 )

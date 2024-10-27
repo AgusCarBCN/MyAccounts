@@ -26,17 +26,17 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Text
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
-import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 @Composable
-fun CurrencySelector(createAccountsViewModel: CreateAccountsViewModel) {
+fun CurrencySelector(accountsViewModel: AccountsViewModel) {
     // Obtener el estado actual de la moneda seleccionada
-    val currencyCode by createAccountsViewModel.currencyCode.observeAsState("USD")
+    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
     // Obtener el estado de expansión desde el ViewModel
-    val isExpanded by createAccountsViewModel.isCurrencyExpanded.observeAsState(false)
+    val isExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
     // Obtener la lista de divisas desde el ViewModel
-    val currencies = createAccountsViewModel.getListOfCurrencyCode()
+    val currencies = accountsViewModel.getListOfCurrencyCode()
 
     // Contenedor principal
     Column(
@@ -62,7 +62,7 @@ fun CurrencySelector(createAccountsViewModel: CreateAccountsViewModel) {
                 text = "Select Currency",
                 R.dimen.text_title_medium,
                 modifier = Modifier.fillMaxWidth(),
-                onClickButton = { createAccountsViewModel.onExpandedChange(true) }
+                onClickButton = { accountsViewModel.onExpandedChange(true) }
             )
 
             // Mostrar la moneda seleccionada actualmente
@@ -86,9 +86,10 @@ fun CurrencySelector(createAccountsViewModel: CreateAccountsViewModel) {
                     // Elemento de la lista
                     CurrencyListItem(currency) {
                         // Acción al seleccionar la moneda
-                        createAccountsViewModel.onCurrencySelectedChange(currency.currencyCode)
+                        accountsViewModel.onCurrencySelectedChange(currency.currencyCode)
+                        accountsViewModel.setCurrencyCode(currencyCode)
                         // Cambia el estado a colapsado
-                        createAccountsViewModel.onExpandedChange(false)
+                        accountsViewModel.onExpandedChange(false)
                     }
                 }
             }
