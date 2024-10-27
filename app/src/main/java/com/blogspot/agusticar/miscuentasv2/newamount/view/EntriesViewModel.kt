@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
@@ -12,11 +13,13 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.G
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllEntriesDatabaseUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllIncomesUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetFilteredEntriesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -26,6 +29,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,6 +40,7 @@ class EntriesViewModel @Inject constructor(
     private val getAllEntriesDB:GetAllEntriesDatabaseUseCase,
     private val getAllIncomes:GetAllIncomesUseCase,
     private val getAllExpenses:GetAllExpensesUseCase,
+    private val getFilteredEntries:GetFilteredEntriesUseCase,
     private val getAllEntriesByAccount: GetAllEntriesByAccountUseCase
 
 ) : ViewModel() {
@@ -85,6 +90,34 @@ class EntriesViewModel @Inject constructor(
 
     init{
         getTotal()
+    }
+    fun getFilteredEntries(accountId: Int,
+                           dateFrom: String = Date().dateFormat(),
+                           dateTo: String = Date().dateFormat(),
+                           amountMin: Double = 0.0,
+                           amountMax: Double = Double.MAX_VALUE,
+                           selectedOptions: Int = 0)
+
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            flow {
+                val entries = getFilteredEntries.invoke(accountId,
+                    dateFrom,
+                    dateTo,
+                    amountMin,
+                    amountMax,
+                    selectedOptions)
+                emit(entries)
+            }
+                .catch { e ->
+                    // Manejo de errores
+                    _listOfEntriesDB.value = emptyList() // O alguna acción que maneje el error
+                    Log.e("ViewModel", "Error getting incomes: ${e.message}")
+                }
+                .collect { entries ->
+                    _listOfEntries.value = entries
+                }
+        }
     }
 
     fun getAllEntriesDataBase(){

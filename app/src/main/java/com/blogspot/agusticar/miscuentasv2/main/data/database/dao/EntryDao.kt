@@ -8,7 +8,9 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
-import java.time.LocalDate
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
+import java.util.Date
+
 @Dao
 interface EntryDao {
 
@@ -55,7 +57,6 @@ interface EntryDao {
     suspend fun getEntriesByAmount(minAmount: Double): List<Entry>
 
 
-
     @Transaction
     @Query("SELECT * FROM EntryEntity WHERE categoryId = :categoryId ORDER BY date DESC")
     suspend fun getEntriesByCategory(categoryId: Int): List<Entry>
@@ -70,7 +71,8 @@ interface EntryDao {
     suspend fun getSumOfExpenseEntries(): Double?
 
 
-    @Query("""
+    @Query(
+        """
     SELECT e.description,
            e.amount,
            e.date,
@@ -81,10 +83,12 @@ interface EntryDao {
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
     WHERE e.amount >= 0
-""")
+"""
+    )
     suspend fun getAllIncomesDTO(): List<EntryDTO>
 
-    @Query("""
+    @Query(
+        """
     SELECT e.description,
            e.amount,
            e.date,
@@ -95,10 +99,12 @@ interface EntryDao {
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
     WHERE e.amount < 0
-""")
+"""
+    )
     suspend fun getAllExpensesDTO(): List<EntryDTO>
 
-    @Query("""
+    @Query(
+        """
     SELECT e.description,
            e.amount,
            e.date,
@@ -109,10 +115,12 @@ interface EntryDao {
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
    
-""")
+"""
+    )
     suspend fun getAllEntriesDTO(): List<EntryDTO>
 
-    @Query("""
+    @Query(
+        """
     SELECT e.description,
            e.amount,
            e.date,
@@ -123,9 +131,40 @@ interface EntryDao {
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
    WHERE accountId = :accountId
-""")
-    suspend fun getAllEntriesByAccountDTO(accountId:Int): List<EntryDTO>
+"""
+    )
+    suspend fun getAllEntriesByAccountDTO(accountId: Int): List<EntryDTO>
 
+    @Query(
+        """
+    SELECT e.description,
+           e.amount,
+           e.date,
+           e.categoryName,
+           e.categoryId,
+           e.accountId,
+           a.name 
+    FROM EntryEntity e
+    INNER JOIN AccountEntity a ON e.accountId = a.id
+    WHERE accountId = :accountId
+        AND(:dateFrom IS NULL OR date >= :dateFrom)
+        AND (:dateTo IS NULL OR date <= :dateTo)
+        AND (:amountMin IS  NULL OR amount >= :amountMin OR :amountMax IS NULL OR amount <= :amountMax)
+        AND (
+            :selectedOptions = 2131624295 OR 
+            (:selectedOptions = 2131624297 AND amount > 0.0) OR 
+            (:selectedOptions = 2131624296 AND amount < 0.0)
+        )
+"""
+    )
+    suspend fun getFilteredEntriesDTO(
+        accountId: Int,
+        dateFrom: String = Date().dateFormat(),
+        dateTo: String = Date().dateFormat(),
+        amountMin: Double = 0.0,
+        amountMax: Double = Double.MAX_VALUE,
+        selectedOptions: Int = 0
+    ): List<EntryDTO> // 0 = todos, 1 = positivos, -1 = negativos
 
 }
 

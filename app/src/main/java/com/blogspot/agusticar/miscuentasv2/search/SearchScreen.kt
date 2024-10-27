@@ -26,7 +26,9 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.RadioButtonSearch
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
@@ -38,16 +40,19 @@ import java.util.Date
 fun SearchScreen(
     accountViewModel: AccountsViewModel,
     searchViewModel: SearchViewModel,
+    entriesViewModel: EntriesViewModel,
     mainViewModel: MainViewModel
 ) {
-    val fromAmount by searchViewModel.fromAmount.observeAsState("")
-    val toAmount by searchViewModel.toAmount.observeAsState("")
+    val fromAmount by searchViewModel.fromAmount.observeAsState("0.0")
+    val toAmount by searchViewModel.toAmount.observeAsState("0.0")
     val toDate by searchViewModel.selectedToDate.observeAsState(Date().dateFormat())
     val fromDate by searchViewModel.selectedFromDate.observeAsState(Date().dateFormat())
     val entryDescription by searchViewModel.entryDescription.observeAsState("")
     val enableSearchButton by searchViewModel.enableSearchButton.observeAsState(false)
+    val selectedAccount by accountViewModel.accountSelected.observeAsState()
+    val selectedOption by searchViewModel.selectedOption.observeAsState()
+    val id=selectedAccount?.id?:0
     val scope = rememberCoroutineScope()
-
     val messageAmountError = stringResource(id = R.string.amountfromoverdateto)
     val messageDateError = stringResource(id = R.string.datefromoverdateto)
     searchViewModel.onEnableSearchButton()
@@ -147,8 +152,18 @@ fun SearchScreen(
             modifier = Modifier.width(360.dp),
             enableSearchButton,
             onClickButton = {
-                Log.d("Date", "datefrom: $fromDate")
-                Log.d("Date", "dateto: $toDate")
+                entriesViewModel.getFilteredEntries(id,
+                    fromDate,
+                    toDate,
+                    fromAmount.toDoubleOrNull() ?:0.0,
+                    toAmount.toDoubleOrNull()?:0.0,
+                    selectedOption?:0)
+                mainViewModel.selectScreen(IconOptions.ENTRIES)
+                Log.d("data","fromDate: $fromDate")
+                Log.d("data","toDate: $toDate")
+                Log.d("data","fromAmount: $fromAmount")
+                Log.d("data","toAmount: $toAmount")
+                Log.d("data","selectOption: $selectedOption")
             }
         )
 

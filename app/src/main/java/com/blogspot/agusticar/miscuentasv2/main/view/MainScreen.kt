@@ -162,7 +162,7 @@ fun MainScreen(
                         }
 
                         IconOptions.SEARCH -> {
-                            SearchScreen(accountsViewModel,searchViewModel,mainViewModel)
+                            SearchScreen(accountsViewModel,searchViewModel,entriesViewModel,mainViewModel)
                             title = R.string.searchtitle
                         }
                         IconOptions.SETTINGS -> {
