@@ -32,8 +32,6 @@ import androidx.compose.ui.window.Popup
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
-import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
-import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,8 +52,8 @@ fun DatePickerSearch(
     Box(modifier = Modifier.width(160.dp)) {
         TextField(
             value = selectedDate,
-            onValueChange = { if(isDateFrom)searchViewModel.onDateToSelected(selectedDate)
-                            else searchViewModel.onDateFromSelected(selectedDate)},
+            onValueChange = { if(isDateFrom)searchViewModel.onToDateSelected(selectedDate)
+                            else searchViewModel.onFromDateSelected(selectedDate)},
             label = { Text(stringResource(label)) },
             readOnly = true,
             trailingIcon = {

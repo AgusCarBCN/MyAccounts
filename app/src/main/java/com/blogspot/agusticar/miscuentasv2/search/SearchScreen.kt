@@ -31,8 +31,9 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 fun SearchScreen(accountViewModel:AccountsViewModel,
                  searchViewModel: SearchViewModel,
                  mainViewModel: MainViewModel) {
-    val amountFrom by searchViewModel.amountFrom.observeAsState("")
-    val amountTo by searchViewModel.amountTo.observeAsState("")
+    val fromAmount by searchViewModel.fromAmount.observeAsState("")
+    val toAmount by searchViewModel.toAmount.observeAsState("")
+    val T
     val entryDescription by searchViewModel.entryDescription.observeAsState("")
 
     Column( modifier = Modifier
@@ -45,7 +46,7 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.searchentries),
             entryDescription,
-            onTextChange = {searchViewModel.onDescriptionEntryChanged(it) },
+            onTextChange = {searchViewModel.onEntryDescriptionChanged(it) },
             BoardType.TEXT,
             false
         )
@@ -63,7 +64,7 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.fromamount),
             amountFrom,
-            onTextChange = { searchViewModel.onAmountFromChanged(it) },
+            onTextChange = { searchViewModel.onFromAmountChanged(it) },
             BoardType.DECIMAL,
             false
         )
@@ -71,7 +72,7 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.toamount),
             amountTo,
-            onTextChange = { searchViewModel.onAmountToChanged(it) },
+            onTextChange = { searchViewModel.onToAmountChanged(it) },
             BoardType.DECIMAL,
             false
         )

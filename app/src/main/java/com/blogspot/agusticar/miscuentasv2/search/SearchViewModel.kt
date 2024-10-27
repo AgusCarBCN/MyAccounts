@@ -11,47 +11,47 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     private val _showDatePicker = MutableLiveData<Boolean>()
     val showDatePicker: LiveData<Boolean> = _showDatePicker
 
-    private val _selectedDateFrom = MutableLiveData<String>()
-    val selectedDateFrom: LiveData<String> = _selectedDateFrom
+    private val _selectedFromDate = MutableLiveData<String>()
+    val selectedFromDate: LiveData<String> = _selectedFromDate
 
-    private val _selectedDateTo = MutableLiveData<String>()
-    val selectedDateTo: LiveData<String> = _selectedDateTo
+    private val _selectedToDate = MutableLiveData<String>()
+    val selectedToDate: LiveData<String> = _selectedToDate
 
     private val _entryDescription = MutableLiveData<String>()
     val entryDescription: LiveData<String> = _entryDescription
 
-    private val _amountFrom = MutableLiveData<String>()
-    val amountFrom: LiveData<String> = _amountFrom
+    private val _fromAmount = MutableLiveData<String>()
+    val fromAmount: LiveData<String> = _fromAmount
 
-    private val _amountTo = MutableLiveData<String>()
-    val amountTo: LiveData<String> = _amountTo
+    private val _toAmount = MutableLiveData<String>()
+    val toAmount: LiveData<String> = _toAmount
 
 
     fun onShowDatePicker(newValue: Boolean) {
         _showDatePicker.value = newValue
     }
 
-    fun onDateFromSelected(date: String) {
-        _selectedDateFrom.value = date
+    fun onFromDateSelected(date: String) {
+        _selectedFromDate.value = date
     }
 
-    fun onDateToSelected(date: String) {
-        _selectedDateTo.value = date
+    fun onToDateSelected(date: String) {
+        _selectedToDate.value = date
     }
 
-    fun onAmountFromChanged(newAmount: String) {
+    fun onFromAmountChanged(newAmount: String) {
         // Validar y actualizar el valor de amount
         if (Utils.isValidDecimal(newAmount)) {
-            _amountFrom.value = newAmount
+            _fromAmount.value = newAmount
         }
     }
-    fun onAmountToChanged(newAmount: String) {
+    fun onToAmountChanged(newAmount: String) {
         // Validar y actualizar el valor de amount
         if (Utils.isValidDecimal(newAmount)) {
-            _amountTo.value = newAmount
+            _toAmount.value = newAmount
         }
     }
-    fun onDescriptionEntryChanged(newDescription: String) {
+    fun onEntryDescriptionChanged(newDescription: String) {
         _entryDescription.value = newDescription
     }
 
