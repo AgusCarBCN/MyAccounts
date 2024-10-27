@@ -25,6 +25,8 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
+import java.util.Date
 
 
 @Composable
@@ -33,7 +35,8 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
                  mainViewModel: MainViewModel) {
     val fromAmount by searchViewModel.fromAmount.observeAsState("")
     val toAmount by searchViewModel.toAmount.observeAsState("")
-    val T
+    val toDate by searchViewModel.selectedToDate.observeAsState(Date().dateFormat())
+    val fromDate by searchViewModel.selectedFromDate.observeAsState(Date().dateFormat())
     val entryDescription by searchViewModel.entryDescription.observeAsState("")
 
     Column( modifier = Modifier
@@ -63,7 +66,7 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.fromamount),
-            amountFrom,
+            fromAmount,
             onTextChange = { searchViewModel.onFromAmountChanged(it) },
             BoardType.DECIMAL,
             false
@@ -71,7 +74,7 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.toamount),
-            amountTo,
+            toAmount,
             onTextChange = { searchViewModel.onToAmountChanged(it) },
             BoardType.DECIMAL,
             false
