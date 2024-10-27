@@ -20,6 +20,7 @@ import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.DatePickerSearch
 
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
+import com.blogspot.agusticar.miscuentasv2.components.RadioButtonSearch
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
@@ -63,6 +64,7 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             DatePickerSearch(modifier = Modifier.weight(0.5f),R.string.todate,searchViewModel,false)
         }
         AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
+        RadioButtonSearch()
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.fromamount),
@@ -85,14 +87,6 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             true,
             onClickButton = {
 
-            }
-        )
-        ModelButton(text = stringResource(id = R.string.backButton),
-            R.dimen.text_title_small,
-            modifier = Modifier.width(360.dp),
-            true,
-            onClickButton = {
-            mainViewModel.selectScreen(IconOptions.HOME)
             }
         )
 
