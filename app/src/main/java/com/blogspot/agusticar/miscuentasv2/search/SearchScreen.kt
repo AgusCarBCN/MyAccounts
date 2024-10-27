@@ -49,7 +49,7 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
     val scope = rememberCoroutineScope()
 
     val messageAmountError= stringResource(id = R.string.amountfromoverdateto)
-    val messageDateError= stringResource(id = R.string.datefromoverdateto)
+
     searchViewModel.onEnableSearchButton()
     Column( modifier = Modifier
         .fillMaxWidth()

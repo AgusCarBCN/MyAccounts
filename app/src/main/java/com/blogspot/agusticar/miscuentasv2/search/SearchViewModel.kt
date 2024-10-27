@@ -59,8 +59,11 @@ init {
 
         if(isDateFrom) {
            _selectedFromDate.value = date
+
+
        }else{
            _selectedToDate.value = date
+
        }
     }
 

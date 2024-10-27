@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -51,15 +52,19 @@ fun DatePickerSearch(
     } else {
         searchViewModel.selectedToDate.observeAsState("")
     }.value
+    //Mensaje de error de fechas
+    val messageDateError= stringResource(id = R.string.datefromoverdateto)
 
-    val datePickerState = rememberDatePickerState()
 
+// Estado del DatePicker
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = null) // Reiniciamos el estado para cada nueva apertura
     // Actualiza la fecha en el ViewModel al cambiar la selección en DatePicker
     datePickerState.selectedDateMillis?.let { selectedMillis ->
         val dateString = Utils.convertMillisToDate(selectedMillis)
         searchViewModel.onSelectedDate(dateString, isDateFrom)
-        searchViewModel.onShowDatePicker(false, isDateFrom) // Cierra el DatePicker automáticamente
+
     }
+
 
     Box(modifier = Modifier.width(160.dp)) {
         TextField(
@@ -68,7 +73,8 @@ fun DatePickerSearch(
             label = { Text(stringResource(label)) },
             readOnly = true,
             trailingIcon = {
-                IconButton(onClick = { searchViewModel.onShowDatePicker(true,isDateFrom)}) {
+                IconButton(onClick = { searchViewModel.onShowDatePicker(true,isDateFrom)}
+                ) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
                         contentDescription = "Select date"
@@ -112,6 +118,7 @@ fun DatePickerSearch(
                 ) {
                     DatePicker(
                         state = datePickerState,
+
                         showModeToggle = false,
                         colors = DatePickerColors(
                             containerColor = LocalCustomColorsPalette.current.drawerColor,
