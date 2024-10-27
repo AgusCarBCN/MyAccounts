@@ -35,9 +35,11 @@ import java.util.Date
 
 
 @Composable
-fun SearchScreen(accountViewModel:AccountsViewModel,
-                 searchViewModel: SearchViewModel,
-                 mainViewModel: MainViewModel) {
+fun SearchScreen(
+    accountViewModel: AccountsViewModel,
+    searchViewModel: SearchViewModel,
+    mainViewModel: MainViewModel
+) {
     val fromAmount by searchViewModel.fromAmount.observeAsState("")
     val toAmount by searchViewModel.toAmount.observeAsState("")
     val toDate by searchViewModel.selectedToDate.observeAsState(Date().dateFormat())
@@ -46,31 +48,45 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
     val enableSearchButton by searchViewModel.enableSearchButton.observeAsState(false)
     val scope = rememberCoroutineScope()
 
-    val messageAmountError= stringResource(id = R.string.amountfromoverdateto)
-
+    val messageAmountError = stringResource(id = R.string.amountfromoverdateto)
+    val messageDateError = stringResource(id = R.string.datefromoverdateto)
     searchViewModel.onEnableSearchButton()
-    Column( modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 30.dp)
-        .background(LocalCustomColorsPalette.current.backgroundPrimary),
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 30.dp)
+            .background(LocalCustomColorsPalette.current.backgroundPrimary),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally){
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.searchentries),
             entryDescription,
-            onTextChange = {searchViewModel.onEntryDescriptionChanged(it) },
+            onTextChange = { searchViewModel.onEntryDescriptionChanged(it) },
             BoardType.TEXT,
             false
         )
 
-        Row(modifier = Modifier
-            .width(360.dp)
-            .fillMaxWidth(),
+        Row(
+            modifier = Modifier
+                .width(360.dp)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically) {
-           DatePickerSearch(modifier = Modifier.weight(0.5f),R.string.fromdate,searchViewModel,true)
-            DatePickerSearch(modifier = Modifier.weight(0.5f),R.string.todate,searchViewModel,false)
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            DatePickerSearch(
+                modifier = Modifier.weight(0.5f),
+                R.string.fromdate,
+                searchViewModel,
+                true
+            )
+            DatePickerSearch(
+                modifier = Modifier.weight(0.5f),
+                R.string.todate,
+                searchViewModel,
+                false
+            )
         }
         AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
         RadioButtonSearch(searchViewModel)
@@ -78,9 +94,25 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.fromamount),
             fromAmount,
-            onTextChange = { searchViewModel.onAmountsFieldsChange(it,toAmount)
-
-                               },
+            onTextChange = {
+                searchViewModel.onAmountsFieldsChange(it, toAmount)
+                scope.launch(Dispatchers.Main) {
+                    if (!searchViewModel.validateAmounts(fromAmount, toAmount)) {
+                        SnackBarController.sendEvent(
+                            event = SnackBarEvent(
+                                messageAmountError
+                            )
+                        )
+                    }
+                    if(!searchViewModel.validateDates()){
+                        SnackBarController.sendEvent(
+                            event = SnackBarEvent(
+                                messageDateError
+                            )
+                        )
+                    }
+                }
+            },
             BoardType.DECIMAL,
             false
         )
@@ -88,17 +120,25 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             stringResource(id = R.string.toamount),
             toAmount,
-            onTextChange = {  searchViewModel.onAmountsFieldsChange(fromAmount,it)
+            onTextChange = {
+                searchViewModel.onAmountsFieldsChange(fromAmount, it)
                 scope.launch(Dispatchers.Main) {
-                    if(!searchViewModel.validateAmounts(fromAmount, toAmount)){
+                    if (!searchViewModel.validateAmounts(fromAmount, toAmount)) {
                         SnackBarController.sendEvent(
                             event = SnackBarEvent(
                                 messageAmountError
                             )
                         )
                     }
+                    if(!searchViewModel.validateDates()){
+                        SnackBarController.sendEvent(
+                            event = SnackBarEvent(
+                                messageDateError
+                            )
+                        )
+                    }
                 }
-             },
+            },
             BoardType.DECIMAL,
             false
         )
@@ -107,8 +147,8 @@ fun SearchScreen(accountViewModel:AccountsViewModel,
             modifier = Modifier.width(360.dp),
             enableSearchButton,
             onClickButton = {
-            Log.d("Date","datefrom: $fromDate")
-                Log.d("Date","dateto: $toDate")
+                Log.d("Date", "datefrom: $fromDate")
+                Log.d("Date", "dateto: $toDate")
             }
         )
 

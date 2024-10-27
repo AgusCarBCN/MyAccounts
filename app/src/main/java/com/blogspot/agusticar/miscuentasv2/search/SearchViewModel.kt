@@ -1,6 +1,5 @@
 package com.blogspot.agusticar.miscuentasv2.search
 
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +12,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor() : ViewModel() {
 
     // Lista de opciones como identificadores de recursos
-     val options = listOf(R.string.incomeoption, R.string.expenseoption, R.string.alloption)
+    val options = listOf(R.string.incomeoption, R.string.expenseoption, R.string.alloption)
 
     // LiveData para la opción seleccionada
     private val _selectedOption = MutableLiveData(options[0])
@@ -42,35 +41,34 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
     private val _enableSearchButton = MutableLiveData<Boolean>()
     val enableSearchButton: LiveData<Boolean> = _enableSearchButton
-init {
-    resetFields()
-}
 
-    fun onShowDatePicker(newValue: Boolean,isDateFrom:Boolean) {
-        if(isDateFrom){
+    init {
+        resetFields()
+    }
+
+    fun onShowDatePicker(newValue: Boolean, isDateFrom: Boolean) {
+        if (isDateFrom) {
             _showDatePickerFrom.value = newValue
-        }else{
+        } else {
             _showDatePickerTo.value = newValue
         }
     }
 
 
-    fun onSelectedDate(date: String,isDateFrom:Boolean) {
+    fun onSelectedDate(date: String, isDateFrom: Boolean) {
 
-        if(isDateFrom) {
-           _selectedFromDate.value = date
+        if (isDateFrom) {
+            _selectedFromDate.value = date
 
 
-       }else{
-           _selectedToDate.value = date
+        } else {
+            _selectedToDate.value = date
 
-       }
+        }
     }
 
 
-
-
-    fun onAmountsFieldsChange(fromAmount:String,toAmount:String) {
+    fun onAmountsFieldsChange(fromAmount: String, toAmount: String) {
         // Validar y actualizar el valor de amount
         if (Utils.isValidDecimal(fromAmount)) {
             _fromAmount.value = fromAmount
@@ -78,53 +76,57 @@ init {
         if (Utils.isValidDecimal(toAmount)) {
             _toAmount.value = toAmount
         }
-        if(validateAmounts(fromAmount, toAmount)){
-            _enableSearchButton.value=true
-        }else {
-            _enableSearchButton.value=false
+        if (validateAmounts(fromAmount, toAmount)) {
+            _enableSearchButton.value = true
+        } else {
+            _enableSearchButton.value = false
         }
     }
-
 
 
     fun onEntryDescriptionChanged(newDescription: String) {
         _entryDescription.value = newDescription
     }
+
     // Método para actualizar la opción seleccionada
     fun onOptionSelected(option: Int) {
         _selectedOption.value = option
     }
 
     fun onEnableSearchButton() {
-        val fromDate=_selectedFromDate.value?: Date().dateFormat()
-        val toDate=_selectedToDate.value?: Date().dateFormat()
-        val fromAmount=_fromAmount.value?:"0.0"
-        val toAmount=_toAmount.value?:"0.0"
-        val enable= validateDates(fromDate,toDate) && validateAmounts(fromAmount,toAmount)
+        val fromDate = _selectedFromDate.value ?: Date().dateFormat()
+        val toDate = _selectedToDate.value ?: Date().dateFormat()
+        val fromAmount = _fromAmount.value ?: "0.0"
+        val toAmount = _toAmount.value ?: "0.0"
+        val enable = validateDates() && validateAmounts(fromAmount, toAmount)
         _enableSearchButton.value = enable
 
     }
 
 
-     fun validateDates(fromDateString:String, toDateString:String):Boolean {
+    fun validateDates(): Boolean {
+        val fromDateString = _selectedFromDate.value ?: Date().dateFormat()
+        val toDateString = _selectedToDate.value ?: Date().dateFormat()
         val fromDate = Utils.convertStringToLocalDate(fromDateString)
         val toDate = Utils.convertStringToLocalDate(toDateString)
         return fromDate.isBefore(toDate) || fromDate.isEqual(toDate)
     }
-    fun validateAmounts(fromAmount:String, toAmount:String):Boolean {
-        val from=_fromAmount.value?.toDoubleOrNull()?:0.0
-        val to=_toAmount.value?.toDoubleOrNull()?:0.0
-        return to>=from
+
+    fun validateAmounts(fromAmount: String, toAmount: String): Boolean {
+        val from = _fromAmount.value?.toDoubleOrNull() ?: 0.0
+        val to = _toAmount.value?.toDoubleOrNull() ?: 0.0
+        return to >= from
     }
-    fun resetFields(){
-        _selectedOption.value=options[0]
-        _showDatePickerFrom.value=false
-        _showDatePickerTo.value=false
-        _selectedFromDate.value=Date().dateFormat()
-        _selectedToDate.value=Date().dateFormat()
-        _entryDescription.value=""
-        _fromAmount.value=""
-        _toAmount.value=""
-        _enableSearchButton.value=false
+
+    fun resetFields() {
+        _selectedOption.value = options[0]
+        _showDatePickerFrom.value = false
+        _showDatePickerTo.value = false
+        _selectedFromDate.value = Date().dateFormat()
+        _selectedToDate.value = Date().dateFormat()
+        _entryDescription.value = ""
+        _fromAmount.value = ""
+        _toAmount.value = ""
+        _enableSearchButton.value = false
     }
 }
