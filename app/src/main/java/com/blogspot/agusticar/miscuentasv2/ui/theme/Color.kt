@@ -21,5 +21,7 @@ val LightGrey = Color(0xFF0808080)
 val MediumDarkBrown = Color(0xFF2C2D26)
 val WarmChocolate = Color(0xFF8B4513) // Marrón cálido con tonos chocolate
 val DeepTerracotta = Color(0xFFB35440) // Un terracota profundo pero cálido
-val DeepBlue=Color(0xFF0047AB)
+val DeepBlue=Color(0xFF0047AB)  // Color base oscuro
+val BlueLighter = Color(0xFF1A5DB8) // Azul ligeramente más claro
+
 

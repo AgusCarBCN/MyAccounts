@@ -56,6 +56,7 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.about.SendEmail
+import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorUI
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 
@@ -270,7 +271,8 @@ fun MainScreen(
                         }
 
                         IconOptions.BARCHART -> TODO()
-                        IconOptions.CALCULATOR -> TODO()
+                        IconOptions.CALCULATOR -> {CalculatorUI()
+                        title=R.string.calculator}
                         IconOptions.EMAIL -> SendEmail()
                     }
 
@@ -364,7 +366,9 @@ private fun DrawerContent(
                 viewModel.selectScreen(IconOptions.TRANSFER)
             })
             ClickableRow(OptionItem(R.string.chart, R.drawable.barchartoption), onClick = {})
-            ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {})
+            ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {
+                viewModel.selectScreen(IconOptions.CALCULATOR)
+            })
             TitleOptions(R.string.aboutapp)
             ClickableRow(OptionItem(R.string.about, R.drawable.info), onClick = {
                 viewModel.selectScreen(IconOptions.ABOUT)
