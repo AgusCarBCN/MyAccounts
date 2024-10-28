@@ -66,9 +66,7 @@ fun IconComponent(isPressed: Boolean, iconResource: Int, iconSize: Int) {
 @Composable
 fun IconAnimated(iconResource:Int,sizeIcon:Int,initColor:Color,targetColor: Color){
 
-    // Creamos un animatable para manejar el color del ícono
-    //val initColor = LocalCustomColorsPalette.current.imageTutorialInit
-    //val targetColor = LocalCustomColorsPalette.current.imageTutorialTarget
+
     val color = remember { Animatable(initColor) }
 
     val coroutineScope = rememberCoroutineScope()
@@ -76,7 +74,6 @@ fun IconAnimated(iconResource:Int,sizeIcon:Int,initColor:Color,targetColor: Colo
     // Iniciamos una corrutina para animar el color de manera infinita
 
         LaunchedEffect(Unit) {
-
             coroutineScope.launch {
                 // Animación infinita que alterna entre dos colores
                 color.animateTo(

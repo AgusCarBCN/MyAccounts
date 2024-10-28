@@ -53,6 +53,7 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
 
     suspend fun getEntriesFiltered(
         accountId: Int,
+        descriptionAmount:String,
         dateFrom: String = Date().dateFormat(),
         dateTo: String = Date().dateFormat(),
         amountMin: Double = 0.0,
@@ -60,6 +61,7 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
         selectedOptions: Int = 0
     ): List<EntryDTO> = entryDao.getFilteredEntriesDTO(
         accountId,
+        descriptionAmount,
         dateFrom,
         dateTo,
         amountMin,

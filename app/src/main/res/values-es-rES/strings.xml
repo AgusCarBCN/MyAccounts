@@ -278,4 +278,6 @@
     <string name="incomeoption">Ingresos</string>
     <string name="expenseoption">Gastos</string>
     <string name="alloption">Ingresos y gastos</string>
+    <!--calculator-->
+    <string name="calcback">"\u232B"</string>
 </resources>

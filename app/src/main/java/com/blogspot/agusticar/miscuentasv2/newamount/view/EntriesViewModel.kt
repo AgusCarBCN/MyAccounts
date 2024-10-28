@@ -92,6 +92,7 @@ class EntriesViewModel @Inject constructor(
         getTotal()
     }
     fun getFilteredEntries(accountId: Int,
+                           description:String,
                            dateFrom: String = Date().dateFormat(),
                            dateTo: String = Date().dateFormat(),
                            amountMin: Double = 0.0,
@@ -102,6 +103,7 @@ class EntriesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             flow {
                 val entries = getFilteredEntries.invoke(accountId,
+                    description,
                     dateFrom,
                     dateTo,
                     amountMin,

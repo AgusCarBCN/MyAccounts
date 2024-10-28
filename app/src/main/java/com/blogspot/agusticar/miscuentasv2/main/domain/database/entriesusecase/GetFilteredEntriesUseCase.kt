@@ -10,6 +10,7 @@ class GetFilteredEntriesUseCase @Inject constructor(private val repository: Entr
 
     suspend operator fun invoke(
         accountId: Int,
+        description: String,
         dateFrom: String = Date().dateFormat(),
         dateTo: String = Date().dateFormat(),
         amountMin: Double = 0.0,
@@ -18,6 +19,7 @@ class GetFilteredEntriesUseCase @Inject constructor(private val repository: Entr
     ): List<EntryDTO> =
         repository.getEntriesFiltered(
             accountId,
+            description,
             dateFrom,
             dateTo,
             amountMin,

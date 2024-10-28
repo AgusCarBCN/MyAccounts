@@ -46,7 +46,7 @@ fun SearchScreen(
     val fromAmount by searchViewModel.fromAmount.observeAsState("0.0")
     val toAmount by searchViewModel.toAmount.observeAsState("0.0")
     val toDate by searchViewModel.selectedToDate.observeAsState(Date().dateFormat())
-    val fromDate by searchViewModel.selectedFromDate.observeAsState(Date().dateFormat())
+    val fromDate by searchViewModel.selectedFromDate.observeAsState("01/01/1900")
     val entryDescription by searchViewModel.entryDescription.observeAsState("")
     val enableSearchButton by searchViewModel.enableSearchButton.observeAsState(false)
     val selectedAccount by accountViewModel.accountSelected.observeAsState()
@@ -153,10 +153,11 @@ fun SearchScreen(
             enableSearchButton,
             onClickButton = {
                 entriesViewModel.getFilteredEntries(id,
+                    entryDescription,
                     fromDate,
                     toDate,
                     fromAmount.toDoubleOrNull() ?:0.0,
-                    toAmount.toDoubleOrNull()?:0.0,
+                    toAmount.toDoubleOrNull()?:Double.MAX_VALUE,
                     selectedOption?:0)
                 mainViewModel.selectScreen(IconOptions.ENTRIES)
                 Log.d("data","fromDate: $fromDate")

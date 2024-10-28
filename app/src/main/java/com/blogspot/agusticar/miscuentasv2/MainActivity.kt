@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
@@ -51,7 +52,7 @@ class MainActivity : ComponentActivity() {
     private val settingViewModel: SettingViewModel by viewModels()
     private val searchViewModel: SearchViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
-
+    private val calculatorViewModel: CalculatorViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -155,6 +156,7 @@ class MainActivity : ComponentActivity() {
                                 settingViewModel,
                                 entriesViewModel,
                                 searchViewModel,
+                                calculatorViewModel,
                                 navToCreateAccounts = {
                                     navigationController.navigate(Routes.CreateAccounts.route)
                                 }
