@@ -15,10 +15,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.CalculatorButton
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
@@ -306,7 +308,7 @@ fun CalculatorUI(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( start = 16.dp,end = 16.dp,bottom = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     ,
                 horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
             ) {
@@ -337,7 +339,7 @@ fun CalculatorUI(
                     LocalCustomColorsPalette.current.textTransition
                 )
                 CalculatorButton(
-                    symbol = "Del",
+                    symbol = stringResource(id = R.string.calcback),
                     modifier = Modifier
                         .aspectRatio(1f)
                         .weight(1f)
