@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.di
 
 import android.content.Context
+import com.blogspot.agusticar.miscuentasv2.calculator.ParserCalculator
 import com.blogspot.agusticar.miscuentasv2.main.data.datastore.preferences.repository.UserDataStoreRepository
 import dagger.Module
 import dagger.Provides
@@ -24,6 +25,11 @@ object AppModule {
     @Singleton
     fun provideUserPreferencesRepository(@ApplicationContext context: Context): UserDataStoreRepository {
         return UserDataStoreRepository(context)
+    }
+    @Singleton
+    @Provides
+    fun provideParserCalculator(): ParserCalculator {
+        return ParserCalculator()
     }
 
 

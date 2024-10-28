@@ -57,6 +57,7 @@ import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.about.SendEmail
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorUI
+import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 
@@ -93,6 +94,7 @@ fun MainScreen(
     settingViewModel: SettingViewModel,
     entriesViewModel: EntriesViewModel,
     searchViewModel: SearchViewModel,
+    calculatorViewModel: CalculatorViewModel,
     navToCreateAccounts: () -> Unit
 
 ) {
@@ -271,7 +273,7 @@ fun MainScreen(
                         }
 
                         IconOptions.BARCHART -> TODO()
-                        IconOptions.CALCULATOR -> {CalculatorUI()
+                        IconOptions.CALCULATOR -> {CalculatorUI(calculatorViewModel)
                         title=R.string.calculator}
                         IconOptions.EMAIL -> SendEmail()
                     }

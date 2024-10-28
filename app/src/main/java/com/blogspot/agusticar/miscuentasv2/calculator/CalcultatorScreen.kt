@@ -13,11 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
@@ -25,14 +26,14 @@ import com.blogspot.agusticar.miscuentasv2.components.CalculatorButton
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 @Composable
-@Preview
+
 fun CalculatorUI(
-    //viewModel: CalculatorViewModel,
+    viewModel: CalculatorViewModel,
 ) {
-    //val expression = viewModel.expression
+    val expression by viewModel.expression.observeAsState("")
     val buttonSpacing = 8.dp
 
-    // Log.d("MainActivity", "onCreate: ${viewModel.expression.value}")
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +53,7 @@ fun CalculatorUI(
             ) {
                 item {
                     Text(
-                        text = "0",
+                        text = expression,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 32.dp, horizontal = 16.dp),
@@ -78,7 +79,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.clear()
                         },
                     LocalCustomColorsPalette.current.initDelCalc,
                     LocalCustomColorsPalette.current.targetDelCalc,
@@ -91,7 +92,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("(")
                         },
                     LocalCustomColorsPalette.current.initOperatorCalc,
                     LocalCustomColorsPalette.current.targetOperatorCalc,
@@ -104,7 +105,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append(")")
                         },
                     LocalCustomColorsPalette.current.initOperatorCalc,
                     LocalCustomColorsPalette.current.targetOperatorCalc,
@@ -117,7 +118,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("÷")
                         },
                     LocalCustomColorsPalette.current.initOperatorCalc,
                     LocalCustomColorsPalette.current.targetOperatorCalc,
@@ -138,7 +139,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("7")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -151,7 +152,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("8")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -164,7 +165,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("9")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -177,7 +178,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("×")
                         },
                     LocalCustomColorsPalette.current.initOperatorCalc,
                     LocalCustomColorsPalette.current.targetOperatorCalc,
@@ -198,7 +199,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("4")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -211,7 +212,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("5")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -224,7 +225,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("6")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -237,7 +238,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("-")
                         },
                     LocalCustomColorsPalette.current.initOperatorCalc,
                     LocalCustomColorsPalette.current.targetOperatorCalc,
@@ -258,7 +259,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("1")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -271,7 +272,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("2")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -284,7 +285,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("3")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -297,7 +298,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("+")
                         },
                     LocalCustomColorsPalette.current.initOperatorCalc,
                     LocalCustomColorsPalette.current.targetOperatorCalc,
@@ -318,7 +319,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append("0")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -331,7 +332,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.append(".")
                         },
                     LocalCustomColorsPalette.current.buttonColorDefault,
                     LocalCustomColorsPalette.current.buttonTransition,
@@ -344,7 +345,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.delete()
                         },
                     LocalCustomColorsPalette.current.initDelCalc,
                     LocalCustomColorsPalette.current.targetDelCalc,
@@ -357,7 +358,7 @@ fun CalculatorUI(
                         .aspectRatio(1f)
                         .weight(1f)
                         .clickable {
-                            //viewModel.clear()
+                            viewModel.evaluate()
                         },
                     LocalCustomColorsPalette.current.initOperatorCalc,
                     LocalCustomColorsPalette.current.targetOperatorCalc,
