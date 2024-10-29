@@ -50,7 +50,7 @@ fun SearchScreen(
     val entryDescription by searchViewModel.entryDescription.observeAsState("")
     val enableSearchButton by searchViewModel.enableSearchButton.observeAsState(false)
     val selectedAccount by accountViewModel.accountSelected.observeAsState()
-    val selectedOption by searchViewModel.selectedOption.observeAsState()
+    val selectedOption by searchViewModel.selectedOptionIndex.observeAsState()
     val id=selectedAccount?.id?:0
     val scope = rememberCoroutineScope()
     val messageAmountError = stringResource(id = R.string.amountfromoverdateto)
