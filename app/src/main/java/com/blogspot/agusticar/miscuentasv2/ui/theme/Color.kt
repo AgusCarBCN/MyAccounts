@@ -1,18 +1,22 @@
 package com.blogspot.agusticar.miscuentasv2.ui.theme
 
 import androidx.compose.ui.graphics.Color
-
+val darkOliveGreen = Color(0xFF4A6D3D) // Verde oliva oscuro
 val greenDark = Color(0xFF006400)  // Verde oscuro
 val greenLight =  Color(0xFF2E7D32)
-val greenPistacho=Color(0xFF8BC34A)
+val greenPistachio=Color(0xFF8BC34A)
+val greenPistachioTransition = Color(0xFF7CB342)
 val coralRed=Color(0xFFFF6F61)
+val coralRedTransition = Color(0xFFEC5B4E)
 val redDark = Color(0xFF8B0000) // Rojo oscuro
 val redLight =  Color(0xFF9B1B1B)// Color Rojo
 val DeepBrown = Color(0xFF5C3B28)
+val darkChocolateBrown = Color(0xFF3E2723) // Marrón chocolate
 val BurntPeach = Color(0xFFB56438)
 val DarkPeach = Color(0xFFCC7A46)
 val SoftPeach = Color(0xFFEB9961) // Color 4: Un melocotón suave
 val PeachyCream = Color(0xFFFBE0A5) // Un tono suave entre melocotón y amarillo
+val PeachyCreamTransition = Color(0xFFF3C568) // Un tono suave entre melocotón y amarillo con tonos chocolate
 val LightYellow = Color(0xFFFCF4B6) // Color 5: Un amarillo claro
 val Black = Color(0xFF000000)
 val DarkBrown = Color(0xFF1A1B17)
