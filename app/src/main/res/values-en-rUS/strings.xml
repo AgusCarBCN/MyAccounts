@@ -63,7 +63,8 @@
     <string name="mainmenu">Main navigation menu</string>
     <string name="management">Financial management</string>
     <string name="aboutapp">Information about App</string>
-    <string name="chart">BarChart</string>
+    <string name="barchart">BarChart</string>
+    <string name="piechart">Pie Charts</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="notification">Notifications</string>

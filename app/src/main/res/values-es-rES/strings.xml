@@ -71,7 +71,8 @@
     <string name="privacy">Política de privacidad</string>
     <string name="notification">Notificaciones</string>
     <string name="calculator">Calculadora</string>
-    <string name="chart">Gráfico de barras</string>
+    <string name="barchart">Gráfico de barras</string>
+    <string name="piechart">Graficos circulares</string>
     <string name="newincome">Nuevo ingreso</string>
     <string name="transfer">Transferencia</string>
     <string name="search">Buscar</string>

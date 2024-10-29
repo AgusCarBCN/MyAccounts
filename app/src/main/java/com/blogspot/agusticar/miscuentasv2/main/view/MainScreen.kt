@@ -367,7 +367,8 @@ private fun DrawerContent(
             ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {
                 viewModel.selectScreen(IconOptions.TRANSFER)
             })
-            ClickableRow(OptionItem(R.string.chart, R.drawable.barchartoption), onClick = {})
+            ClickableRow(OptionItem(R.string.barchart, R.drawable.barchartoption), onClick = {})
+            ClickableRow(OptionItem(R.string.piechart, R.drawable.ic_piechart), onClick = {})
             ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {
                 viewModel.selectScreen(IconOptions.CALCULATOR)
             })

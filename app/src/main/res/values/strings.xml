@@ -72,7 +72,8 @@
     <string name="profile">Profile</string>
     <string name="notification">Notifications</string>
     <string name="calculator">Calculator</string>
-    <string name="chart">BarChart</string>
+    <string name="barchart">BarChart</string>
+    <string name="piechart">Pie Charts</string>
     <string name="newincome">New amount</string>
     <string name="transfer">Transfer</string>
     <string name="search">Search</string>
