@@ -60,7 +60,7 @@ fun CalculatorUI(
             verticalArrangement = Arrangement.spacedBy(buttonSpacing),
         ) {
             LazyRow(
-                horizontalArrangement = Arrangement.End,
+                horizontalArrangement = Arrangement.Start,
                 modifier = Modifier
                     .fillMaxWidth(),
                 reverseLayout = true
@@ -75,7 +75,7 @@ fun CalculatorUI(
                             text = expression,
                             fontSize = 64.sp,
                             fontWeight = FontWeight.Normal,
-                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Start,
                             color = LocalCustomColorsPalette.current.textColor
                         )
 
