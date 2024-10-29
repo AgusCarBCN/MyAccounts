@@ -10,11 +10,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.CalculatorButton
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import kotlinx.coroutines.delay
 
 @Composable
 
@@ -32,8 +39,15 @@ fun CalculatorUI(
 ) {
     val expression by viewModel.expression.observeAsState("")
     val buttonSpacing = 8.dp
+    var isCursorVisible by remember { mutableStateOf(true) }
 
-
+    // Alternar la visibilidad del cursor cada 500 ms
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(500) // Tiempo que el cursor está visible
+            isCursorVisible = !isCursorVisible
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -52,16 +66,31 @@ fun CalculatorUI(
                 reverseLayout = true
             ) {
                 item {
-                    Text(
-                        text = expression,
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 32.dp, horizontal = 16.dp),
-                        fontSize = 64.sp,
-                        fontWeight = FontWeight.Normal, // Estilo de texto en negrita
-                        textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                        color = LocalCustomColorsPalette.current.textColor
-                    )
+                            .padding(vertical = 32.dp, horizontal = 16.dp)
+                    ) {
+                        Text(
+                            text = expression,
+                            fontSize = 64.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                            color = LocalCustomColorsPalette.current.textColor
+                        )
+
+                        // Cursor
+                        if (isCursorVisible) {
+                            Box(
+                                modifier = Modifier
+                                    .width(2.dp) // Ancho del cursor
+                                    .height(64.dp) // Altura del cursor
+                                    .background(LocalCustomColorsPalette.current.textColor) // Color del cursor
+                                    .align(Alignment.CenterEnd) // Alinear al final del texto
+                                    .padding(horizontal = 4.dp) // Espacio a los lados del cursor
+                            )
+                        }
+                    }
 
                 }
             }
