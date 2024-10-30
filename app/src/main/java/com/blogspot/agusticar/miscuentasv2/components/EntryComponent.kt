@@ -38,12 +38,15 @@ import com.blogspot.agusticar.miscuentasv2.utils.Utils
 fun EntryList(entriesViewModel: EntriesViewModel,listOfEntries: List<EntryDTO>, currencyCode: String) {
 
     val enableByDate by entriesViewModel.enableOptionList.observeAsState(true)
+
     // Agrupar las entradas por fecha
     val groupedEntriesByDate =
         listOfEntries.groupBy { it.date }  // Asumiendo que it.date es un String o LocalDate
-    val groupedEntriesByCategoryName = listOfEntries.groupBy { it.categoryName }
+    //val groupedEntriesByCategoryName = listOfEntries.groupBy { it.categoryName }
 
-    val categoryIcons=groupedEntriesByCategoryName.mapValues { (_, entries) ->
+    val entriesByCategory=Utils.getMapOfEntriesByCategory(listOfEntries)
+
+    /*val categoryIcons=groupedEntriesByCategoryName.mapValues { (_, entries) ->
         entries.firstOrNull()?.categoryId
     }
     val categoryTotals = groupedEntriesByCategoryName.mapValues { (_, entries) ->
@@ -51,7 +54,7 @@ fun EntryList(entriesViewModel: EntriesViewModel,listOfEntries: List<EntryDTO>, 
     }
     val combinedCategoryInfo = categoryIcons.map { (categoryName, icon) ->
         categoryName to Pair(icon, categoryTotals[categoryName])
-    }.toMap()
+    }.toMap()*/
 
     Row(
         modifier = Modifier
@@ -127,7 +130,7 @@ fun EntryList(entriesViewModel: EntriesViewModel,listOfEntries: List<EntryDTO>, 
                 }
             }
         } else {
-            items(combinedCategoryInfo.toList()) { (categoryName, info) ->
+            items(entriesByCategory.toList()) { (categoryName, info) ->
                 val (icon, total) = info // Desestructurar el ícono y el total
                 ItemCategory(categoryName = categoryName, categoryIcon =icon  , amount =total , currencyCode)
             }

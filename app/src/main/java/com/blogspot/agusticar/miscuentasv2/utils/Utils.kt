@@ -3,6 +3,7 @@ package com.blogspot.agusticar.miscuentasv2.utils
 import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
+import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.currencyLocales
 import com.blogspot.agusticar.miscuentasv2.setting.model.EntryCSV
@@ -128,6 +129,19 @@ class Utils {
                 }
             }
             return entries
+        }
+        fun getMapOfEntriesByCategory(listOfEntries: List<EntryDTO>): Map<Int, Pair<Int?, Double?>> {
+            val groupedEntriesByCategoryName = listOfEntries.groupBy { it.categoryName }
+
+            val categoryIcons=groupedEntriesByCategoryName.mapValues { (_, entries) ->
+                entries.firstOrNull()?.categoryId
+            }
+            val categoryTotals = groupedEntriesByCategoryName.mapValues { (_, entries) ->
+                entries.sumOf { it.amount }
+            }
+            return categoryIcons.map { (categoryName, icon) ->
+                categoryName to Pair(icon, categoryTotals[categoryName])
+            }.toMap()
         }
 
 

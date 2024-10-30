@@ -157,6 +157,7 @@ class EntriesViewModel @Inject constructor(
                 }
 
         }
+
     }
 
     // Método para obtener todos los gastos

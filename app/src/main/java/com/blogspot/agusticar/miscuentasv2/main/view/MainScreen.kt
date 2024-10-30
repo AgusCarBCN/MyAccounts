@@ -71,6 +71,7 @@ import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
+import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
@@ -276,6 +277,10 @@ fun MainScreen(
                         IconOptions.CALCULATOR -> {CalculatorUI(calculatorViewModel)
                         title=R.string.calculator}
                         IconOptions.EMAIL -> SendEmail()
+                        IconOptions.PIECHART -> PieChartScreen(
+                            entriesViewModel ,
+                            accountsViewModel
+                        )
                     }
 
                 }
@@ -368,7 +373,10 @@ private fun DrawerContent(
                 viewModel.selectScreen(IconOptions.TRANSFER)
             })
             ClickableRow(OptionItem(R.string.barchart, R.drawable.barchartoption), onClick = {})
-            ClickableRow(OptionItem(R.string.piechart, R.drawable.ic_piechart), onClick = {})
+            ClickableRow(OptionItem(R.string.piechart, R.drawable.ic_piechart), onClick = {
+                viewModel.selectScreen(IconOptions.PIECHART)
+
+            })
             ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {
                 viewModel.selectScreen(IconOptions.CALCULATOR)
             })

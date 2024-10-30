@@ -281,5 +281,8 @@
     <string name="alloption">Incomes and Expenses</string>
     <!--calculator-->
     <string name="calcback">"\u232B"</string>
+    <!--Charts-->
+    <string name="incomechart">Incomes</string>
+    <string name="expensechart">Expenses</string>
 </resources>
 
