@@ -42,6 +42,7 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
+import com.blogspot.agusticar.miscuentasv2.piechart.model.Legend
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import kotlin.math.cos
@@ -64,7 +65,9 @@ fun PieChartScreen(
 
     //Array de porcentajes para dibujar los gráficos circulares
     val percentIncomesList = mutableListOf<Float>()
+    val incomesLegends = mutableListOf<String>()
     val percentExpensesList = mutableListOf<Float>()
+    val expensesLegends= mutableListOf<String>()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,35 +86,38 @@ fun PieChartScreen(
         listOfEntries.forEach { entry->
             if(entry.amount >=0){
                 percentIncomesList.add((entry.amount / getTotalIncomes).toFloat())
+                incomesLegends.add(stringResource(id = entry.categoryName))
             }else{
                 percentExpensesList.add((entry.amount / getTotalIncomes).toFloat())
+                expensesLegends.add(stringResource(id = entry.categoryName))
             }
         }
         HeadSetting(title = stringResource(id = R.string.incomechart), 24)
-        ChartPie(percentIncomesList)
+        ChartPie(percentIncomesList,incomesLegends)
 
         HeadSetting(title = stringResource(id = R.string.expensechart), 24)
-      ChartPie(percentExpensesList)
+      ChartPie(percentExpensesList,expensesLegends)
         AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
     }
 
 }
 @Composable
-fun ChartPie(percentList: MutableList<Float>) {
+fun ChartPie(percentList: MutableList<Float>,legendsLabel:MutableList<String>) {
     val initAngle = -90f
     var currentAngle = initAngle
     var endAngle = 0f
     val total = percentList.sum()
     val textColorPieChart = LocalCustomColorsPalette.current.iconColor
     val isDarkTheme = isSystemInDarkTheme()
-
+    val legends= mutableListOf<Legend>()
     // Lista para almacenar los colores generados
     val colors =  mutableListOf<Color>()
 
     // Generar colores aleatorios para cada segmento
-    percentList.forEach { _ ->
+    legendsLabel.forEach { legend ->
         val color = colorGenerator(isDarkTheme) // Cambia esto si deseas un método diferente
         colors.add(color)
+        legends.add(Legend(legend,color)) // Cambia esto si deseas un método diferente
     }
 
     Row(modifier = Modifier.padding(10.dp)) {
@@ -120,12 +126,12 @@ fun ChartPie(percentList: MutableList<Float>) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp)
-                .weight(0.8f),
+                .weight(0.65f),
             contentAlignment = Alignment.Center
         ) {
             Canvas(
                 modifier = Modifier
-                    .size(220.dp)
+                    .size(200.dp)
                     .align(Alignment.Center)
             ) {
                 val centerX = size.width / 2
@@ -162,15 +168,15 @@ fun ChartPie(percentList: MutableList<Float>) {
                     val text = "$percent%"
                     val textPaint = Paint().asFrameworkPaint()
                     textPaint.color = textColorPieChart.toArgb()
-                    textPaint.textSize = 55f
+                    textPaint.textSize = 35f
                     textPaint.isFakeBoldText = true
                     drawContext.canvas.nativeCanvas.drawText(text, textX, textY, textPaint)
                 }
             }
         }
-        Column(modifier = Modifier.weight(0.2f)) {
-            colors.forEach { element ->
-                LegendItem(element,"label")
+        Column(modifier = Modifier.weight(0.35f)) {
+            legends.forEach { element ->
+                LegendItem(element.color,element.legend)
             }
         }
 
