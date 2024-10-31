@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -39,20 +40,18 @@ import com.blogspot.agusticar.miscuentasv2.utils.Utils
 
 
 @Composable
-fun AccountSelector(title:String,accountViewModel:AccountsViewModel,isAccountDestination:Boolean = false) {
-
-
-    // Observa el estado de la lista de cuentas
-    val accounts by accountViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
+fun AccountSelector(
+    title: String,
+    accountViewModel: AccountsViewModel,
+    isAccountDestination: Boolean = false
+) {
+    // Observa el estado de la lista de cuentas y la moneda
+    val accounts by accountViewModel.listOfAccounts.observeAsState(emptyList())
     val currencyCode by accountViewModel.currencyCode.observeAsState("USD")
-    accountViewModel.getAllAccounts()
-    // Inicializamos el estado del VerticalPager con el número de páginas igual al tamaño de la lista de monedas.
 
+    // Inicializamos el estado del VerticalPager basado en la cantidad de cuentas
     val pagerState = rememberPagerState(pageCount = { accounts.size })
-    var previousPage by remember { mutableStateOf(0) }
-    val toDown = R.drawable.arrow_down
-    val toUp = R.drawable.arrow_up
-    var isDraggingUp by remember { mutableStateOf(true) } // Inicializamos la flecha apuntando hacia arriba
+    val isDraggingUp by remember { derivedStateOf { pagerState.currentPage == 0 || pagerState.targetPage > pagerState.currentPage } }
 
     Column(
         modifier = Modifier
@@ -61,7 +60,6 @@ fun AccountSelector(title:String,accountViewModel:AccountsViewModel,isAccountDes
             .padding(5.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
         Row(
             modifier = Modifier
@@ -70,99 +68,63 @@ fun AccountSelector(title:String,accountViewModel:AccountsViewModel,isAccountDes
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Muestra la flecha basada en la dirección del desplazamiento
             Icon(
-                painter = painterResource(
-                    id = if (isDraggingUp) toUp else toDown
-                ),
-                contentDescription = "",
-                tint = LocalCustomColorsPalette.current.textColor, // Color del icono
-                modifier = Modifier
-                    .width(36.dp)
-                    .padding(end = 8.dp) // Espacio entre el icono y el texto
+                painter = painterResource(id = if (isDraggingUp) R.drawable.arrow_up else R.drawable.arrow_down),
+                contentDescription = null,
+                tint = LocalCustomColorsPalette.current.textColor,
+                modifier = Modifier.width(36.dp).padding(end = 8.dp)
             )
-
-            // Coloca el texto al lado del icono
             Text(
                 text = title,
                 fontSize = 20.sp,
-                color = LocalCustomColorsPalette.current.textColor,  // Color del texto
-                modifier = Modifier
-                    .padding(vertical = 10.dp),
-                textAlign = TextAlign.Start // Alinea el texto a la izquierda, cerca del ícono
+                color = LocalCustomColorsPalette.current.textColor,
+                modifier = Modifier.padding(vertical = 10.dp),
+                textAlign = TextAlign.Start
             )
         }
+
         Card(
             modifier = Modifier.width(300.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
-
             VerticalPager(
                 state = pagerState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(LocalCustomColorsPalette.current.backgroundSecondary)
                     .height(60.dp),
-
-                userScrollEnabled = true // Asegúrate de que el scroll esté habilitado
             ) { page ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )
-                {
-                    //Se actualiza la cuenta seleccionada en viewModel
-                    if(isAccountDestination){
-                        accountViewModel.onDestinationAccountSelected(accounts[page])
-                    }else {
-                        accountViewModel.onAccountSelected(accounts[page])
-                    }
-                    val balanceFormat= Utils.numberFormat(accounts[page].balance,currencyCode)
-                    // Texto de la moneda
-                    Row (horizontalArrangement =Arrangement.Absolute.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    )  {
-                        Text(
-                            text = accounts[page].name, // Descripción de la moneda
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = LocalCustomColorsPalette.current.textColor, // Color del texto
-                            textAlign = TextAlign.Center // Alinear el texto a la izquierda
-                        )
-                        Spacer(modifier = Modifier.width(20.dp))
-                        Text(
-                            text = balanceFormat, // Descripción de la moneda
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = LocalCustomColorsPalette.current.incomeColor, // Color del texto
-                            textAlign = TextAlign.Center // Alinear el texto a la izquierda
-                        )
-                    }
-
+                // Actualiza la cuenta seleccionada en ViewModel
+                if (isAccountDestination) {
+                    accountViewModel.onDestinationAccountSelected(accounts[page])
+                } else {
+                    accountViewModel.onAccountSelected(accounts[page])
                 }
-            }
 
-            // Detectar el desplazamiento y actualizar el estado de la flecha
-            LaunchedEffect(pagerState) {
-                snapshotFlow { pagerState.currentPage }.collect { page ->
+                val balanceFormatted = Utils.numberFormat(accounts[page].balance, currencyCode)
 
-                    if (page == 0) {
-                        isDraggingUp = true
-                    } else if (page == 9) {
-                        isDraggingUp = false
-                    } else if (previousPage <= page) {
-                        isDraggingUp = true
-                    } else isDraggingUp = false
-
-                    previousPage = page
-
-
-
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = accounts[page].name,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = LocalCustomColorsPalette.current.textColor,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Text(
+                        text = balanceFormatted,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = LocalCustomColorsPalette.current.incomeColor,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
     }
 }
-

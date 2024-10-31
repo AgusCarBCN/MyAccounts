@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -37,6 +39,7 @@ import java.util.Date
 @Composable
 
 fun NewAmount(
+
     mainViewModel: MainViewModel,
     entryViewModel: EntriesViewModel,
     accountViewModel: AccountsViewModel
@@ -70,7 +73,9 @@ fun NewAmount(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 30.dp),
+            .padding(top = 30.dp)
+            .verticalScroll(
+                rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

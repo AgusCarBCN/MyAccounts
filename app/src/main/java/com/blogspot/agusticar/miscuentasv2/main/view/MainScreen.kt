@@ -277,10 +277,14 @@ fun MainScreen(
                         IconOptions.CALCULATOR -> {CalculatorUI(calculatorViewModel)
                         title=R.string.calculator}
                         IconOptions.EMAIL -> SendEmail()
-                        IconOptions.PIECHART -> PieChartScreen(
-                            entriesViewModel ,
-                            accountsViewModel
-                        )
+                        IconOptions.PIECHART -> {
+                            PieChartScreen(
+                                entriesViewModel,
+                                accountsViewModel,
+                                searchViewModel
+                            )
+                            title=R.string.piechart
+                        }
                     }
 
                 }

@@ -284,4 +284,5 @@
     <!--Charts-->
     <string name="incomechart">Ingresos</string>
     <string name="expensechart">Gastos</string>
+    <string name="daterange">Selecciona un rango de fechas</string>
 </resources>

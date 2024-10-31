@@ -97,6 +97,7 @@ class AccountsViewModel @Inject constructor(
             _currencyCode.value = getCurrencyCode()
             _isCurrencyExpanded.value = false
             onAccountUpdated()
+            getAllAccounts()
         }
     }
 

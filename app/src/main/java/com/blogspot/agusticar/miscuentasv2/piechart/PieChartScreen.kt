@@ -1,6 +1,5 @@
 package com.blogspot.agusticar.miscuentasv2.piechart
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,9 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,36 +33,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
+import com.blogspot.agusticar.miscuentasv2.components.DatePickerSearch
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
-import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.piechart.model.Legend
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-import com.blogspot.agusticar.miscuentasv2.utils.Utils
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
+import java.util.Date
 import kotlin.math.cos
+import kotlin.math.exp
 import kotlin.math.sin
 import kotlin.random.Random
 
 @Composable
 fun PieChartScreen(
     entriesViewModel: EntriesViewModel,
-    accountViewModel: AccountsViewModel
+    accountViewModel: AccountsViewModel,
+    searchViewModel:SearchViewModel
 ) {
 
     val getTotalIncomes by entriesViewModel.totalIncomes.observeAsState(0.0)
     val getTotalExpenses by entriesViewModel.totalExpenses.observeAsState(0.0)
+    val toDate by searchViewModel.selectedToDate.observeAsState(Date().dateFormat())
+    val fromDate by searchViewModel.selectedFromDate.observeAsState("01/01/1900")
     val listOfEntries by entriesViewModel.listOfEntries.collectAsState()
     val accountSelected by accountViewModel.accountSelected.observeAsState()
     accountViewModel.getAllAccounts()
     val idAccount = accountSelected?.id ?: 1
+    val incomeList:MutableList<Pair<Float,String>> = mutableListOf()
+    val expenseList:MutableList<Pair<Float,String>> = mutableListOf()
 
-
-    //Array de porcentajes para dibujar los gráficos circulares
-    val percentIncomesList = mutableListOf<Float>()
-    val incomesLegends = mutableListOf<String>()
-    val percentExpensesList = mutableListOf<Float>()
-    val expensesLegends= mutableListOf<String>()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -79,45 +76,84 @@ fun PieChartScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        //Getting entries from selected account
-        entriesViewModel.getAllEntriesByAccount(idAccount)
 
+        AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
+        HeadSetting(title = stringResource(id = R.string.daterange), 20)
+        Row(
+            modifier = Modifier
+                .width(360.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            DatePickerSearch(
+                modifier = Modifier.weight(0.5f),
+                R.string.fromdate,
+                searchViewModel,
+                true
+            )
+            DatePickerSearch(
+                modifier = Modifier.weight(0.5f),
+                R.string.todate,
+                searchViewModel,
+                false
+            )
+        }
+        //Getting entries from selected account
+        entriesViewModel.getFilteredEntries(idAccount,
+            "",
+            fromDate,
+            toDate,
+            0.0,
+            Double.MAX_VALUE,
+            2
+            )
         //Calculate percent of entries and adding to percentsList
-        listOfEntries.forEach { entry->
-            if(entry.amount >=0){
-                percentIncomesList.add((entry.amount / getTotalIncomes).toFloat())
-                incomesLegends.add(stringResource(id = entry.categoryName))
-            }else{
-                percentExpensesList.add((entry.amount / getTotalIncomes).toFloat())
-                expensesLegends.add(stringResource(id = entry.categoryName))
+        listOfEntries.forEach { entry ->
+            if (entry.amount >= 0) {
+                incomeList.add((entry.amount / getTotalIncomes).toFloat() to stringResource(id = entry.categoryName))
+
+            } else {
+                expenseList.add((entry.amount / getTotalExpenses).toFloat() to stringResource(id = entry.categoryName))
+
             }
         }
-        HeadSetting(title = stringResource(id = R.string.incomechart), 24)
-        ChartPie(percentIncomesList,incomesLegends)
-
-        HeadSetting(title = stringResource(id = R.string.expensechart), 24)
-      ChartPie(percentExpensesList,expensesLegends)
-        AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
+        if(listOfEntries.isNotEmpty()) {
+            HeadSetting(title = stringResource(id = R.string.incomechart), 24)
+            ChartPie(incomeList)
+            HeadSetting(title = stringResource(id = R.string.expensechart), 24)
+            ChartPie(expenseList)
+        }else{
+            Text(modifier = Modifier.padding(50.dp),
+                text = stringResource(id = R.string.noentries),
+                color = LocalCustomColorsPalette.current.textColor,
+                fontSize = 18.sp
+            )
+        }
     }
 
 }
+
 @Composable
-fun ChartPie(percentList: MutableList<Float>,legendsLabel:MutableList<String>) {
+fun ChartPie(listOfEntries:MutableList<Pair<Float,String>>) {
     val initAngle = -90f
     var currentAngle = initAngle
     var endAngle = 0f
-    val total = percentList.sum()
-    val textColorPieChart = LocalCustomColorsPalette.current.iconColor
+    //val total = listOfEntries.sum()
+    // Sumar todos los valores Float en la lista
+    // Extraer los valores Float y sumar
+    val total: Float = listOfEntries.map { it.first }.sum()
+    val textColorPieChart = Color.Black
     val isDarkTheme = isSystemInDarkTheme()
-    val legends= mutableListOf<Legend>()
+    val legends = mutableListOf<Legend>()
     // Lista para almacenar los colores generados
-    val colors =  mutableListOf<Color>()
+    val colors = mutableListOf<Color>()
 
     // Generar colores aleatorios para cada segmento
-    legendsLabel.forEach { legend ->
+    listOfEntries.forEach { entry ->
         val color = colorGenerator(isDarkTheme) // Cambia esto si deseas un método diferente
         colors.add(color)
-        legends.add(Legend(legend,color)) // Cambia esto si deseas un método diferente
+        legends.add(Legend(entry.second, color)) // Cambia esto si deseas un método diferente
     }
 
     Row(modifier = Modifier.padding(10.dp)) {
@@ -139,8 +175,8 @@ fun ChartPie(percentList: MutableList<Float>,legendsLabel:MutableList<String>) {
 
                 // Dibuja cada segmento
                 currentAngle = initAngle // Reinicia el ángulo actual para el nuevo dibujo
-                percentList.forEachIndexed { index, element ->
-                    endAngle = (element / total) * 360
+                listOfEntries.forEachIndexed { index, element ->
+                    endAngle = (element.first / total) * 360
                     val midAngle = currentAngle + endAngle / 2
 
                     // Dibuja el arco
@@ -164,7 +200,7 @@ fun ChartPie(percentList: MutableList<Float>,legendsLabel:MutableList<String>) {
                     )
 
                     // Dibuja el texto con el porcentaje
-                    val percent = (element / total * 100).toInt()
+                    val percent = (element.first / total * 100).toInt()
                     val text = "$percent%"
                     val textPaint = Paint().asFrameworkPaint()
                     textPaint.color = textColorPieChart.toArgb()
@@ -176,7 +212,7 @@ fun ChartPie(percentList: MutableList<Float>,legendsLabel:MutableList<String>) {
         }
         Column(modifier = Modifier.weight(0.35f)) {
             legends.forEach { element ->
-                LegendItem(element.color,element.legend)
+                LegendItem(element.color, element.legend)
             }
         }
 
@@ -186,24 +222,24 @@ fun ChartPie(percentList: MutableList<Float>,legendsLabel:MutableList<String>) {
 
 fun colorGenerator(isDarkTheme: Boolean): Color {
     val random = Random.Default
-
     return if (isDarkTheme) {
-        // Genera colores intensos y oscuros para un fondo claro
-        val red = random.nextInt(100, 180) // Colores oscuros pero más intensos
-        val green = random.nextInt(100, 180)
-        val blue = random.nextInt(100, 180)
+        // Genera colores vivos que destacan sobre un fondo oscuro
+        val red = random.nextInt(128, 256) // Colores brillantes
+        val green = random.nextInt(128, 256)
+        val blue = random.nextInt(128, 256)
         Color(red, green, blue)
     } else {
-        // Genera colores intensos y claros para un fondo oscuro
-        val red = random.nextInt(180, 256) // Colores más vivos
-        val green = random.nextInt(180, 256)
-        val blue = random.nextInt(180, 256)
+        // Genera colores pastel que destacan sobre un fondo claro
+        val red = random.nextInt(200, 256) // Colores pastel más claros
+        val green = random.nextInt(200, 256)
+        val blue = random.nextInt(200, 256)
         Color(red, green, blue)
     }
+
 }
 
 @Composable
-fun LegendItem( color:Color,label: String) {
+fun LegendItem(color: Color, label: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(4.dp)

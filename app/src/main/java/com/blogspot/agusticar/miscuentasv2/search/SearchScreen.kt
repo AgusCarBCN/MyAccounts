@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -22,6 +24,7 @@ import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.DatePickerSearch
+import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.RadioButtonSearch
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
@@ -60,7 +63,10 @@ fun SearchScreen(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 30.dp)
-            .background(LocalCustomColorsPalette.current.backgroundPrimary),
+            .background(LocalCustomColorsPalette.current.backgroundPrimary)
+            .verticalScroll(
+            rememberScrollState()
+        ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -72,7 +78,7 @@ fun SearchScreen(
             BoardType.TEXT,
             false
         )
-
+        HeadSetting(title = stringResource(id = R.string.daterange), 20)
         Row(
             modifier = Modifier
                 .width(360.dp)
