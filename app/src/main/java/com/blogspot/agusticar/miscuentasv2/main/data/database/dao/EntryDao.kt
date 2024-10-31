@@ -70,6 +70,28 @@ interface EntryDao {
     @Query("SELECT SUM(amount) FROM EntryEntity WHERE amount < 0")
     suspend fun getSumOfExpenseEntries(): Double?
 
+    @Transaction
+    @Query("""SELECT SUM(amount) FROM EntryEntity WHERE amount >= 0
+            AND accountId = :accountId
+            AND date >= :dateFrom  
+            AND date <= :dateTo  """)
+    suspend fun getSumOfIncomeEntriesByDate(
+        accountId: Int,
+        dateFrom: String = Date().dateFormat(),
+        dateTo: String = Date().dateFormat()
+    ): Double?
+
+    @Transaction
+    @Query("""SELECT SUM(amount) FROM EntryEntity WHERE amount < 0
+            AND accountId = :accountId
+            AND date >= :dateFrom  
+            AND date <= :dateTo""")
+    suspend fun getSumOfExpenseEntriesByDate(
+        accountId: Int,
+        dateFrom: String = Date().dateFormat(),
+        dateTo: String = Date().dateFormat()
+    ): Double?
+
 
     @Query(
         """
@@ -164,7 +186,7 @@ INNER JOIN AccountEntity a ON e.accountId = a.id
     )
     suspend fun getFilteredEntriesDTO(
         accountId: Int,
-        descriptionAmount:String,
+        descriptionAmount: String,
         dateFrom: String = Date().dateFormat(),
         dateTo: String = Date().dateFormat(),
         amountMin: Double = 0.0,

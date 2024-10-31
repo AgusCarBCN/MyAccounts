@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,7 +52,6 @@ fun NewAmount(
     val enableConfirmButton by entryViewModel.enableConfirmButton.observeAsState(false)
     val accountSelected by accountViewModel.accountSelected.observeAsState()
 
-    accountViewModel.getAllAccounts()
     val idAccount = accountSelected?.id ?: 1
     val status = categorySelected?.isIncome ?: false
     val iconResource = categorySelected?.iconResource ?: 0
@@ -75,7 +75,8 @@ fun NewAmount(
             .fillMaxWidth()
             .padding(top = 30.dp)
             .verticalScroll(
-                rememberScrollState()),
+                rememberScrollState()
+            ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

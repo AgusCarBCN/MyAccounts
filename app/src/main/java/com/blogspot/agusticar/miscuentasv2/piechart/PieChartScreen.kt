@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -59,8 +60,23 @@ fun PieChartScreen(
     val fromDate by searchViewModel.selectedFromDate.observeAsState("01/01/1900")
     val listOfEntries by entriesViewModel.listOfEntries.collectAsState()
     val accountSelected by accountViewModel.accountSelected.observeAsState()
-    accountViewModel.getAllAccounts()
+
     val idAccount = accountSelected?.id ?: 1
+
+    // Evita llamadas redundantes usando dependencias
+    LaunchedEffect(idAccount, fromDate, toDate) {
+        entriesViewModel.getTotalByDate(idAccount, fromDate, toDate)
+        entriesViewModel.getFilteredEntries(
+            idAccount,
+            "",
+            fromDate,
+            toDate,
+            0.0,
+            Double.MAX_VALUE,
+            2
+        )
+    }
+
     val incomeList:MutableList<Pair<Float,String>> = mutableListOf()
     val expenseList:MutableList<Pair<Float,String>> = mutableListOf()
 
@@ -98,15 +114,7 @@ fun PieChartScreen(
                 false
             )
         }
-        //Getting entries from selected account
-        entriesViewModel.getFilteredEntries(idAccount,
-            "",
-            fromDate,
-            toDate,
-            0.0,
-            Double.MAX_VALUE,
-            2
-            )
+
         //Calculate percent of entries and adding to percentsList
         listOfEntries.forEach { entry ->
             if (entry.amount >= 0) {

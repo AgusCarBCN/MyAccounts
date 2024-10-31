@@ -14,7 +14,9 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.G
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetFilteredEntriesUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesByDateUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesByDate
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
@@ -41,7 +43,10 @@ class EntriesViewModel @Inject constructor(
     private val getAllIncomes:GetAllIncomesUseCase,
     private val getAllExpenses:GetAllExpensesUseCase,
     private val getFilteredEntries:GetFilteredEntriesUseCase,
-    private val getAllEntriesByAccount: GetAllEntriesByAccountUseCase
+    private val getAllEntriesByAccount: GetAllEntriesByAccountUseCase,
+    private val getTotalIncomesByDate: GetSumTotalIncomesByDate,
+    private val getTotalExpensesByDate: GetSumTotalExpensesByDateUseCase
+
 
 ) : ViewModel() {
 
@@ -261,7 +266,21 @@ class EntriesViewModel @Inject constructor(
         }
     }
 
+    fun getTotalByDate(accountId:Int,fromDate:String,toDate:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            // Ejecutar ambas funciones en paralelo
+            val totalIncomesDeferred = async { getTotalIncomesByDate.invoke(accountId,fromDate,toDate) }
+            val totalExpensesDeferred = async { getTotalExpensesByDate.invoke(accountId,fromDate,toDate) }
 
+            // Esperar los resultados
+            val totalIncomes = totalIncomesDeferred.await()
+            val totalExpenses = totalExpensesDeferred.await()
+
+            // Publicar los resultados en LiveData
+            _totalIncomes.postValue(totalIncomes)
+            _totalExpenses.postValue(totalExpenses)
+        }
+    }
 
 
     private fun resetFields() {

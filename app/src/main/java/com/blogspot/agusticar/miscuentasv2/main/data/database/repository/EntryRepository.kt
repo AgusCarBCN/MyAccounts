@@ -54,21 +54,30 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
     suspend fun getEntriesFiltered(
         accountId: Int,
         descriptionAmount:String,
-        dateFrom: String = Date().dateFormat(),
-        dateTo: String = Date().dateFormat(),
+        fromDate: String = Date().dateFormat(),
+        toDate: String = Date().dateFormat(),
         amountMin: Double = 0.0,
         amountMax: Double = Double.MAX_VALUE,
         selectedOptions: Int = 0
     ): List<EntryDTO> = entryDao.getFilteredEntriesDTO(
         accountId,
         descriptionAmount,
-        dateFrom,
-        dateTo,
+        fromDate,
+        toDate,
         amountMin,
         amountMax,
         selectedOptions
 
     )
+    suspend fun getSumIncomesByDate(accountId:Int,
+                                    fromDate: String = Date().dateFormat(),
+                                    toDate: String = Date().dateFormat()): Double =
+        entryDao.getSumOfIncomeEntriesByDate(accountId, fromDate, toDate)?:0.0
+
+    suspend fun getSumExpensesByDate(accountId:Int,
+                                     fromDate: String = Date().dateFormat(),
+                                     toDate: String = Date().dateFormat()): Double =
+        entryDao.getSumOfExpenseEntriesByDate(accountId, fromDate, toDate)?:0.0
 
 
     private fun entryDtoToEntry(dto: EntryDTO): Entry {
