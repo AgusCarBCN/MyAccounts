@@ -43,7 +43,6 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import java.util.Date
 import kotlin.math.cos
-import kotlin.math.exp
 import kotlin.math.sin
 import kotlin.random.Random
 
@@ -137,8 +136,8 @@ fun PieChartScreen(
 @Composable
 fun ChartPie(listOfEntries:MutableList<Pair<Float,String>>) {
     val initAngle = -90f
-    var currentAngle = initAngle
-    var endAngle = 0f
+    var currentAngle: Float
+    var endAngle: Float
     //val total = listOfEntries.sum()
     // Sumar todos los valores Float en la lista
     // Extraer los valores Float y sumar
