@@ -76,7 +76,7 @@ fun PieChartScreen(
     ) {
 
 
-        AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
+        AccountSelector(300,20,stringResource(id = R.string.selectanaccount), accountViewModel)
         HeadSetting(title = stringResource(id = R.string.daterange), 20)
         Row(
             modifier = Modifier

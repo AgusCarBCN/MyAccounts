@@ -19,11 +19,18 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     private val _selectedOptionIndex = MutableLiveData(0) // Por defecto, selecciona la primera opción
     val selectedOptionIndex: LiveData<Int> = _selectedOptionIndex
 
+    private val _showYearPicker = MutableLiveData<Boolean>()
+    val showYearPicker: LiveData<Boolean> = _showYearPicker
+
     private val _showDatePickerFrom = MutableLiveData<Boolean>()
     val showDatePickerFrom: LiveData<Boolean> = _showDatePickerFrom
 
     private val _showDatePickerTo = MutableLiveData<Boolean>()
     val showDatePickerTo: LiveData<Boolean> = _showDatePickerTo
+
+    private val _selectedYear = MutableLiveData<String>()
+    val selectedYear: LiveData<String> = _selectedYear
+
 
     private val _selectedFromDate = MutableLiveData<String>()
     val selectedFromDate: LiveData<String> = _selectedFromDate
@@ -58,7 +65,9 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             _showDatePickerTo.value = newValue
         }
     }
-
+    fun onShowYearPicker(newValue: Boolean) {
+        _showYearPicker.value = newValue
+    }
 
     fun onSelectedDate(date: String, isDateFrom: Boolean) {
 
@@ -71,7 +80,9 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
         }
     }
-
+    fun onSelectedYear(year:String){
+        _selectedYear.value = year
+    }
 
     fun onAmountsFieldsChange(fromAmount: String, toAmount: String) {
         // Validar y actualizar el valor de amount

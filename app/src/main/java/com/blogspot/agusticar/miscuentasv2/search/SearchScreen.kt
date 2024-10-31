@@ -99,7 +99,7 @@ fun SearchScreen(
                 false
             )
         }
-        AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
+        AccountSelector(300,20,stringResource(id = R.string.selectanaccount), accountViewModel)
         RadioButtonSearch(searchViewModel)
         TextFieldComponent(
             modifier = Modifier.width(360.dp),

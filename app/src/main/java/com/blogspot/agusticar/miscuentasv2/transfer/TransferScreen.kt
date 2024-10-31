@@ -80,8 +80,8 @@ fun Transfer(
             BoardType.DECIMAL,
             false
         )
-        AccountSelector(stringResource(id = R.string.originaccount), accountViewModel)
-        AccountSelector(stringResource(id = R.string.destinationaccount), accountViewModel, true)
+        AccountSelector(300,20,stringResource(id = R.string.originaccount), accountViewModel)
+        AccountSelector(300,20,stringResource(id = R.string.destinationaccount), accountViewModel, true)
 
         ModelButton(text = stringResource(id = R.string.confirmButton),
             R.dimen.text_title_small,
