@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsComponent
@@ -51,6 +52,7 @@ class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val settingViewModel: SettingViewModel by viewModels()
     private val searchViewModel: SearchViewModel by viewModels()
+    private val barChartViewModel:BarChartViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
     private val calculatorViewModel: CalculatorViewModel by viewModels()
 
@@ -157,6 +159,7 @@ class MainActivity : ComponentActivity() {
                                 entriesViewModel,
                                 searchViewModel,
                                 calculatorViewModel,
+                                barChartViewModel,
                                 navToCreateAccounts = {
                                     navigationController.navigate(Routes.CreateAccounts.route)
                                 }

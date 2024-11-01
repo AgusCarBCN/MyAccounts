@@ -57,6 +57,7 @@ import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.about.SendEmail
 import com.blogspot.agusticar.miscuentasv2.barchart.BarChartScreen
+import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorUI
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
@@ -97,6 +98,7 @@ fun MainScreen(
     entriesViewModel: EntriesViewModel,
     searchViewModel: SearchViewModel,
     calculatorViewModel: CalculatorViewModel,
+    barChartView:BarChartViewModel,
     navToCreateAccounts: () -> Unit
 
 ) {
@@ -277,7 +279,7 @@ fun MainScreen(
                         IconOptions.BARCHART -> {BarChartScreen(
                             entriesViewModel ,
                             accountsViewModel,
-                            searchViewModel
+                            barChartView
                         )
                         title=R.string.barchart
                         }

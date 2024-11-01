@@ -1,5 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.barchart
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -27,31 +30,25 @@ import java.util.Calendar
 
 fun BarChartScreen(entriesViewModel: EntriesViewModel,
                    accountViewModel: AccountsViewModel,
-                   searchViewModel: SearchViewModel
+                   barChartViewModel: BarChartViewModel
 
 ){
     val year = Calendar.getInstance().get(Calendar.YEAR)
     val accountSelected by accountViewModel.accountSelected.observeAsState()
-    val yearSelected by searchViewModel.selectedYear.observeAsState(year)
+    val yearSelected by barChartViewModel.selectedYear.observeAsState(year)
+    val barChartData by barChartViewModel.barChartData.observeAsState(mutableListOf())
 
-    val listOfMonths= listOf(stringResource(id = R.string.january,
-        stringResource(id = R.string.february),
-        stringResource(id = R.string.march),
-        stringResource(id = R.string.april),
-        stringResource(id = R.string.may),
-        stringResource(id = R.string.june),
-        stringResource(id = R.string.july),
-        stringResource(id = R.string.august),
-        stringResource(id = R.string.september),
-        stringResource(id = R.string.october),
-        stringResource(id = R.string.november),
-        stringResource(id = R.string.december)
-     ))
+
+    val idAccount = accountSelected?.id ?: 1
+    LaunchedEffect(idAccount) {
+        barChartViewModel.barChartDataByMonth(idAccount)
+    }
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 30.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
+        Log.d("data",barChartData.toString())
 
         Row(
             modifier = Modifier
@@ -61,7 +58,7 @@ fun BarChartScreen(entriesViewModel: EntriesViewModel,
             verticalAlignment = Alignment.CenterVertically
         ) {
             AccountSelector(200, 10, stringResource(id = R.string.account), accountViewModel)
-            YearSelector(searchViewModel)
+            YearSelector(barChartViewModel)
         }
     }
 }

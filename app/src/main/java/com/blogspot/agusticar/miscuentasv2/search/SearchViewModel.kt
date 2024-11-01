@@ -1,6 +1,5 @@
 package com.blogspot.agusticar.miscuentasv2.search
 
-import androidx.compose.ui.util.fastFirstOrNull
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,21 +15,15 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     val options = listOf(R.string.incomeoption, R.string.expenseoption, R.string.alloption)
 
     // Almacena el índice de la opción seleccionada
-    private val _selectedOptionIndex = MutableLiveData(0) // Por defecto, selecciona la primera opción
+    private val _selectedOptionIndex =
+        MutableLiveData(0) // Por defecto, selecciona la primera opción
     val selectedOptionIndex: LiveData<Int> = _selectedOptionIndex
-
-    private val _showYearPicker = MutableLiveData<Boolean>()
-    val showYearPicker: LiveData<Boolean> = _showYearPicker
 
     private val _showDatePickerFrom = MutableLiveData<Boolean>()
     val showDatePickerFrom: LiveData<Boolean> = _showDatePickerFrom
 
     private val _showDatePickerTo = MutableLiveData<Boolean>()
     val showDatePickerTo: LiveData<Boolean> = _showDatePickerTo
-
-    private val _selectedYear = MutableLiveData<String>()
-    val selectedYear: LiveData<String> = _selectedYear
-
 
     private val _selectedFromDate = MutableLiveData<String>()
     val selectedFromDate: LiveData<String> = _selectedFromDate
@@ -50,9 +43,12 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     private val _enableSearchButton = MutableLiveData<Boolean>()
     val enableSearchButton: LiveData<Boolean> = _enableSearchButton
 
+
+
     init {
         resetFields()
     }
+
     // Método para actualizar la opción seleccionada
     fun onOptionSelected(index: Int) {
         _selectedOptionIndex.value = index
@@ -65,9 +61,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             _showDatePickerTo.value = newValue
         }
     }
-    fun onShowYearPicker(newValue: Boolean) {
-        _showYearPicker.value = newValue
-    }
+
 
     fun onSelectedDate(date: String, isDateFrom: Boolean) {
 
@@ -80,9 +74,8 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
         }
     }
-    fun onSelectedYear(year:String){
-        _selectedYear.value = year
-    }
+
+
 
     fun onAmountsFieldsChange(fromAmount: String, toAmount: String) {
         // Validar y actualizar el valor de amount
@@ -105,9 +98,9 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     }
 
     // Método para actualizar la opción seleccionada
-   /* fun onOptionSelected(option: Int) {
-        _selectedOption.value = option
-    }*/
+    /* fun onOptionSelected(option: Int) {
+         _selectedOption.value = option
+     }*/
 
     fun onEnableSearchButton() {
         val fromDate = _selectedFromDate.value ?: Date().dateFormat()
@@ -145,4 +138,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         _toAmount.value = ""
         _enableSearchButton.value = false
     }
+
+
+
 }

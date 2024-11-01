@@ -82,6 +82,33 @@ interface EntryDao {
     ): Double?
 
     @Transaction
+    @Query("""
+    SELECT SUM(amount) FROM EntryEntity 
+    WHERE amount >= 0
+      AND accountId = :accountId
+      AND date LIKE :monthYear || '%'
+""")
+    suspend fun getSumOfIncomeEntriesForMonth(
+        accountId: Int,
+        monthYear: String // Formato "dd/MM/YYYY", por ejemplo, "01/11/2024"
+    ): Double?
+
+    @Transaction
+    @Query("""
+    SELECT SUM(amount) FROM EntryEntity 
+    WHERE amount < 0
+      AND accountId = :accountId
+      AND date LIKE :monthYear || '%'
+""")
+    suspend fun getSumOfExpensesEntriesForMonth(
+        accountId: Int,
+        monthYear: String // Formato "dd/MM/YYYY", por ejemplo, "01/11/2024"
+    ): Double?
+
+
+
+
+    @Transaction
     @Query("""SELECT SUM(amount) FROM EntryEntity WHERE amount < 0
             AND accountId = :accountId
             AND date >= :dateFrom  

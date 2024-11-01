@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import java.time.LocalDate
@@ -37,7 +38,7 @@ import java.time.LocalDate
 
 @Composable
 fun YearSelector(
-    searchViewModel: SearchViewModel
+    barChartViewModel: BarChartViewModel
 ) {
     // Obtén el año actual
     val currentYear = LocalDate.now().year
@@ -95,7 +96,7 @@ fun YearSelector(
                     .height(60.dp),
             ) { page ->
                 // Actualiza la cuenta seleccionada en ViewModel
-                searchViewModel.onSelectedYear(years[page])
+                barChartViewModel.onSelectedYear(years[page])
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceEvenly,

@@ -42,19 +42,8 @@ fun EntryList(entriesViewModel: EntriesViewModel,listOfEntries: List<EntryDTO>, 
     // Agrupar las entradas por fecha
     val groupedEntriesByDate =
         listOfEntries.groupBy { it.date }  // Asumiendo que it.date es un String o LocalDate
-    //val groupedEntriesByCategoryName = listOfEntries.groupBy { it.categoryName }
 
     val entriesByCategory=Utils.getMapOfEntriesByCategory(listOfEntries)
-
-    /*val categoryIcons=groupedEntriesByCategoryName.mapValues { (_, entries) ->
-        entries.firstOrNull()?.categoryId
-    }
-    val categoryTotals = groupedEntriesByCategoryName.mapValues { (_, entries) ->
-        entries.sumOf { it.amount }
-    }
-    val combinedCategoryInfo = categoryIcons.map { (categoryName, icon) ->
-        categoryName to Pair(icon, categoryTotals[categoryName])
-    }.toMap()*/
 
     Row(
         modifier = Modifier
