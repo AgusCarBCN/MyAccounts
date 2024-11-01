@@ -26,6 +26,16 @@ class BarChartViewModel @Inject constructor(
     private val _barChartData = MutableLiveData<MutableList<BarChartData>>(mutableListOf())
     val barChartData: LiveData<MutableList<BarChartData>> = _barChartData
 
+    private val _barChartDataIncome = MutableLiveData<MutableList<Pair<Int, Int>>>(mutableListOf())
+    var barChartDataIncome: LiveData<MutableList<Pair<Int,Int>>> = _barChartDataIncome
+
+    private val _barChartDataExpense = MutableLiveData<MutableList<Pair<Int, Int>>>(mutableListOf())
+    var barChartDataExpense: LiveData<MutableList<Pair<Int,Int>>> = _barChartDataExpense
+
+    private val _barChartDataResult = MutableLiveData<MutableList<Pair<Int, Int>>>(mutableListOf())
+    var barChartDataResult: LiveData<MutableList<Pair<Int,Int>>> = _barChartDataResult
+
+
     private val _showYearPicker = MutableLiveData<Boolean>()
     val showYearPicker: LiveData<Boolean> = _showYearPicker
 
@@ -44,7 +54,9 @@ class BarChartViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val year = _selectedYear.value?:"2024"
             val data: MutableList<BarChartData> = mutableListOf()
-
+            val incomes= mutableListOf<Pair<Int,Int>>()
+            val expenses= mutableListOf<Pair<Int,Int>>()
+            val result= mutableListOf<Pair<Int,Int>>()
             listOfMonths.forEachIndexed { index, month ->
                 // Asegúrate de que el mes esté en el formato correcto
                 val monthValue:String = if(index<9){
@@ -60,15 +72,15 @@ class BarChartViewModel @Inject constructor(
                     Log.d("data",monthValue)
                     Log.d("data",year)
                     // Espera los resultados
-                    val incomeAmount = incomeAmountDeferred.await().toFloat()
-                    val expenseAmount = expenseAmountDeferred.await().toFloat()
+                    val incomeAmount = incomeAmountDeferred.await().toInt()
+                    val expenseAmount = expenseAmountDeferred.await().toInt()
                     val resultAmount = incomeAmount + expenseAmount
-                    Log.d("data",incomeAmount.toString())
-                    Log.d("data",expenseAmount.toString())
-                    Log.d("data",resultAmount.toString())
-                    // Agrega los datos a la lista
-                    data.add(BarChartData(month, incomeAmount, resultAmount, resultAmount))
 
+                    // Agrega los datos a la lista
+                    //data.add(BarChartData(month, incomeAmount, resultAmount, resultAmount))
+                    incomes.add(Pair(month, incomeAmount))
+                    expenses.add(Pair(month, expenseAmount))
+                    result.add(Pair(month, resultAmount))
                 } catch (e: Exception) {
                     Log.e("ViewModel", "Error al obtener entradas para la cuenta $accountId para el mes $month: ${e.message}")
                 }
@@ -76,6 +88,9 @@ class BarChartViewModel @Inject constructor(
 
             // Publica los datos al LiveData una vez que todos los meses se hayan procesado
             _barChartData.postValue(data)
+            _barChartDataIncome.postValue(incomes)
+            _barChartDataExpense.postValue(expenses)
+            _barChartDataResult.postValue(result)
         }
     }
 

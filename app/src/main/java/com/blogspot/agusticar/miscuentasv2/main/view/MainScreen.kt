@@ -279,7 +279,8 @@ fun MainScreen(
                         IconOptions.BARCHART -> {BarChartScreen(
                             entriesViewModel ,
                             accountsViewModel,
-                            barChartView
+                            barChartView,
+                            settingViewModel
                         )
                         title=R.string.barchart
                         }
