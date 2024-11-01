@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 
@@ -37,13 +39,16 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 fun YearSelector(
     searchViewModel: SearchViewModel
 ) {
+    // Obtén el año actual
+    val currentYear = LocalDate.now().year
     val years = mutableListOf<String>()
     for (i in 2000..2100) {
         years.add(i.toString())
     }
-
+    // Encuentra el índice inicial basado en el año actual
+    val initialPage = years.indexOf(currentYear.toString()).coerceAtLeast(0)
     // Inicializamos el estado del VerticalPager basado en la cantidad de cuentas
-    val pagerState = rememberPagerState(pageCount = { years.size })
+    val pagerState = rememberPagerState(pageCount = { years.size }, initialPage = initialPage)
     val isDraggingUp by remember { derivedStateOf { pagerState.currentPage == 0 || pagerState.targetPage > pagerState.currentPage } }
 
     Column(
@@ -65,10 +70,12 @@ fun YearSelector(
                 painter = painterResource(id = if (isDraggingUp) R.drawable.arrow_up else R.drawable.arrow_down),
                 contentDescription = null,
                 tint = LocalCustomColorsPalette.current.textColor,
-                modifier = Modifier.width(36.dp).padding(end = 8.dp)
+                modifier = Modifier
+                    .width(36.dp)
+                    .padding(end = 8.dp)
             )
             Text(
-                text = "Year",
+                text = stringResource(id = R.string.year),
                 fontSize = 20.sp,
                 color = LocalCustomColorsPalette.current.textColor,
                 modifier = Modifier.padding(vertical = 10.dp),

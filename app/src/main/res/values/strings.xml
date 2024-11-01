@@ -286,6 +286,7 @@
     <string name="expensechart">Expenses</string>
     <string name="daterange">Selecciona un rango de fechas</string>
     <string name="account">Account</string>
+    <string name="year">Year</string>
     <!--Months-->
     <string name="january">January</string>
     <string name="february">February</string>

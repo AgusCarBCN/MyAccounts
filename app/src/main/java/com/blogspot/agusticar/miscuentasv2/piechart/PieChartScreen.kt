@@ -63,7 +63,8 @@ fun PieChartScreen(
 
     val idAccount = accountSelected?.id ?: 1
 
-    // Evita llamadas redundantes usando dependencias
+   //LaunchedEffect para ejecutar lógica dependiente de la UI o que deba reaccionar a cambios
+   // en la composición
     LaunchedEffect(idAccount, fromDate, toDate) {
         entriesViewModel.getTotalByDate(idAccount, fromDate, toDate)
         entriesViewModel.getFilteredEntries(

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -25,7 +26,10 @@ fun CategorySelector(mainViewModel: MainViewModel, entriesViewModel:EntriesViewM
 
     val listOfCategories by entriesViewModel.listOfCategories.observeAsState(listOf())
     //Obtengo lista de categorias por status
-    entriesViewModel.getCategories(status)
+    LaunchedEffect(status) {
+        entriesViewModel.getCategories(status)
+    }
+
     HeadSetting(title = (if(status) stringResource(id = R.string.chooseincome) else stringResource(
         id = R.string.chooseexpense)), size = 24)
         LazyVerticalGrid(

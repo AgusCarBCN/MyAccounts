@@ -92,11 +92,13 @@ class AccountsViewModel @Inject constructor(
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
 
+    // Cargar datos iniciales que no dependen de la UI ni de la composición.
     init {
         viewModelScope.launch {
             _currencyCode.value = getCurrencyCode()
             _isCurrencyExpanded.value = false
             onAccountUpdated()
+            getListOfCurrencyCode()
 
         }
     }
@@ -212,7 +214,7 @@ class AccountsViewModel @Inject constructor(
     }
 
 
-    fun getListOfCurrencyCode(): List<Currency> {
+    private fun getListOfCurrencyCode(): List<Currency> {
         //Ordeno la lista por la descripción de la divisa
         val sortedCurrencies = currencies.sortedBy { it.currencyDescription }
         _currencyCodeList.value = sortedCurrencies

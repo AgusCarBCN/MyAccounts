@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -35,8 +36,9 @@ fun CurrencySelector(accountsViewModel: AccountsViewModel) {
     val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
     // Obtener el estado de expansión desde el ViewModel
     val isExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
-    // Obtener la lista de divisas desde el ViewModel
-    val currencies = accountsViewModel.getListOfCurrencyCode()
+    val currencies by accountsViewModel.currencyCodeList.observeAsState(listOf())
+
+
 
     // Contenedor principal
     Column(

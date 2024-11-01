@@ -21,6 +21,7 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.YearSelector
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
+import java.util.Calendar
 
 @Composable
 
@@ -29,8 +30,9 @@ fun BarChartScreen(entriesViewModel: EntriesViewModel,
                    searchViewModel: SearchViewModel
 
 ){
+    val year = Calendar.getInstance().get(Calendar.YEAR)
     val accountSelected by accountViewModel.accountSelected.observeAsState()
-
+    val yearSelected by searchViewModel.selectedYear.observeAsState(year)
 
     val listOfMonths= listOf(stringResource(id = R.string.january,
         stringResource(id = R.string.february),

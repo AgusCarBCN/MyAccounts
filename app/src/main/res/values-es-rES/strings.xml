@@ -286,6 +286,7 @@
     <string name="expensechart">Gastos</string>
     <string name="daterange">Selecciona un rango de fechas</string>
     <string name="account">Cuenta</string>
+    <string name="year">Año</string>
     <!--Meses del año gráfico de barras-->
     <string name="january">Enero</string>
     <string name="february">Febrero</string>
