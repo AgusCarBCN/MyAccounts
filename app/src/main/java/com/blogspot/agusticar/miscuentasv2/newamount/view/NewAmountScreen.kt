@@ -100,7 +100,7 @@ fun NewAmount(
         )
         AccountSelector(300,20,stringResource(id = R.string.selectanaccount), accountViewModel)
         ModelButton(text = stringResource(id = if (status) R.string.newincome else R.string.newexpense),
-            R.dimen.text_title_small,
+            R.dimen.text_title_medium,
             modifier = Modifier.width(320.dp),
             enableConfirmButton,
             onClickButton = {
@@ -173,7 +173,7 @@ fun NewAmount(
             }
         )
         ModelButton(text = stringResource(id = R.string.backButton),
-            R.dimen.text_title_small,
+            R.dimen.text_title_medium,
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {

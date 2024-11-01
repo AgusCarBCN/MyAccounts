@@ -29,7 +29,7 @@ class BarChartViewModel @Inject constructor(
     private val _showYearPicker = MutableLiveData<Boolean>()
     val showYearPicker: LiveData<Boolean> = _showYearPicker
 
-    private val _selectedYear = MutableLiveData<String>()
+    private val _selectedYear = MutableLiveData<String>("2024")
     val selectedYear: LiveData<String> = _selectedYear
 
     fun onShowYearPicker(newValue: Boolean) {
@@ -42,23 +42,30 @@ class BarChartViewModel @Inject constructor(
 
     fun barChartDataByMonth(accountId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val year = _selectedYear.value
+            val year = _selectedYear.value?:"2024"
             val data: MutableList<BarChartData> = mutableListOf()
 
             listOfMonths.forEachIndexed { index, month ->
                 // Asegúrate de que el mes esté en el formato correcto
-                val monthYear = "${index + 1}/$year" // Cambia a index + 1 para obtener el mes correcto
+                val monthValue:String = if(index<9){
+                    "0${(index+1)}"
+                }else{
+                    "${index+1}"
+                }
 
                 try {
                     // Realiza llamadas asíncronas para ingresos y gastos
-                    val incomeAmountDeferred = async { sumIncomesByMonth.invoke(accountId, monthYear) }
-                    val expenseAmountDeferred = async { sumIncomesByMonth.invoke(accountId, monthYear) }
-
+                    val incomeAmountDeferred = async { sumIncomesByMonth.invoke(accountId, monthValue,year) }
+                    val expenseAmountDeferred = async { sumExpensesByMonth.invoke(accountId, monthValue,year) }
+                    Log.d("data",monthValue)
+                    Log.d("data",year)
                     // Espera los resultados
                     val incomeAmount = incomeAmountDeferred.await().toFloat()
                     val expenseAmount = expenseAmountDeferred.await().toFloat()
-                    val resultAmount = incomeAmount - expenseAmount
-
+                    val resultAmount = incomeAmount + expenseAmount
+                    Log.d("data",incomeAmount.toString())
+                    Log.d("data",expenseAmount.toString())
+                    Log.d("data",resultAmount.toString())
                     // Agrega los datos a la lista
                     data.add(BarChartData(month, incomeAmount, resultAmount, resultAmount))
 

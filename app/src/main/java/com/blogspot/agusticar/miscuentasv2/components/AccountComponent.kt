@@ -55,6 +55,10 @@ fun AccountSelector(
     val pagerState = rememberPagerState(pageCount = { accounts.size })
     val isDraggingUp by remember { derivedStateOf { pagerState.currentPage == 0 || pagerState.targetPage > pagerState.currentPage } }
 
+        accountViewModel.getAllAccounts()
+
+
+
     Column(
         modifier = Modifier
             .width(size.dp)
@@ -74,7 +78,9 @@ fun AccountSelector(
                 painter = painterResource(id = if (isDraggingUp) R.drawable.arrow_up else R.drawable.arrow_down),
                 contentDescription = null,
                 tint = LocalCustomColorsPalette.current.textColor,
-                modifier = Modifier.width(36.dp).padding(end = 8.dp)
+                modifier = Modifier
+                    .width(36.dp)
+                    .padding(end = 8.dp)
             )
             Text(
                 text = title,

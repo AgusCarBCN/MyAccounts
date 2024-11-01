@@ -84,7 +84,7 @@ fun Transfer(
         AccountSelector(300,20,stringResource(id = R.string.destinationaccount), accountViewModel, true)
 
         ModelButton(text = stringResource(id = R.string.confirmButton),
-            R.dimen.text_title_small,
+            R.dimen.text_title_medium,
             modifier = Modifier.width(320.dp),
             confirmButton,
             onClickButton = {
@@ -139,7 +139,7 @@ fun Transfer(
             }
         )
         ModelButton(text = stringResource(id = R.string.backButton),
-            R.dimen.text_title_small,
+            R.dimen.text_title_medium,
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {

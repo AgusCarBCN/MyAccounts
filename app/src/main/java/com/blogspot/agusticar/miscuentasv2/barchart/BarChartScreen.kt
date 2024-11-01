@@ -49,11 +49,11 @@ fun BarChartScreen(entriesViewModel: EntriesViewModel,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         Log.d("data",barChartData.toString())
+        Log.d("year",yearSelected.toString())
 
         Row(
             modifier = Modifier
-                .width(300.dp)
-                .background(Color.Red),
+                .width(300.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {

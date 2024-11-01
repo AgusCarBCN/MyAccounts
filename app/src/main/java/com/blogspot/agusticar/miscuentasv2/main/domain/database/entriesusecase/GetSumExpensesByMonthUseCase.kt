@@ -7,6 +7,7 @@ class GetSumExpensesByMonthUseCase @Inject constructor(private val repository: E
 
     suspend operator fun invoke(
         accountId: Int,
-        yearMonth: String
-    ): Double = repository.getSumOfExpensesEntriesForMonth(accountId, yearMonth)
+        month: String,
+        year: String
+    ): Double = repository.getSumOfExpensesEntriesForMonth(accountId, month, year)
 }

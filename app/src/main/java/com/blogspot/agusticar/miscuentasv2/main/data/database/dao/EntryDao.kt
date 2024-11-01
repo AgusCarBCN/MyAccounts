@@ -71,10 +71,12 @@ interface EntryDao {
     suspend fun getSumOfExpenseEntries(): Double?
 
     @Transaction
-    @Query("""SELECT SUM(amount) FROM EntryEntity WHERE amount >= 0
+    @Query(
+        """SELECT SUM(amount) FROM EntryEntity WHERE amount >= 0
             AND accountId = :accountId
             AND date >= :dateFrom  
-            AND date <= :dateTo  """)
+            AND date <= :dateTo  """
+    )
     suspend fun getSumOfIncomeEntriesByDate(
         accountId: Int,
         dateFrom: String = Date().dateFormat(),
@@ -82,37 +84,45 @@ interface EntryDao {
     ): Double?
 
     @Transaction
-    @Query("""
-    SELECT SUM(amount) FROM EntryEntity 
-    WHERE amount >= 0
-      AND accountId = :accountId
-      AND date LIKE :monthYear || '%'
-""")
+    @Query(
+        """
+SELECT SUM(amount) FROM EntryEntity 
+WHERE amount >= 0
+  AND accountId = :accountId
+   AND SUBSTR(date, 4, 2) = :month 
+   AND SUBSTR(date, 7, 4) = :year
+"""
+    )
     suspend fun getSumOfIncomeEntriesForMonth(
         accountId: Int,
-        monthYear: String // Formato "dd/MM/YYYY", por ejemplo, "01/11/2024"
+        month: String,  // Espera un valor en formato 'MM' (ejemplo: '01' para enero)
+        year: String    // Espera un valor en formato 'YYYY' (ejemplo: '2024')
     ): Double?
 
     @Transaction
-    @Query("""
-    SELECT SUM(amount) FROM EntryEntity 
-    WHERE amount < 0
-      AND accountId = :accountId
-      AND date LIKE :monthYear || '%'
-""")
+    @Query(
+        """
+SELECT SUM(amount) FROM EntryEntity 
+WHERE amount < 0
+  AND accountId = :accountId
+   AND SUBSTR(date, 4, 2) = :month 
+   AND SUBSTR(date, 7, 4) = :year
+"""
+    )
     suspend fun getSumOfExpensesEntriesForMonth(
         accountId: Int,
-        monthYear: String // Formato "dd/MM/YYYY", por ejemplo, "01/11/2024"
+        month: String,
+        year: String
     ): Double?
 
 
-
-
     @Transaction
-    @Query("""SELECT SUM(amount) FROM EntryEntity WHERE amount < 0
+    @Query(
+        """SELECT SUM(amount) FROM EntryEntity WHERE amount < 0
             AND accountId = :accountId
             AND date >= :dateFrom  
-            AND date <= :dateTo""")
+            AND date <= :dateTo"""
+    )
     suspend fun getSumOfExpenseEntriesByDate(
         accountId: Int,
         dateFrom: String = Date().dateFormat(),

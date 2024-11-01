@@ -8,6 +8,7 @@ class GetSumIncomesByMonthUseCase @Inject constructor(private val repository: En
 
     suspend operator fun invoke(
         accountId: Int,
-        yearMonth: String
-    ): Double = repository.getSumOfIncomeEntriesForMonth(accountId, yearMonth)
+        month: String,
+        year:String
+    ): Double = repository.getSumOfIncomeEntriesForMonth(accountId, month, year)
 }

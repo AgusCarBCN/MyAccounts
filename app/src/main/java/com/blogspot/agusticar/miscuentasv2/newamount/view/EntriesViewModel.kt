@@ -95,6 +95,7 @@ class EntriesViewModel @Inject constructor(
 
     init{
         getTotal()
+
     }
     fun getFilteredEntries(accountId: Int,
                            description:String,

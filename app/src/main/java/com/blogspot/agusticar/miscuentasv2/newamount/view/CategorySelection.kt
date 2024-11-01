@@ -25,10 +25,9 @@ fun CategorySelector(mainViewModel: MainViewModel, entriesViewModel:EntriesViewM
 
 
     val listOfCategories by entriesViewModel.listOfCategories.observeAsState(listOf())
-    //Obtengo lista de categorias por status
-    LaunchedEffect(status) {
-        entriesViewModel.getCategories(status)
-    }
+
+    entriesViewModel.getCategories(status)
+
 
     HeadSetting(title = (if(status) stringResource(id = R.string.chooseincome) else stringResource(
         id = R.string.chooseexpense)), size = 24)

@@ -53,7 +53,7 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
 
     suspend fun getEntriesFiltered(
         accountId: Int,
-        descriptionAmount:String,
+        descriptionAmount: String,
         fromDate: String = Date().dateFormat(),
         toDate: String = Date().dateFormat(),
         amountMin: Double = 0.0,
@@ -69,24 +69,33 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
         selectedOptions
 
     )
-    suspend fun getSumIncomesByDate(accountId:Int,
-                                    fromDate: String = Date().dateFormat(),
-                                    toDate: String = Date().dateFormat()): Double =
-        entryDao.getSumOfIncomeEntriesByDate(accountId, fromDate, toDate)?:0.0
 
-    suspend fun getSumExpensesByDate(accountId:Int,
-                                     fromDate: String = Date().dateFormat(),
-                                     toDate: String = Date().dateFormat()): Double =
-        entryDao.getSumOfExpenseEntriesByDate(accountId, fromDate, toDate)?:0.0
+    suspend fun getSumIncomesByDate(
+        accountId: Int,
+        fromDate: String = Date().dateFormat(),
+        toDate: String = Date().dateFormat()
+    ): Double =
+        entryDao.getSumOfIncomeEntriesByDate(accountId, fromDate, toDate) ?: 0.0
 
-    suspend fun getSumOfIncomeEntriesForMonth (accountId: Int,
-    monthYear: String
-    ): Double =entryDao.getSumOfIncomeEntriesForMonth(accountId,monthYear)?:0.0
+    suspend fun getSumExpensesByDate(
+        accountId: Int,
+        fromDate: String = Date().dateFormat(),
+        toDate: String = Date().dateFormat()
+    ): Double =
+        entryDao.getSumOfExpenseEntriesByDate(accountId, fromDate, toDate) ?: 0.0
 
-    suspend fun getSumOfExpensesEntriesForMonth (accountId: Int,
-                                               monthYear: String
-    ): Double =entryDao.getSumOfExpensesEntriesForMonth(accountId,monthYear)?:0.0
+    suspend fun getSumOfIncomeEntriesForMonth(
+        accountId: Int,
+        month: String,
+        year: String
+    ): Double =
+        entryDao.getSumOfIncomeEntriesForMonth(accountId, month, year) ?: 0.0
 
+    suspend fun getSumOfExpensesEntriesForMonth(
+        accountId: Int,
+        month: String,
+        year: String
+    ): Double = entryDao.getSumOfExpensesEntriesForMonth(accountId, month,year) ?: 0.0
 
 
     private fun entryDtoToEntry(dto: EntryDTO): Entry {
