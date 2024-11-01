@@ -82,9 +82,9 @@ fun BarChartScreen(entriesViewModel: EntriesViewModel,
 fun BarChart() {
 
     val chartData = listOf(
-        Pair("1", 90),
-        Pair("2", 110),
-        Pair("2", 70),
+        Pair("1", 0),
+        Pair("2", 0),
+        Pair("2", 0),
         Pair("4", 205),
         Pair("5", 150),
         Pair("6", 175),
@@ -196,18 +196,20 @@ fun BarChart() {
             chartData.forEachIndexed { index, chartPair ->
 
                 //draw text at top of each bar
-                drawContext.canvas.nativeCanvas.apply {
-                    drawText(
-                        chartPair.second.toString(),
-                        spacingFromLeft + 40f + index * spacePerData,
-                        (upperValue - chartPair.second.toFloat()) / upperValue * canvasHeight - 10f,
-                        textPaint
-                    )
-                }
+               if(chartPair.second>0) {
+                   drawContext.canvas.nativeCanvas.apply {
+                       drawText(
+                           chartPair.second.toString(),
+                           spacingFromLeft + 40f + index * spacePerData,
+                           (upperValue - chartPair.second.toFloat()) / upperValue * canvasHeight - 10f,
+                           textPaint
+                       )
+                   }
+               }
 
                 //draw Bar for each value
                 drawRoundRect(
-                    color = Color.Magenta,
+                    color = if(chartPair.second>0)Color.Magenta else Color.Transparent,
                     topLeft = Offset(
                         spacingFromLeft + 10f + index * spacePerData,
                         (upperValue - chartPair.second.toFloat()) / upperValue * canvasHeight
