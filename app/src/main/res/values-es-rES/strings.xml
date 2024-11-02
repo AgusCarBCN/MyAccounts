@@ -287,6 +287,7 @@
     <string name="daterange">Selecciona un rango de fechas</string>
     <string name="account">Cuenta</string>
     <string name="year">Año</string>
+    <string name="result">Resultado</string>
     <!--Meses del año gráfico de barras-->
     <string name="january">Ene</string>
     <string name="february">Feb</string>

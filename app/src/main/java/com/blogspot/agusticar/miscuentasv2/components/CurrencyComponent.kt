@@ -1,6 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,8 +38,6 @@ fun CurrencySelector(accountsViewModel: AccountsViewModel) {
     // Obtener el estado de expansión desde el ViewModel
     val isExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
     val currencies by accountsViewModel.currencyCodeList.observeAsState(listOf())
-
-
 
     // Contenedor principal
     Column(
@@ -93,6 +92,7 @@ fun CurrencySelector(accountsViewModel: AccountsViewModel) {
                         // Cambia el estado a colapsado
                         accountsViewModel.onExpandedChange(false)
                     }
+                    Log.d("currency",currency.currencyCode)
                 }
             }
         }

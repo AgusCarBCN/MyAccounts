@@ -84,7 +84,8 @@ fun BarChartScreen(
 
         HeadSetting(title = stringResource(id = R.string.alloption), 20)
         BarChart(context, data,isDarkTheme)
-
+        HeadSetting(title = stringResource(id = R.string.result), 20)
+        BarChartResult(context, data,isDarkTheme)
     }
 
 }
@@ -200,3 +201,104 @@ fun BarChart(
     )
 }
 
+@Composable
+fun BarChartResult(
+    context: Context,
+    data: MutableList<BarChartData>,
+    isDarkTheme: Boolean
+) {
+    val months= mutableListOf<String>()
+    data.forEach {element->
+        months.add(stringResource(id =element.month ))
+    }
+    Log.d("data",data.toString())
+    val resultLabel= stringResource(id = R.string.result)
+    var resultBar:Float=0.0f
+    AndroidView(
+        factory = { ctx ->
+            BarChart(ctx).apply {
+                // Set up chart properties
+                setBackgroundColor(if(isDarkTheme) ContextCompat.getColor(context, R.color.darkBrown)
+                else ContextCompat.getColor(context, R.color.lightYellow))
+                setGridBackgroundColor(if(isDarkTheme) ContextCompat.getColor(context, R.color.darkBrown)
+                else ContextCompat.getColor(context, R.color.lightYellow))
+                description.isEnabled = false
+                setTouchEnabled(true) // Correct usage to enable touch
+                setDrawGridBackground(false)
+                axisRight.isEnabled = false// Disable right Y axis
+
+                // Setup the X-axis
+                xAxis.apply {
+                    valueFormatter = IndexAxisValueFormatter(months)
+                    granularity = 1f
+                    isGranularityEnabled = true // Asegura que la granularidad se respete
+                    labelCount = months.size // Establece el número de etiquetas en el total de meses
+                    position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                    setDrawGridLines(false)
+                    textColor = if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
+                    else ContextCompat.getColor(context, R.color.darkBrown)
+                    axisLineColor = if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
+                    else ContextCompat.getColor(context, R.color.darkBrown)
+                    textSize = 10f
+                }
+
+
+                // Configuración del eje Y izquierdo
+                axisLeft.apply {
+                    textColor =  if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
+                    else ContextCompat.getColor(context, R.color.darkBrown)
+                    axisLineColor = if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
+                    else ContextCompat.getColor(context, R.color.darkBrown)
+                    setDrawGridLines(false) // Habilitar líneas de cuadrícula en el eje Y
+                    gridColor =  if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
+                    else ContextCompat.getColor(context, R.color.darkBrown)
+                    textSize = 12f
+                    if(resultBar>=0){
+                        axisMinimum = 0f
+                        }
+                }
+                // Configuración de la leyenda
+                legend.apply {
+                    isEnabled = true // Habilitar la leyenda
+                    textColor =  if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
+                    else ContextCompat.getColor(context, R.color.darkBrown)
+                    textSize = 14f // Establecer el tamaño del texto de la leyenda
+                    form = Legend.LegendForm.CIRCLE // Forma de la leyenda (puede ser SQUARE, CIRCLE, LINE)
+                    formSize = 10f // Tamaño de la forma en la leyenda
+                    horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT // Alineación horizontal
+                    verticalAlignment = Legend.LegendVerticalAlignment.TOP // Alineación vertical
+                    orientation = Legend.LegendOrientation.HORIZONTAL // Orientación de la leyenda
+                }
+
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(410.dp)
+            .padding(5.dp)
+        ,
+        update = { chart ->
+            // Prepare bar entries for each category
+            val barEntriesResult = data.mapIndexed { index, value ->
+                BarEntry(index.toFloat(), value.result)
+
+            }
+            data.map{value->
+            resultBar=value.result
+            }
+            // Create datasets
+            val resultDataSet = BarDataSet(barEntriesResult,resultLabel).apply {
+                color = if(isDarkTheme)ContextCompat.getColor(context, R.color.lightblue)
+                else ContextCompat.getColor(context, R.color.blue)
+                setDrawValues(false)
+            }
+
+            // Create bar data
+            val dataBarChart = BarData(resultDataSet)
+            chart.data = dataBarChart
+            // Refresh chart
+            chart.invalidate()
+
+        }
+    )
+}

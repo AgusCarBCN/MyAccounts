@@ -287,6 +287,7 @@
     <string name="daterange">Selecciona un rango de fechas</string>
     <string name="account">Account</string>
     <string name="year">Year</string>
+    <string name="result">Result</string>
     <!--Months-->
     <string name="january">Jan</string>
     <string name="february">Feb</string>

@@ -154,7 +154,7 @@ fun SearchScreen(
             false
         )
         ModelButton(text = stringResource(id = R.string.search),
-            R.dimen.text_title_small,
+            R.dimen.text_title_medium,
             modifier = Modifier.width(360.dp),
             enableSearchButton,
             onClickButton = {
@@ -166,11 +166,7 @@ fun SearchScreen(
                     toAmount.toDoubleOrNull()?:Double.MAX_VALUE,
                     selectedOption?:0)
                 mainViewModel.selectScreen(IconOptions.ENTRIES)
-                Log.d("data","fromDate: $fromDate")
-                Log.d("data","toDate: $toDate")
-                Log.d("data","fromAmount: $fromAmount")
-                Log.d("data","toAmount: $toAmount")
-                Log.d("data","selectOption: $selectedOption")
+
             }
         )
 
