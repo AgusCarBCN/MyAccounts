@@ -41,14 +41,10 @@ class BarChartViewModel @Inject constructor(
         _selectedYear.value = year
     }
 
-    fun barChartDataByMonth(accountId: Int) {
+    fun barChartDataByMonth(accountId: Int,year:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val year = _selectedYear.value?:"2024"
-            val data: MutableList<BarChartData> = mutableListOf()
-            val incomes= mutableListOf<Pair<Int,Int>>()
-            val expenses= mutableListOf<Pair<Int,Int>>()
-            val result= mutableListOf<Pair<Int,Int>>()
 
+            val data: MutableList<BarChartData> = mutableListOf()
 
             listOfMonths.forEachIndexed { index, month ->
                 // Asegúrate de que el mes esté en el formato correcto
@@ -66,14 +62,10 @@ class BarChartViewModel @Inject constructor(
                     val incomeAmount = incomeAmountDeferred.await().toFloat()
                     val expenseAmount = expenseAmountDeferred.await().toFloat()
                     val resultAmount = incomeAmount + expenseAmount
-
                     // Agrega los datos a la lista
                     data.add(BarChartData(month, incomeAmount, expenseAmount,
                         resultAmount))
-                    //incomes.add(Pair(month, incomeAmount))
-                    //expenses.add(Pair(month, expenseAmount))
-                    //result.add(Pair(month, resultAmount))
-                } catch (e: Exception) {
+                     } catch (e: Exception) {
                     Log.e("ViewModel", "Error al obtener entradas para la cuenta $accountId para el mes $month: ${e.message}")
                 }
             }

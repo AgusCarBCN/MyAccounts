@@ -96,7 +96,7 @@ fun YearSelector(
                     .height(60.dp),
             ) { page ->
                 // Actualiza la cuenta seleccionada en ViewModel
-                barChartViewModel.onSelectedYear(years[page])
+                barChartViewModel.onSelectedYear(years[pagerState.targetPage])
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceEvenly,
@@ -109,8 +109,6 @@ fun YearSelector(
                         color = LocalCustomColorsPalette.current.textColor,
                         textAlign = TextAlign.Center
                     )
-
-
 
             }
         }

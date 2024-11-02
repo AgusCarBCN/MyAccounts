@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -51,19 +52,15 @@ fun BarChartScreen(
 ) {
     val year = Calendar.getInstance().get(Calendar.YEAR)
     val accountSelected by accountViewModel.accountSelected.observeAsState()
-    val yearSelected by barChartViewModel.selectedYear.observeAsState(year)
-
+    val yearSelected by barChartViewModel.selectedYear.observeAsState()
     val data by barChartViewModel.barChartData.observeAsState(mutableListOf())
     val isDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
-    val colorIncomeBar = LocalCustomColorsPalette.current.incomeColor
-    val colorExpenseBar = LocalCustomColorsPalette.current.expenseColor
     val context= LocalContext.current
-
     val idAccount = accountSelected?.id ?: 1
-
-        barChartViewModel.barChartDataByMonth(idAccount)
-
-
+    Log.d("year",yearSelected.toString())
+    LaunchedEffect(idAccount,yearSelected) {
+        barChartViewModel.barChartDataByMonth(idAccount,yearSelected?:year.toString())
+    }
 
     Column(
         modifier = Modifier
