@@ -61,7 +61,6 @@ import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorUI
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
-import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
@@ -111,7 +110,7 @@ fun MainScreen(
     val showExitDialog by mainViewModel.showExitDialog.collectAsState()
     val showDeleteAccountDialog by mainViewModel.showDeleteAccountDialog.collectAsState()
     val entries by entriesViewModel.listOfEntries.collectAsState()
-    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+    val currencyCode by accountsViewModel.currencyCodeShowed.observeAsState("USD")
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
     LaunchedEffect(Unit) {

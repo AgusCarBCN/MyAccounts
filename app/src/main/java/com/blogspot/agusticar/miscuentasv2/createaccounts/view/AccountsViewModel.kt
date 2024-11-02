@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
@@ -19,7 +18,6 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.U
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountNameUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
-import com.blogspot.agusticar.miscuentasv2.retrofit.CurrencyConverterApi
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -63,8 +61,11 @@ class AccountsViewModel @Inject constructor(
     private val _enableCurrencySelector = MutableLiveData<Boolean>()
     val enableCurrencySelector: LiveData<Boolean> = _enableCurrencySelector
 
-    private val _currencyCode = MutableLiveData<String>()
-    val currencyCode: LiveData<String> = _currencyCode
+    private val _currencyCodeShowed = MutableLiveData<String>()
+    val currencyCodeShowed: LiveData<String> = _currencyCodeShowed
+
+    private val _currencyCodeSelected = MutableLiveData<String>()
+    val currencyCodeSelected: LiveData<String> = _currencyCodeSelected
 
     // LiveData para los campos de texto
     private val _name = MutableLiveData<String>()
@@ -102,7 +103,7 @@ class AccountsViewModel @Inject constructor(
     // Cargar datos iniciales que no dependen de la UI ni de la composición.
     init {
         viewModelScope.launch {
-            _currencyCode.value = getCurrencyCode()
+            _currencyCodeShowed.value =getCurrencyCode.invoke()
             _isCurrencyExpanded.value = false
             onAccountUpdated()
             getListOfCurrencyCode()
@@ -191,10 +192,13 @@ class AccountsViewModel @Inject constructor(
         _destinationAccount.postValue(null)
         _isConfirmTransfer.postValue(false)
         _isEnableButton.postValue(false)
+
     }
 
-    fun onCurrencySelectedChange(currencySelected: String) {
-        _currencyCode.value = currencySelected
+
+    fun onCurrencyShowedChange(currencyShowed: String) {
+        _currencyCodeShowed.value = currencyShowed
+
 
     }
 
@@ -215,6 +219,7 @@ class AccountsViewModel @Inject constructor(
 
     fun setCurrencyCode(currencyCode: String) {
         viewModelScope.launch {
+            _currencyCodeSelected.value =currencyCode
             setCurrencyCode.invoke(currencyCode)
 
         }

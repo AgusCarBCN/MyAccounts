@@ -145,6 +145,8 @@
     <string name="errorreadingdatastore">Error reading to DataStore</string>
     <string name="datefromoverdateto">Date from is over date to</string>
     <string name="amountfromoverdateto">Amount from is over amount to</string>
+    <string name="currencyformatchange">You have changed the currency format</string>
+    <string name="currencychange">You have changed the format and entries to the new currency.</string>
     <!--TopBar titles-->
     <string name="hometitle">Home</string>
     <string name="searchtitle">Search</string>

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -33,15 +32,15 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 @Composable
 fun CurrencySelector(accountsViewModel: AccountsViewModel) {
-    // Obtener el estado actual de la moneda seleccionada
-    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+
+     // Divisa mostrada en proceso de seleccion
+    val currencyCodeShowed by accountsViewModel.currencyCodeShowed.observeAsState("USD")
+
     // Obtener el estado de expansión desde el ViewModel
     val isExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
     val currencies by accountsViewModel.currencyCodeList.observeAsState(listOf())
-    val conversionCurrencyRate by accountsViewModel.conversionCurrencyRate.observeAsState(1)
-    accountsViewModel.conversionCurrencyRate(currencyCode,"GBP")
 
-    Log.d("ratio",conversionCurrencyRate.toString())
+
     // Contenedor principal
     Column(
         modifier = Modifier
@@ -71,7 +70,7 @@ fun CurrencySelector(accountsViewModel: AccountsViewModel) {
 
             // Mostrar la moneda seleccionada actualmente
             Text(
-                text = "${stringResource(id = R.string.selectedcurrency)} $currencyCode",
+                text = "${stringResource(id = R.string.selectedcurrency)} $currencyCodeShowed",
                 fontSize = 18.sp,
                 color = LocalCustomColorsPalette.current.textColor,
                 modifier = Modifier
@@ -90,12 +89,12 @@ fun CurrencySelector(accountsViewModel: AccountsViewModel) {
                     // Elemento de la lista
                     CurrencyListItem(currency) {
                         // Acción al seleccionar la moneda
-                        accountsViewModel.onCurrencySelectedChange(currency.currencyCode)
-                        accountsViewModel.setCurrencyCode(currencyCode)
-                        // Cambia el estado a colapsado
+                        accountsViewModel.onCurrencyShowedChange(currency.currencyCode)
+
+                       //Cambia el estado a colapsado
                         accountsViewModel.onExpandedChange(false)
                     }
-                    Log.d("currency",currency.currencyCode)
+
                 }
             }
         }

@@ -148,6 +148,8 @@
     <string name="errorreadingdatastore">Error al leer en DataStore</string>
     <string name="datefromoverdateto">La fecha inicial es posterior a la fecha final</string>
     <string name="amountfromoverdateto">El monto inicial es mayor que el monto final</string>
+    <string name="currencyformatchange">Has cambiado el formato de la moneda</string>
+    <string name="currencychange">Has cambiado el formato y las entradas a la nueva moneda.</string>
 
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>

@@ -1,6 +1,5 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,14 +17,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -49,14 +44,13 @@ fun AccountSelector(
 ) {
     // Observa el estado de la lista de cuentas y la moneda
     val accounts by accountViewModel.listOfAccounts.observeAsState(emptyList())
-    val currencyCode by accountViewModel.currencyCode.observeAsState("USD")
+    val currencyCodeSelected by accountViewModel.currencyCodeSelected.observeAsState("USD")
 
     // Inicializamos el estado del VerticalPager basado en la cantidad de cuentas
     val pagerState = rememberPagerState(pageCount = { accounts.size })
     val isDraggingUp by remember { derivedStateOf { pagerState.currentPage == 0 || pagerState.targetPage > pagerState.currentPage } }
 
         accountViewModel.getAllAccounts()
-
 
 
     Column(
@@ -109,7 +103,7 @@ fun AccountSelector(
                     accountViewModel.onAccountSelected(accounts[pagerState.targetPage])
                 }
 
-                val balanceFormatted = Utils.numberFormat(accounts[page].balance, currencyCode)
+                val balanceFormatted = Utils.numberFormat(accounts[page].balance, currencyCodeSelected)
 
                 Row(
                     modifier = Modifier.fillMaxSize(),
