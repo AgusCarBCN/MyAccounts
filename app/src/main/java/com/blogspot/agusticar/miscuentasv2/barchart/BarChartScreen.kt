@@ -118,6 +118,7 @@ fun BarChart(
                 setTouchEnabled(true) // Correct usage to enable touch
                 setDrawGridBackground(false)
                 axisRight.isEnabled = false// Disable right Y axis
+
                 // Setup the X-axis
                 xAxis.apply {
                     valueFormatter = IndexAxisValueFormatter(months)
@@ -129,8 +130,8 @@ fun BarChart(
                     axisLineColor =  if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
                     else ContextCompat.getColor(context, R.color.darkBrown)
                     textSize = 12f
-                }
 
+                }
 
                 // Configuración del eje Y izquierdo
                 axisLeft.apply {
@@ -143,6 +144,7 @@ fun BarChart(
                     else ContextCompat.getColor(context, R.color.darkBrown)
                     textSize = 12f
                     axisMinimum = 0f
+
                 }
                 // Configuración de la leyenda
                 legend.apply {
@@ -156,11 +158,14 @@ fun BarChart(
                     verticalAlignment = Legend.LegendVerticalAlignment.TOP // Alineación vertical
                     orientation = Legend.LegendOrientation.HORIZONTAL // Orientación de la leyenda
                 }
+                setDrawValueAboveBar(false)
             }
         },
         modifier = Modifier
             .fillMaxWidth()
-            .height(400.dp),
+            .height(410.dp)
+            .padding(5.dp)
+            ,
         update = { chart ->
             // Prepare bar entries for each category
             val barEntriesIncomes = data.mapIndexed { index, value ->
@@ -175,12 +180,16 @@ fun BarChart(
             val incomesDataSet = BarDataSet(barEntriesIncomes,incomeLabel ).apply {
                 color = if(isDarkTheme)ContextCompat.getColor(context, R.color.darkGreenPistacho)
                 else ContextCompat.getColor(context, R.color.darkgreen)
+                setDrawValues(false)
+
+
             }
             val expensesDataSet = BarDataSet(barEntriesExpenses, expensesLabel).apply {
                 color = if(isDarkTheme)ContextCompat.getColor(context, R.color.coralred)
                 else ContextCompat.getColor(context, R.color.red)
-            }
+                setDrawValues(false)
 
+            }
 
             // Create bar data
             val dataBarChart = BarData(incomesDataSet, expensesDataSet)
