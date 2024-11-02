@@ -123,15 +123,17 @@ fun BarChart(
                 xAxis.apply {
                     valueFormatter = IndexAxisValueFormatter(months)
                     granularity = 1f
+                    isGranularityEnabled = true // Asegura que la granularidad se respete
+                    labelCount = months.size // Establece el número de etiquetas en el total de meses
                     position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
                     setDrawGridLines(false)
                     textColor = if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
                     else ContextCompat.getColor(context, R.color.darkBrown)
-                    axisLineColor =  if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
+                    axisLineColor = if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
                     else ContextCompat.getColor(context, R.color.darkBrown)
-                    textSize = 12f
-
+                    textSize = 10f
                 }
+
 
                 // Configuración del eje Y izquierdo
                 axisLeft.apply {
@@ -158,7 +160,7 @@ fun BarChart(
                     verticalAlignment = Legend.LegendVerticalAlignment.TOP // Alineación vertical
                     orientation = Legend.LegendOrientation.HORIZONTAL // Orientación de la leyenda
                 }
-                setDrawValueAboveBar(false)
+
             }
         },
         modifier = Modifier
