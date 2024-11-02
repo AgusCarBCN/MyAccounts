@@ -94,9 +94,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation (libs.commons.csv)
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.kotlinx.serialization.json)
+    implementation (libs.circleindicator)
     //Dagger Hilt
     implementation (libs.hilt.android)
     kapt (libs.hilt.compiler)
+    //Chart
     implementation (libs.mpandroidchart)
 }
 

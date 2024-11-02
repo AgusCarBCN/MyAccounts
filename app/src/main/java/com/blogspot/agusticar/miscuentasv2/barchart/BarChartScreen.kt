@@ -1,7 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.barchart
 
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,16 +26,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.wear.compose.material3.CurvedTextDefaults.backgroundColor
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.barchart.model.BarChartData
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.YearSelector
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
-import com.blogspot.agusticar.miscuentasv2.setting.SpacerApp
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import com.github.mikephil.charting.charts.BarChart
@@ -52,7 +48,6 @@ import kotlin.math.abs
 @Composable
 
 fun BarChartScreen(
-    entriesViewModel: EntriesViewModel,
     accountViewModel: AccountsViewModel,
     barChartViewModel: BarChartViewModel,
     settingViewModel: SettingViewModel
@@ -110,7 +105,7 @@ fun BarChart(
     data.forEach {element->
         months.add(stringResource(id =element.month ))
     }
-    Log.d("data",data.toString())
+
     val incomeLabel= stringResource(id = R.string.incomechart)
     val expensesLabel= stringResource(id = R.string.expensechart)
     AndroidView(
@@ -222,7 +217,7 @@ fun BarChartResult(
     }
     Log.d("data",data.toString())
     val resultLabel= stringResource(id = R.string.result)
-    var resultBar:Float=0.0f
+
     AndroidView(
         factory = { ctx ->
             BarChart(ctx).apply {
@@ -262,9 +257,7 @@ fun BarChartResult(
                     gridColor =  if(isDarkTheme) ContextCompat.getColor(context, R.color.lightYellow)
                     else ContextCompat.getColor(context, R.color.darkBrown)
                     textSize = 12f
-                    if(resultBar>=0){
-                        axisMinimum = 0f
-                        }
+
                 }
                 // Configuración de la leyenda
                 legend.apply {
@@ -292,9 +285,7 @@ fun BarChartResult(
                 BarEntry(index.toFloat(), value.result)
 
             }
-            data.map{value->
-            resultBar=value.result
-            }
+
             // Create datasets
             val resultDataSet = BarDataSet(barEntriesResult,resultLabel).apply {
                 color = if(isDarkTheme)ContextCompat.getColor(context, R.color.lightblue)

@@ -277,7 +277,6 @@ fun MainScreen(
                         }
 
                         IconOptions.BARCHART -> {BarChartScreen(
-                            entriesViewModel ,
                             accountsViewModel,
                             barChartView,
                             settingViewModel

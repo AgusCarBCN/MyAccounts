@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.main.domain.apidata.ConvertCurrencyUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.DeleteAccountByIdUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
@@ -17,6 +19,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.U
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountNameUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
+import com.blogspot.agusticar.miscuentasv2.retrofit.CurrencyConverterApi
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +36,8 @@ class AccountsViewModel @Inject constructor(
     private val transferAmount:TransferUseCase,
     private val deleteAccount: DeleteAccountByIdUseCase,
     private val updateName:UpdateAccountNameUseCase,
-    private val updateBalance:UpdateAccountBalanceUseCase
+    private val updateBalance:UpdateAccountBalanceUseCase,
+    private val converterCurrency:ConvertCurrencyUseCase
 
 ) : ViewModel() {
     // Variable privada que representa un estado observable y modificable. Solo el ViewModel puede cambiar este valor,
@@ -91,6 +95,9 @@ class AccountsViewModel @Inject constructor(
 
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
+
+    private val _conversionCurrencyRate = MutableLiveData<Double>()
+    val conversionCurrencyRate: LiveData<Double> = _conversionCurrencyRate
 
     // Cargar datos iniciales que no dependen de la UI ni de la composición.
     init {
@@ -277,6 +284,16 @@ class AccountsViewModel @Inject constructor(
             Log.d("Account", "Balance updated")
             _isEnableChangeNameButton.postValue(false)
            onAccountUpdated()
+        }
+    }
+    fun conversionCurrencyRate(fromCurrency: String, toCurrency: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = converterCurrency.invoke(fromCurrency,toCurrency)
+            if (response.isSuccessful) {
+                _conversionCurrencyRate.postValue(response.body()?.conversion_rate)
+            } else {
+                Log.e("CurrencyConverter", "Error converting currency: ${response.code()}")
+            }
         }
     }
 

@@ -38,7 +38,10 @@ fun CurrencySelector(accountsViewModel: AccountsViewModel) {
     // Obtener el estado de expansión desde el ViewModel
     val isExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
     val currencies by accountsViewModel.currencyCodeList.observeAsState(listOf())
+    val conversionCurrencyRate by accountsViewModel.conversionCurrencyRate.observeAsState(1)
+    accountsViewModel.conversionCurrencyRate(currencyCode,"GBP")
 
+    Log.d("ratio",conversionCurrencyRate.toString())
     // Contenedor principal
     Column(
         modifier = Modifier
