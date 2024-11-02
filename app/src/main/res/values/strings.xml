@@ -289,6 +289,7 @@
     <string name="year">Year</string>
     <string name="result">Result</string>
     <!--Months-->
+    <string name="months">Months</string>
     <string name="january">Jan</string>
     <string name="february">Feb</string>
     <string name="march">Mar</string>
@@ -301,5 +302,18 @@
     <string name="october">Oct</string>
     <string name="november">Nov</string>
     <string name="december">Dec</string>
+    <string name="januarytable">January</string>
+    <string name="februarytable">February</string>
+    <string name="marchtable">March</string>
+    <string name="apriltable">April</string>
+    <string name="mayotable">May</string>
+    <string name="junetable">June</string>
+    <string name="julytable">July</string>
+    <string name="augusttable">August</string>
+    <string name="septembertable">September</string>
+    <string name="octobertable">October</string>
+    <string name="novembertable">November</string>
+    <string name="decembertable">December</string>
+
 </resources>
 

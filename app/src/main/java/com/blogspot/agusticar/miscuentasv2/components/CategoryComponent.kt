@@ -26,6 +26,7 @@ fun CategoryEntries(category: Category, modifier:Modifier, onClickItem:() -> Uni
         if(category.isIncome) LocalCustomColorsPalette.current.iconIncomeInit
         else LocalCustomColorsPalette.current.iconExpenseInit
 
+
     val targetColor= if(category.isIncome) LocalCustomColorsPalette.current.iconIncomeTarget
 
 

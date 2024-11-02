@@ -301,4 +301,18 @@
     <string name="october">Oct</string>
     <string name="november">Nov</string>
     <string name="december">Dic</string>
+    <!--Meses del año gráfico de barras-->
+    <string name="months">Meses</string>
+    <string name="januarytable">Enero</string>
+    <string name="februarytable">Febrero</string>
+    <string name="marchtable">Marzo</string>
+    <string name="apriltable">Abril</string>
+    <string name="mayotable">Mayo</string>
+    <string name="junetable">Junio</string>
+    <string name="julytable">Julio</string>
+    <string name="augusttable">Agosto</string>
+    <string name="septembertable">Septiembre</string>
+    <string name="octobertable">Octubre</string>
+    <string name="novembertable">Noviembre</string>
+    <string name="decembertable">Diciciembre</string>
 </resources>

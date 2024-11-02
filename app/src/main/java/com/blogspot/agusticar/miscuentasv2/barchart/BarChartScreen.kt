@@ -1,16 +1,21 @@
 package com.blogspot.agusticar.miscuentasv2.barchart
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.wear.compose.material3.CurvedTextDefaults.backgroundColor
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.barchart.model.BarChartData
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
@@ -30,7 +36,9 @@ import com.blogspot.agusticar.miscuentasv2.components.YearSelector
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.setting.SettingViewModel
+import com.blogspot.agusticar.miscuentasv2.setting.SpacerApp
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.BarData
@@ -68,7 +76,7 @@ fun BarChartScreen(
             .padding(top = 30.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
 
@@ -86,6 +94,7 @@ fun BarChartScreen(
         BarChart(context, data,isDarkTheme)
         HeadSetting(title = stringResource(id = R.string.result), 20)
         BarChartResult(context, data,isDarkTheme)
+        Table(data)
     }
 
 }
@@ -300,5 +309,88 @@ fun BarChartResult(
             chart.invalidate()
 
         }
+    )
+}
+
+@Composable
+fun Table(data: MutableList<BarChartData>) {
+    // Encabezados de la tabla
+    val header = listOf(
+        stringResource(id = R.string.months),
+        stringResource(id = R.string.incomechart),
+        stringResource(id = R.string.expensechart),
+        stringResource(id = R.string.result)
+    )
+
+    Column(modifier = Modifier
+        .padding(15.dp)
+        .fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+        // Encabezados
+        Row(
+            modifier = Modifier.fillMaxWidth().
+            padding(start=15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            header.forEach { item ->
+                Text(
+                    text = item,
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = LocalCustomColorsPalette.current.textHeadColor
+                )
+            }
+        }
+        SpacerTable()
+
+        // Datos
+        data.forEach { element ->
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(start=15.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+
+            ) {
+                Text(
+                    text = stringResource(element.month), // Obtener el nombre del mes
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = LocalCustomColorsPalette.current.textColor
+                )
+                Text(
+                    text = Utils.numberFormatTable(element.incomes), // Formato para ingresos
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = LocalCustomColorsPalette.current.incomeColor
+                )
+                Text(
+                    text = Utils.numberFormatTable(element.expenses), // Formato para gastos
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = LocalCustomColorsPalette.current.expenseColor
+                )
+                Text(
+                    text = Utils.numberFormatTable(element.result), // Formato para resultado
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if(element.result>=0) LocalCustomColorsPalette.current.incomeColor
+                    else LocalCustomColorsPalette.current.expenseColor
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp)) // Espaciado entre filas
+        }
+    }
+}
+
+@Composable
+private fun SpacerTable() {
+    Spacer(
+        modifier = Modifier
+            .width(360.dp)
+            .padding(10.dp)
+            .background(LocalCustomColorsPalette.current.textColor.copy(alpha = 0.2f)) // Ajusta el valor alpha para la opacidad
+            .height(1.dp) // Cambié a height para que la línea sea horizontal, ajusta si es necesario
     )
 }
