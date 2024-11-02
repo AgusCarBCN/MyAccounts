@@ -1,9 +1,11 @@
 package com.blogspot.agusticar.miscuentasv2.changecurrency
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,20 +21,29 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 
 
 fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
-                         accountsViewModel: AccountsViewModel) {
+                         accountsViewModel: AccountsViewModel,
+                         entriesViewModel: EntriesViewModel
+) {
     val scope = rememberCoroutineScope()
-    val currencyCode by accountsViewModel.currencyCodeShowed.observeAsState("EUR")
+    val currencyCodeShowed by accountsViewModel.currencyCodeShowed.observeAsState("EUR")
     val currencyCodeSelected by accountsViewModel.currencyCodeSelected.observeAsState("EUR")
+    val currencyRatio by accountsViewModel.conversionCurrencyRate.observeAsState(1)
+    val accounts by accountsViewModel.listOfAccounts.observeAsState()
+    val entries by entriesViewModel.listOfEntriesDB.collectAsState()
+
     val messageFormatCurrencyChange = stringResource(id = R.string.currencyformatchange)
     val messageCurrencyChange = stringResource(id = R.string.currencychange)
     Column(
@@ -42,7 +53,7 @@ fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
 
     ) {
         IconAnimated(
-            iconResource = R.drawable.ic_change_currency, sizeIcon = 120,
+            iconResource = R.drawable.ic_change_currency, sizeIcon = 140,
             LocalCustomColorsPalette.current.imageTutorialInit,
             LocalCustomColorsPalette.current.imageTutorialTarget
         )
@@ -55,7 +66,7 @@ fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
             onClickButton = {
 
                 scope.launch(Dispatchers.Main) {
-                    accountsViewModel.setCurrencyCode(currencyCode)
+                    accountsViewModel.setCurrencyCode(currencyCodeShowed)
                     SnackBarController.sendEvent(event = SnackBarEvent(messageFormatCurrencyChange))
                 }
             }
@@ -66,10 +77,29 @@ fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
             modifier = Modifier.width(360.dp),
             true,
             onClickButton = {
+                scope.launch(Dispatchers.IO) {
+                    accountsViewModel.conversionCurrencyRate(currencyCodeSelected, currencyCodeShowed)
+                    accountsViewModel.setCurrencyCode(currencyCodeShowed)
+                    entriesViewModel.getAllEntriesDataBase()
+                    accountsViewModel.getAllAccounts()
+                    accounts?.forEach { account->
+                        val newBalance=account.balance*(currencyRatio.toDouble())
+                        val id=account.id
+                        accountsViewModel.upDateAccountBalance(id,newBalance)
+                        Log.d("change","ratio:$currencyRatio")
+                        Log.d("change","newBalance:$newBalance")
+                    }
+                    entries.forEach { entry->
+                        val newAmount=entry.amount*(currencyRatio.toDouble())
+                        val id=entry.id
+                        entriesViewModel.upDateAmountEntry (id,newAmount)
+                    }
 
-            scope.launch(Dispatchers.Main) {
-                SnackBarController.sendEvent(event = SnackBarEvent(messageCurrencyChange))
-            }
+
+                    withContext(Dispatchers.Main) {
+                        SnackBarController.sendEvent(event = SnackBarEvent(messageCurrencyChange))
+                    }
+                }
             }
         )
         ModelButton(text = stringResource(id = R.string.backButton),

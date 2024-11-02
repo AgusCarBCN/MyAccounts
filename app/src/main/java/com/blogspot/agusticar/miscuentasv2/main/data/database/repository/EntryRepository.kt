@@ -97,6 +97,9 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
         year: String
     ): Double = entryDao.getSumOfExpensesEntriesForMonth(accountId, month,year) ?: 0.0
 
+    suspend fun updateAmountEntry(idAccount:Long,newAmount:Double){
+        entryDao.updateAmountEntry(idAccount,newAmount)
+    }
 
     private fun entryDtoToEntry(dto: EntryDTO): Entry {
         return Entry(
@@ -122,5 +125,6 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
             // No necesitamos el id
         )
     }
+
 
 }

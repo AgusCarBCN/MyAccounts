@@ -19,6 +19,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.G
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesByDate
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.UpdateAmountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
@@ -45,8 +46,8 @@ class EntriesViewModel @Inject constructor(
     private val getFilteredEntries:GetFilteredEntriesUseCase,
     private val getAllEntriesByAccount: GetAllEntriesByAccountUseCase,
     private val getTotalIncomesByDate: GetSumTotalIncomesByDate,
-    private val getTotalExpensesByDate: GetSumTotalExpensesByDateUseCase
-
+    private val getTotalExpensesByDate: GetSumTotalExpensesByDateUseCase,
+    private val updateAmountEntry:UpdateAmountUseCase
 
 ) : ViewModel() {
 
@@ -248,7 +249,11 @@ class EntriesViewModel @Inject constructor(
     fun onChangeTransferButton(newValue:Boolean){
         _enableConfirmTransferButton.postValue(newValue)
     }
-
+    fun upDateAmountEntry(entryId:Long,newAmount:Double){
+        viewModelScope.launch(Dispatchers.IO){
+            updateAmountEntry.invoke(entryId,newAmount)
+        }
+    }
 
 
     private fun getTotal() {

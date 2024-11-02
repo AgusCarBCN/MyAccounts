@@ -265,7 +265,9 @@ fun MainScreen(
 
                         }
 
-                        IconOptions.CHANGE_CURRENCY -> ChangeCurrencyScreen(mainViewModel,accountsViewModel)
+                        IconOptions.CHANGE_CURRENCY -> ChangeCurrencyScreen(mainViewModel,
+                            accountsViewModel,
+                            entriesViewModel)
                         IconOptions.ENTRIES -> {
                             EntryList(entriesViewModel,entries, currencyCode)
                             title = R.string.yourentries

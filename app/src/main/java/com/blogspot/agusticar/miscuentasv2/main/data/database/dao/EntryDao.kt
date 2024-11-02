@@ -48,6 +48,11 @@ interface EntryDao {
     @Query("UPDATE EntryEntity SET description = :newDescription WHERE id = :entryId")
     suspend fun updateEntryDescription(entryId: Long, newDescription: String)
 
+    // 7. Actualizar el montante de una entrada
+    @Query("UPDATE EntryEntity SET amount = :amount WHERE id = :accountId")
+    suspend fun updateAmountEntry(accountId: Long, amount: Double)
+
+
     // 7. Obtener entradas por fecha específica (ordenadas por fecha descendiente)
     @Query("SELECT * FROM EntryEntity WHERE date = :specificDate ORDER BY date DESC")
     suspend fun getEntriesByDate(specificDate: String): List<Entry>
