@@ -104,9 +104,9 @@ fun AccountSelector(
             ) { page ->
                 // Actualiza la cuenta seleccionada en ViewModel
                 if (isAccountDestination) {
-                    accountViewModel.onDestinationAccountSelected(accounts[page])
+                    accountViewModel.onDestinationAccountSelected(accounts[pagerState.targetPage])
                 } else {
-                    accountViewModel.onAccountSelected(accounts[page])
+                    accountViewModel.onAccountSelected(accounts[pagerState.targetPage])
                 }
 
                 val balanceFormatted = Utils.numberFormat(accounts[page].balance, currencyCode)

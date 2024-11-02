@@ -57,7 +57,7 @@ fun BarChartScreen(
     val isDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val context= LocalContext.current
     val idAccount = accountSelected?.id ?: 1
-    Log.d("year",yearSelected.toString())
+    Log.d("account",accountSelected?.name?:"")
     LaunchedEffect(idAccount,yearSelected) {
         barChartViewModel.barChartDataByMonth(idAccount,yearSelected?:year.toString())
     }
