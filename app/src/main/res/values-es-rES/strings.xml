@@ -5,7 +5,10 @@
     <string name="title_activity_login">LoginActivity</string>
 
     <!--Login -->
-
+    <string name="changeformattext">Cambia solo el formato de la divisa.</string>
+    <string name="changecurrencytext">Cambia el formato y las entradas a la divisa seleccionada.</string>
+    <string name="changeFormat">Cambiar formato</string>
+    <string name="changeCurrency">Cambiar divisa</string>
     <string name="loginButton">Inicio de sesion</string>
     <string name="confirmButton">Confirmar</string>
     <string name="backButton">Atras</string>

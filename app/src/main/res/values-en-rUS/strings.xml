@@ -5,10 +5,13 @@
     <string name="title_activity_other">Other</string>
     <string name="title_activity_login">LoginActivity</string>
     <!-- Login -->
-
+    <string name="changeformattext">Only change the currency format.</string>
+    <string name="changecurrencytext">Change the format and entries to the selected currency.</string>
     <string name="loginButton">Log in</string>
     <string name="confirmButton">Confirm</string>
     <string name="backButton">Back</string>
+    <string name="changeFormat">Change Format</string>
+    <string name="changeCurrency">Change Currency</string>
     <string name="enterName">Enter your name</string>
     <string name="repeatpassword">Repeat your password</string>
     <string name="enterUsername">Enter your user name</string>

@@ -60,6 +60,7 @@ import com.blogspot.agusticar.miscuentasv2.barchart.BarChartScreen
 import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorUI
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
+import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
 import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 
@@ -265,7 +266,7 @@ fun MainScreen(
 
                         }
 
-                        IconOptions.CHANGE_CURRENCY -> CurrencySelector(accountsViewModel)
+                        IconOptions.CHANGE_CURRENCY -> ChangeCurrencyScreen(mainViewModel,accountsViewModel)
                         IconOptions.ENTRIES -> {
                             EntryList(entriesViewModel,entries, currencyCode)
                             title = R.string.yourentries
