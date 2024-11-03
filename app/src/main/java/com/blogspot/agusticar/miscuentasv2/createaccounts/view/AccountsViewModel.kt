@@ -104,6 +104,7 @@ class AccountsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _currencyCodeShowed.value =getCurrencyCode.invoke()
+            _currencyCodeSelected.value = getCurrencyCode.invoke()
             _isCurrencyExpanded.value = false
             onAccountUpdated()
             getListOfCurrencyCode()

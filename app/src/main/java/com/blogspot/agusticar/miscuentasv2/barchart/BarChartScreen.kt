@@ -89,7 +89,7 @@ fun BarChartScreen(
         BarChart(context, data,isDarkTheme)
         HeadSetting(title = stringResource(id = R.string.result), 20)
         BarChartResult(context, data,isDarkTheme)
-        Table(data)
+        Table(accountViewModel,data)
     }
 
 }
@@ -304,7 +304,9 @@ fun BarChartResult(
 }
 
 @Composable
-fun Table(data: MutableList<BarChartData>) {
+fun Table(accountsViewModel:AccountsViewModel ,data: MutableList<BarChartData>) {
+
+    val currencyCodeSelected by accountsViewModel.currencyCodeSelected.observeAsState("EUR")
     // Encabezados de la tabla
     val header = listOf(
         stringResource(id = R.string.months),
@@ -351,19 +353,19 @@ fun Table(data: MutableList<BarChartData>) {
                     color = LocalCustomColorsPalette.current.textColor
                 )
                 Text(
-                    text = Utils.numberFormatTable(element.incomes), // Formato para ingresos
+                    text = Utils.numberFormat(element.incomes.toDouble(),currencyCodeSelected), // Formato para ingresos
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodyLarge,
                     color = LocalCustomColorsPalette.current.incomeColor
                 )
                 Text(
-                    text = Utils.numberFormatTable(element.expenses), // Formato para gastos
+                    text = Utils.numberFormat(element.expenses.toDouble(),currencyCodeSelected), // Formato para gastos
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodyLarge,
                     color = LocalCustomColorsPalette.current.expenseColor
                 )
                 Text(
-                    text = Utils.numberFormatTable(element.result), // Formato para resultado
+                    text = Utils.numberFormat(element.result.toDouble(),currencyCodeSelected), // Formato para resultado
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodyLarge,
                     color = if(element.result>=0) LocalCustomColorsPalette.current.incomeColor

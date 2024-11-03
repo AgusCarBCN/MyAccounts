@@ -45,16 +45,7 @@ class Utils {
                 abs(amount)
             )
         }
-        fun numberFormatTable(amount: Float): String {
 
-            val locale = Locale.getDefault()
-            // Formatear la cantidad en la moneda especificada
-            val numberFormat = NumberFormat.getCurrencyInstance(locale)
-            // Iniciar la carga de cuentas solo cuando el Composable se inicia
-            return numberFormat.format(
-                abs(amount)
-            )
-        }
 
         fun toDateEntry(date: String): String {
             val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
