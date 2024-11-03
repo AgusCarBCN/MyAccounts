@@ -61,6 +61,7 @@ import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorUI
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
+import com.blogspot.agusticar.miscuentasv2.components.CategoryEntries
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
@@ -68,11 +69,14 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
+
 import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
+
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
+import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
@@ -295,6 +299,11 @@ fun MainScreen(
                                 searchViewModel
                             )
                             title=R.string.piechart
+                        }
+
+                        IconOptions.SELECT_CATEGORIES -> {
+
+                           EntryCategoryList (entriesViewModel)
                         }
                     }
 

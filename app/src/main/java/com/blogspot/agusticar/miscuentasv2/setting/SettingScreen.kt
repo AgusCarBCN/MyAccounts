@@ -162,18 +162,13 @@ fun SettingScreen(
             description = stringResource(id = R.string.desexpensecontrol),
             iconResource = R.drawable.ic_expensetotal,
             onClick = {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                pickerExportLauncher.launch(intent)
+
             })
         RowComponent(title = stringResource(id = R.string.categorycontrol),
             description = stringResource(id = R.string.descategorycontrol),
             iconResource = R.drawable.ic_categorycontrol,
             onClick = {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.type = "*/*"
-                pickerImportLauncher.launch(intent)
-
+                mainViewModel.selectScreen(IconOptions.SELECT_CATEGORIES)
             })
 
         SpacerApp()

@@ -344,5 +344,5 @@
     <string name="monthbills">Gastos mensuales</string>
     <string name="resultsearch">Resultado</string>
     <string name="permissiongranted">Permiso de notificaciones concedido</string>
-
+    <string name="choosecategories">Escoje las categorias</string>
 </resources>

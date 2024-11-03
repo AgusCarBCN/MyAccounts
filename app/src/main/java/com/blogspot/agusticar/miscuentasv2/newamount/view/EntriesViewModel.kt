@@ -51,6 +51,11 @@ class EntriesViewModel @Inject constructor(
 
 ) : ViewModel() {
 
+    // LiveData to hold the state of the categories
+    private val _categoryStates = MutableLiveData<Map<String, Boolean>>() // Map to hold category name and checked state
+    val categoryStates: LiveData<Map<String, Boolean>> get() = _categoryStates
+
+
     private val _totalIncomes = MutableLiveData<Double>()
     val totalIncomes: LiveData<Double> = _totalIncomes
 
@@ -96,7 +101,7 @@ class EntriesViewModel @Inject constructor(
 
     init{
         getTotal()
-
+        _categoryStates.value = emptyMap()
     }
     fun getFilteredEntries(accountId: Int,
                            description:String,
@@ -287,7 +292,19 @@ class EntriesViewModel @Inject constructor(
             _totalExpenses.postValue(totalExpenses)
         }
     }
+    // Function to handle checkbox state changes
+    fun onCategoryCheckChanged(category: Category, isChecked: Boolean) {
+        // Get the current state
+        val currentStates = _categoryStates.value ?: emptyMap()
 
+        // Update the state with the new checked status for the specific category
+        val updatedStates = currentStates.toMutableMap().apply {
+            put(category.name.toString(), isChecked) // Update the specific category
+        }
+
+        // Post the updated state back to LiveData
+        _categoryStates.value = updatedStates
+    }
 
     private fun resetFields() {
         _entryName.postValue("") // Vaciar el nombre de la cuenta
