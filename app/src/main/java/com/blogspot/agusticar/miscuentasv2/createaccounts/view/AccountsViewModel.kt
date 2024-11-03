@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,7 +52,6 @@ class AccountsViewModel @Inject constructor(
 
     private val _isEnableChangeBalanceButton = MutableLiveData<Boolean>()
     val isEnableChangeBalanceButton: LiveData<Boolean> = _isEnableChangeBalanceButton
-
 
     private val _isConfirmTransfer = MutableLiveData<Boolean>()
     val isConfirmTransfer: LiveData<Boolean> = _isConfirmTransfer
@@ -298,15 +298,17 @@ class AccountsViewModel @Inject constructor(
         }
     }
     suspend fun conversionCurrencyRate(fromCurrency: String, toCurrency: String): Double? {
-        return withContext(Dispatchers.IO) {
-            val response = converterCurrency.invoke(fromCurrency, toCurrency)
-            response.body()?.conversion_rate
+
+        return try {
+            withContext(Dispatchers.IO) {
+                val response = converterCurrency.invoke(fromCurrency, toCurrency)
+                response.body()?.conversion_rate
+            }
+        }catch(e: IOException) {
+            null
         }
     }
 
-    fun getRatio(){
-        _conversionCurrencyRate.value
-    }
 
     private fun onAccountUpdated() {
         resetFields()

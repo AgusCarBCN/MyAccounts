@@ -46,6 +46,7 @@ fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
 
     val messageFormatCurrencyChange = stringResource(id = R.string.currencyformatchange)
     val messageCurrencyChange = stringResource(id = R.string.currencychange)
+    val messageErrorConnexionApi=stringResource(id = R.string.apierror)
     Column(
 
         verticalArrangement = Arrangement.Center,
@@ -79,33 +80,32 @@ fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
             onClickButton = {
                 scope.launch(Dispatchers.IO) {
                     accountsViewModel.setCurrencyCode(currencyCodeShowed)
-                    Log.d("change","currencyShow:$currencyCodeShowed")
-                    Log.d("change","currencySelected:$currencyCodeSelected")
 
                     // Llama a conversionCurrencyRate y espera el resultado
                     val ratio = accountsViewModel.conversionCurrencyRate(currencyCodeSelected, currencyCodeShowed)
-                    Log.d("change","currencyShow:$currencyCodeShowed")
-                    Log.d("change","currencySelected:$currencyCodeSelected")
-                    Log.d("change","ratio:$ratio")
+                    Log.d("ratio",ratio.toString())
+                    if(ratio!=null) {
+                        entriesViewModel.getAllEntriesDataBase()
+                        accountsViewModel.getAllAccounts()
+                        accounts?.forEach { account ->
 
-                    entriesViewModel.getAllEntriesDataBase()
-                    accountsViewModel.getAllAccounts()
-                    accounts?.forEach { account->
+                            val newBalance = account.balance * (ratio ?: 1.0)
+                            val id = account.id
+                            accountsViewModel.upDateAccountBalance(id, newBalance)
 
-                        val newBalance = account.balance * (ratio ?: 1.0)
-                        val id=account.id
-                        accountsViewModel.upDateAccountBalance(id,newBalance)
+                        }
+                        entries.forEach { entry ->
+                            val newAmount = entry.amount * (ratio ?: 1.0)
+                            val id = entry.id
+                            entriesViewModel.upDateAmountEntry(id, newAmount)
+                        }
+                        entriesViewModel.getTotal()
 
-                    }
-                    entries.forEach { entry->
-                        val newAmount=entry.amount*(ratio ?: 1.0)
-                        val id=entry.id
-                        entriesViewModel.upDateAmountEntry (id,newAmount)
-                    }
-                    entriesViewModel.getTotal()
-
-                    withContext(Dispatchers.Main) {
-                        SnackBarController.sendEvent(event = SnackBarEvent(messageCurrencyChange))
+                        withContext(Dispatchers.Main) {
+                            SnackBarController.sendEvent(event = SnackBarEvent(messageCurrencyChange))
+                        }
+                    }else{
+                        SnackBarController.sendEvent(event = SnackBarEvent(messageErrorConnexionApi))
                     }
                 }
             }
