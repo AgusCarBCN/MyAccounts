@@ -89,6 +89,11 @@
     <string name="selectedcurrency">Divisa seleccionada: </string>
 
     <!--Ajustes-->
+    <string name="expensemanagement">controla tus gastos</string>
+    <string name="categorycontrol">Gasto por categoria</string>
+    <string name="descategorycontrol">Establece un control de gasto por cada categoría y recibe avisos al superarlos.</string>
+    <string name="desexpensecontrol">Controla los gastos totales y recibe avisos cuando los hayas superado con notificaciones</string>
+    <string name="expensecontrol">Gasto total</string>
     <string name="modify">Modifica esta cuenta</string>
     <string name="deleteaccount">Borra esta cuenta</string>
     <string name="appsettings">Ajustes generales</string>
@@ -97,7 +102,7 @@
     <string name="theme">Tema de la app</string>
     <string name="enableonboarding">Tutorial de inicio.</string>
     <string name="enablenotifications">Notificaciones</string>
-    <string name="desenablenotifications">Habilitar o deshabilitar notificaciones en tu móvil.</string>
+    <string name="desenablenotifications">Habilitar o deshabilitar notificaciones en tu móvil de control del gasto.</string>
     <string name="createbackup">Copia de seguridad</string>
     <string name="loadbackup">Carga archivo de seguridad</string>
     <string name="deleteall">Borra todo</string>
@@ -320,4 +325,24 @@
     <string name="octobertable">Octubre</string>
     <string name="novembertable">Noviembre</string>
     <string name="decembertable">Diciciembre</string>
+    <!--Notificaciones-->
+    <string name="selectCurrency">Selecciona una divisa para tus cuentas</string>
+    <string name="daylyreport">Informe diario</string>
+    <string name="weekreport">Informe semanal</string>
+    <string name="monthreport">Informe mensual</string>
+    <string name="lowbalance">Alerta de saldo inferior a </string>
+    <string name="hightexpenses">Gastos del mes superiores al limite</string>
+    <string name="limitexpense">Limite de gasto mensual</string>
+    <string name="expenseslimit">Has superado los gastos de este mes en </string>
+    <string name="Noblankallowed">Campo requerido.No puede dejarse en blanco</string>
+    <string name="nomovtoday">Hoy no has tenido movimientos en tus cuentas</string>
+    <string name="notificationrequired">Se requiere permiso para las notificaciones.Permite las notificaciones para recibirlas</string>
+    <string name="notificationrequiredalert">Mensaje para permitir notificaciones</string>
+    <string name="weekicome">Ingresos semanales</string>
+    <string name="weekbills">Gastos semanales</string>
+    <string name="monthicome">Ingresos mensuales</string>
+    <string name="monthbills">Gastos mensuales</string>
+    <string name="resultsearch">Resultado</string>
+    <string name="permissiongranted">Permiso de notificaciones concedido</string>
+
 </resources>

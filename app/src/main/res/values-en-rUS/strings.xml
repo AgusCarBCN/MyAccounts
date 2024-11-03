@@ -86,6 +86,11 @@
     <string name="selectcurrency">Select a currency for your accounts.</string>
     <string name="selectedcurrency">Selected currency: </string>
     <!--Settings-->
+    <string name="expensemanagement">Manage your expenses</string>
+    <string name="categorycontrol">Expense by Category</string>
+    <string name="descategorycontrol">Set an expense limit for each category and receive alerts when you exceed them.</string>
+    <string name="desexpensecontrol">Track total expenses and receive notifications when limits are exceeded.</string>
+    <string name="expensecontrol">Total Expense</string>
     <string name="modify">Modify this account</string>
     <string name="delete_data_account">Delete the account and all its records</string>
     <string name="deleteaccount">Delete this account</string>
@@ -97,7 +102,8 @@
     <string name="destheme">Choose between dark or light theme.</string>
     <string name="desenableonboarding">Enable or disable onboarding</string>
     <string name="enablenotifications">Notifications</string>
-    <string name="desenablenotifications">Enable or disable notifications on your mobile phone.</string>
+    <string name="desenablenotifications">Enable or disable notifications on your expense tracker mobile app.</string>
+
     <string name="createbackup">Create backup</string>
     <string name="loadbackup">Load backup</string>
     <string name="deleteall">Delete all</string>
@@ -319,5 +325,24 @@
     <string name="octobertable">October</string>
     <string name="novembertable">November</string>
     <string name="decembertable">December</string>
+    <!--Notifications-->
+    <string name="selectCurrency">Select a currency for your accounts</string>
+    <string name="daylyreport">dayly report</string>
+    <string name="weekreport">weekly report</string>
+    <string name="monthreport">montly report</string>
+    <string name="weekicome">Weekly earnings</string>
+    <string name="weekbills">Weekly expenses</string>
+    <string name="monthicome">Monthly earnings</string>
+    <string name="monthbills">Monthly expenses</string>
+    <string name="resultsearch">Result</string>
+    <string name="lowbalance">Balance alert less than</string>
+    <string name="hightexpenses">Expenses per month above the limit</string>
+    <string name="expenseslimit">You have exceeded this months expenses in </string>
+    <string name="limitexpense">Expense montly limit</string>
+    <string name="Noblankallowed">Required field. Cannot be blank</string>
+    <string name="nomovtoday">You have had no movements in your accounts today</string>
+    <string name="notificationrequired">Notification permission is required, Please allow notification</string>
+    <string name="notificationrequiredalert">Message to allow notifications</string>
+    <string name="permissiongranted">Notification permission granted</string>
 
 </resources>

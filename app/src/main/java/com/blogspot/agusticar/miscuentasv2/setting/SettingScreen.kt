@@ -150,10 +150,31 @@ fun SettingScreen(
         )
         SwitchComponent(
             title = stringResource(id = R.string.enablenotifications),
-            description = stringResource(id = R.string.desenableonboarding),
+            description = stringResource(id = R.string.desenablenotifications),
             switchNotifications,
             onClickSwitch = { settingViewModel.onSwitchNotificationsClicked(it) }
         )
+        SpacerApp()
+
+        HeadSetting(title = stringResource(id = R.string.expensemanagement), 20)
+
+        RowComponent(title = stringResource(id = R.string.expensecontrol),
+            description = stringResource(id = R.string.desexpensecontrol),
+            iconResource = R.drawable.ic_expensetotal,
+            onClick = {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                pickerExportLauncher.launch(intent)
+            })
+        RowComponent(title = stringResource(id = R.string.categorycontrol),
+            description = stringResource(id = R.string.descategorycontrol),
+            iconResource = R.drawable.ic_categorycontrol,
+            onClick = {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "*/*"
+                pickerImportLauncher.launch(intent)
+
+            })
 
         SpacerApp()
 

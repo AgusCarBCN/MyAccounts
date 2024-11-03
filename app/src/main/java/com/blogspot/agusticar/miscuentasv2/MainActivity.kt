@@ -43,6 +43,12 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    companion object {
+        const val CHANEL_NOTIFICATION = "NotificationChanel"
+        const val INTERVAL_WEEKLY = 7
+        const val INTERVAL_MONTHLY = 30
+        const val INTERVAL_DAYLY=1
+    }
 
 
     private val tutorialViewModel: TutorialViewModel by viewModels()
