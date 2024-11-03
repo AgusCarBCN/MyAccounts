@@ -21,6 +21,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCode
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -104,7 +105,7 @@ class AccountsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _currencyCodeShowed.value =getCurrencyCode.invoke()
-            _currencyCodeSelected.value = getCurrencyCode.invoke()
+            getCurrencyCode()
             _isCurrencyExpanded.value = false
             onAccountUpdated()
             getListOfCurrencyCode()
@@ -202,7 +203,11 @@ class AccountsViewModel @Inject constructor(
 
 
     }
-
+    fun getCurrencyCode(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _currencyCodeSelected.postValue(getCurrencyCode.invoke())
+        }
+    }
 
     fun onAccountSelected(accountSelected: Account) {
         _accountSelected.value = accountSelected
@@ -292,15 +297,15 @@ class AccountsViewModel @Inject constructor(
            onAccountUpdated()
         }
     }
-    fun conversionCurrencyRate(fromCurrency: String, toCurrency: String){
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = converterCurrency.invoke(fromCurrency,toCurrency)
-            if (response.isSuccessful) {
-                _conversionCurrencyRate.postValue(response.body()?.conversion_rate)
-            } else {
-                Log.e("CurrencyConverter", "Error converting currency: ${response.code()}")
-            }
+    suspend fun conversionCurrencyRate(fromCurrency: String, toCurrency: String): Double? {
+        return withContext(Dispatchers.IO) {
+            val response = converterCurrency.invoke(fromCurrency, toCurrency)
+            response.body()?.conversion_rate
         }
+    }
+
+    fun getRatio(){
+        _conversionCurrencyRate.value
     }
 
     private fun onAccountUpdated() {

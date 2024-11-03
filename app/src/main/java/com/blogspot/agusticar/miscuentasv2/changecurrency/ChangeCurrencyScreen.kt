@@ -78,23 +78,31 @@ fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
             true,
             onClickButton = {
                 scope.launch(Dispatchers.IO) {
-                    accountsViewModel.conversionCurrencyRate(currencyCodeSelected, currencyCodeShowed)
                     accountsViewModel.setCurrencyCode(currencyCodeShowed)
+                    Log.d("change","currencyShow:$currencyCodeShowed")
+                    Log.d("change","currencySelected:$currencyCodeSelected")
+
+                    // Llama a conversionCurrencyRate y espera el resultado
+                    val ratio = accountsViewModel.conversionCurrencyRate(currencyCodeSelected, currencyCodeShowed)
+                    Log.d("change","currencyShow:$currencyCodeShowed")
+                    Log.d("change","currencySelected:$currencyCodeSelected")
+                    Log.d("change","ratio:$ratio")
+
                     entriesViewModel.getAllEntriesDataBase()
                     accountsViewModel.getAllAccounts()
                     accounts?.forEach { account->
-                        val newBalance=account.balance*(currencyRatio.toDouble())
+
+                        val newBalance = account.balance * (ratio ?: 1.0)
                         val id=account.id
                         accountsViewModel.upDateAccountBalance(id,newBalance)
-                        Log.d("change","ratio:$currencyRatio")
-                        Log.d("change","newBalance:$newBalance")
+
                     }
                     entries.forEach { entry->
-                        val newAmount=entry.amount*(currencyRatio.toDouble())
+                        val newAmount=entry.amount*(ratio ?: 1.0)
                         val id=entry.id
                         entriesViewModel.upDateAmountEntry (id,newAmount)
                     }
-
+                    entriesViewModel.getTotal()
 
                     withContext(Dispatchers.Main) {
                         SnackBarController.sendEvent(event = SnackBarEvent(messageCurrencyChange))

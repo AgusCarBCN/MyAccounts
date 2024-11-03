@@ -256,7 +256,7 @@ class EntriesViewModel @Inject constructor(
     }
 
 
-    private fun getTotal() {
+    fun getTotal() {
         viewModelScope.launch(Dispatchers.IO) {
             // Ejecutar ambas funciones en paralelo
             val totalIncomesDeferred = async { getTotalIncomes.invoke() }

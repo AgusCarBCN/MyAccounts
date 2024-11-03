@@ -40,8 +40,8 @@ fun HomeScreen(
 ) {
     val incomes by entriesViewModel.totalIncomes.observeAsState(0.0)
     val expenses by entriesViewModel.totalExpenses.observeAsState(0.0)
-
     val currencyCodeSelected by accountsViewModel.currencyCodeSelected.observeAsState("EUR")
+
     // Observa el estado de la lista de cuentas
     val accounts by accountsViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
 
