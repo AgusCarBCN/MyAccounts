@@ -51,7 +51,7 @@ import kotlin.random.Random
 fun PieChartScreen(
     entriesViewModel: EntriesViewModel,
     accountViewModel: AccountsViewModel,
-    searchViewModel:SearchViewModel
+    searchViewModel: SearchViewModel
 ) {
 
     val getTotalIncomes by entriesViewModel.totalIncomes.observeAsState(0.0)
@@ -63,8 +63,8 @@ fun PieChartScreen(
 
     val idAccount = accountSelected?.id ?: 1
 
-   //LaunchedEffect para ejecutar lógica dependiente de la UI o que deba reaccionar a cambios
-   // en la composición
+    //LaunchedEffect para ejecutar lógica dependiente de la UI o que deba reaccionar a cambios
+    // en la composición
     LaunchedEffect(idAccount, fromDate, toDate) {
         entriesViewModel.getTotalByDate(idAccount, fromDate, toDate)
         entriesViewModel.getFilteredEntries(
@@ -78,8 +78,22 @@ fun PieChartScreen(
         )
     }
 
-    val incomeList:MutableList<Pair<Float,String>> = mutableListOf()
-    val expenseList:MutableList<Pair<Float,String>> = mutableListOf()
+    /* Agrupa las entradas por el nombre de la categoría. Esto crea un mapa donde la clave
+    es el nombre de la categoría, y el valor es una lista de entradas que pertenecen a esa categoría.*/
+    val groupedEntriesByCategoryName = listOfEntries.groupBy { it.categoryName }
+
+    /*Calcula el total de cada categoría. Usamos `mapValues` para transformar los valores del mapa anterior.
+   En lugar de la lista de entradas de cada categoría, ahora el valor será la suma de los montos de esas entradas.*/
+    val categoryTotals = groupedEntriesByCategoryName.mapValues { (_, entries) ->
+        entries.sumOf { it.amount } // Suma el monto de cada entrada en la lista de esa categoría
+    }
+
+    /* Convierte el mapa de totales de categorías en una lista de pares clave-valor.
+    Cada elemento de la lista será un par (categoryName, totalAmount), que facilita el acceso secuencial*/
+    val categoryList = categoryTotals.toList()
+
+    val incomeList: MutableList<Pair<Float, String>> = mutableListOf()
+    val expenseList: MutableList<Pair<Float, String>> = mutableListOf()
 
     Column(
         modifier = Modifier
@@ -93,7 +107,7 @@ fun PieChartScreen(
     ) {
 
 
-        AccountSelector(300,20,stringResource(id = R.string.selectanaccount), accountViewModel)
+        AccountSelector(300, 20, stringResource(id = R.string.selectanaccount), accountViewModel)
         HeadSetting(title = stringResource(id = R.string.daterange), 20)
         Row(
             modifier = Modifier
@@ -117,22 +131,23 @@ fun PieChartScreen(
         }
 
         //Calculate percent of entries and adding to percentsList
-        listOfEntries.forEach { entry ->
-            if (entry.amount >= 0) {
-                incomeList.add((entry.amount / getTotalIncomes).toFloat() to stringResource(id = entry.categoryName))
+        categoryList.forEach { category ->
+            if (category.second >= 0) {
+                incomeList.add((category.second / getTotalIncomes).toFloat() to stringResource(id = category.first))
 
             } else {
-                expenseList.add((entry.amount / getTotalExpenses).toFloat() to stringResource(id = entry.categoryName))
+                expenseList.add((category.second / getTotalExpenses).toFloat() to stringResource(id = category.first))
 
             }
         }
-        if(listOfEntries.isNotEmpty()) {
+        if (listOfEntries.isNotEmpty()) {
             HeadSetting(title = stringResource(id = R.string.incomechart), 24)
             ChartPie(incomeList)
             HeadSetting(title = stringResource(id = R.string.expensechart), 24)
             ChartPie(expenseList)
-        }else{
-            Text(modifier = Modifier.padding(50.dp),
+        } else {
+            Text(
+                modifier = Modifier.padding(50.dp),
                 text = stringResource(id = R.string.noentries),
                 color = LocalCustomColorsPalette.current.textColor,
                 fontSize = 18.sp
@@ -143,7 +158,7 @@ fun PieChartScreen(
 }
 
 @Composable
-fun ChartPie(listOfEntries:MutableList<Pair<Float,String>>) {
+fun ChartPie(listOfEntries: MutableList<Pair<Float, String>>) {
     val initAngle = -90f
     var currentAngle: Float
     var endAngle: Float
