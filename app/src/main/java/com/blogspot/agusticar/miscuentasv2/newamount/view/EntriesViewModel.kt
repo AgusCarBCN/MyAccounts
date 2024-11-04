@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
@@ -89,6 +88,10 @@ class EntriesViewModel @Inject constructor(
     //LiveData para la lista de Categorias
     private val _listOfCategories = MutableLiveData<List<Category>>()
     val listOfCategories: LiveData<List<Category>> = _listOfCategories
+
+    //LiveData para la lista de Categorias seleccionadas
+    private val _listOfCategoriesChecked = MutableLiveData<List<Category>>()
+    val listOfCategoriesChecked: LiveData<List<Category>> = _listOfCategoriesChecked
 
     // MutableStateFlow para la lista de entradas
     private val _listOfEntries = MutableStateFlow<List<EntryDTO>>(emptyList())
@@ -206,6 +209,7 @@ class EntriesViewModel @Inject constructor(
         }
     }
 
+
     fun addEntry(entry: Entry) {
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -292,18 +296,26 @@ class EntriesViewModel @Inject constructor(
             _totalExpenses.postValue(totalExpenses)
         }
     }
-    // Function to handle checkbox state changes
-    fun onCategoryCheckChanged(category: Category, isChecked: Boolean) {
-        // Get the current state
-        val currentStates = _categoryStates.value ?: emptyMap()
 
-        // Update the state with the new checked status for the specific category
-        val updatedStates = currentStates.toMutableMap().apply {
-            put(category.name.toString(), isChecked) // Update the specific category
+    fun onCheckedCategoryChange(category: Category, isChecked: Boolean) {
+
+        // Actualiza la categoría específica y crea una nueva lista para forzar la recomposición
+        _listOfCategories.value = _listOfCategories.value?.map {
+            if (it.iconResource == category.iconResource) {
+                it.copy(isChecked = isChecked)
+            } else it
         }
+    }
 
-        // Post the updated state back to LiveData
-        _categoryStates.value = updatedStates
+    fun saveCategoriesChecked(){
+       val categories=_listOfCategories.value
+       val categoriesChecked = mutableListOf<Category>()
+        categories?.forEach {
+            if (it.isChecked) {
+                categoriesChecked.add(it)
+            }
+        }
+        _listOfCategoriesChecked.value=categoriesChecked
     }
 
     private fun resetFields() {
