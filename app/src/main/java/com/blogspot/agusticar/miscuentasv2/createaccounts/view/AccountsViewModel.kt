@@ -309,7 +309,6 @@ class AccountsViewModel @Inject constructor(
         }
     }
 
-
     private fun onAccountUpdated() {
         resetFields()
         getAllAccounts()

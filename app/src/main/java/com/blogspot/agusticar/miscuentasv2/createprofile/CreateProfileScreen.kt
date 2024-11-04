@@ -211,10 +211,7 @@ fun ProfileImageWithCamera(viewModel: ProfileViewModel) {
     ) { uri: Uri? ->
         selectedImageUri = uri
         selectedImageUri?.let { viewModel.onImageSelected(it) }
-        Log.d("AfterClickImageSaved", selectedImageUriSavedFromFile.toString())
-        Log.d("AfterClickImage", selectedImageUri.toString())
-        Log.d("AfterClickImageSelected", selectedImageUriSelected.toString())
-    }
+            }
 
     Box(
         modifier = Modifier
