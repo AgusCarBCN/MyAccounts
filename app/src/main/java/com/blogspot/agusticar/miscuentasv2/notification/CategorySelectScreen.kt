@@ -58,8 +58,7 @@ fun EntryCategoryList(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HeadSetting(title = stringResource(id =R.string.choosecategories), 20)
-        // Asegúrate de que la LazyColumn ocupa solo el espacio necesario
+       // Asegúrate de que la LazyColumn ocupa solo el espacio necesario
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,19 +78,6 @@ fun EntryCategoryList(
             }
         }
 
-        // Botón para guardar categorías seleccionadas
-        ModelButton(
-            text = stringResource(id = R.string.confirmButton),
-            fontDimen = R.dimen.text_title_medium,
-            modifier = Modifier
-                .width(320.dp)
-                .padding(bottom = 8.dp), // Espacio entre botones
-            enabledButton = true,
-            onClickButton = {
-
-
-            }
-        )
 
         // Botón para volver a la pantalla anterior
         ModelButton(

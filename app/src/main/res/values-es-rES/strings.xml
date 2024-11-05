@@ -344,5 +344,6 @@
     <string name="monthbills">Gastos mensuales</string>
     <string name="resultsearch">Resultado</string>
     <string name="permissiongranted">Permiso de notificaciones concedido</string>
-    <string name="choosecategories">Escoje las categorias</string>
+    <string name="selectcategories">Selecciona categorias</string>
+    <string name="choosecategories">Habilita o Deshabilita categorias para controlar gastos</string>
 </resources>
