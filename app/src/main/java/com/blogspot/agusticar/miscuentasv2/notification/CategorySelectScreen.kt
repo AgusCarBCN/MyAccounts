@@ -79,16 +79,6 @@ fun EntryCategoryList(
         }
 
 
-        // Botón para volver a la pantalla anterior
-        ModelButton(
-            text = stringResource(id = R.string.backButton),
-            fontDimen = R.dimen.text_title_medium,
-            modifier = Modifier.width(320.dp),
-            enabledButton = true,
-            onClickButton = {
-                mainViewModel.selectScreen(IconOptions.HOME)
-            }
-        )
     }
 }
 
