@@ -74,6 +74,7 @@ import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
+import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
@@ -115,7 +116,7 @@ fun MainScreen(
     val currencyCode by accountsViewModel.currencyCodeShowed.observeAsState("USD")
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
-    val categoriesChecked by entriesViewModel.listOfCategoriesChecked.observeAsState()
+  //  val categoriesChecked by entriesViewModel.listOfCategoriesChecked.observeAsState()
     LaunchedEffect(Unit) {
         entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
     }
@@ -300,7 +301,7 @@ fun MainScreen(
                             title=R.string.piechart
                         }
                         IconOptions.SELECT_CATEGORIES -> {
-                           //EntryCategoryList (mainViewModel,entriesViewModel)
+                           EntryCategoryList (mainViewModel,categoriesViewModel)
                         }
                     }
 

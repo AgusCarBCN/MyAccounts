@@ -20,4 +20,8 @@ class CategoryRepository  @Inject constructor(private val categoryDao: CategoryD
         return categoryDao.getAllCategories(type)
     }
 
+    // 3. Cambiar estado de checked de una categoria
+    suspend fun updateChecked(categoryId:Int,newValue:Boolean) {
+        categoryDao.updateCheckedCategory(categoryId,newValue)
+    }
 }

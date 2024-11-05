@@ -1,7 +1,7 @@
 package com.blogspot.agusticar.miscuentasv2.notification
 
 
-import android.util.Log
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,22 +32,23 @@ import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
-import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-/*
+
 
 @Composable
 fun EntryCategoryList(
     mainViewModel: MainViewModel,
-    entriesViewModel: EntriesViewModel
+    categoriesViewModel: CategoriesViewModel
 ) {
     // Observa la lista de categorías desde el ViewModel
-    val listOfCategories by entriesViewModel.listOfCategories.observeAsState(emptyList())
-    val listOfCategoriesChecked by entriesViewModel.listOfCategoriesChecked.observeAsState(emptyList())
+    val listOfCategories by categoriesViewModel.listOfCategories.observeAsState(emptyList())
+
     LaunchedEffect(Unit) {
-        entriesViewModel.getCategories(false)
+        categoriesViewModel.getAllCategoriesByType(CategoryType.EXPENSE)
     }
 
     Column(
@@ -67,11 +68,12 @@ fun EntryCategoryList(
         ) {
             items(listOfCategories) { category ->
                 ItemCategoryCheck(
-                    categoryName = category.name,
+                    categoryName = category.nameResource,
                     categoryIcon = category.iconResource,
                     checked = category.isChecked,
                     onCheckBoxChange = { checked ->
-                        entriesViewModel.onCheckedCategoryChange(category, checked)
+                       categoriesViewModel.updateCategoryCheckedState(category.id, checked)
+                        categoriesViewModel.getAllCategoriesByType(CategoryType.EXPENSE)
                     }
                 )
             }
@@ -86,8 +88,8 @@ fun EntryCategoryList(
                 .padding(bottom = 8.dp), // Espacio entre botones
             enabledButton = true,
             onClickButton = {
-                entriesViewModel.saveCategoriesChecked()
-                Log.d("categoriesChecked",listOfCategoriesChecked.toString())
+
+
             }
         )
 
@@ -162,5 +164,5 @@ fun ItemCategoryCheck(
     }
 }
 
-*/
+
 

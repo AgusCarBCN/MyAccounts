@@ -9,6 +9,7 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesByType
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.InsertCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateCheckedCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val insertCategory:InsertCategoryUseCase,
-    private val getAllCategoriesByType:GetAllCategoriesByType
+    private val getAllCategoriesByType:GetAllCategoriesByType,
+    private val upDateCategoryChecked:UpdateCheckedCategoryUseCase
 ): ViewModel() {
 
     //LiveData para la lista de Categorias
@@ -51,6 +53,12 @@ class CategoriesViewModel @Inject constructor(
         _categorySelected.value = categorySelected
     }
 
+
+    fun updateCategoryCheckedState(categoryId: Int, isChecked: Boolean) {
+        viewModelScope.launch {
+            upDateCategoryChecked.invoke(categoryId, isChecked)
+        }
+    }
 
     private val incomeCategories = listOf(
         Category(

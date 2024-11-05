@@ -21,7 +21,6 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.IconAnimated
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
@@ -40,7 +39,6 @@ fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
     val scope = rememberCoroutineScope()
     val currencyCodeShowed by accountsViewModel.currencyCodeShowed.observeAsState("EUR")
     val currencyCodeSelected by accountsViewModel.currencyCodeSelected.observeAsState("EUR")
-    val currencyRatio by accountsViewModel.conversionCurrencyRate.observeAsState(1)
     val accounts by accountsViewModel.listOfAccounts.observeAsState()
     val entries by entriesViewModel.listOfEntriesDB.collectAsState()
 
@@ -88,14 +86,13 @@ fun ChangeCurrencyScreen(mainViewModel:MainViewModel,
                         entriesViewModel.getAllEntriesDataBase()
                         accountsViewModel.getAllAccounts()
                         accounts?.forEach { account ->
-
-                            val newBalance = account.balance * (ratio ?: 1.0)
+                            val newBalance = account.balance * (ratio )
                             val id = account.id
                             accountsViewModel.upDateAccountBalance(id, newBalance)
 
                         }
                         entries.forEach { entry ->
-                            val newAmount = entry.amount * (ratio ?: 1.0)
+                            val newAmount = entry.amount * (ratio)
                             val id = entry.id
                             entriesViewModel.upDateAmountEntry(id, newAmount)
                         }

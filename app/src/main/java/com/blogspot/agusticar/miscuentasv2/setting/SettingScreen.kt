@@ -168,7 +168,7 @@ fun SettingScreen(
             description = stringResource(id = R.string.descategorycontrol),
             iconResource = R.drawable.ic_categorycontrol,
             onClick = {
-                //mainViewModel.selectScreen(IconOptions.SELECT_CATEGORIES)
+                mainViewModel.selectScreen(IconOptions.SELECT_CATEGORIES)
             })
 
         SpacerApp()
