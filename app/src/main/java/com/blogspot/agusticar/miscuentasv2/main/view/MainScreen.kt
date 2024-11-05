@@ -501,7 +501,7 @@ private fun ClickableRow(
 
 @Composable
 private fun TitleOptions(title: Int) {
-
+git
     Text(
         text = stringResource(id = title),
         modifier = Modifier
