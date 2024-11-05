@@ -14,9 +14,10 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     // Lista de opciones como identificadores de recursos
     val options = listOf(R.string.incomeoption, R.string.expenseoption, R.string.alloption)
 
-    // LiveData para la opción seleccionada
-    private val _selectedOption = MutableLiveData(options[0])
-    val selectedOption: LiveData<Int> = _selectedOption
+    // Almacena el índice de la opción seleccionada
+    private val _selectedOptionIndex =
+        MutableLiveData(0) // Por defecto, selecciona la primera opción
+    val selectedOptionIndex: LiveData<Int> = _selectedOptionIndex
 
     private val _showDatePickerFrom = MutableLiveData<Boolean>()
     val showDatePickerFrom: LiveData<Boolean> = _showDatePickerFrom
@@ -42,8 +43,15 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     private val _enableSearchButton = MutableLiveData<Boolean>()
     val enableSearchButton: LiveData<Boolean> = _enableSearchButton
 
+
+
     init {
         resetFields()
+    }
+
+    // Método para actualizar la opción seleccionada
+    fun onOptionSelected(index: Int) {
+        _selectedOptionIndex.value = index
     }
 
     fun onShowDatePicker(newValue: Boolean, isDateFrom: Boolean) {
@@ -68,6 +76,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     }
 
 
+
     fun onAmountsFieldsChange(fromAmount: String, toAmount: String) {
         // Validar y actualizar el valor de amount
         if (Utils.isValidDecimal(fromAmount)) {
@@ -89,9 +98,9 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     }
 
     // Método para actualizar la opción seleccionada
-    fun onOptionSelected(option: Int) {
-        _selectedOption.value = option
-    }
+    /* fun onOptionSelected(option: Int) {
+         _selectedOption.value = option
+     }*/
 
     fun onEnableSearchButton() {
         val fromDate = _selectedFromDate.value ?: Date().dateFormat()
@@ -119,7 +128,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     }
 
     fun resetFields() {
-        _selectedOption.value = options[0]
+        _selectedOptionIndex.value = 0
         _showDatePickerFrom.value = false
         _showDatePickerTo.value = false
         _selectedFromDate.value = Date().dateFormat()
@@ -129,4 +138,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         _toAmount.value = ""
         _enableSearchButton.value = false
     }
+
+
+
 }

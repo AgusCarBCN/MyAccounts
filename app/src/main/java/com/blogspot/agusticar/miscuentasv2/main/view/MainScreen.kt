@@ -56,21 +56,26 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.about.AboutApp
 import com.blogspot.agusticar.miscuentasv2.about.AboutScreen
 import com.blogspot.agusticar.miscuentasv2.about.SendEmail
+import com.blogspot.agusticar.miscuentasv2.barchart.BarChartScreen
+import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorUI
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
-import com.blogspot.agusticar.miscuentasv2.components.CurrencySelector
+import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
-
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
 import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
+import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
+import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
@@ -90,11 +95,13 @@ fun MainScreen(
 
     mainViewModel: MainViewModel,
     accountsViewModel: AccountsViewModel,
+    categoriesViewModel: CategoriesViewModel,
     profileViewModel: ProfileViewModel,
     settingViewModel: SettingViewModel,
     entriesViewModel: EntriesViewModel,
     searchViewModel: SearchViewModel,
     calculatorViewModel: CalculatorViewModel,
+    barChartView:BarChartViewModel,
     navToCreateAccounts: () -> Unit
 
 ) {
@@ -106,9 +113,10 @@ fun MainScreen(
     val showExitDialog by mainViewModel.showExitDialog.collectAsState()
     val showDeleteAccountDialog by mainViewModel.showDeleteAccountDialog.collectAsState()
     val entries by entriesViewModel.listOfEntries.collectAsState()
-    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+    val currencyCode by accountsViewModel.currencyCodeShowed.observeAsState("USD")
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
+  //  val categoriesChecked by entriesViewModel.listOfCategoriesChecked.observeAsState()
     LaunchedEffect(Unit) {
         entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
     }
@@ -182,10 +190,10 @@ fun MainScreen(
 
                         IconOptions.INCOME_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                entriesViewModel.getCategories(true)
+                                categoriesViewModel.getAllCategoriesByType(CategoryType.INCOME)
 
                             }
-                            CategorySelector(mainViewModel, entriesViewModel, true)
+                            CategorySelector(mainViewModel, categoriesViewModel,CategoryType.INCOME)
                             title = R.string.newincome
                         }
 
@@ -250,18 +258,20 @@ fun MainScreen(
 
                         IconOptions.EXPENSE_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                entriesViewModel.getCategories(false)
+                              categoriesViewModel.getAllCategoriesByType(CategoryType.EXPENSE)
                             }
-                            CategorySelector(mainViewModel, entriesViewModel, false)
+                            CategorySelector(mainViewModel, categoriesViewModel, CategoryType.EXPENSE)
                             title = R.string.newexpense
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(mainViewModel, entriesViewModel, accountsViewModel)
+                            NewAmount(mainViewModel, entriesViewModel,categoriesViewModel, accountsViewModel)
 
                         }
 
-                        IconOptions.CHANGE_CURRENCY -> CurrencySelector(accountsViewModel)
+                        IconOptions.CHANGE_CURRENCY -> ChangeCurrencyScreen(mainViewModel,
+                            accountsViewModel,
+                            entriesViewModel)
                         IconOptions.ENTRIES -> {
                             EntryList(entriesViewModel,entries, currencyCode)
                             title = R.string.yourentries
@@ -272,10 +282,27 @@ fun MainScreen(
                                 accountsViewModel)
                         }
 
-                        IconOptions.BARCHART -> TODO()
+                        IconOptions.BARCHART -> {BarChartScreen(
+                            accountsViewModel,
+                            barChartView,
+                            settingViewModel
+                        )
+                        title=R.string.barchart
+                        }
                         IconOptions.CALCULATOR -> {CalculatorUI(calculatorViewModel)
                         title=R.string.calculator}
                         IconOptions.EMAIL -> SendEmail()
+                        IconOptions.PIECHART -> {
+                            PieChartScreen(
+                                entriesViewModel,
+                                accountsViewModel,
+                                searchViewModel
+                            )
+                            title=R.string.piechart
+                        }
+                        IconOptions.SELECT_CATEGORIES -> {
+                           EntryCategoryList (mainViewModel,categoriesViewModel)
+                        }
                     }
 
                 }
@@ -367,7 +394,13 @@ private fun DrawerContent(
             ClickableRow(OptionItem(R.string.transfer, R.drawable.transferoption), onClick = {
                 viewModel.selectScreen(IconOptions.TRANSFER)
             })
-            ClickableRow(OptionItem(R.string.chart, R.drawable.barchartoption), onClick = {})
+            ClickableRow(OptionItem(R.string.barchart, R.drawable.barchartoption), onClick = {
+                viewModel.selectScreen(IconOptions.BARCHART)
+            })
+            ClickableRow(OptionItem(R.string.piechart, R.drawable.ic_piechart), onClick = {
+                viewModel.selectScreen(IconOptions.PIECHART)
+
+            })
             ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {
                 viewModel.selectScreen(IconOptions.CALCULATOR)
             })

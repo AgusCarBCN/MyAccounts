@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.main.domain.apidata.ConvertCurrencyUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.DeleteAccountByIdUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
@@ -20,8 +21,10 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCode
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +36,8 @@ class AccountsViewModel @Inject constructor(
     private val transferAmount:TransferUseCase,
     private val deleteAccount: DeleteAccountByIdUseCase,
     private val updateName:UpdateAccountNameUseCase,
-    private val updateBalance:UpdateAccountBalanceUseCase
+    private val updateBalance:UpdateAccountBalanceUseCase,
+    private val converterCurrency:ConvertCurrencyUseCase
 
 ) : ViewModel() {
     // Variable privada que representa un estado observable y modificable. Solo el ViewModel puede cambiar este valor,
@@ -49,7 +53,6 @@ class AccountsViewModel @Inject constructor(
     private val _isEnableChangeBalanceButton = MutableLiveData<Boolean>()
     val isEnableChangeBalanceButton: LiveData<Boolean> = _isEnableChangeBalanceButton
 
-
     private val _isConfirmTransfer = MutableLiveData<Boolean>()
     val isConfirmTransfer: LiveData<Boolean> = _isConfirmTransfer
 
@@ -59,8 +62,11 @@ class AccountsViewModel @Inject constructor(
     private val _enableCurrencySelector = MutableLiveData<Boolean>()
     val enableCurrencySelector: LiveData<Boolean> = _enableCurrencySelector
 
-    private val _currencyCode = MutableLiveData<String>()
-    val currencyCode: LiveData<String> = _currencyCode
+    private val _currencyCodeShowed = MutableLiveData<String>()
+    val currencyCodeShowed: LiveData<String> = _currencyCodeShowed
+
+    private val _currencyCodeSelected = MutableLiveData<String>()
+    val currencyCodeSelected: LiveData<String> = _currencyCodeSelected
 
     // LiveData para los campos de texto
     private val _name = MutableLiveData<String>()
@@ -92,11 +98,18 @@ class AccountsViewModel @Inject constructor(
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
 
+    private val _conversionCurrencyRate = MutableLiveData<Double>()
+    val conversionCurrencyRate: LiveData<Double> = _conversionCurrencyRate
+
+    // Cargar datos iniciales que no dependen de la UI ni de la composición.
     init {
         viewModelScope.launch {
-            _currencyCode.value = getCurrencyCode()
+            _currencyCodeShowed.value =getCurrencyCode.invoke()
+            getCurrencyCode()
             _isCurrencyExpanded.value = false
             onAccountUpdated()
+            getListOfCurrencyCode()
+
         }
     }
 
@@ -181,13 +194,20 @@ class AccountsViewModel @Inject constructor(
         _destinationAccount.postValue(null)
         _isConfirmTransfer.postValue(false)
         _isEnableButton.postValue(false)
-    }
-
-    fun onCurrencySelectedChange(currencySelected: String) {
-        _currencyCode.value = currencySelected
 
     }
 
+
+    fun onCurrencyShowedChange(currencyShowed: String) {
+        _currencyCodeShowed.value = currencyShowed
+
+
+    }
+    fun getCurrencyCode(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _currencyCodeSelected.postValue(getCurrencyCode.invoke())
+        }
+    }
 
     fun onAccountSelected(accountSelected: Account) {
         _accountSelected.value = accountSelected
@@ -205,13 +225,14 @@ class AccountsViewModel @Inject constructor(
 
     fun setCurrencyCode(currencyCode: String) {
         viewModelScope.launch {
+            _currencyCodeSelected.value =currencyCode
             setCurrencyCode.invoke(currencyCode)
 
         }
     }
 
 
-    fun getListOfCurrencyCode(): List<Currency> {
+    private fun getListOfCurrencyCode(): List<Currency> {
         //Ordeno la lista por la descripción de la divisa
         val sortedCurrencies = currencies.sortedBy { it.currencyDescription }
         _currencyCodeList.value = sortedCurrencies
@@ -274,6 +295,17 @@ class AccountsViewModel @Inject constructor(
             Log.d("Account", "Balance updated")
             _isEnableChangeNameButton.postValue(false)
            onAccountUpdated()
+        }
+    }
+    suspend fun conversionCurrencyRate(fromCurrency: String, toCurrency: String): Double? {
+
+        return try {
+            withContext(Dispatchers.IO) {
+                val response = converterCurrency.invoke(fromCurrency, toCurrency)
+                response.body()?.conversion_rate
+            }
+        }catch(e: IOException) {
+            null
         }
     }
 

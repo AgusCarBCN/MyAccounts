@@ -12,6 +12,7 @@ enum class IconOptions {
     EXPENSE_OPTIONS,
     TRANSFER,
     BARCHART,
+    PIECHART,
     CALCULATOR,
     SETTING_ACCOUNTS,
     DELETE_ACCOUNT,
@@ -19,5 +20,6 @@ enum class IconOptions {
     ABOUT_DESCRIPTION,
     EXIT,
     ENTRIES,
-    EMAIL
+    EMAIL,
+    SELECT_CATEGORIES
 }

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -22,6 +24,7 @@ import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.AccountSelector
 import com.blogspot.agusticar.miscuentasv2.components.BoardType
 import com.blogspot.agusticar.miscuentasv2.components.DatePickerSearch
+import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.RadioButtonSearch
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
@@ -50,7 +53,7 @@ fun SearchScreen(
     val entryDescription by searchViewModel.entryDescription.observeAsState("")
     val enableSearchButton by searchViewModel.enableSearchButton.observeAsState(false)
     val selectedAccount by accountViewModel.accountSelected.observeAsState()
-    val selectedOption by searchViewModel.selectedOption.observeAsState()
+    val selectedOption by searchViewModel.selectedOptionIndex.observeAsState()
     val id=selectedAccount?.id?:0
     val scope = rememberCoroutineScope()
     val messageAmountError = stringResource(id = R.string.amountfromoverdateto)
@@ -60,7 +63,10 @@ fun SearchScreen(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 30.dp)
-            .background(LocalCustomColorsPalette.current.backgroundPrimary),
+            .background(LocalCustomColorsPalette.current.backgroundPrimary)
+            .verticalScroll(
+            rememberScrollState()
+        ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -72,7 +78,7 @@ fun SearchScreen(
             BoardType.TEXT,
             false
         )
-
+        HeadSetting(title = stringResource(id = R.string.daterange), 20)
         Row(
             modifier = Modifier
                 .width(360.dp)
@@ -93,7 +99,7 @@ fun SearchScreen(
                 false
             )
         }
-        AccountSelector(stringResource(id = R.string.selectanaccount), accountViewModel)
+        AccountSelector(300,20,stringResource(id = R.string.selectanaccount), accountViewModel)
         RadioButtonSearch(searchViewModel)
         TextFieldComponent(
             modifier = Modifier.width(360.dp),
@@ -148,7 +154,7 @@ fun SearchScreen(
             false
         )
         ModelButton(text = stringResource(id = R.string.search),
-            R.dimen.text_title_small,
+            R.dimen.text_title_medium,
             modifier = Modifier.width(360.dp),
             enableSearchButton,
             onClickButton = {
@@ -160,11 +166,7 @@ fun SearchScreen(
                     toAmount.toDoubleOrNull()?:Double.MAX_VALUE,
                     selectedOption?:0)
                 mainViewModel.selectScreen(IconOptions.ENTRIES)
-                Log.d("data","fromDate: $fromDate")
-                Log.d("data","toDate: $toDate")
-                Log.d("data","fromAmount: $fromAmount")
-                Log.d("data","toAmount: $toAmount")
-                Log.d("data","selectOption: $selectedOption")
+
             }
         )
 

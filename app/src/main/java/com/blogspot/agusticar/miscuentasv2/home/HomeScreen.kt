@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -40,10 +41,14 @@ fun HomeScreen(
 ) {
     val incomes by entriesViewModel.totalIncomes.observeAsState(0.0)
     val expenses by entriesViewModel.totalExpenses.observeAsState(0.0)
-    val currencyCode by accountsViewModel.currencyCode.observeAsState("USD")
+    val currencyCodeSelected by accountsViewModel.currencyCodeSelected.observeAsState("EUR")
 
     // Observa el estado de la lista de cuentas
     val accounts by accountsViewModel.listOfAccounts.observeAsState(listOf())   // Observa el estado de la lista de cuentas
+
+    LaunchedEffect(Unit) {
+        entriesViewModel.getTotal()
+    }
 
     Column(
         modifier = Modifier
@@ -60,14 +65,14 @@ fun HomeScreen(
         else{
             Row(modifier = Modifier.padding(top = 20.dp)) {
                 HeadCard(modifier = Modifier.weight(0.5f),
-                    Utils.numberFormat(incomes,currencyCode),
+                    Utils.numberFormat(incomes,currencyCodeSelected),
                     true,
                     onClickCard={mainViewModel.selectScreen(IconOptions.ENTRIES)
                     entriesViewModel.getAllIncomes()
                     })
                 Spacer(modifier = Modifier.width(5.dp))  // Espacio entre los dos cards
                 HeadCard(modifier = Modifier.weight(0.5f),
-                    Utils.numberFormat(expenses,currencyCode),
+                    Utils.numberFormat(expenses,currencyCodeSelected),
                     false,
                     onClickCard={mainViewModel.selectScreen(IconOptions.ENTRIES)
                     entriesViewModel.getAllExpenses()
@@ -88,7 +93,7 @@ fun HomeScreen(
             ) {
                 items(accounts) { account -> // Solo utiliza accounts
                     AccountCard(
-                        Utils.numberFormat(account.balance,currencyCode),
+                        Utils.numberFormat(account.balance,currencyCodeSelected),
                         account.name,
                         R.string.seeall,
                         onClickCard = { mainViewModel.selectScreen(IconOptions.ENTRIES)

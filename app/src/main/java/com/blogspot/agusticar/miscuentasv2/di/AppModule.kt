@@ -32,5 +32,4 @@ object AppModule {
         return ParserCalculator()
     }
 
-
 }

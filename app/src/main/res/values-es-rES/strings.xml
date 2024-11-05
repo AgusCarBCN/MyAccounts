@@ -5,7 +5,10 @@
     <string name="title_activity_login">LoginActivity</string>
 
     <!--Login -->
-
+    <string name="changeformattext">Cambia solo el formato de la divisa.</string>
+    <string name="changecurrencytext">Cambia el formato y las entradas a la divisa seleccionada.</string>
+    <string name="changeFormat">Cambiar formato</string>
+    <string name="changeCurrency">Cambiar divisa</string>
     <string name="loginButton">Inicio de sesion</string>
     <string name="confirmButton">Confirmar</string>
     <string name="backButton">Atras</string>
@@ -71,7 +74,8 @@
     <string name="privacy">Política de privacidad</string>
     <string name="notification">Notificaciones</string>
     <string name="calculator">Calculadora</string>
-    <string name="chart">Gráfico de barras</string>
+    <string name="barchart">Gráfico de barras</string>
+    <string name="piechart">Graficos circulares</string>
     <string name="newincome">Nuevo ingreso</string>
     <string name="transfer">Transferencia</string>
     <string name="search">Buscar</string>
@@ -85,6 +89,11 @@
     <string name="selectedcurrency">Divisa seleccionada: </string>
 
     <!--Ajustes-->
+    <string name="expensemanagement">controla tus gastos</string>
+    <string name="categorycontrol">Gasto por categoria</string>
+    <string name="descategorycontrol">Establece un control de gasto por cada categoría y recibe avisos al superarlos.</string>
+    <string name="desexpensecontrol">Controla los gastos totales y recibe avisos cuando los hayas superado con notificaciones</string>
+    <string name="expensecontrol">Gasto total</string>
     <string name="modify">Modifica esta cuenta</string>
     <string name="deleteaccount">Borra esta cuenta</string>
     <string name="appsettings">Ajustes generales</string>
@@ -93,7 +102,7 @@
     <string name="theme">Tema de la app</string>
     <string name="enableonboarding">Tutorial de inicio.</string>
     <string name="enablenotifications">Notificaciones</string>
-    <string name="desenablenotifications">Habilitar o deshabilitar notificaciones en tu móvil.</string>
+    <string name="desenablenotifications">Habilitar o deshabilitar notificaciones en tu móvil de control del gasto.</string>
     <string name="createbackup">Copia de seguridad</string>
     <string name="loadbackup">Carga archivo de seguridad</string>
     <string name="deleteall">Borra todo</string>
@@ -144,7 +153,9 @@
     <string name="errorreadingdatastore">Error al leer en DataStore</string>
     <string name="datefromoverdateto">La fecha inicial es posterior a la fecha final</string>
     <string name="amountfromoverdateto">El monto inicial es mayor que el monto final</string>
-
+    <string name="currencyformatchange">Has cambiado el formato de la moneda</string>
+    <string name="currencychange">Has cambiado el formato y las entradas a la nueva moneda.</string>
+    <string name="apierror">Error de conexion a internet</string>
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>
@@ -280,4 +291,59 @@
     <string name="alloption">Ingresos y gastos</string>
     <!--calculator-->
     <string name="calcback">"\u232B"</string>
+    <!--Charts-->
+    <string name="incomechart">Ingresos</string>
+    <string name="expensechart">Gastos</string>
+    <string name="daterange">Selecciona un rango de fechas</string>
+    <string name="account">Cuenta</string>
+    <string name="year">Año</string>
+    <string name="result">Resultado</string>
+    <!--Meses del año gráfico de barras-->
+    <string name="january">Ene</string>
+    <string name="february">Feb</string>
+    <string name="march">Mar</string>
+    <string name="april">Abr</string>
+    <string name="may">May</string>
+    <string name="june">Jun</string>
+    <string name="july">Jul</string>
+    <string name="august">Ago</string>
+    <string name="september">Sep</string>
+    <string name="october">Oct</string>
+    <string name="november">Nov</string>
+    <string name="december">Dic</string>
+    <!--Meses del año gráfico de barras-->
+    <string name="months">Meses</string>
+    <string name="januarytable">Enero</string>
+    <string name="februarytable">Febrero</string>
+    <string name="marchtable">Marzo</string>
+    <string name="apriltable">Abril</string>
+    <string name="mayotable">Mayo</string>
+    <string name="junetable">Junio</string>
+    <string name="julytable">Julio</string>
+    <string name="augusttable">Agosto</string>
+    <string name="septembertable">Septiembre</string>
+    <string name="octobertable">Octubre</string>
+    <string name="novembertable">Noviembre</string>
+    <string name="decembertable">Diciciembre</string>
+    <!--Notificaciones-->
+    <string name="selectCurrency">Selecciona una divisa para tus cuentas</string>
+    <string name="daylyreport">Informe diario</string>
+    <string name="weekreport">Informe semanal</string>
+    <string name="monthreport">Informe mensual</string>
+    <string name="lowbalance">Alerta de saldo inferior a </string>
+    <string name="hightexpenses">Gastos del mes superiores al limite</string>
+    <string name="limitexpense">Limite de gasto mensual</string>
+    <string name="expenseslimit">Has superado los gastos de este mes en </string>
+    <string name="Noblankallowed">Campo requerido.No puede dejarse en blanco</string>
+    <string name="nomovtoday">Hoy no has tenido movimientos en tus cuentas</string>
+    <string name="notificationrequired">Se requiere permiso para las notificaciones.Permite las notificaciones para recibirlas</string>
+    <string name="notificationrequiredalert">Mensaje para permitir notificaciones</string>
+    <string name="weekicome">Ingresos semanales</string>
+    <string name="weekbills">Gastos semanales</string>
+    <string name="monthicome">Ingresos mensuales</string>
+    <string name="monthbills">Gastos mensuales</string>
+    <string name="resultsearch">Resultado</string>
+    <string name="permissiongranted">Permiso de notificaciones concedido</string>
+    <string name="selectcategories">Selecciona categorias</string>
+    <string name="choosecategories">Habilita o Deshabilita categorias para controlar gastos</string>
 </resources>

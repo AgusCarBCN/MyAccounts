@@ -16,6 +16,12 @@ import java.util.Date
             parentColumns = ["id"], // La columna id de Account
             childColumns = ["accountId"], // Referencia a accountId en Entry
             onDelete = ForeignKey.CASCADE // Si se elimina una cuenta, se eliminan las entradas relacionadas
+        ),
+        ForeignKey(
+            entity = Category::class, // Relación uno a muchos con Account
+            parentColumns = ["id"], // La columna id de Account
+            childColumns = ["categoryId"], // Referencia a accountId en Entry
+            onDelete = ForeignKey.CASCADE // Si se elimina una cuenta, se eliminan las entradas relacionadas
         )
     ]
 )
@@ -25,7 +31,6 @@ data class Entry(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "amount") var amount: Double,
     @ColumnInfo(name = "date") val date: String = Date().dateFormat(),
-    @ColumnInfo(name = "categoryId") val categoryId: Int, //Recurso de icono para identificar categorias de entradas
-    @ColumnInfo(name = "categoryName") val categoryName: Int, //Recurso de icono para identificar categorias de entradas
+    @ColumnInfo(name = "categoryId") val categoryId: Int, // Relación uno a muchos con Account
     @ColumnInfo(name = "accountId") val accountId: Int // Relación uno a muchos con Account
 )

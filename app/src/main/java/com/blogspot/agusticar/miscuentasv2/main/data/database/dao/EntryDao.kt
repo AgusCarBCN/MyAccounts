@@ -48,6 +48,11 @@ interface EntryDao {
     @Query("UPDATE EntryEntity SET description = :newDescription WHERE id = :entryId")
     suspend fun updateEntryDescription(entryId: Long, newDescription: String)
 
+    // 7. Actualizar el montante de una entrada
+    @Query("UPDATE EntryEntity SET amount = :amount WHERE id = :accountId")
+    suspend fun updateAmountEntry(accountId: Long, amount: Double)
+
+
     // 7. Obtener entradas por fecha específica (ordenadas por fecha descendiente)
     @Query("SELECT * FROM EntryEntity WHERE date = :specificDate ORDER BY date DESC")
     suspend fun getEntriesByDate(specificDate: String): List<Entry>
@@ -70,18 +75,78 @@ interface EntryDao {
     @Query("SELECT SUM(amount) FROM EntryEntity WHERE amount < 0")
     suspend fun getSumOfExpenseEntries(): Double?
 
+    @Transaction
+    @Query(
+        """SELECT SUM(amount) FROM EntryEntity WHERE amount >= 0
+            AND accountId = :accountId
+            AND date >= :dateFrom  
+            AND date <= :dateTo  """
+    )
+    suspend fun getSumOfIncomeEntriesByDate(
+        accountId: Int,
+        dateFrom: String = Date().dateFormat(),
+        dateTo: String = Date().dateFormat()
+    ): Double?
+
+    @Transaction
+    @Query(
+        """
+SELECT SUM(amount) FROM EntryEntity 
+WHERE amount >= 0
+  AND accountId = :accountId
+   AND SUBSTR(date, 4, 2) = :month 
+   AND SUBSTR(date, 7, 4) = :year
+"""
+    )
+    suspend fun getSumOfIncomeEntriesForMonth(
+        accountId: Int,
+        month: String,  // Espera un valor en formato 'MM' (ejemplo: '01' para enero)
+        year: String    // Espera un valor en formato 'YYYY' (ejemplo: '2024')
+    ): Double?
+
+    @Transaction
+    @Query(
+        """
+SELECT SUM(amount) FROM EntryEntity 
+WHERE amount < 0
+  AND accountId = :accountId
+   AND SUBSTR(date, 4, 2) = :month 
+   AND SUBSTR(date, 7, 4) = :year
+"""
+    )
+    suspend fun getSumOfExpensesEntriesForMonth(
+        accountId: Int,
+        month: String,
+        year: String
+    ): Double?
+
+
+    @Transaction
+    @Query(
+        """SELECT SUM(amount) FROM EntryEntity WHERE amount < 0
+            AND accountId = :accountId
+            AND date >= :dateFrom  
+            AND date <= :dateTo"""
+    )
+    suspend fun getSumOfExpenseEntriesByDate(
+        accountId: Int,
+        dateFrom: String = Date().dateFormat(),
+        dateTo: String = Date().dateFormat()
+    ): Double?
+
 
     @Query(
         """
     SELECT e.description,
            e.amount,
            e.date,
-           e.categoryName,
-           e.categoryId,
+           c.iconResource,
+           c.nameResource,
            e.accountId,
            a.name 
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
+    INNER JOIN CategoryEntity c ON e.categoryId = c.id
     WHERE e.amount >= 0
 """
     )
@@ -92,12 +157,13 @@ interface EntryDao {
     SELECT e.description,
            e.amount,
            e.date,
-           e.categoryName,
-           e.categoryId,
+           c.nameResource,
+           c.iconResource,
            e.accountId,
            a.name 
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
+    INNER JOIN CategoryEntity c ON e.categoryId = c.id
     WHERE e.amount < 0
 """
     )
@@ -108,12 +174,13 @@ interface EntryDao {
     SELECT e.description,
            e.amount,
            e.date,
-           e.categoryName,
-           e.categoryId,
+           c.nameResource,
+           c.iconResource,
            e.accountId,
            a.name 
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
+    INNER JOIN CategoryEntity c ON e.categoryId = c.id
    
 """
     )
@@ -124,12 +191,13 @@ interface EntryDao {
     SELECT e.description,
            e.amount,
            e.date,
-           e.categoryName,
-           e.categoryId,
+           c.nameResource,
+           c.iconResource,
            e.accountId,
            a.name 
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
+     INNER JOIN CategoryEntity c ON e.categoryId = c.id
    WHERE accountId = :accountId
 """
     )
@@ -140,12 +208,13 @@ interface EntryDao {
     SELECT e.description,
        e.amount,
        e.date,
-       e.categoryName,
-       e.categoryId,
+       c.nameResource,
+       c.iconResource,
        e.accountId,
        a.name 
 FROM EntryEntity e
 INNER JOIN AccountEntity a ON e.accountId = a.id
+INNER JOIN CategoryEntity c ON e.categoryId = c.id
  WHERE e.accountId = :accountId
            
         AND e.date >= :dateFrom 
@@ -153,9 +222,9 @@ INNER JOIN AccountEntity a ON e.accountId = a.id
         AND ABS(e.amount) >= :amountMin 
         AND ABS(e.amount) <= :amountMax
         AND (
-            (:selectedOptions = 2131624295) 
-            OR (:selectedOptions = 2131624297 AND e.amount > 0.0)
-            OR (:selectedOptions = 2131624296 AND e.amount < 0.0)                  
+            (:selectedOptions = 2) 
+            OR (:selectedOptions = 0 AND e.amount > 0.0)
+            OR (:selectedOptions = 1 AND e.amount < 0.0)                  
         )
          AND (:descriptionAmount LIKE "" OR e.description LIKE :descriptionAmount)
 
@@ -164,7 +233,7 @@ INNER JOIN AccountEntity a ON e.accountId = a.id
     )
     suspend fun getFilteredEntriesDTO(
         accountId: Int,
-        descriptionAmount:String,
+        descriptionAmount: String,
         dateFrom: String = Date().dateFormat(),
         dateTo: String = Date().dateFormat(),
         amountMin: Double = 0.0,

@@ -21,8 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
@@ -42,15 +44,23 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    companion object {
+        const val CHANEL_NOTIFICATION = "NotificationChanel"
+        const val INTERVAL_WEEKLY = 7
+        const val INTERVAL_MONTHLY = 30
+        const val INTERVAL_DAYLY=1
+    }
 
 
     private val tutorialViewModel: TutorialViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val accountViewModel: AccountsViewModel by viewModels()
+    private val categoriesViewModel: CategoriesViewModel by viewModels()
     private val entriesViewModel: EntriesViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val settingViewModel: SettingViewModel by viewModels()
     private val searchViewModel: SearchViewModel by viewModels()
+    private val barChartViewModel:BarChartViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
     private val calculatorViewModel: CalculatorViewModel by viewModels()
 
@@ -132,7 +142,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Routes.CreateAccounts.route) {
-                            CreateAccountsComponent(accountViewModel, navToLogin = {
+                            CreateAccountsComponent(accountViewModel,categoriesViewModel, navToLogin = {
                                 navigationController.navigate(Routes.Login.route)
                             },
                                 navToBack = { navigationController.popBackStack() }
@@ -152,11 +162,13 @@ class MainActivity : ComponentActivity() {
                             MainScreen(
                                 mainViewModel,
                                 accountViewModel,
+                                categoriesViewModel,
                                 profileViewModel,
                                 settingViewModel,
                                 entriesViewModel,
                                 searchViewModel,
                                 calculatorViewModel,
+                                barChartViewModel,
                                 navToCreateAccounts = {
                                     navigationController.navigate(Routes.CreateAccounts.route)
                                 }

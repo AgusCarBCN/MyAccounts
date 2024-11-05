@@ -45,6 +45,7 @@ import kotlinx.coroutines.withContext
 
 fun CreateAccountsComponent(
     accountsViewModel: AccountsViewModel,
+    categoriesViewModel: CategoriesViewModel,
     navToLogin: () -> Unit,
     navToBack: () -> Unit
 ) {
@@ -55,7 +56,7 @@ fun CreateAccountsComponent(
     ) {
 
         val scope = rememberCoroutineScope()
-        val currencyCode by accountsViewModel.currencyCode.observeAsState("EUR")
+        val currencyShowedCode by accountsViewModel.currencyCodeShowed.observeAsState("EUR")
         val isCurrencyExpanded by accountsViewModel.isCurrencyExpanded.observeAsState(false)
         val isEnableButton by accountsViewModel.isEnableButton.observeAsState(false)
         val accountName by accountsViewModel.name.observeAsState("")
@@ -171,7 +172,8 @@ fun CreateAccountsComponent(
                         onClickButton = {
                             scope.launch(Dispatchers.IO) {
                                 try {
-                                    accountsViewModel.setCurrencyCode(currencyCode)
+                                    accountsViewModel.setCurrencyCode(currencyShowedCode)
+                                    categoriesViewModel.populateCategories()
                                 }catch (e: Exception) {
                                     withContext(Dispatchers.Main) {
                                         SnackBarController.sendEvent(

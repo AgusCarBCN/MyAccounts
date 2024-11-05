@@ -7,8 +7,8 @@ data class EntryDTO(
     val description: String,
     val amount: Double,
     val date: String = Date().dateFormat(),
-    val categoryId: Int,
-    val categoryName: Int,
+    val iconResource: Int,
+    val nameResource: Int,
     val accountId: Int,
     val name:String=""
 )

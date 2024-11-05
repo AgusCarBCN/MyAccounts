@@ -6,6 +6,10 @@
 
     <string name="loginButton">Log In</string>
     <string name="confirmButton">Confirm</string>
+    <string name="changeFormat">Change Format</string>
+    <string name="changeCurrency">Change Currency</string>
+    <string name="changeformattext">Only change the currency format.</string>
+    <string name="changecurrencytext">Change the format and entries to the selected currency.</string>
     <string name="backButton">Back</string>
     <string name="enterName">Enter your name</string>
     <string name="repeatpassword">Repeat your password</string>
@@ -72,7 +76,8 @@
     <string name="profile">Profile</string>
     <string name="notification">Notifications</string>
     <string name="calculator">Calculator</string>
-    <string name="chart">BarChart</string>
+    <string name="barchart">BarChart</string>
+    <string name="piechart">Pie Charts</string>
     <string name="newincome">New amount</string>
     <string name="transfer">Transfer</string>
     <string name="search">Search</string>
@@ -85,6 +90,11 @@
     <string name="selectcurrency">Select a currency for your accounts.</string>
     <string name="selectedcurrency">Selected currency: </string>
     <!--Settings-->
+    <string name="expensemanagement">Manage your expenses</string>
+    <string name="categorycontrol">Expense by Category</string>
+    <string name="descategorycontrol">Set an expense limit for each category and receive alerts when you exceed them.</string>
+    <string name="desexpensecontrol">Track total expenses and receive notifications when limits are exceeded.</string>
+    <string name="expensecontrol">Total Expense</string>
     <string name="modify">Modify this account</string>
     <string name="delete_data_account">Delete the account and all its records</string>
     <string name="deleteaccount">Delete this account</string>
@@ -94,7 +104,7 @@
     <string name="destheme">Choose between dark or light theme.</string>
     <string name="desenableonboarding">Enable or disable onboarding</string>
     <string name="enablenotifications">Notifications</string>
-    <string name="desenablenotifications">Enable or disable notifications on your mobile phone.</string>
+    <string name="desenablenotifications">Enable or disable notifications on your expense tracker mobile app.</string>
     <string name="createbackup">Create backup</string>
     <string name="loadbackup">Load backup</string>
     <string name="deleteall">Delete all</string>
@@ -145,6 +155,9 @@
     <string name="errorreadingdatastore">Error reading to DataStore</string>
     <string name="datefromoverdateto">Date from is over date to</string>
     <string name="amountfromoverdateto">Amount from is over amount to</string>
+    <string name="currencyformatchange">You have changed the currency format</string>
+    <string name="currencychange">You have changed the format and entries to the new currency.</string>
+    <string name="apierror">Internet connection error</string>
 <!--TopBar titles-->
     <string name="hometitle">Home</string>
     <string name="searchtitle">Search</string>
@@ -280,5 +293,59 @@
     <string name="alloption">Incomes and Expenses</string>
     <!--calculator-->
     <string name="calcback">"\u232B"</string>
+    <!--Charts-->
+    <string name="incomechart">Incomes</string>
+    <string name="expensechart">Expenses</string>
+    <string name="daterange">Selecciona un rango de fechas</string>
+    <string name="account">Account</string>
+    <string name="year">Year</string>
+    <string name="result">Result</string>
+    <!--Months-->
+    <string name="months">Months</string>
+    <string name="january">Jan</string>
+    <string name="february">Feb</string>
+    <string name="march">Mar</string>
+    <string name="april">Apr</string>
+    <string name="may">May</string>
+    <string name="june">Jun</string>
+    <string name="july">Jul</string>
+    <string name="august">Aug</string>
+    <string name="september">Sep</string>
+    <string name="october">Oct</string>
+    <string name="november">Nov</string>
+    <string name="december">Dec</string>
+    <string name="januarytable">January</string>
+    <string name="februarytable">February</string>
+    <string name="marchtable">March</string>
+    <string name="apriltable">April</string>
+    <string name="mayotable">May</string>
+    <string name="junetable">June</string>
+    <string name="julytable">July</string>
+    <string name="augusttable">August</string>
+    <string name="septembertable">September</string>
+    <string name="octobertable">October</string>
+    <string name="novembertable">November</string>
+    <string name="decembertable">December</string>
+    <!--Notifications-->
+    <string name="selectCurrency">Select a currency for your accounts</string>
+    <string name="daylyreport">dayly report</string>
+    <string name="weekreport">weekly report</string>
+    <string name="monthreport">montly report</string>
+    <string name="weekicome">Weekly earnings</string>
+    <string name="weekbills">Weekly expenses</string>
+    <string name="monthicome">Monthly earnings</string>
+    <string name="monthbills">Monthly expenses</string>
+    <string name="resultsearch">Result</string>
+    <string name="lowbalance">Balance alert less than</string>
+    <string name="hightexpenses">Expenses per month above the limit</string>
+    <string name="expenseslimit">You have exceeded this months expenses in </string>
+    <string name="limitexpense">Expense montly limit</string>
+    <string name="Noblankallowed">Required field. Cannot be blank</string>
+    <string name="nomovtoday">You have had no movements in your accounts today</string>
+    <string name="notificationrequired">Notification permission is required, Please allow notification</string>
+    <string name="notificationrequiredalert">Message to allow notifications</string>
+    <string name="permissiongranted">Notification permission granted</string>
+    <string name="choosecategories">Enable or disable categories to control expenses </string>
+    <string name="selectcategories">Select categories</string>
 </resources>
 
