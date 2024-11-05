@@ -57,6 +57,7 @@ class CategoriesViewModel @Inject constructor(
     fun updateCategoryCheckedState(categoryId: Int, isChecked: Boolean) {
         viewModelScope.launch {
             upDateCategoryChecked.invoke(categoryId, isChecked)
+            getAllCategoriesByType(CategoryType.EXPENSE)
         }
     }
 

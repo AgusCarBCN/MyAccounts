@@ -73,7 +73,7 @@ fun EntryCategoryList(
                     checked = category.isChecked,
                     onCheckBoxChange = { checked ->
                        categoriesViewModel.updateCategoryCheckedState(category.id, checked)
-                        categoriesViewModel.getAllCategoriesByType(CategoryType.EXPENSE)
+
                     }
                 )
             }
