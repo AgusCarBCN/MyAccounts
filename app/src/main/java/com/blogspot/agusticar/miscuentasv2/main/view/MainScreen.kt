@@ -440,15 +440,7 @@ fun HeadDrawerMenu(profileViewModel: ProfileViewModel) {
         }
 
 
-        Column(modifier = Modifier.weight(0.6f),
-        /*Column(modifier = Modifier.weight(0.6f),
->>>>>>> develop
-            ) {
-            Text(text = "Hola",
-                color= LocalCustomColorsPalette.current.textColor)
-            Text(text = "$name !",
-                color= LocalCustomColorsPalette.current.textColor)
-        }*/
+
 
 
     }
