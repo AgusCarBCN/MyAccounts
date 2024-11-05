@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -21,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -181,13 +178,13 @@ fun ItemEntry(
         ) {
             Icon(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(id = entry.categoryId),
+                painter = painterResource(id = entry.iconResource),
                 contentDescription = "icon",
                 tint = LocalCustomColorsPalette.current.textColor
             )
             Spacer(modifier = Modifier.height(20.dp)) // Espacio entre el texto y el botón
             Text(
-                text = stringResource(id = entry.categoryName),
+                text = stringResource(id = entry.nameResource),
                 modifier = Modifier
                     .padding(10.dp)
                     .weight(0.4f),

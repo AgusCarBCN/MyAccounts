@@ -27,6 +27,9 @@ import com.blogspot.agusticar.miscuentasv2.components.ModelButton
 import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.components.message
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
@@ -40,22 +43,23 @@ import java.util.Date
 @Composable
 
 fun NewAmount(
-
     mainViewModel: MainViewModel,
     entryViewModel: EntriesViewModel,
+    categoriesViewModel: CategoriesViewModel,
     accountViewModel: AccountsViewModel
 ) {
     val scope = rememberCoroutineScope()
     val descriptionEntry by entryViewModel.entryName.observeAsState("")
     val amountEntry by entryViewModel.entryAmount.observeAsState("")
-    val categorySelected by entryViewModel.categorySelected.observeAsState(null)
+    val categorySelected by categoriesViewModel.categorySelected.observeAsState(null)
     val enableConfirmButton by entryViewModel.enableConfirmButton.observeAsState(false)
     val accountSelected by accountViewModel.accountSelected.observeAsState()
 
     val idAccount = accountSelected?.id ?: 1
-    val status = categorySelected?.isIncome ?: false
+    val categoryId=categorySelected?.id?:1
+    val type = categorySelected?.type?: CategoryType.INCOME
     val iconResource = categorySelected?.iconResource ?: 0
-    val titleResource = categorySelected?.name ?: 0
+    val titleResource = categorySelected?.nameResource ?: 0
     val amount = amountEntry.toDoubleOrNull() ?: 0.0
     val negativeAmount = (-1) * (amountEntry.toDoubleOrNull() ?: 0.0)
     //Snackbar messages
@@ -66,9 +70,9 @@ fun NewAmount(
     var operationStatus: Int
 
     val initColor =
-        if (status) LocalCustomColorsPalette.current.iconIncomeInit
+        if (type==CategoryType.INCOME) LocalCustomColorsPalette.current.iconIncomeInit
         else LocalCustomColorsPalette.current.iconExpenseInit
-    val targetColor = if (status) LocalCustomColorsPalette.current.iconIncomeTarget
+    val targetColor = if (type==CategoryType.INCOME) LocalCustomColorsPalette.current.iconIncomeTarget
     else LocalCustomColorsPalette.current.iconExpenseTarget
     Column(
         modifier = Modifier
@@ -99,12 +103,12 @@ fun NewAmount(
             false
         )
         AccountSelector(300,20,stringResource(id = R.string.selectanaccount), accountViewModel)
-        ModelButton(text = stringResource(id = if (status) R.string.newincome else R.string.newexpense),
+        ModelButton(text = stringResource(id = if (type==CategoryType.INCOME) R.string.newincome else R.string.newexpense),
             R.dimen.text_title_medium,
             modifier = Modifier.width(320.dp),
             enableConfirmButton,
             onClickButton = {
-                operationStatus = if (!status) {
+                operationStatus = if (type==CategoryType.EXPENSE){
                     if (accountViewModel.isValidExpense(amountEntry.toDoubleOrNull() ?: 0.0)) {
                         1
                     } else {
@@ -118,22 +122,20 @@ fun NewAmount(
                         entryViewModel.addEntry(
                             Entry(
                                 description = descriptionEntry,
-                                amount = if (status) amount
+                                amount = if (type==CategoryType.INCOME) amount
                                 else negativeAmount,
                                 date = Date().dateFormat(),
-                                categoryId = iconResource,
-                                categoryName = titleResource,
+                                categoryId = categoryId,
                                 accountId = idAccount
-
                             )
                         )
                         accountViewModel.updateEntry(
                             idAccount,
-                            if (status) amount else negativeAmount,
+                            if (type==CategoryType.INCOME) amount else negativeAmount,
                             false
                         )
 
-                        if (status) {
+                        if (type==CategoryType.INCOME) {
                             withContext(Dispatchers.Main) {
                                 SnackBarController.sendEvent(
                                     event = SnackBarEvent(

@@ -36,7 +36,7 @@ import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-
+/*
 
 @Composable
 fun EntryCategoryList(
@@ -162,5 +162,5 @@ fun ItemCategoryCheck(
     }
 }
 
-
+*/
 

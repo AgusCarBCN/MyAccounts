@@ -32,4 +32,7 @@ object RoomModule {
     fun provideEntryDao(database: AppDataBase) = database.getEntryDao()
 
 
+    @Provides
+    @Singleton
+    fun provideCategoryDao(database: AppDataBase) = database.getCategoryDao()
 }

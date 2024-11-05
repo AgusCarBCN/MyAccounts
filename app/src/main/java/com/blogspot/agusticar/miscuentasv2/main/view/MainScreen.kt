@@ -61,22 +61,19 @@ import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorUI
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
-import com.blogspot.agusticar.miscuentasv2.components.CategoryEntries
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
-
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
-
 import com.blogspot.agusticar.miscuentasv2.home.HomeScreen
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
-
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
-import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
@@ -97,6 +94,7 @@ fun MainScreen(
 
     mainViewModel: MainViewModel,
     accountsViewModel: AccountsViewModel,
+    categoriesViewModel: CategoriesViewModel,
     profileViewModel: ProfileViewModel,
     settingViewModel: SettingViewModel,
     entriesViewModel: EntriesViewModel,
@@ -191,10 +189,10 @@ fun MainScreen(
 
                         IconOptions.INCOME_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                entriesViewModel.getCategories(true)
+                                categoriesViewModel.getAllCategoriesByType(CategoryType.INCOME)
 
                             }
-                            CategorySelector(mainViewModel, entriesViewModel, true)
+                            CategorySelector(mainViewModel, categoriesViewModel,CategoryType.INCOME)
                             title = R.string.newincome
                         }
 
@@ -259,14 +257,14 @@ fun MainScreen(
 
                         IconOptions.EXPENSE_OPTIONS -> {
                             LaunchedEffect(Unit) {
-                                entriesViewModel.getCategories(false)
+                              categoriesViewModel.getAllCategoriesByType(CategoryType.EXPENSE)
                             }
-                            CategorySelector(mainViewModel, entriesViewModel, false)
+                            CategorySelector(mainViewModel, categoriesViewModel, CategoryType.EXPENSE)
                             title = R.string.newexpense
                         }
 
                         IconOptions.NEW_AMOUNT -> {
-                            NewAmount(mainViewModel, entriesViewModel, accountsViewModel)
+                            NewAmount(mainViewModel, entriesViewModel,categoriesViewModel, accountsViewModel)
 
                         }
 
@@ -302,7 +300,7 @@ fun MainScreen(
                             title=R.string.piechart
                         }
                         IconOptions.SELECT_CATEGORIES -> {
-                           EntryCategoryList (mainViewModel,entriesViewModel)
+                           //EntryCategoryList (mainViewModel,entriesViewModel)
                         }
                     }
 

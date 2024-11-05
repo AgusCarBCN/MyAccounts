@@ -80,7 +80,7 @@ fun PieChartScreen(
 
     /* Agrupa las entradas por el nombre de la categoría. Esto crea un mapa donde la clave
     es el nombre de la categoría, y el valor es una lista de entradas que pertenecen a esa categoría.*/
-    val groupedEntriesByCategoryName = listOfEntries.groupBy { it.categoryName }
+    val groupedEntriesByCategoryName = listOfEntries.groupBy { it.nameResource }
 
     /*Calcula el total de cada categoría. Usamos `mapValues` para transformar los valores del mapa anterior.
    En lugar de la lista de entradas de cada categoría, ahora el valor será la suma de los montos de esas entradas.*/

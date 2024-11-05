@@ -140,12 +140,13 @@ WHERE amount < 0
     SELECT e.description,
            e.amount,
            e.date,
-           e.categoryName,
-           e.categoryId,
+           c.iconResource,
+           c.nameResource,
            e.accountId,
            a.name 
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
+    INNER JOIN CategoryEntity c ON e.categoryId = c.id
     WHERE e.amount >= 0
 """
     )
@@ -156,12 +157,13 @@ WHERE amount < 0
     SELECT e.description,
            e.amount,
            e.date,
-           e.categoryName,
-           e.categoryId,
+           c.nameResource,
+           c.iconResource,
            e.accountId,
            a.name 
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
+    INNER JOIN CategoryEntity c ON e.categoryId = c.id
     WHERE e.amount < 0
 """
     )
@@ -172,12 +174,13 @@ WHERE amount < 0
     SELECT e.description,
            e.amount,
            e.date,
-           e.categoryName,
-           e.categoryId,
+           c.nameResource,
+           c.iconResource,
            e.accountId,
            a.name 
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
+    INNER JOIN CategoryEntity c ON e.categoryId = c.id
    
 """
     )
@@ -188,12 +191,13 @@ WHERE amount < 0
     SELECT e.description,
            e.amount,
            e.date,
-           e.categoryName,
-           e.categoryId,
+           c.nameResource,
+           c.iconResource,
            e.accountId,
            a.name 
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
+     INNER JOIN CategoryEntity c ON e.categoryId = c.id
    WHERE accountId = :accountId
 """
     )
@@ -204,12 +208,13 @@ WHERE amount < 0
     SELECT e.description,
        e.amount,
        e.date,
-       e.categoryName,
-       e.categoryId,
+       c.nameResource,
+       c.iconResource,
        e.accountId,
        a.name 
 FROM EntryEntity e
 INNER JOIN AccountEntity a ON e.accountId = a.id
+INNER JOIN CategoryEntity c ON e.categoryId = c.id
  WHERE e.accountId = :accountId
            
         AND e.date >= :dateFrom 

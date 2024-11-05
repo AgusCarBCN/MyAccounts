@@ -32,16 +32,6 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
         entryDao.getAllEntries()
 
 
-    suspend fun getAllIncomes(): List<EntryDTO> {
-        val entries = entryDao.getAllIncomes()
-        return entries.map { entryToEntryDto(it) }
-    }
-
-    suspend fun getAllExpenses(): List<EntryDTO> {
-        val entries = entryDao.getAllExpenses()
-        return entries.map { entryToEntryDto(it) }
-    }
-
     suspend fun getAllEntriesDTO(): List<EntryDTO> = entryDao.getAllEntriesDTO()
 
     suspend fun getAllIncomesDTO(): List<EntryDTO> = entryDao.getAllIncomesDTO()
@@ -106,25 +96,23 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
             description = dto.description,
             amount = dto.amount,
             date = dto.date,
-            categoryId = dto.categoryId,
-            categoryName = dto.categoryName,
-            accountId = dto.accountId
-            // id será generado automáticamente, así que no lo incluimos aquí
+            categoryId = dto.iconResource,
+            accountId =dto.accountId
+
         )
     }
 
-    private fun entryToEntryDto(entry: Entry): EntryDTO {
+    /*private fun entryToEntryDto(entry: Entry): EntryDTO {
         return EntryDTO(
             description = entry.description,
             amount = entry.amount,
             date = entry.date,
-            categoryId = entry.categoryId,
-            categoryName = entry.categoryName,
+            nameResource = entry.categoryId,
+            iconResource = entry.categoryId,
             accountId = entry.accountId,
-            name = "" // Este campo no está presente en la entidad EntryDTO, así que lo dejamos vacío
-            // No necesitamos el id
+            name = ""
         )
-    }
+    }*/
 
 
 }

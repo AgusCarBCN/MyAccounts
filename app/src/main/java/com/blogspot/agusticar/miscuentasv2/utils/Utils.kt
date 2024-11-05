@@ -30,6 +30,7 @@ class Utils {
             return text.isEmpty() || text.matches(Regex("^([1-9]\\d*|0)?(\\.\\d*)?\$"))
 
         }
+
         fun convertMillisToDate(millis: Long): String {
             val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             return formatter.format(Date(millis))
@@ -56,6 +57,7 @@ class Utils {
 
 
         }
+
         fun convertStringToLocalDate(date: String): LocalDate {
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault())
             return LocalDate.parse(date, formatter)
@@ -72,18 +74,18 @@ class Utils {
 
             BufferedWriter(OutputStreamWriter(outputStream)).use { writer ->
                 // Escribir el encabezado del CSV
-                writer.write("Id,Description,Category,Amount,Date,CategoryId,CategoryName,accountId\n")
+                writer.write("Description,CategoryName,Amount,Date,AccountName,CategoryId,accountId\n")
 
                 //Escribir las rutas en fichero
                 for (entry in entries) {
                     // Asegúrate de que los datos sean válidos antes de escribirlos
-                    val csvLine = "${entry.id}," +
-                        "${entry.description}," +
+                    val csvLine =
+                                "${entry.description}," +
                                 "${entry.category}," +
                                 "${entry.amount}," +
                                 "${entry.date}," +
+                                "${entry.accountName}," +
                                 "${entry.categoryId}," +
-                                "${entry.categoryName}," +
                                 "${entry.accountId}\n"
                     writer.write(csvLine)
                 }
@@ -103,24 +105,21 @@ class Utils {
                 val csvParser = CSVParser.parse(bufferedReader, CSVFormat.DEFAULT)
 
                 for (record in csvParser) {
-                    try {val id=record.get(0).toLong()
-                        val description = record.get(1)
-                        val amount = record.get(3).toDoubleOrNull() ?: 0.0
-                        val date = record.get(4)
-                        val categoryId = record.get(5).toInt()
-                        val categoryName = record.get(6).toInt()
-                        val accountId = record.get(7).toInt()
+                    try {
 
+                        val description = record.get(0)
+                        val amount = record.get(2).toDoubleOrNull() ?: 0.0
+                        val date = record.get(3)
+                        val categoryId = record.get(5).toInt()
+                        val accountId = record.get(6).toInt()
 
                         // Crear objeto route y agregarlo a lista
 
                         val entry = Entry(
-                            id=id,
                             description = description,
                             amount = amount,
                             date = date,
                             categoryId = categoryId,
-                            categoryName = categoryName,
                             accountId = accountId
                         )
                         entries.add(entry)
@@ -131,11 +130,12 @@ class Utils {
             }
             return entries
         }
-        fun getMapOfEntriesByCategory(listOfEntries: List<EntryDTO>): Map<Int, Pair<Int?, Double?>> {
-            val groupedEntriesByCategoryName = listOfEntries.groupBy { it.categoryName }
 
-            val categoryIcons=groupedEntriesByCategoryName.mapValues { (_, entries) ->
-                entries.firstOrNull()?.categoryId
+        fun getMapOfEntriesByCategory(listOfEntries: List<EntryDTO>): Map<Int, Pair<Int?, Double?>> {
+            val groupedEntriesByCategoryName = listOfEntries.groupBy { it.nameResource }
+
+            val categoryIcons = groupedEntriesByCategoryName.mapValues { (_, entries) ->
+                entries.firstOrNull()?.iconResource
             }
             val categoryTotals = groupedEntriesByCategoryName.mapValues { (_, entries) ->
                 entries.sumOf { it.amount }

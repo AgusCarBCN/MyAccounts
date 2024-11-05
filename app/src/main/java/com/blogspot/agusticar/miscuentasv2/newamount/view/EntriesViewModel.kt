@@ -248,13 +248,7 @@ class EntriesViewModel @Inject constructor(
         _categorySelected.value = categorySelected
     }
 
-    fun getCategories(status: Boolean) {
-        if (status) {
-            _listOfCategories.value = incomeCategories
-        } else {
-            _listOfCategories.value = expenseCategories
-        }
-    }
+
     fun onChangeTransferButton(newValue:Boolean){
         _enableConfirmTransferButton.postValue(newValue)
     }
@@ -331,7 +325,7 @@ class EntriesViewModel @Inject constructor(
     private fun enableButtonTransfer( idAccountFrom:Int,idAccountTo:Int,amount: String): Boolean =
         amount.isNotEmpty() && amount.isNotBlank() && idAccountFrom!=idAccountTo
 
-    private val incomeCategories = listOf(
+    /*private val incomeCategories = listOf(
         Category(
             iconResource = R.drawable.ic_category_salary,
             name = R.string.salary,  // Usando el recurso de string
@@ -581,5 +575,5 @@ class EntriesViewModel @Inject constructor(
             name = R.string.other_expenses,  // Usando el recurso de string
             isIncome = false
         )
-    )
+    )*/
 }

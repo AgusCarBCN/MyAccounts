@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.blogspot.agusticar.miscuentasv2.barchart.BarChartViewModel
 import com.blogspot.agusticar.miscuentasv2.calculator.CalculatorViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CreateAccountsComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.CreateProfileComponent
 import com.blogspot.agusticar.miscuentasv2.createprofile.ProfileViewModel
@@ -54,6 +55,7 @@ class MainActivity : ComponentActivity() {
     private val tutorialViewModel: TutorialViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val accountViewModel: AccountsViewModel by viewModels()
+    private val categoriesViewModel: CategoriesViewModel by viewModels()
     private val entriesViewModel: EntriesViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val settingViewModel: SettingViewModel by viewModels()
@@ -140,7 +142,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Routes.CreateAccounts.route) {
-                            CreateAccountsComponent(accountViewModel, navToLogin = {
+                            CreateAccountsComponent(accountViewModel,categoriesViewModel, navToLogin = {
                                 navigationController.navigate(Routes.Login.route)
                             },
                                 navToBack = { navigationController.popBackStack() }
@@ -160,6 +162,7 @@ class MainActivity : ComponentActivity() {
                             MainScreen(
                                 mainViewModel,
                                 accountViewModel,
+                                categoriesViewModel,
                                 profileViewModel,
                                 settingViewModel,
                                 entriesViewModel,

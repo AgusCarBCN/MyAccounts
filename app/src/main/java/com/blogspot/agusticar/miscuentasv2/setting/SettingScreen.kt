@@ -30,7 +30,7 @@ import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.RowComponent
 import com.blogspot.agusticar.miscuentasv2.components.SwitchComponent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
-import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
+import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
@@ -60,7 +60,7 @@ fun SettingScreen(
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
-    val entries by entriesViewModel.listOfEntriesDB.collectAsState()
+    val entries by entriesViewModel.listOfEntries.collectAsState()
     val entriesCSV = toEntryCSV(entries)
     val date = Date().dateFormat()
     val fileName = "backup$date"
@@ -168,7 +168,7 @@ fun SettingScreen(
             description = stringResource(id = R.string.descategorycontrol),
             iconResource = R.drawable.ic_categorycontrol,
             onClick = {
-                mainViewModel.selectScreen(IconOptions.SELECT_CATEGORIES)
+                //mainViewModel.selectScreen(IconOptions.SELECT_CATEGORIES)
             })
 
         SpacerApp()
@@ -239,19 +239,18 @@ fun SpacerApp() {
 }
 
 @Composable
-fun toEntryCSV(entries: List<Entry>): MutableList<EntryCSV> {
+fun toEntryCSV(entries: List<EntryDTO>): MutableList<EntryCSV> {
 
     val entriesCSV = mutableListOf<EntryCSV>()
     entries.forEach { entry ->
         entriesCSV.add(
             EntryCSV(
-                entry.id,
                 entry.description,
-                stringResource(id = entry.categoryName),
+                stringResource(id = entry.nameResource),
                 entry.amount,
                 entry.date,
-                entry.categoryId,
-                entry.categoryName,
+                entry.name,
+                entry.iconResource,
                 entry.accountId
             )
         )
