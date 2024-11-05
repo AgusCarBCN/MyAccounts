@@ -302,6 +302,7 @@ fun MainScreen(
                         }
                         IconOptions.SELECT_CATEGORIES -> {
                            EntryCategoryList (mainViewModel,categoriesViewModel)
+                            title=R.string.selectcategories
                         }
                     }
 
