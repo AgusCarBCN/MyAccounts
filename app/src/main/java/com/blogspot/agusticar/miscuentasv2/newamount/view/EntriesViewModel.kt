@@ -19,7 +19,6 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.G
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.InsertEntryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.UpdateAmountUseCase
-import com.blogspot.agusticar.miscuentasv2.main.model.Category
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
