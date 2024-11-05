@@ -438,12 +438,8 @@ fun HeadDrawerMenu(profileViewModel: ProfileViewModel) {
             selectedImageUriSaved?.let { UserImage(it, 80) }
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 
         Column(modifier = Modifier.weight(0.6f),
-=======
         /*Column(modifier = Modifier.weight(0.6f),
 >>>>>>> develop
             ) {
@@ -454,8 +450,6 @@ fun HeadDrawerMenu(profileViewModel: ProfileViewModel) {
         }*/
 
 
-=======
->>>>>>> develop
     }
 
 }
