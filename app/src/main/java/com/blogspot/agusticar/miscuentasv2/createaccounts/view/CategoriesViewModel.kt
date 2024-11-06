@@ -8,7 +8,9 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesByType
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesCheckedUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.InsertCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateAmountCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateCheckedCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +21,8 @@ import javax.inject.Inject
 class CategoriesViewModel @Inject constructor(
     private val insertCategory:InsertCategoryUseCase,
     private val getAllCategoriesByType:GetAllCategoriesByType,
+    private val getAllCategoriesChecked:GetAllCategoriesCheckedUseCase,
+    private val upDateAmountCategory:UpdateAmountCategoryUseCase,
     private val upDateCategoryChecked:UpdateCheckedCategoryUseCase
 ): ViewModel() {
 
@@ -48,6 +52,12 @@ class CategoriesViewModel @Inject constructor(
         }
 
     }
+    fun getAllCategoriesChecked(type:CategoryType){
+        viewModelScope.launch(Dispatchers.IO){
+            _listOfCategories.postValue(getAllCategoriesChecked.invoke(type))
+        }
+
+    }
 
     fun onCategorySelected(categorySelected: Category) {
         _categorySelected.value = categorySelected
@@ -57,6 +67,12 @@ class CategoriesViewModel @Inject constructor(
     fun updateCategoryCheckedState(categoryId: Int, isChecked: Boolean) {
         viewModelScope.launch {
             upDateCategoryChecked.invoke(categoryId, isChecked)
+            getAllCategoriesByType(CategoryType.EXPENSE)
+        }
+    }
+    fun upDateCategoryAmount(categoryId: Int, newAmount: Double) {
+        viewModelScope.launch {
+            upDateAmountCategory.invoke(categoryId, newAmount)
             getAllCategoriesByType(CategoryType.EXPENSE)
         }
     }

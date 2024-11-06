@@ -20,8 +20,16 @@ interface CategoryDao {
     @Query("SELECT * FROM CategoryEntity WHERE categoryType= :type")
     suspend fun getAllCategories(type:CategoryType): List<Category>
 
-    // 3. Cambiar estado de checked de una categoria
+    // 3. Get all categories checked
+    @Query("SELECT * FROM CategoryEntity WHERE isChecked= 1 AND categoryType= :type")
+    suspend fun getAllCategoriesChecked(type:CategoryType): List<Category>
+
+    // 4. Cambiar estado de checked de una categoria
     @Query("UPDATE CategoryEntity SET isChecked = :newValueChecked WHERE id = :categoryId")
     suspend fun updateCheckedCategory(categoryId: Int, newValueChecked: Boolean)
+
+    // 5. Update amount Category
+    @Query("UPDATE CategoryEntity SET amount = :newAmount WHERE id = :categoryId")
+    suspend fun updateAmountCategory(categoryId: Int, newAmount:Double)
 
 }
