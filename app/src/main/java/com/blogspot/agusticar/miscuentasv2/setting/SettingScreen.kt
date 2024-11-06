@@ -164,15 +164,15 @@ fun SettingScreen(
             onClick = {
                 mainViewModel.selectScreen(IconOptions.SELECT_CATEGORIES)
             })
-        RowComponent(title = stringResource(id = R.string.expensecontrol),
-            description = stringResource(id = R.string.desexpensecontrol),
-            iconResource = R.drawable.ic_expensetotal,
-            onClick = {
-
-            })
         RowComponent(title = stringResource(id = R.string.categorycontrol),
             description = stringResource(id = R.string.descategorycontrol),
             iconResource = R.drawable.ic_categorycontrol,
+            onClick = {
+                mainViewModel.selectScreen(IconOptions.CATEGORY_EXPENSE_CONTROL)
+            })
+        RowComponent(title = stringResource(id = R.string.expensecontrol),
+            description = stringResource(id = R.string.desexpensecontrol),
+            iconResource = R.drawable.ic_expensetotal,
             onClick = {
 
             })
