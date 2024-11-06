@@ -73,7 +73,7 @@ class CategoriesViewModel @Inject constructor(
     fun upDateCategoryAmount(categoryId: Int, newAmount: Double) {
         viewModelScope.launch {
             upDateAmountCategory.invoke(categoryId, newAmount)
-            getAllCategoriesByType(CategoryType.EXPENSE)
+            getAllCategoriesChecked(CategoryType.EXPENSE)
         }
     }
 

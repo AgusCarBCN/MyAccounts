@@ -346,4 +346,5 @@
     <string name="permissiongranted">Notification permission granted</string>
     <string name="choosecategories">Enable or disable categories to control expenses</string>
     <string name="selectcategories">Select categories</string>
+    <string name="currentexpense">Current expense</string>
 </resources>

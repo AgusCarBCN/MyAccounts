@@ -1,12 +1,15 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,6 +27,7 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 
 @Composable
@@ -34,9 +38,10 @@ fun CategoryBudgetItemControl(
     accountsViewModel: AccountsViewModel
 ) {
     val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
-
+    val limitExpenseText=stringResource(id = R.string.limitexpense)
+    val currentExpense=stringResource(id = R.string.currentexpense)
     // Estado para almacenar el total de gastos por categoría
-    var expensesByCategory by remember { mutableStateOf(0.0) }
+    var expensesByCategory by remember { mutableDoubleStateOf(0.0) }
 
     // Cargar el total de gastos de la categoría cuando cambie el composable o la categoría
     LaunchedEffect(category.id) {
@@ -44,15 +49,15 @@ fun CategoryBudgetItemControl(
     }
 
     // Variables de estado para el límite de gasto y porcentaje
-    var spendingLimit by remember { mutableStateOf(200.0) }  // Límite de gasto inicial
-    val maxLimit = 500f  // Límite máximo ajustable
-    val spendingPercentage = (expensesByCategory / spendingLimit).coerceIn(0.0, 1.0) // Porcentaje de gasto
-
+    var spendingLimit by remember { mutableDoubleStateOf(category.amount) }  // Límite de gasto inicial
+    val maxLimit = 1000f  // Límite máximo ajustable
+    val spendingPercentage = (abs(expensesByCategory.toFloat()) / spendingLimit.toFloat()).coerceIn(0.0f, 1.0f) // Porcentaje de gasto
+    Log.d("progresbar",spendingPercentage.toString())
     // Color de la barra de progreso según el porcentaje
     val progressColor = when {
-        spendingPercentage < 0.8f -> LocalCustomColorsPalette.current.incomeColor
-        spendingPercentage < 1f -> LocalCustomColorsPalette.current.expenseColor
-        else -> Color.Red
+        spendingPercentage < 0.5f -> LocalCustomColorsPalette.current.progressBar50
+        spendingPercentage < 0.8f -> LocalCustomColorsPalette.current.progressBar80
+        else -> LocalCustomColorsPalette.current.progressBar100
     }
 
     Column(
@@ -88,9 +93,10 @@ fun CategoryBudgetItemControl(
 
         // Barra de progreso de gasto actual
         Text(
-            text = "Gasto Actual: ${Utils.numberFormat(expensesByCategory, currencyCode)} / $${spendingLimit.toInt()}",
+            text = "$currentExpense: ${Utils.numberFormat(expensesByCategory, currencyCode)} / ${Utils.numberFormat(spendingLimit,currencyCode)}",
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
+            color = LocalCustomColorsPalette.current.textColor,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -99,11 +105,12 @@ fun CategoryBudgetItemControl(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(10.dp)
-                .background(Color.LightGray)
+                .background(LocalCustomColorsPalette.current.drawerColor)
+                .clip(RoundedCornerShape(5.dp))
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(spendingPercentage.toFloat())
+                    .fillMaxWidth(spendingPercentage)
                     .fillMaxHeight()
                     .background(progressColor)
             )
@@ -113,16 +120,34 @@ fun CategoryBudgetItemControl(
 
         // Slider para ajustar el límite de gasto
         Text(
-            text = "Límite de Gasto: $${spendingLimit.toInt()}",
+            text = "$limitExpenseText: ${Utils.numberFormat(spendingLimit,currencyCode)}",
             fontSize = 16.sp,
+            color = LocalCustomColorsPalette.current.textColor,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Slider(
             value = spendingLimit.toFloat(),
-            onValueChange = { spendingLimit = it.toDouble() },
+            onValueChange = { spendingLimit = it.toDouble()
+                            categoriesViewModel.upDateCategoryAmount(category.id,spendingLimit)
+                            },
             valueRange = 50f..maxLimit,  // Rango ajustable
             steps = (maxLimit / 50).toInt() - 1, // Incremento en pasos de 50
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = SliderColors(
+                thumbColor = LocalCustomColorsPalette.current.thumbCheckedColor,
+                activeTrackColor = LocalCustomColorsPalette.current.trackCheckedColor,
+                activeTickColor = LocalCustomColorsPalette.current.thumbCheckedColor,
+                inactiveTrackColor = LocalCustomColorsPalette.current.trackDefaultColor,
+                inactiveTickColor = LocalCustomColorsPalette.current.trackDefaultColor,
+                disabledThumbColor = LocalCustomColorsPalette.current.trackDefaultColor,
+                disabledActiveTrackColor = LocalCustomColorsPalette.current.trackDefaultColor,
+                disabledActiveTickColor = LocalCustomColorsPalette.current.trackDefaultColor,
+                disabledInactiveTrackColor = LocalCustomColorsPalette.current.trackDefaultColor,
+                disabledInactiveTickColor = LocalCustomColorsPalette.current.trackDefaultColor,
+
+            )
         )
     }
 }
+
+

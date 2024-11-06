@@ -346,4 +346,5 @@
     <string name="permissiongranted">Permiso de notificaciones concedido</string>
     <string name="selectcategories">Selecciona categorias</string>
     <string name="choosecategories">Habilita o Deshabilita categorias para controlar gastos</string>
+    <string name="currentexpense">Gasto actual</string>
 </resources>
