@@ -15,12 +15,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.blogspot.agusticar.miscuentasv2.components.CategoryBudgetItemControl
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
+import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 
 @Composable
 
-fun ExpenseControlScreen(categoriesViewModel: CategoriesViewModel){
+fun ExpenseControlScreen(categoriesViewModel: CategoriesViewModel,
+                         entriesViewModel: EntriesViewModel,
+                         accountsViewModel: AccountsViewModel
+){
 
     // Observa la lista de categorías desde el ViewModel
     val listOfCategories by categoriesViewModel.listOfCategories.observeAsState(emptyList())
@@ -44,7 +49,10 @@ fun ExpenseControlScreen(categoriesViewModel: CategoriesViewModel){
                 .padding(bottom = 16.dp) // Espacio en la parte inferior
         ) {
             items(listOfCategories) { category ->
-               CategoryBudgetItemControl(category)
+               CategoryBudgetItemControl(category,
+                   categoriesViewModel,
+                   entriesViewModel,
+                   accountsViewModel)
             }
         }
 

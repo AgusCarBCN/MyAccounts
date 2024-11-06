@@ -307,7 +307,9 @@ fun MainScreen(
                         }
 
                         IconOptions.CATEGORY_EXPENSE_CONTROL -> {
-                            ExpenseControlScreen(categoriesViewModel)
+                            ExpenseControlScreen(categoriesViewModel,
+                                entriesViewModel,
+                                accountsViewModel)
                             title=R.string.expensecontrol
                         }
                     }
