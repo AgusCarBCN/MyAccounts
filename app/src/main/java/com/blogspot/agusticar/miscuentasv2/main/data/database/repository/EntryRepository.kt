@@ -110,7 +110,7 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
         )
     }
 
-    private fun entryToEntryDto(entry: Entry): EntryDTO {
+    /*private fun entryToEntryDto(entry: Entry): EntryDTO {
         return EntryDTO(
             description = entry.description,
             amount = entry.amount,
@@ -120,7 +120,7 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
             accountId = entry.accountId,
             name = ""
         )
-    }
+    }*/
 
 
 }

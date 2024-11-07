@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GeAllEntriesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllEntriesByAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllEntriesDatabaseUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllExpensesUseCase
@@ -49,7 +49,8 @@ class EntriesViewModel @Inject constructor(
     private val getTotalIncomesByDate: GetSumTotalIncomesByDate,
     private val getTotalExpensesByDate: GetSumTotalExpensesByDateUseCase,
     private val getSumExpensesByCategory: GetSumOfExpensesByCategoryUseCase,
-    private val updateAmountEntry:UpdateAmountUseCase
+    private val updateAmountEntry:UpdateAmountUseCase,
+    private val getAllEntriesDTO: GeAllEntriesUseCase
 
 ) : ViewModel() {
 
@@ -84,8 +85,8 @@ class EntriesViewModel @Inject constructor(
 
 
     // MutableStateFlow para la lista de entradas
-    private val _listOfEntries = MutableStateFlow<List<EntryDTO>>(emptyList())
-    val listOfEntries: StateFlow<List<EntryDTO>> = _listOfEntries.asStateFlow()
+    private val _listOfEntriesDTO = MutableStateFlow<List<EntryDTO>>(emptyList())
+    val listOfEntriesDTO: StateFlow<List<EntryDTO>> = _listOfEntriesDTO.asStateFlow()
 
     // MutableStateFlow para la lista de entradas
     private val _listOfEntriesDB = MutableStateFlow<List<Entry>>(emptyList())
@@ -95,6 +96,23 @@ class EntriesViewModel @Inject constructor(
     init{
         getTotal()
 
+    }
+
+    fun getAllEntriesDTO(){
+        viewModelScope.launch(Dispatchers.IO) {
+            flow {
+                val entries = getAllEntriesDTO.invoke()
+                emit(entries)
+            }
+                .catch { e ->
+                    // Manejo de errores
+                    _listOfEntriesDTO.value = emptyList() // O alguna acción que maneje el error
+                    Log.e("ViewModel", "Error getting incomes: ${e.message}")
+                }
+                .collect { entries ->
+                    _listOfEntriesDTO.value = entries
+                }
+        }
     }
     fun getFilteredEntries(accountId: Int,
                            description:String,
@@ -122,7 +140,7 @@ class EntriesViewModel @Inject constructor(
                     Log.e("ViewModel", "Error getting incomes: ${e.message}")
                 }
                 .collect { entries ->
-                    _listOfEntries.value = entries
+                    _listOfEntriesDTO.value = entries
                 }
         }
     }
@@ -153,12 +171,12 @@ class EntriesViewModel @Inject constructor(
             }
                 .catch { e ->
                     // Manejo de errores
-                    _listOfEntries.value = emptyList() // O alguna acción que maneje el error
+                    _listOfEntriesDTO.value = emptyList() // O alguna acción que maneje el error
                     Log.e("ViewModel", "Error getting incomes: ${e.message}")
                 }
                 .collect {/* entries ->
                     _listOfEntries.value = entries*/
-                    _listOfEntries.value = it
+                    _listOfEntriesDTO.value = it
                 }
 
         }
@@ -173,11 +191,11 @@ class EntriesViewModel @Inject constructor(
                 emit(entries)
             }
                 .catch { e ->
-                    _listOfEntries.value = emptyList()
+                    _listOfEntriesDTO.value = emptyList()
                     Log.e("ViewModel", "Error getting expenses: ${e.message}")
                 }
                 .collect { entries ->
-                    _listOfEntries.value = entries
+                    _listOfEntriesDTO.value = entries
                 }
         }
     }
@@ -190,11 +208,11 @@ class EntriesViewModel @Inject constructor(
                 emit(entries)
             }
                 .catch { e ->
-                    _listOfEntries.value = emptyList()
+                    _listOfEntriesDTO.value = emptyList()
                     Log.e("ViewModel", "Error getting entries by account $accountId: ${e.message}")
                 }
                 .collect { entries ->
-                    _listOfEntries.value = entries
+                    _listOfEntriesDTO.value = entries
                 }
         }
     }

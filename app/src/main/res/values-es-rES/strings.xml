@@ -258,6 +258,7 @@
     <string name="therapies">Terapias</string>
     <string name="alcohol">Alcohol</string>
     <string name="gambling">Juego</string>
+    <string name="internet">Internet</string>
     <!---Transfer-->
     <string name="originaccount">Selecciona cuenta de origen</string>
     <string name="destinationaccount">Selecciona cuenta destino</string>
@@ -348,7 +349,6 @@
     <string name="choosecategories">Habilita o Deshabilita categorias para controlar gastos</string>
     <string name="currentexpense">Gasto actual</string>
     <string name="categorytitle">Categorias</string>
-    <string name="limiMax">Limite máximo</string>
+    <string name="limitMax">Limite máximo</string>
     <string name="select">Selecciona</string>
-    <string name="titleLimitMax">Introduce un limite máximo de gasto</string>
 </resources>

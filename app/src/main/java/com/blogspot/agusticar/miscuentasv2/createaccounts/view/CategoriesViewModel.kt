@@ -166,6 +166,12 @@ class CategoriesViewModel @Inject constructor(
         ),
         Category(
             type = CategoryType.EXPENSE,
+            iconResource = R.drawable.ic_category_internet,
+            nameResource = R.string.internet
+        ),
+
+        Category(
+            type = CategoryType.EXPENSE,
             iconResource = R.drawable.ic_category_publictansport,
             nameResource = R.string.publictransport
         ),

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -55,12 +56,15 @@ fun SettingScreen(
     navToCreateAccounts: () -> Unit
 ) {
     val context = LocalContext.current
-    entriesViewModel.getAllEntriesDataBase()
+    LaunchedEffect(Unit) {
+        entriesViewModel.getAllEntriesDTO()
+    }
+
     val scope = rememberCoroutineScope()
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
-    val entries by entriesViewModel.listOfEntries.collectAsState()
+    val entries by entriesViewModel.listOfEntriesDTO.collectAsState()
     val entriesCSV = toEntryCSV(entries)
     val date = Date().dateFormat()
     val fileName = "backup$date"
@@ -256,8 +260,8 @@ fun toEntryCSV(entries: List<EntryDTO>): MutableList<EntryCSV> {
                 entry.amount,
                 entry.date,
                 entry.name,
-                entry.iconResource,
-                entry.accountId
+                entry.categoryId,
+                entry.accountId,
             )
         )
     }

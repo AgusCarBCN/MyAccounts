@@ -29,9 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
-import com.blogspot.agusticar.miscuentasv2.components.BoardType
-import com.blogspot.agusticar.miscuentasv2.components.ModelDialogWithTextField
-import com.blogspot.agusticar.miscuentasv2.components.TextFieldComponent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
@@ -86,7 +83,7 @@ fun EntryCategoryList(
 fun ItemCategoryCheck(category: Category,
                       onCheckBoxChange: (Boolean) -> Unit
 ) {
-    val limitMax = stringResource(id = R.string.limiMax)
+    val limitMax = stringResource(id = R.string.limitMax)
     Column(
         modifier = Modifier
             .fillMaxWidth()

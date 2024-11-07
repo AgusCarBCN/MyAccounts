@@ -153,7 +153,8 @@ WHERE amount < 0
            c.iconResource,
            c.nameResource,
            e.accountId,
-           a.name 
+           a.name,
+           e.categoryId
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
     INNER JOIN CategoryEntity c ON e.categoryId = c.id
@@ -170,7 +171,8 @@ WHERE amount < 0
            c.nameResource,
            c.iconResource,
            e.accountId,
-           a.name 
+           a.name,
+           e.categoryId
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
     INNER JOIN CategoryEntity c ON e.categoryId = c.id
@@ -187,7 +189,8 @@ WHERE amount < 0
            c.nameResource,
            c.iconResource,
            e.accountId,
-           a.name 
+           a.name,
+            e.categoryId
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
     INNER JOIN CategoryEntity c ON e.categoryId = c.id
@@ -204,7 +207,8 @@ WHERE amount < 0
            c.nameResource,
            c.iconResource,
            e.accountId,
-           a.name 
+           a.name ,
+           e.categoryId
     FROM EntryEntity e
     INNER JOIN AccountEntity a ON e.accountId = a.id
      INNER JOIN CategoryEntity c ON e.categoryId = c.id
@@ -221,7 +225,8 @@ WHERE amount < 0
        c.nameResource,
        c.iconResource,
        e.accountId,
-       a.name 
+       a.name ,
+       e.categoryId
 FROM EntryEntity e
 INNER JOIN AccountEntity a ON e.accountId = a.id
 INNER JOIN CategoryEntity c ON e.categoryId = c.id
