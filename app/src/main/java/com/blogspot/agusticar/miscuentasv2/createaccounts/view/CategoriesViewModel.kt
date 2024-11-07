@@ -13,6 +13,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateAmountCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateCheckedCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateLimitMaxCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,6 +38,17 @@ class CategoriesViewModel @Inject constructor(
     private val _categorySelected = MutableLiveData<Category>()
     val categorySelected: LiveData<Category> = _categorySelected
 
+    //LiveData para textfield de categoria seleccionada para control de gasto
+
+    private val _limitMax=MutableLiveData<String>()
+    val limitMax: LiveData<String> = _limitMax
+
+    //LiveData que activa o desactiva dialogo de categoria seleccionada
+
+    private val _enableDialog=MutableLiveData<Boolean>()
+    val enableDialog: LiveData<Boolean> = _enableDialog
+
+
     fun populateCategories(){
         viewModelScope.launch(Dispatchers.IO)
          {
@@ -48,6 +60,18 @@ class CategoriesViewModel @Inject constructor(
             }
          }
     }
+
+    fun onChangeLimitMax(newLimitMax:String){
+        if (Utils.isValidDecimal(newLimitMax)) {
+            _limitMax.value = newLimitMax
+        }
+        _limitMax.value = newLimitMax
+    }
+
+    fun onEnableDialogChange(newValue:Boolean){
+        _enableDialog.value = newValue
+    }
+
     fun getAllCategoriesByType(type:CategoryType){
         viewModelScope.launch(Dispatchers.IO){
             _listOfCategories.postValue(getAllCategoriesByType.invoke(type))

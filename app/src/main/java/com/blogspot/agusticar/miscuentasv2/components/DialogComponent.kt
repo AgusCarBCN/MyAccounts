@@ -1,7 +1,9 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -61,7 +63,7 @@ fun ModelDialog(
         )
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun ModelDialogWithTextField(
     title: Int,
@@ -74,11 +76,11 @@ fun ModelDialogWithTextField(
 ) {
     if (showDialog) {
         AlertDialog(
-            containerColor = LocalCustomColorsPalette.current.drawerColor,
+            containerColor = LocalCustomColorsPalette.current.backgroundPrimary,
             onDismissRequest = { onDismiss() },
             title = {
                 Text(
-                    stringResource(id = title),
+                    stringResource(id=title),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = LocalCustomColorsPalette.current.textColor
@@ -93,11 +95,12 @@ fun ModelDialogWithTextField(
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
-                    TextFieldComponent(modifier=Modifier.size(100.dp),
+                    TextFieldComponent(modifier=Modifier.fillMaxWidth()
+                        ,
                         label= stringResource(id = R.string.limitMax),
                         textFieldValue,
                         onTextChange = onValueChange,
-                        BoardType.TEXT,
+                        BoardType.DECIMAL,
                         false
                         )
 

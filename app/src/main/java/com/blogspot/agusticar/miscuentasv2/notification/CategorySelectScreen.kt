@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.components.ModelDialogWithTextField
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
@@ -66,10 +67,13 @@ fun EntryCategoryList(
             items(listOfCategories) { category ->
                 ItemCategoryCheck(
                     category,
+                    categoriesViewModel,
                     onCheckBoxChange = { checked ->
-                        categoriesViewModel.updateCheckedCategory(category.id, checked)
-
+                        categoriesViewModel.updateCheckedCategory(category.id,
+                            checked)
+                        categoriesViewModel.onEnableDialogChange(true)
                     }
+
                 )
             }
         }
@@ -81,9 +85,11 @@ fun EntryCategoryList(
 
 @Composable
 fun ItemCategoryCheck(category: Category,
+                      categoriesViewModel: CategoriesViewModel,
                       onCheckBoxChange: (Boolean) -> Unit
 ) {
-    val limitMax = stringResource(id = R.string.limitMax)
+    val limitMax by categoriesViewModel.limitMax.observeAsState("")
+    val showDialog by categoriesViewModel.enableDialog.observeAsState(false)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,8 +127,15 @@ fun ItemCategoryCheck(category: Category,
                 fontWeight = FontWeight.Bold
             )
             if (category.isChecked) {
-                //ModelDialogWithTextField(R.string.titleLimitMax)
-                //Se abre dialogo para pedir un limite maximo
+                ModelDialogWithTextField(R.string.titledialog,
+                    R.string.messagedialog,
+                    showDialog,
+                    limitMax,
+                    onValueChange = {categoriesViewModel.onChangeLimitMax(it)},
+                    onConfirm = {
+
+                                },
+                    onDismiss = {categoriesViewModel.onEnableDialogChange(false) })
             }
 
             Checkbox(
