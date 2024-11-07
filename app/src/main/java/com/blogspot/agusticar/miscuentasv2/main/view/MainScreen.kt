@@ -302,7 +302,7 @@ fun MainScreen(
                             title=R.string.piechart
                         }
                         IconOptions.SELECT_CATEGORIES -> {
-                           EntryCategoryList (mainViewModel,categoriesViewModel)
+                           EntryCategoryList (categoriesViewModel)
                             title=R.string.selectcategories
                         }
 

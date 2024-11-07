@@ -34,7 +34,7 @@ fun CategoryBudgetItemControl(
     accountsViewModel: AccountsViewModel
 ) {
     val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
-    val limitMax by categoriesViewModel.limitMax.observeAsState(category.limitMax.toString())
+
     val limitExpenseText=stringResource(id = R.string.limitexpense)
     val currentExpense=stringResource(id = R.string.currentexpense)
     // Estado para almacenar el total de gastos por categoría
@@ -47,7 +47,7 @@ fun CategoryBudgetItemControl(
 
     // Variables de estado para el límite de gasto y porcentaje
     var spendingLimit by remember { mutableDoubleStateOf(category.amount) }  // Límite de gasto inicial
-    val maxLimit = limitMax.toFloat()
+    val maxLimit = category.limitMax
     val spendingPercentage = (abs(expensesByCategory.toFloat()) / spendingLimit.toFloat()).coerceIn(0.0f, 1.0f) // Porcentaje de gasto
     Log.d("progresbar",spendingPercentage.toString())
     // Color de la barra de progreso según el porcentaje

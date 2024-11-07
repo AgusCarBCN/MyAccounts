@@ -39,7 +39,6 @@ import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 @Composable
 fun EntryCategoryList(
-    mainViewModel: MainViewModel,
     categoriesViewModel: CategoriesViewModel
 ) {
     // Observa la lista de categorías desde el ViewModel
