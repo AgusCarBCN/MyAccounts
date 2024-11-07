@@ -2,8 +2,10 @@ package com.blogspot.agusticar.miscuentasv2.setting
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +37,7 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationScreen
 import com.blogspot.agusticar.miscuentasv2.setting.model.EntryCSV
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -42,10 +45,12 @@ import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.notify
 import java.io.IOException
 import java.util.Date
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 
 fun SettingScreen(
@@ -156,7 +161,9 @@ fun SettingScreen(
             title = stringResource(id = R.string.enablenotifications),
             description = stringResource(id = R.string.desenablenotifications),
             switchNotifications,
-            onClickSwitch = { settingViewModel.onSwitchNotificationsClicked(it) }
+            onClickSwitch = { settingViewModel.onSwitchNotificationsClicked(it)
+                mainViewModel.selectScreen(IconOptions.NOTIFICATION_SCREEN)
+            }
         )
         SpacerApp()
 

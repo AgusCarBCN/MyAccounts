@@ -2,7 +2,9 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 import android.app.Activity
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -76,6 +78,7 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
 import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlScreen
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationScreen
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
@@ -91,6 +94,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun MainScreen(
 
@@ -118,9 +122,11 @@ fun MainScreen(
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
   //  val categoriesChecked by entriesViewModel.listOfCategoriesChecked.observeAsState()
+    val enableNotifications by settingViewModel.switchNotifications.observeAsState()
     LaunchedEffect(Unit) {
         entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
     }
+
     //Boton de atrás te lleva al Home
     BackHandler(true) {
         mainViewModel.selectScreen(IconOptions.HOME)
@@ -155,6 +161,7 @@ fun MainScreen(
                 { BottomAppBar(mainViewModel) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
+
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
@@ -312,6 +319,9 @@ fun MainScreen(
                                 accountsViewModel)
                             title=R.string.expensecontrol
                         }
+
+                        IconOptions.NOTIFICATION_SCREEN -> NotificationScreen(settingViewModel,
+                            mainViewModel)
                     }
 
                 }

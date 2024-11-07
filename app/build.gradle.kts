@@ -105,6 +105,7 @@ dependencies {
     kapt (libs.hilt.compiler)
     //Chart
     implementation (libs.mpandroidchart)
+    implementation (libs.accompanist.permissions)
 }
 
 kapt {

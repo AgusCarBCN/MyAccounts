@@ -156,6 +156,7 @@
     <string name="currencyformatchange">Has cambiado el formato de la moneda</string>
     <string name="currencychange">Has cambiado el formato y las entradas a la nueva moneda.</string>
     <string name="apierror">Error de conexion a internet</string>
+    <string name="permissiondeny">Permiso de notificacion denegado</string>
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>
