@@ -71,7 +71,9 @@ fun EntryCategoryList(
                     onCheckBoxChange = { checked ->
                         categoriesViewModel.updateCheckedCategory(category.id,
                             checked)
+                        if(!category.isChecked){
                         categoriesViewModel.onEnableDialogChange(true)
+                            }
                     }
 
                 )
@@ -88,13 +90,14 @@ fun ItemCategoryCheck(category: Category,
                       categoriesViewModel: CategoriesViewModel,
                       onCheckBoxChange: (Boolean) -> Unit
 ) {
-    val limitMax by categoriesViewModel.limitMax.observeAsState("")
+    val limitMax by categoriesViewModel.limitMax.observeAsState(category.limitMax.toString())
     val showDialog by categoriesViewModel.enableDialog.observeAsState(false)
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,17 +129,6 @@ fun ItemCategoryCheck(category: Category,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            if (category.isChecked) {
-                ModelDialogWithTextField(R.string.titledialog,
-                    R.string.messagedialog,
-                    showDialog,
-                    limitMax,
-                    onValueChange = {categoriesViewModel.onChangeLimitMax(it)},
-                    onConfirm = {
-
-                                },
-                    onDismiss = {categoriesViewModel.onEnableDialogChange(false) })
-            }
 
             Checkbox(
                 modifier = Modifier.weight(0.2f), // Ajuste proporcional para el checkbox
@@ -148,9 +140,24 @@ fun ItemCategoryCheck(category: Category,
                     checkmarkColor = LocalCustomColorsPalette.current.incomeColor
                 )
             )
+
+        }
+        if (category.isChecked) {
+            ModelDialogWithTextField(
+                category,
+                showDialog,
+                limitMax,
+                onValueChange = { categoriesViewModel.onChangeLimitMax(it) },
+                onConfirm = {
+                categoriesViewModel.upDateLimitMaxCategory(category.id,
+                    limitMax.toFloatOrNull()?:0f)
+                categoriesViewModel.onEnableDialogChange(false)
+                },
+                onDismiss = { categoriesViewModel.onEnableDialogChange(false) })
         }
     }
-}
+ }
+
 
 
 

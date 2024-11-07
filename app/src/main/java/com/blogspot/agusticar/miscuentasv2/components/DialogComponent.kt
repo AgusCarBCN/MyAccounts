@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
@@ -66,8 +67,7 @@ fun ModelDialog(
 
 @Composable
 fun ModelDialogWithTextField(
-    title: Int,
-    message: Int,
+    category: Category,
     showDialog: Boolean,
     textFieldValue: String,
     onValueChange: (String) -> Unit,  // Callback para actualizar el valor del TextField
@@ -80,7 +80,9 @@ fun ModelDialogWithTextField(
             onDismissRequest = { onDismiss() },
             title = {
                 Text(
-                    stringResource(id=title),
+                    stringResource(id=R.string.titledialog)+
+                            " "
+                            +stringResource(category.nameResource),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = LocalCustomColorsPalette.current.textColor
@@ -89,7 +91,7 @@ fun ModelDialogWithTextField(
             text = {
                 Column {
                     Text(
-                        text = stringResource(id = message),
+                        text = stringResource(R.string.messagedialog),
                         fontSize = 18.sp,
                         color = LocalCustomColorsPalette.current.textColor
                     )

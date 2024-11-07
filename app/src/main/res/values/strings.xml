@@ -352,7 +352,7 @@
     <string name="categorytitle">Categories</string>
     <string name="limitMax">Maximum limit</string>
     <string name="select">Select</string>
-    <string name="titledialog">Maximum Category Limit</string>
+    <string name="titledialog">Maximum Category Limit </string>
     <string name="messagedialog">Select the maximum spending limit per category</string>
    </resources>
 
