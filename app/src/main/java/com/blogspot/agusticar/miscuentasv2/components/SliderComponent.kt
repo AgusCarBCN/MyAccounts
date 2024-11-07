@@ -10,12 +10,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
@@ -25,8 +23,6 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 
@@ -50,7 +46,7 @@ fun CategoryBudgetItemControl(
 
     // Variables de estado para el límite de gasto y porcentaje
     var spendingLimit by remember { mutableDoubleStateOf(category.amount) }  // Límite de gasto inicial
-    val maxLimit = 1000f  // Límite máximo ajustable
+    val maxLimit = 1000f
     val spendingPercentage = (abs(expensesByCategory.toFloat()) / spendingLimit.toFloat()).coerceIn(0.0f, 1.0f) // Porcentaje de gasto
     Log.d("progresbar",spendingPercentage.toString())
     // Color de la barra de progreso según el porcentaje
@@ -128,9 +124,9 @@ fun CategoryBudgetItemControl(
         Slider(
             value = spendingLimit.toFloat(),
             onValueChange = { spendingLimit = it.toDouble()
-                            categoriesViewModel.upDateCategoryAmount(category.id,spendingLimit)
+                            categoriesViewModel.upDateAmountCategory(category.id,spendingLimit)
                             },
-            valueRange = 50f..maxLimit,  // Rango ajustable
+            valueRange = 50f..maxLimit.toFloat(),  // Rango ajustable
             steps = (maxLimit / 50).toInt() - 1, // Incremento en pasos de 50
             modifier = Modifier.fillMaxWidth(),
             colors = SliderColors(

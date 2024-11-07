@@ -32,4 +32,9 @@ class CategoryRepository  @Inject constructor(private val categoryDao: CategoryD
     suspend fun updateAmountCategory(categoryId:Int,newAmount:Double) {
         categoryDao.updateAmountCategory(categoryId,newAmount)
     }
+
+    // 6. Update limitMax category
+    suspend fun updateLimitMaxCategory(categoryId:Int,newLimitMax:Float) {
+        categoryDao.updateLimitMaxCategory(categoryId,newLimitMax)
+    }
 }

@@ -347,4 +347,7 @@
     <string name="choosecategories">Enable or disable categories to control expenses</string>
     <string name="selectcategories">Select categories</string>
     <string name="currentexpense">Current expense</string>
+    <string name="categorytitle">Categories</string>
+    <string name="limiMax">Maximum limit</string>
+    <string name="select">Select</string>
 </resources>

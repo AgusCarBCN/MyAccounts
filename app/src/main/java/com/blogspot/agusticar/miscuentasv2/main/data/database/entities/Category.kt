@@ -10,5 +10,6 @@ data class Category(
     @ColumnInfo(name = "nameResource") val nameResource: Int, // Identificador del recurso de string para el nombre
     @ColumnInfo(name = "iconResource") val iconResource: Int, // Recurso de icono para la categoría
     @ColumnInfo(name = "isChecked") var isChecked: Boolean = false, // Indica si la categoría está seleccionada
-    @ColumnInfo(name = "amount") var amount: Double = 0.0 // Cantidad asociada a la categoría
+    @ColumnInfo(name = "amount") var amount: Double = 0.0, // Cantidad asociada a la categoría
+    @ColumnInfo(name = "limitMax") var limitMax: Float = 1000f // Cantidad asociada a la categoría
 )

@@ -32,4 +32,7 @@ interface CategoryDao {
     @Query("UPDATE CategoryEntity SET amount = :newAmount WHERE id = :categoryId")
     suspend fun updateAmountCategory(categoryId: Int, newAmount:Double)
 
+    // 6. Update limitMax category
+    @Query("UPDATE CategoryEntity SET limitMax = :newLimitMax WHERE id = :categoryId")
+    suspend fun updateLimitMaxCategory(categoryId: Int, newLimitMax:Float)
 }

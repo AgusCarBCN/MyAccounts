@@ -114,7 +114,7 @@ fun ModelDialogWithTextField(
 
                     Spacer(modifier = Modifier.height(16.dp))
                     TextFieldComponent(modifier=Modifier.size(100.dp),
-                        label= stringResource(id = R.string.filenamelabel),
+                        label= stringResource(id = R.string.limiMax),
                         textFieldValue,
                         onTextChange = onValueChange,
                         BoardType.TEXT,

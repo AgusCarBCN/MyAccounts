@@ -12,6 +12,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.InsertCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateAmountCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateCheckedCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateLimitMaxCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +24,8 @@ class CategoriesViewModel @Inject constructor(
     private val getAllCategoriesByType:GetAllCategoriesByType,
     private val getAllCategoriesChecked:GetAllCategoriesCheckedUseCase,
     private val upDateAmountCategory:UpdateAmountCategoryUseCase,
-    private val upDateCategoryChecked:UpdateCheckedCategoryUseCase
+    private val upDateCheckedCategory:UpdateCheckedCategoryUseCase,
+    private val upDateLimitMaxCategory:UpdateLimitMaxCategoryUseCase
 ): ViewModel() {
 
     //LiveData para la lista de Categorias
@@ -64,19 +66,25 @@ class CategoriesViewModel @Inject constructor(
     }
 
 
-    fun updateCategoryCheckedState(categoryId: Int, isChecked: Boolean) {
+    fun updateCheckedCategory(categoryId: Int, isChecked: Boolean) {
         viewModelScope.launch {
-            upDateCategoryChecked.invoke(categoryId, isChecked)
+            upDateCheckedCategory.invoke(categoryId, isChecked)
             getAllCategoriesByType(CategoryType.EXPENSE)
         }
     }
-    fun upDateCategoryAmount(categoryId: Int, newAmount: Double) {
+    fun upDateAmountCategory(categoryId: Int, newAmount: Double) {
         viewModelScope.launch {
             upDateAmountCategory.invoke(categoryId, newAmount)
             getAllCategoriesChecked(CategoryType.EXPENSE)
         }
     }
 
+    fun upDateLimitMaxCategory(categoryId: Int, newLimitMax: Float) {
+        viewModelScope.launch {
+            upDateLimitMaxCategory.invoke(categoryId, newLimitMax)
+            getAllCategoriesChecked(CategoryType.EXPENSE)
+        }
+    }
     private val incomeCategories = listOf(
         Category(
             type = CategoryType.INCOME,

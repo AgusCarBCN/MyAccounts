@@ -99,7 +99,6 @@ class Utils {
         ): MutableList<Entry> {
             val entries = mutableListOf<Entry>()
 
-
             context.contentResolver.openInputStream(fileUri)?.use { inputStream ->
                 val bufferedReader = BufferedReader(InputStreamReader(inputStream))
                 val csvParser = CSVParser.parse(bufferedReader, CSVFormat.DEFAULT)
@@ -107,9 +106,11 @@ class Utils {
                 for (record in csvParser) {
                     try {
                         val description = record.get(0)
+                        val category = record.get(1)
                         val amount = record.get(2).toDoubleOrNull() ?: 0.0
                         val date = record.get(3)
-                        val categoryId = record.get(4).toInt()
+                        val accountName = record.get(4)
+                        val categoryId = record.get(5).toInt()
                         val accountId = record.get(6).toInt()
 
                         // Crear objeto route y agregarlo a lista
