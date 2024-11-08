@@ -68,13 +68,13 @@ fun IconAnimated(iconResource:Int,sizeIcon:Int,initColor:Color,targetColor: Colo
 
 
     val color = remember { Animatable(initColor) }
-
     val coroutineScope = rememberCoroutineScope()
 
 
     // Iniciamos una corrutina para animar el color de manera infinita
 
         LaunchedEffect(Unit) {
+
             coroutineScope.launch {
                 // Animación infinita que alterna entre dos colores
                 color.animateTo(

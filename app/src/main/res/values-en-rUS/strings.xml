@@ -154,7 +154,7 @@
     <string name="currencyformatchange">You have changed the currency format</string>
     <string name="currencychange">You have changed the format and entries to the new currency.</string>
     <string name="apierror">Internet connection error</string>
-
+    <string name="espendingupdate">Spending limit updated of </string>
     <string name="permissiondeny">Notification permission denied</string>
 
     <!--TopBar titles-->
@@ -330,6 +330,7 @@
     <string name="novembertable">November</string>
     <string name="decembertable">December</string>
     <!--Notifications-->
+    <string name="notificationrequiredalert">Allow My Accounts to send you notifications?</string>
     <string name="selectCurrency">Select a currency for your accounts</string>
     <string name="daylyreport">dayly report</string>
     <string name="weekreport">weekly report</string>
@@ -345,8 +346,8 @@
     <string name="limitexpense">Expense montly limit</string>
     <string name="Noblankallowed">Required field. Cannot be blank</string>
     <string name="nomovtoday">You have had no movements in your accounts today</string>
-    <string name="notificationrequired">Notification permission is required, Please allow notification</string>
-    <string name="notificationrequiredalert">Message to allow notifications</string>
+
+    <string name="notificationrequired">Notification permission is required. Enable notifications to receive alerts about expense tracking.</string>
     <string name="permissiongranted">Notification permission granted</string>
     <string name="choosecategories">Enable or disable categories to control expenses</string>
     <string name="selectcategories">Select categories</string>
@@ -356,5 +357,6 @@
     <string name="select">Select</string>
     <string name="titledialog">Maximum Category Limit </string>
     <string name="messagedialog">Select the maximum spending limit per category</string>
+    <string name="categoryespendingcontrol">Category spending control</string>
 
 </resources>

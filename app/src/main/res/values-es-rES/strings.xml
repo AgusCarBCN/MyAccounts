@@ -89,8 +89,8 @@
     <string name="selectedcurrency">Divisa seleccionada: </string>
 
     <!--Ajustes-->
-    <string name="expensemanagement">controla tus gastos</string>
-    <string name="categorycontrol">Gasto por categoria</string>
+    <string name="expensemanagement">Controla tus gastos</string>
+    <string name="categorycontrol">Gasto por categoría</string>
     <string name="descategorycontrol">Establece un control de gasto por cada categoría y recibe avisos al superarlos.</string>
     <string name="desexpensecontrol">Controla los gastos totales y recibe avisos cuando los hayas superado con notificaciones</string>
     <string name="expensecontrol">Gasto total</string>
@@ -157,6 +157,7 @@
     <string name="currencychange">Has cambiado el formato y las entradas a la nueva moneda.</string>
     <string name="apierror">Error de conexion a internet</string>
     <string name="permissiondeny">Permiso de notificacion denegado</string>
+    <string name="espendingupdate">Límite de gasto modificado de </string>
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>
@@ -338,8 +339,8 @@
     <string name="expenseslimit">Has superado los gastos de este mes en </string>
     <string name="Noblankallowed">Campo requerido.No puede dejarse en blanco</string>
     <string name="nomovtoday">Hoy no has tenido movimientos en tus cuentas</string>
-    <string name="notificationrequired">Se requiere permiso para las notificaciones.Permite las notificaciones para recibirlas</string>
-    <string name="notificationrequiredalert">Mensaje para permitir notificaciones</string>
+    <string name="notificationrequired">Se requiere permiso para las notificaciones.Permite las notificaciones para recibir avisos sobre el control de gastos</string>
+    <string name="notificationrequiredalert">¿Permites que mis cuentas te envie notificaciones?</string>
     <string name="weekicome">Ingresos semanales</string>
     <string name="weekbills">Gastos semanales</string>
     <string name="monthicome">Ingresos mensuales</string>
@@ -354,4 +355,5 @@
     <string name="select">Selecciona</string>
     <string name="titledialog">Límite máximo de categoría </string>
     <string name="messagedialog">Selecciona el límite máximo de gasto por categoría</string>
+    <string name="categoryespendingcontrol">Control de gasto por categoría</string>
 </resources>

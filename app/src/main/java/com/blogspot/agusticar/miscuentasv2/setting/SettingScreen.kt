@@ -37,7 +37,6 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
-import com.blogspot.agusticar.miscuentasv2.notification.NotificationScreen
 import com.blogspot.agusticar.miscuentasv2.setting.model.EntryCSV
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -160,15 +159,18 @@ fun SettingScreen(
         SwitchComponent(
             title = stringResource(id = R.string.enablenotifications),
             description = stringResource(id = R.string.desenablenotifications),
-            switchNotifications,
-            onClickSwitch = { settingViewModel.onSwitchNotificationsClicked(it)
-                mainViewModel.selectScreen(IconOptions.NOTIFICATION_SCREEN)
+             switchNotifications,  // Estado del switch desde ViewModel
+            onClickSwitch = { isChecked ->
+                settingViewModel.onSwitchNotificationsClicked(isChecked)
+                if (isChecked) {  // Solicitar permiso si el switch está activado
+                    mainViewModel.selectScreen(IconOptions.NOTIFICATION_SCREEN)
+                } else {  // Si se desactiva el switch, manejar las notificaciones desactivadas
+                    settingViewModel.onSwitchNotificationsClicked(false)
+                }
             }
         )
         SpacerApp()
-
         HeadSetting(title = stringResource(id = R.string.expensemanagement), 20)
-
         RowComponent(title = stringResource(id = R.string.selectcategories),
             description = stringResource(id = R.string.choosecategories),
             iconResource = R.drawable.ic_check,

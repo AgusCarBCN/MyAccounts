@@ -17,12 +17,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
+import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 
@@ -34,7 +39,7 @@ fun CategoryBudgetItemControl(
     accountsViewModel: AccountsViewModel
 ) {
     val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
-
+    val scope = rememberCoroutineScope()
     val limitExpenseText=stringResource(id = R.string.limitexpense)
     val currentExpense=stringResource(id = R.string.currentexpense)
     // Estado para almacenar el total de gastos por categoría
@@ -44,6 +49,7 @@ fun CategoryBudgetItemControl(
     LaunchedEffect(category.id) {
         expensesByCategory = entriesViewModel.sumOfExpensesByCategory(category.id) ?: 0.0
     }
+    val messageUpdateSpendingLimit = "${stringResource(id = R.string.espendingupdate)} ${stringResource(id = category.nameResource)}"
 
     // Variables de estado para el límite de gasto y porcentaje
     var spendingLimit by remember { mutableDoubleStateOf(category.amount) }  // Límite de gasto inicial
@@ -60,34 +66,34 @@ fun CategoryBudgetItemControl(
     Column(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier
-                .padding(start = 15.dp, end = 20.dp, top = 5.dp)
+                .padding(start = 15.dp, end = 20.dp, top = 5.dp, bottom = 15.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+            horizontalArrangement = Arrangement.Center, // Centrar los elementos en el Row
+            verticalAlignment = Alignment.CenterVertically // Alinear verticalmente al centro
         ) {
             Icon(
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(24.dp),
                 painter = painterResource(category.iconResource),
                 contentDescription = "icon",
-                tint = LocalCustomColorsPalette.current.textColor
+                tint = LocalCustomColorsPalette.current.expenseColor
             )
-            Spacer(modifier = Modifier.height(20.dp)) // Espacio entre el texto y el botón
             Text(
                 text = stringResource(category.nameResource),
                 modifier = Modifier
-                    .padding(10.dp)
-                    .weight(0.4f),
-                color = LocalCustomColorsPalette.current.textColor,
+                    .padding(start = 5.dp) // Ajusta el espacio entre el icono y el texto
+                    , // Hace que el texto ocupe espacio disponible
+                color = LocalCustomColorsPalette.current.textHeadColor,
                 textAlign = TextAlign.Center,
-                fontSize = 18.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
         }
-
         // Barra de progreso de gasto actual
         Text(
             text = "$currentExpense: ${Utils.numberFormat(expensesByCategory, currencyCode)} / ${Utils.numberFormat(spendingLimit,currencyCode)}",
@@ -125,10 +131,10 @@ fun CategoryBudgetItemControl(
         Slider(
             value = spendingLimit.toFloat(),
             onValueChange = { spendingLimit = it.toDouble()
-                            categoriesViewModel.upDateAmountCategory(category.id,spendingLimit)
+
                             },
-            valueRange = 50f..maxLimit.toFloat(),  // Rango ajustable
-            steps = (maxLimit / 50).toInt() - 1, // Incremento en pasos de 50
+            valueRange = 0f..maxLimit.toFloat(),  // Rango ajustable
+            steps = (maxLimit / 1).toInt() - 1, // Incremento en pasos de 50
             modifier = Modifier.fillMaxWidth(),
             colors = SliderColors(
                 thumbColor = LocalCustomColorsPalette.current.thumbCheckedColor,
@@ -143,6 +149,21 @@ fun CategoryBudgetItemControl(
                 disabledInactiveTickColor = LocalCustomColorsPalette.current.trackDefaultColor,
 
             )
+        )
+        ModelButton(text = stringResource(id = R.string.confirmButton),
+            R.dimen.text_title_small,
+            modifier = Modifier.width(320.dp),
+            true,
+            onClickButton = {
+                categoriesViewModel.upDateAmountCategory(category.id,spendingLimit)
+                scope.launch(Dispatchers.Main) {
+                    SnackBarController.sendEvent(
+                        event = SnackBarEvent(
+                            messageUpdateSpendingLimit
+                        )
+                    )
+                }
+            }
         )
     }
 }
