@@ -160,13 +160,9 @@ fun SettingScreen(
             title = stringResource(id = R.string.enablenotifications),
             description = stringResource(id = R.string.desenablenotifications),
              switchNotifications,  // Estado del switch desde ViewModel
-            onClickSwitch = { isChecked ->
-                settingViewModel.onSwitchNotificationsClicked(isChecked)
-                if (isChecked) {  // Solicitar permiso si el switch está activado
-                    mainViewModel.selectScreen(IconOptions.NOTIFICATION_SCREEN)
-                } else {  // Si se desactiva el switch, manejar las notificaciones desactivadas
-                    settingViewModel.onSwitchNotificationsClicked(false)
-                }
+            onClickSwitch = {
+                settingViewModel.onSwitchNotificationsClicked(it)
+
             }
         )
         SpacerApp()
