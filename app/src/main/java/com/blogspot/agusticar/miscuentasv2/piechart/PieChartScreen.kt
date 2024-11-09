@@ -58,7 +58,7 @@ fun PieChartScreen(
     val getTotalExpenses by entriesViewModel.totalExpenses.observeAsState(0.0)
     val toDate by searchViewModel.selectedToDate.observeAsState(Date().dateFormat())
     val fromDate by searchViewModel.selectedFromDate.observeAsState("01/01/1900")
-    val listOfEntries by entriesViewModel.listOfEntries.collectAsState()
+    val listOfEntries by entriesViewModel.listOfEntriesDTO.collectAsState()
     val accountSelected by accountViewModel.accountSelected.observeAsState()
 
     val idAccount = accountSelected?.id ?: 1

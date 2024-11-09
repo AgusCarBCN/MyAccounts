@@ -10,5 +10,6 @@ data class EntryDTO(
     val iconResource: Int,
     val nameResource: Int,
     val accountId: Int,
-    val name:String=""
+    val name:String="",
+    val categoryId:Int
 )

@@ -89,8 +89,8 @@
     <string name="selectedcurrency">Divisa seleccionada: </string>
 
     <!--Ajustes-->
-    <string name="expensemanagement">controla tus gastos</string>
-    <string name="categorycontrol">Gasto por categoria</string>
+    <string name="expensemanagement">Controla tus gastos</string>
+    <string name="categorycontrol">Gasto por categoría</string>
     <string name="descategorycontrol">Establece un control de gasto por cada categoría y recibe avisos al superarlos.</string>
     <string name="desexpensecontrol">Controla los gastos totales y recibe avisos cuando los hayas superado con notificaciones</string>
     <string name="expensecontrol">Gasto total</string>
@@ -156,6 +156,8 @@
     <string name="currencyformatchange">Has cambiado el formato de la moneda</string>
     <string name="currencychange">Has cambiado el formato y las entradas a la nueva moneda.</string>
     <string name="apierror">Error de conexion a internet</string>
+    <string name="permissiondeny">Permiso de notificacion denegado</string>
+    <string name="espendingupdate">Límite de gasto modificado de </string>
     <!--TopBar titles-->
     <string name="hometitle">Mis Cuentas</string>
     <string name="searchtitle">Busqueda</string>
@@ -258,6 +260,7 @@
     <string name="therapies">Terapias</string>
     <string name="alcohol">Alcohol</string>
     <string name="gambling">Juego</string>
+    <string name="internet">Internet</string>
     <!---Transfer-->
     <string name="originaccount">Selecciona cuenta de origen</string>
     <string name="destinationaccount">Selecciona cuenta destino</string>
@@ -333,11 +336,11 @@
     <string name="lowbalance">Alerta de saldo inferior a </string>
     <string name="hightexpenses">Gastos del mes superiores al limite</string>
     <string name="limitexpense">Limite de gasto mensual</string>
-    <string name="expenseslimit">Has superado los gastos de este mes en </string>
     <string name="Noblankallowed">Campo requerido.No puede dejarse en blanco</string>
     <string name="nomovtoday">Hoy no has tenido movimientos en tus cuentas</string>
-    <string name="notificationrequired">Se requiere permiso para las notificaciones.Permite las notificaciones para recibirlas</string>
-    <string name="notificationrequiredalert">Mensaje para permitir notificaciones</string>
+    <string name="notification_required">Activa las notificaciones para recibir alertas sobre el control de tus gastos. Puedes activarlas o desactivarlas en cualquier momento desde la sección de Ajustes de la aplicación.</string>
+
+    <string name="notificationrequiredalert">¿Permites que mis cuentas te envie notificaciones?</string>
     <string name="weekicome">Ingresos semanales</string>
     <string name="weekbills">Gastos semanales</string>
     <string name="monthicome">Ingresos mensuales</string>
@@ -346,4 +349,12 @@
     <string name="permissiongranted">Permiso de notificaciones concedido</string>
     <string name="selectcategories">Selecciona categorias</string>
     <string name="choosecategories">Habilita o Deshabilita categorias para controlar gastos</string>
+    <string name="currentexpense">Gasto actual</string>
+    <string name="categorytitle">Categorias</string>
+    <string name="limitMax">Limite máximo</string>
+    <string name="select">Selecciona</string>
+    <string name="titledialog">Límite máximo de categoría </string>
+    <string name="messagedialog">Selecciona el límite máximo de gasto por categoría</string>
+    <string name="categoryespendingcontrol">Control de gasto por categoría</string>
+    <string name="expenseslimit">Has superado el límite de gastos en </string>
 </resources>

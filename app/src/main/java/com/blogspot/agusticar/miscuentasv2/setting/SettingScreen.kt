@@ -2,8 +2,10 @@ package com.blogspot.agusticar.miscuentasv2.setting
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -41,10 +44,12 @@ import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.notify
 import java.io.IOException
 import java.util.Date
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 
 fun SettingScreen(
@@ -55,12 +60,16 @@ fun SettingScreen(
     navToCreateAccounts: () -> Unit
 ) {
     val context = LocalContext.current
-    entriesViewModel.getAllEntriesDataBase()
+    LaunchedEffect(Unit) {
+        entriesViewModel.getAllEntriesDTO()
+    }
+
     val scope = rememberCoroutineScope()
+    val permissionNotificationGranted by mainViewModel.notificationPermissionGranted.collectAsState()
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
-    val entries by entriesViewModel.listOfEntries.collectAsState()
+    val entries by entriesViewModel.listOfEntriesDTO.collectAsState()
     val entriesCSV = toEntryCSV(entries)
     val date = Date().dateFormat()
     val fileName = "backup$date"
@@ -150,29 +159,32 @@ fun SettingScreen(
         )
         SwitchComponent(
             title = stringResource(id = R.string.enablenotifications),
-            description = stringResource(id = R.string.desenablenotifications),
-            switchNotifications,
-            onClickSwitch = { settingViewModel.onSwitchNotificationsClicked(it) }
+            description = (if(permissionNotificationGranted) stringResource(id = R.string.desenablenotifications)
+            else stringResource(id = R.string.permissiondeny)),
+             isChecked = if(permissionNotificationGranted) switchNotifications
+             else false,
+            onClickSwitch = {
+                settingViewModel.onSwitchNotificationsClicked(it)
+
+            }
         )
         SpacerApp()
-
         HeadSetting(title = stringResource(id = R.string.expensemanagement), 20)
-
         RowComponent(title = stringResource(id = R.string.selectcategories),
             description = stringResource(id = R.string.choosecategories),
             iconResource = R.drawable.ic_check,
             onClick = {
                 mainViewModel.selectScreen(IconOptions.SELECT_CATEGORIES)
             })
-        RowComponent(title = stringResource(id = R.string.expensecontrol),
-            description = stringResource(id = R.string.desexpensecontrol),
-            iconResource = R.drawable.ic_expensetotal,
-            onClick = {
-
-            })
         RowComponent(title = stringResource(id = R.string.categorycontrol),
             description = stringResource(id = R.string.descategorycontrol),
             iconResource = R.drawable.ic_categorycontrol,
+            onClick = {
+                mainViewModel.selectScreen(IconOptions.CATEGORY_EXPENSE_CONTROL)
+            })
+        RowComponent(title = stringResource(id = R.string.expensecontrol),
+            description = stringResource(id = R.string.desexpensecontrol),
+            iconResource = R.drawable.ic_expensetotal,
             onClick = {
 
             })
@@ -256,8 +268,8 @@ fun toEntryCSV(entries: List<EntryDTO>): MutableList<EntryCSV> {
                 entry.amount,
                 entry.date,
                 entry.name,
-                entry.iconResource,
-                entry.accountId
+                entry.categoryId,
+                entry.accountId,
             )
         )
     }

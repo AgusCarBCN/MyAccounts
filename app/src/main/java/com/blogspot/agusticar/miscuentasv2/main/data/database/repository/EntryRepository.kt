@@ -3,6 +3,7 @@ package com.blogspot.agusticar.miscuentasv2.main.data.database.repository
 
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dao.EntryDao
 import com.blogspot.agusticar.miscuentasv2.main.data.database.dto.EntryDTO
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
 import java.util.Date
@@ -90,6 +91,13 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
     suspend fun updateAmountEntry(idAccount:Long,newAmount:Double){
         entryDao.updateAmountEntry(idAccount,newAmount)
     }
+
+    suspend fun getSumOfExpensesEntriesByCategory(categoryId:Int) :Double=
+        entryDao.getSumOfExpenseByCategory(categoryId)?:0.0
+
+
+
+
 
     private fun entryDtoToEntry(dto: EntryDTO): Entry {
         return Entry(

@@ -8,19 +8,43 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesByType
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesCheckedUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.InsertCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateAmountCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateCheckedCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateLimitMaxCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumOfExpensesByCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val insertCategory:InsertCategoryUseCase,
     private val getAllCategoriesByType:GetAllCategoriesByType,
-    private val upDateCategoryChecked:UpdateCheckedCategoryUseCase
+    private val getAllCategoriesChecked:GetAllCategoriesCheckedUseCase,
+    private val upDateAmountCategory:UpdateAmountCategoryUseCase,
+    private val upDateCheckedCategory:UpdateCheckedCategoryUseCase,
+    private val upDateLimitMaxCategory:UpdateLimitMaxCategoryUseCase,
+    private val getSumExpensesByCategory: GetSumOfExpensesByCategoryUseCase
 ): ViewModel() {
+
+    // Flow que emite los gastos actuales y el límite para cada categoría
+    private val _expensePercentageFlow = MutableStateFlow<Map<Category, Float>>(emptyMap())
+    val expensePercentageFlow: StateFlow<Map<Category, Float>> = _expensePercentageFlow.asStateFlow()
+
+    //LiveData para la lista de Categorias de control de gasto
+    private val _listOfCategoriesChecked = MutableLiveData<List<Category>>()
+    val listOfCategoriesChecked: LiveData<List<Category>> = _listOfCategoriesChecked
+
 
     //LiveData para la lista de Categorias
     private val _listOfCategories = MutableLiveData<List<Category>>()
@@ -31,6 +55,21 @@ class CategoriesViewModel @Inject constructor(
     private val _categorySelected = MutableLiveData<Category>()
     val categorySelected: LiveData<Category> = _categorySelected
 
+    //LiveData para textfield de categoria seleccionada para control de gasto
+
+    private val _limitMax=MutableLiveData<String>()
+    val limitMax: LiveData<String> = _limitMax
+
+    //LiveData que activa o desactiva dialogo de categoria seleccionada
+
+    private val _enableDialog=MutableLiveData<Boolean>()
+    val enableDialog: LiveData<Boolean> = _enableDialog
+
+    init {
+        viewModelScope.launch {
+            updateExpensePercentage()
+        }
+    }
     fun populateCategories(){
         viewModelScope.launch(Dispatchers.IO)
          {
@@ -42,9 +81,27 @@ class CategoriesViewModel @Inject constructor(
             }
          }
     }
+
+    fun onChangeLimitMax(newLimitMax:String){
+        if (Utils.isValidDecimal(newLimitMax)) {
+            _limitMax.value = newLimitMax
+        }
+        _limitMax.value = newLimitMax
+    }
+
+    fun onEnableDialogChange(newValue:Boolean){
+        _enableDialog.value = newValue
+    }
+
     fun getAllCategoriesByType(type:CategoryType){
         viewModelScope.launch(Dispatchers.IO){
             _listOfCategories.postValue(getAllCategoriesByType.invoke(type))
+        }
+
+    }
+    fun getAllCategoriesChecked(type:CategoryType){
+        viewModelScope.launch(Dispatchers.IO){
+            _listOfCategoriesChecked.postValue(getAllCategoriesChecked.invoke(type))
         }
 
     }
@@ -54,10 +111,58 @@ class CategoriesViewModel @Inject constructor(
     }
 
 
-    fun updateCategoryCheckedState(categoryId: Int, isChecked: Boolean) {
+    fun updateCheckedCategory(categoryId: Int, isChecked: Boolean) {
         viewModelScope.launch {
-            upDateCategoryChecked.invoke(categoryId, isChecked)
+            upDateCheckedCategory.invoke(categoryId, isChecked)
             getAllCategoriesByType(CategoryType.EXPENSE)
+        }
+    }
+    fun upDateAmountCategory(categoryId: Int, newAmount: Double) {
+        viewModelScope.launch {
+            upDateAmountCategory.invoke(categoryId, newAmount)
+            getAllCategoriesChecked(CategoryType.EXPENSE)
+        }
+    }
+
+    fun upDateLimitMaxCategory(categoryId: Int, newLimitMax: Float) {
+        viewModelScope.launch {
+            upDateLimitMaxCategory.invoke(categoryId, newLimitMax)
+            getAllCategoriesChecked(CategoryType.EXPENSE)
+        }
+    }
+    suspend fun sumOfExpensesByCategory(categoryId:Int): Double? {
+
+        return try {
+            withContext(Dispatchers.IO) {
+                val result=getSumExpensesByCategory.invoke(categoryId)
+                result
+            }
+        }catch(e: IOException) {
+            null
+        }
+    }
+    // Función que actualiza el flujo con el porcentaje de gasto para cada categoría
+    private suspend fun updateExpensePercentage() {
+        getAllCategoriesChecked(CategoryType.EXPENSE)
+        val categories = _listOfCategoriesChecked.value // Método que obtiene todas las categorías
+        // Verifica que las categorías no sean nulas
+        if (categories.isNullOrEmpty()) {
+            // Si las categorías son nulas o vacías, no se hace nada
+            _expensePercentageFlow.value = emptyMap() // Asigna un mapa vacío
+            return
+        }
+
+        val expensePercentageMap = categories.associateWith { category ->
+            val expenses = sumOfExpensesByCategory(category.id) ?: 0.0
+            val percentage = (abs(expenses) / abs(category.amount)).toFloat().coerceIn(0.0f, 1.0f)
+            percentage
+        }
+        _expensePercentageFlow.value = expensePercentageMap
+    }
+    // Función para refrescar el porcentaje de gasto (opcional)
+    fun UpdateExpensePercentage() {
+        viewModelScope.launch {
+            updateExpensePercentage()
         }
     }
 
@@ -140,6 +245,12 @@ class CategoriesViewModel @Inject constructor(
             iconResource = R.drawable.ic_category_gasbill,
             nameResource = R.string.gasbill
         ),
+        Category(
+            type = CategoryType.EXPENSE,
+            iconResource = R.drawable.ic_category_internet,
+            nameResource = R.string.internet
+        ),
+
         Category(
             type = CategoryType.EXPENSE,
             iconResource = R.drawable.ic_category_publictansport,

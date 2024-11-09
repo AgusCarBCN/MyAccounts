@@ -2,7 +2,9 @@ package com.blogspot.agusticar.miscuentasv2.main.view
 
 
 import android.app.Activity
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -64,6 +66,7 @@ import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
+import com.blogspot.agusticar.miscuentasv2.components.NotificationDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
@@ -75,6 +78,10 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
+import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlScreen
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationObserver
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
+import com.blogspot.agusticar.miscuentasv2.notification.RequestNotificationPermissionDialog
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
@@ -90,6 +97,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun MainScreen(
 
@@ -106,20 +114,26 @@ fun MainScreen(
 
 ) {
 
+    val context= LocalContext.current
+    val notificationService= NotificationService(context)
+    val enableNotifications by settingViewModel.switchNotifications.observeAsState(false)
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedScreen by mainViewModel.selectedScreen.collectAsState()
     val showExitDialog by mainViewModel.showExitDialog.collectAsState()
     val showDeleteAccountDialog by mainViewModel.showDeleteAccountDialog.collectAsState()
-    val entries by entriesViewModel.listOfEntries.collectAsState()
+    val entries by entriesViewModel.listOfEntriesDTO.collectAsState()
     val currencyCode by accountsViewModel.currencyCodeShowed.observeAsState("USD")
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
-  //  val categoriesChecked by entriesViewModel.listOfCategoriesChecked.observeAsState()
+    if(enableNotifications) {
+        NotificationObserver(categoriesViewModel, notificationService)
+    }
     LaunchedEffect(Unit) {
         entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
     }
+
     //Boton de atrás te lleva al Home
     BackHandler(true) {
         mainViewModel.selectScreen(IconOptions.HOME)
@@ -154,6 +168,7 @@ fun MainScreen(
                 { BottomAppBar(mainViewModel) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
+                RequestNotificationPermissionDialog(mainViewModel)
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
@@ -292,7 +307,7 @@ fun MainScreen(
                         IconOptions.CALCULATOR -> {CalculatorUI(calculatorViewModel)
                         title=R.string.calculator}
                         IconOptions.EMAIL -> SendEmail()
-                        IconOptions.PIECHART -> {
+                        IconOptions.PIE_CHART -> {
                             PieChartScreen(
                                 entriesViewModel,
                                 accountsViewModel,
@@ -301,9 +316,19 @@ fun MainScreen(
                             title=R.string.piechart
                         }
                         IconOptions.SELECT_CATEGORIES -> {
-                           EntryCategoryList (mainViewModel,categoriesViewModel)
+                           EntryCategoryList (categoriesViewModel)
                             title=R.string.selectcategories
                         }
+
+                        IconOptions.CATEGORY_EXPENSE_CONTROL -> {
+                            ExpenseControlScreen(categoriesViewModel,
+                                entriesViewModel,
+                                accountsViewModel)
+                            title=R.string.categorycontrol
+                        }
+
+
+
                     }
 
                 }
@@ -399,7 +424,7 @@ private fun DrawerContent(
                 viewModel.selectScreen(IconOptions.BARCHART)
             })
             ClickableRow(OptionItem(R.string.piechart, R.drawable.ic_piechart), onClick = {
-                viewModel.selectScreen(IconOptions.PIECHART)
+                viewModel.selectScreen(IconOptions.PIE_CHART)
 
             })
             ClickableRow(OptionItem(R.string.calculator, R.drawable.ic_calculate), onClick = {

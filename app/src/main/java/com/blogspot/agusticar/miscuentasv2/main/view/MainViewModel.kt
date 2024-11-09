@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +17,9 @@ class MainViewModel @Inject constructor() : ViewModel() {
     // Inicialmente se establece en "Home".
     private val _selectedScreen = MutableStateFlow(IconOptions.HOME)
 
+    // MutableStateFlow que contiene el estado del permiso de notificaciones.
+    private val _notificationPermissionGranted = MutableStateFlow(false)
+    val notificationPermissionGranted: StateFlow<Boolean> = _notificationPermissionGranted
 
     // Exposición pública del StateFlow, permite a los composables observar cambios en el estado.
     // StateFlow es un flujo que siempre mantiene su último valor emitido.
@@ -50,6 +54,9 @@ class MainViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             _showDeleteAccountDialog.emit(newValue)
         }
+    }
+    fun updateNotificationPermission(isGranted: Boolean) {
+        _notificationPermissionGranted.value = isGranted
     }
 }
 

@@ -13,34 +13,35 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 @Dao
 interface AccountDao {
 
-    // 1. Añadir una cuenta
+    // 1. Add an account
     @Insert
     suspend fun insertAccount(account: Account)
 
-    // 2. Listar todas las cuentas en la base de datos  (SELECT *)  (FROM AccountEntity)  (LIMIT 1)  (WHERE id = :accountId)  (ORDER BY id DESC)  (GROUP BY id)  (HAVING balance > 1000)  (LIMIT 1 OFFSET 5)  (OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY)  (INNER JOIN table2 ON AccountEntity)
+    // 2. List all accounts
     @Query("SELECT * FROM AccountEntity")
     suspend fun getAllAccounts(): List<Account>
 
-    // 3. Borrar una cuenta
+    // 3. Delete account
     @Delete
     suspend fun deleteAccount(account: Account)
 
-    // 4. Borrar todas las cuentas
+    // 4. Delete all accounts
     @Query("DELETE FROM AccountEntity")
     suspend fun deleteAllAccounts()
 
-    // 5. Obtener una cuenta específica por ID
+    // 5. Get account by id
     @Query("SELECT * FROM AccountEntity WHERE id = :accountId LIMIT 1")
     suspend fun getAccountById(accountId: Int): Account?
 
-    // 6. Actualizar el nombre de una cuenta
+    // 6. Update account name
     @Query("UPDATE AccountEntity SET name = :newName WHERE id = :accountId")
     suspend fun updateAccountName(accountId: Int, newName: String)
 
-    // 7. Actualizar el balance de una cuenta
+    // 7. Update account balance
     @Query("UPDATE AccountEntity SET balance = :newBalance WHERE id = :accountId")
     suspend fun updateAccountBalance(accountId: Int, newBalance: Double)
 
+    // 8. Transfer funds between accounts
     @Transaction
     suspend fun transferFunds(fromAccountId: Int, toAccountId: Int, amount: Double) {
         val fromAccount = getAccountById(fromAccountId)
