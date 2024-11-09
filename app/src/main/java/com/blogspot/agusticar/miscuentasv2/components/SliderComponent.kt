@@ -52,7 +52,7 @@ fun CategoryBudgetItemControl(
 
     // Cargar el total de gastos de la categoría cuando cambie el composable o la categoría
     LaunchedEffect(category.id) {
-        expensesByCategory = entriesViewModel.sumOfExpensesByCategory(category.id) ?: 0.0
+        expensesByCategory = categoriesViewModel.sumOfExpensesByCategory(category.id) ?: 0.0
     }
     val messageUpdateSpendingLimit = "${stringResource(id = R.string.espendingupdate)} ${stringResource(id = category.nameResource)}"
 

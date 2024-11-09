@@ -28,7 +28,7 @@ fun ExpenseControlScreen(categoriesViewModel: CategoriesViewModel,
 ){
 
     // Observa la lista de categorías desde el ViewModel
-    val listOfCategories by categoriesViewModel.listOfCategories.observeAsState(emptyList())
+    val listOfCategoriesChecked by categoriesViewModel.listOfCategoriesChecked.observeAsState(emptyList())
 
     LaunchedEffect(Unit) {
         categoriesViewModel.getAllCategoriesChecked(CategoryType.EXPENSE)
@@ -48,7 +48,7 @@ fun ExpenseControlScreen(categoriesViewModel: CategoriesViewModel,
                 .weight(1f) // Permite que la columna ocupe el espacio disponible
                 .padding(bottom = 16.dp) // Espacio en la parte inferior
         ) {
-            items(listOfCategories) { category ->
+            items(listOfCategoriesChecked) { category ->
                CategoryBudgetItemControl(category,
                    categoriesViewModel,
                    entriesViewModel,

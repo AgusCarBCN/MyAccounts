@@ -13,7 +13,6 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.G
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetAllIncomesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetFilteredEntriesUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumOfExpensesByCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesByDateUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalIncomesByDate
@@ -31,8 +30,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.IOException
 import java.util.Date
 import javax.inject.Inject
 
@@ -48,7 +45,6 @@ class EntriesViewModel @Inject constructor(
     private val getAllEntriesByAccount: GetAllEntriesByAccountUseCase,
     private val getTotalIncomesByDate: GetSumTotalIncomesByDate,
     private val getTotalExpensesByDate: GetSumTotalExpensesByDateUseCase,
-    private val getSumExpensesByCategory: GetSumOfExpensesByCategoryUseCase,
     private val updateAmountEntry:UpdateAmountUseCase,
     private val getAllEntriesDTO: GeAllEntriesUseCase
 
@@ -60,9 +56,6 @@ class EntriesViewModel @Inject constructor(
 
     private val _totalExpenses = MutableLiveData<Double>()
     val totalExpenses: LiveData<Double> = _totalExpenses
-
-    private val _totalExpensesByCategory = MutableLiveData<Double>()
-    val totalExpensesByCategory: LiveData<Double> = _totalExpensesByCategory
 
     //LiveData para la habilitación del boton
     private val _enableConfirmButton = MutableLiveData<Boolean>()
@@ -278,18 +271,6 @@ class EntriesViewModel @Inject constructor(
             _totalExpenses.postValue(totalExpenses)
         }
     }
-    suspend fun sumOfExpensesByCategory(categoryId:Int): Double? {
-
-        return try {
-            withContext(Dispatchers.IO) {
-                val result=getSumExpensesByCategory.invoke(categoryId)
-                result
-            }
-        }catch(e: IOException) {
-            null
-        }
-    }
-
 
     fun getTotalByDate(accountId:Int,fromDate:String,toDate:String){
         viewModelScope.launch(Dispatchers.IO) {

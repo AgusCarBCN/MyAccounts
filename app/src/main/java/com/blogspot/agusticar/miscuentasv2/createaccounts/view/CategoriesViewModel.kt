@@ -13,10 +13,13 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateAmountCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateCheckedCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateLimitMaxCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumOfExpensesByCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,8 +29,14 @@ class CategoriesViewModel @Inject constructor(
     private val getAllCategoriesChecked:GetAllCategoriesCheckedUseCase,
     private val upDateAmountCategory:UpdateAmountCategoryUseCase,
     private val upDateCheckedCategory:UpdateCheckedCategoryUseCase,
-    private val upDateLimitMaxCategory:UpdateLimitMaxCategoryUseCase
+    private val upDateLimitMaxCategory:UpdateLimitMaxCategoryUseCase,
+    private val getSumExpensesByCategory: GetSumOfExpensesByCategoryUseCase
 ): ViewModel() {
+
+    //LiveData para la lista de Categorias de control de gasto
+    private val _listOfCategoriesChecked = MutableLiveData<List<Category>>()
+    val listOfCategoriesChecked: LiveData<List<Category>> = _listOfCategoriesChecked
+
 
     //LiveData para la lista de Categorias
     private val _listOfCategories = MutableLiveData<List<Category>>()
@@ -80,7 +89,7 @@ class CategoriesViewModel @Inject constructor(
     }
     fun getAllCategoriesChecked(type:CategoryType){
         viewModelScope.launch(Dispatchers.IO){
-            _listOfCategories.postValue(getAllCategoriesChecked.invoke(type))
+            _listOfCategoriesChecked.postValue(getAllCategoriesChecked.invoke(type))
         }
 
     }
@@ -109,6 +118,18 @@ class CategoriesViewModel @Inject constructor(
             getAllCategoriesChecked(CategoryType.EXPENSE)
         }
     }
+    suspend fun sumOfExpensesByCategory(categoryId:Int): Double? {
+
+        return try {
+            withContext(Dispatchers.IO) {
+                val result=getSumExpensesByCategory.invoke(categoryId)
+                result
+            }
+        }catch(e: IOException) {
+            null
+        }
+    }
+
     private val incomeCategories = listOf(
         Category(
             type = CategoryType.INCOME,
