@@ -10,6 +10,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,8 +23,8 @@ import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
-import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import kotlinx.coroutines.Dispatchers
@@ -38,10 +39,14 @@ fun CategoryBudgetItemControl(
     entriesViewModel: EntriesViewModel,
     accountsViewModel: AccountsViewModel
 ) {
+    val context= LocalContext.current
+    val notificationService=NotificationService(context)
     val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
     val scope = rememberCoroutineScope()
     val limitExpenseText=stringResource(id = R.string.limitexpense)
     val currentExpense=stringResource(id = R.string.currentexpense)
+    val categoryName=stringResource(id = category.nameResource)
+    val messageSpendingLimit="${stringResource(id = R.string.expenseslimit)} ${stringResource(id = category.nameResource)}"
     // Estado para almacenar el total de gastos por categoría
     var expensesByCategory by remember { mutableDoubleStateOf(0.0) }
 
@@ -55,7 +60,12 @@ fun CategoryBudgetItemControl(
     var spendingLimit by remember { mutableDoubleStateOf(category.amount) }  // Límite de gasto inicial
     val maxLimit = category.limitMax
     val spendingPercentage = (abs(expensesByCategory.toFloat()) / spendingLimit.toFloat()).coerceIn(0.0f, 1.0f) // Porcentaje de gasto
-    Log.d("progresbar",spendingPercentage.toString())
+    if(spendingPercentage>=0.8f){
+        notificationService.showBasicNotification(categoryName,
+            messageSpendingLimit,
+            category.iconResource
+            )
+    }
     // Color de la barra de progreso según el porcentaje
     val progressColor = when {
         spendingPercentage < 0.5f -> LocalCustomColorsPalette.current.progressBar50

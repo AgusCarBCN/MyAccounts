@@ -1,11 +1,16 @@
 package com.blogspot.agusticar.miscuentasv2
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -45,12 +50,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     companion object {
-        const val CHANEL_NOTIFICATION = "NotificationChanel"
-        const val INTERVAL_WEEKLY = 7
-        const val INTERVAL_MONTHLY = 30
-        const val INTERVAL_DAYLY=1
-    }
+        const val CHANEL_NOTIFICATION = "NotificationChannel"
 
+    }
 
     private val tutorialViewModel: TutorialViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
@@ -64,23 +66,23 @@ class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
     private val calculatorViewModel: CalculatorViewModel by viewModels()
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
-
+        //Crea canal para las notificaciones
+        createChannel()
         enableEdgeToEdge()
 
         setContent {
 
             val navigationController = rememberNavController()
-
             val toLogin by tutorialViewModel.toLogin.observeAsState(false) // Defaults to `false`
             val showTutorial by tutorialViewModel.showTutorial.observeAsState(true)
             val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
 
             MisCuentasv2Theme(darkTheme = switchDarkTheme) {
-
 
                 val snackbarHostState = remember {
                     SnackbarHostState()
@@ -183,6 +185,17 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    private fun createChannel() {
+        val channel = NotificationChannel(
+            CHANEL_NOTIFICATION,
+            "channelAlert",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        val notificationManager: NotificationManager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        notificationManager.createNotificationChannel(channel)
     }
 }
 
