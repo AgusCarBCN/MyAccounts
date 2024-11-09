@@ -65,6 +65,7 @@ fun SettingScreen(
     }
 
     val scope = rememberCoroutineScope()
+    val permissionNotificationGranted by mainViewModel.notificationPermissionGranted.collectAsState()
     val switchTutorial by settingViewModel.switchTutorial.observeAsState(true)
     val switchDarkTheme by settingViewModel.switchDarkTheme.observeAsState(false)
     val switchNotifications by settingViewModel.switchNotifications.observeAsState(false)
@@ -158,8 +159,10 @@ fun SettingScreen(
         )
         SwitchComponent(
             title = stringResource(id = R.string.enablenotifications),
-            description = stringResource(id = R.string.desenablenotifications),
-             switchNotifications,  // Estado del switch desde ViewModel
+            description = (if(permissionNotificationGranted) stringResource(id = R.string.desenablenotifications)
+            else stringResource(id = R.string.permissiondeny)),
+             isChecked = if(permissionNotificationGranted) switchNotifications
+             else false,
             onClickSwitch = {
                 settingViewModel.onSwitchNotificationsClicked(it)
 

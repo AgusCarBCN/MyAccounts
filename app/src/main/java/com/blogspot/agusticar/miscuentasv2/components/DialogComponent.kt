@@ -89,7 +89,7 @@ fun NotificationDialog(
                 )
             }                           ,
 
-            text={Text(stringResource(id = R.string.notificationrequired),
+            text={Text(stringResource(id = R.string.notification_required),
                 fontSize=18.sp,
                 color = LocalCustomColorsPalette.current.textColor)}
             ,

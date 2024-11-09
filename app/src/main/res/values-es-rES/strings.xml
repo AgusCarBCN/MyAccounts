@@ -339,7 +339,8 @@
     <string name="expenseslimit">Has superado los gastos de este mes en </string>
     <string name="Noblankallowed">Campo requerido.No puede dejarse en blanco</string>
     <string name="nomovtoday">Hoy no has tenido movimientos en tus cuentas</string>
-    <string name="notificationrequired">Se requiere permiso para las notificaciones.Permite las notificaciones para recibir avisos sobre el control de gastos</string>
+    <string name="notification_required">Activa las notificaciones para recibir alertas sobre el control de tus gastos. Puedes activarlas o desactivarlas en cualquier momento desde la sección de Ajustes de la aplicación.</string>
+
     <string name="notificationrequiredalert">¿Permites que mis cuentas te envie notificaciones?</string>
     <string name="weekicome">Ingresos semanales</string>
     <string name="weekbills">Gastos semanales</string>

@@ -347,8 +347,9 @@
     <string name="limitexpense">Expense montly limit</string>
     <string name="Noblankallowed">Required field. Cannot be blank</string>
     <string name="nomovtoday">You have had no movements in your accounts today</string>
+    <string name="notification_required">Enable notifications to receive alerts about your spending control. You can turn them on or off anytime in the app settings.</string>
 
-    <string name="notificationrequired">Notification permission is required. Enable notifications to receive alerts about expense tracking.</string>
+
 
     <string name="permissiongranted">Notification permission granted</string>
     <string name="choosecategories">Enable or disable categories to control expenses </string>

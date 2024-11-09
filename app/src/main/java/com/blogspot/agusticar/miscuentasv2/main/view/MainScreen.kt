@@ -66,6 +66,7 @@ import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
+import com.blogspot.agusticar.miscuentasv2.components.NotificationDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
@@ -78,6 +79,7 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
 import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlScreen
+import com.blogspot.agusticar.miscuentasv2.notification.RequestNotificationPermissionDialog
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
@@ -159,7 +161,7 @@ fun MainScreen(
                 { BottomAppBar(mainViewModel) },
                 containerColor = LocalCustomColorsPalette.current.backgroundPrimary
             ) { innerPadding ->
-
+                RequestNotificationPermissionDialog(mainViewModel)
                 // Add your main screen content here
                 Column(
                     modifier = Modifier.padding(innerPadding)
@@ -318,7 +320,7 @@ fun MainScreen(
                             title=R.string.categorycontrol
                         }
 
-                        IconOptions.NOTIFICATION_SCREEN ->TODO()
+
 
                     }
 
