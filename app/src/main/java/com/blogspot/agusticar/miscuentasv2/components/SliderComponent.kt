@@ -60,12 +60,7 @@ fun CategoryBudgetItemControl(
     var spendingLimit by remember { mutableDoubleStateOf(category.amount) }  // Límite de gasto inicial
     val maxLimit = category.limitMax
     val spendingPercentage = (abs(expensesByCategory.toFloat()) / spendingLimit.toFloat()).coerceIn(0.0f, 1.0f) // Porcentaje de gasto
-    if(spendingPercentage>=0.8f){
-        notificationService.showBasicNotification(categoryName,
-            messageSpendingLimit,
-            category.iconResource
-            )
-    }
+
     // Color de la barra de progreso según el porcentaje
     val progressColor = when {
         spendingPercentage < 0.5f -> LocalCustomColorsPalette.current.progressBar50

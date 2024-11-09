@@ -17,10 +17,14 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.G
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
@@ -32,6 +36,10 @@ class CategoriesViewModel @Inject constructor(
     private val upDateLimitMaxCategory:UpdateLimitMaxCategoryUseCase,
     private val getSumExpensesByCategory: GetSumOfExpensesByCategoryUseCase
 ): ViewModel() {
+
+    // Flow que emite los gastos actuales y el límite para cada categoría
+    private val _expensePercentageFlow = MutableStateFlow<Map<Category, Float>>(emptyMap())
+    val expensePercentageFlow: StateFlow<Map<Category, Float>> = _expensePercentageFlow.asStateFlow()
 
     //LiveData para la lista de Categorias de control de gasto
     private val _listOfCategoriesChecked = MutableLiveData<List<Category>>()
@@ -57,7 +65,11 @@ class CategoriesViewModel @Inject constructor(
     private val _enableDialog=MutableLiveData<Boolean>()
     val enableDialog: LiveData<Boolean> = _enableDialog
 
-
+    init {
+        viewModelScope.launch {
+            updateExpensePercentage()
+        }
+    }
     fun populateCategories(){
         viewModelScope.launch(Dispatchers.IO)
          {
@@ -127,6 +139,30 @@ class CategoriesViewModel @Inject constructor(
             }
         }catch(e: IOException) {
             null
+        }
+    }
+    // Función que actualiza el flujo con el porcentaje de gasto para cada categoría
+    private suspend fun updateExpensePercentage() {
+        getAllCategoriesChecked(CategoryType.EXPENSE)
+        val categories = _listOfCategoriesChecked.value // Método que obtiene todas las categorías
+        // Verifica que las categorías no sean nulas
+        if (categories.isNullOrEmpty()) {
+            // Si las categorías son nulas o vacías, no se hace nada
+            _expensePercentageFlow.value = emptyMap() // Asigna un mapa vacío
+            return
+        }
+
+        val expensePercentageMap = categories.associateWith { category ->
+            val expenses = sumOfExpensesByCategory(category.id) ?: 0.0
+            val percentage = (abs(expenses) / abs(category.amount)).toFloat().coerceIn(0.0f, 1.0f)
+            percentage
+        }
+        _expensePercentageFlow.value = expensePercentageMap
+    }
+    // Función para refrescar el porcentaje de gasto (opcional)
+    fun UpdateExpensePercentage() {
+        viewModelScope.launch {
+            updateExpensePercentage()
         }
     }
 

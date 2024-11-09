@@ -79,6 +79,8 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
 import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlScreen
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationObserver
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
 import com.blogspot.agusticar.miscuentasv2.notification.RequestNotificationPermissionDialog
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
@@ -112,6 +114,9 @@ fun MainScreen(
 
 ) {
 
+    val context= LocalContext.current
+    val notificationService= NotificationService(context)
+    val enableNotifications by settingViewModel.switchNotifications.observeAsState(false)
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -122,7 +127,9 @@ fun MainScreen(
     val currencyCode by accountsViewModel.currencyCodeShowed.observeAsState("USD")
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
-
+    if(enableNotifications) {
+        NotificationObserver(categoriesViewModel, notificationService)
+    }
     LaunchedEffect(Unit) {
         entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
     }
