@@ -331,33 +331,26 @@
     <string name="novembertable">November</string>
     <string name="decembertable">December</string>
     <!--Notifications-->
-    <string name="notificationrequiredalert">Allow My Accounts to send you notifications?</string>
-    <string name="selectCurrency">Select a currency for your accounts</string>
-    <string name="daylyreport">dayly report</string>
-    <string name="weekreport">weekly report</string>
-    <string name="monthreport">montly report</string>
-    <string name="weekicome">Weekly earnings</string>
-    <string name="weekbills">Weekly expenses</string>
-    <string name="monthicome">Monthly earnings</string>
-    <string name="monthbills">Monthly expenses</string>
-    <string name="resultsearch">Result</string>
-    <string name="lowbalance">Balance alert less than</string>
-    <string name="hightexpenses">Expenses per month above the limit</string>
-    <string name="limitexpense">Expense montly limit</string>
-    <string name="Noblankallowed">Required field. Cannot be blank</string>
-    <string name="nomovtoday">You have had no movements in your accounts today</string>
-    <string name="notification_required">Enable notifications to receive alerts about your spending control. You can turn them on or off anytime in the app settings.</string>
+    <string name="lowbalance">Low balance alert </string>
+    <string name="hightexpenses">Monthly expenses exceed the limit</string>
+    <string name="limitexpense">Monthly expense limit</string>
+    <string name="notification_required">Enable notifications to receive alerts about managing your expenses. You can enable or disable them at any time from the app’s Settings section.</string>
+    <string name="notificationrequiredalert">Do you allow My Accounts to send you notifications?</string>
     <string name="permissiongranted">Notification permission granted</string>
-    <string name="choosecategories">Enable or disable categories to control expenses </string>
     <string name="selectcategories">Select categories</string>
+    <string name="choosecategories">Enable or Disable categories to control spending</string>
     <string name="currentexpense">Current expense</string>
     <string name="categorytitle">Categories</string>
     <string name="limitMax">Maximum limit</string>
     <string name="select">Select</string>
-    <string name="titledialog">Maximum Category Limit </string>
+    <string name="titledialog">Category maximum limit</string>
     <string name="messagedialog">Select the maximum spending limit per category</string>
-    <string name="categoryespendingcontrol">Category spending control</string>
-    <string name="expenseslimit">You have exceeded the spending limit in </string>
+    <string name="categoryespendingcontrol">Spending control by category of</string>
+    <string name="expenseslimit">You have exceeded the spending limit.</string>
+    <string name="expenseslimit80"> You are about to exceed your spending limit.</string>
+    <string name="expensebycategory">Spending by category of </string>
+    <string name="expenselimitOk">Your expenses are under control</string>
+
 
 </resources>
 

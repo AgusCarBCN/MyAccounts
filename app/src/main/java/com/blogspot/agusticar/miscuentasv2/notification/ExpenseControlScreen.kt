@@ -23,7 +23,6 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 @Composable
 
 fun ExpenseControlScreen(categoriesViewModel: CategoriesViewModel,
-                         entriesViewModel: EntriesViewModel,
                          accountsViewModel: AccountsViewModel
 ){
 
@@ -51,7 +50,6 @@ fun ExpenseControlScreen(categoriesViewModel: CategoriesViewModel,
             items(listOfCategoriesChecked) { category ->
                CategoryBudgetItemControl(category,
                    categoriesViewModel,
-                   entriesViewModel,
                    accountsViewModel)
             }
         }

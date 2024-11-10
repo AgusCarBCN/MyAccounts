@@ -36,17 +36,14 @@ import kotlin.math.abs
 fun CategoryBudgetItemControl(
     category: Category,
     categoriesViewModel: CategoriesViewModel,
-    entriesViewModel: EntriesViewModel,
     accountsViewModel: AccountsViewModel
 ) {
-    val context= LocalContext.current
-    val notificationService=NotificationService(context)
+
     val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
     val scope = rememberCoroutineScope()
     val limitExpenseText=stringResource(id = R.string.limitexpense)
     val currentExpense=stringResource(id = R.string.currentexpense)
-    val categoryName=stringResource(id = category.nameResource)
-    val messageSpendingLimit="${stringResource(id = R.string.expenseslimit)} ${stringResource(id = category.nameResource)}"
+
     // Estado para almacenar el total de gastos por categoría
     var expensesByCategory by remember { mutableDoubleStateOf(0.0) }
 

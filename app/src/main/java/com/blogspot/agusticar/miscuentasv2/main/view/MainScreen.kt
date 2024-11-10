@@ -128,7 +128,9 @@ fun MainScreen(
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
     if(enableNotifications) {
-        NotificationObserver(categoriesViewModel, notificationService)
+        NotificationObserver(categoriesViewModel,
+            accountsViewModel,
+            notificationService)
     }
     LaunchedEffect(Unit) {
         entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
@@ -322,7 +324,6 @@ fun MainScreen(
 
                         IconOptions.CATEGORY_EXPENSE_CONTROL -> {
                             ExpenseControlScreen(categoriesViewModel,
-                                entriesViewModel,
                                 accountsViewModel)
                             title=R.string.categorycontrol
                         }

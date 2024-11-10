@@ -329,23 +329,12 @@
     <string name="novembertable">Noviembre</string>
     <string name="decembertable">Diciciembre</string>
     <!--Notificaciones-->
-    <string name="selectCurrency">Selecciona una divisa para tus cuentas</string>
-    <string name="daylyreport">Informe diario</string>
-    <string name="weekreport">Informe semanal</string>
-    <string name="monthreport">Informe mensual</string>
+
     <string name="lowbalance">Alerta de saldo inferior a </string>
     <string name="hightexpenses">Gastos del mes superiores al limite</string>
     <string name="limitexpense">Limite de gasto mensual</string>
-    <string name="Noblankallowed">Campo requerido.No puede dejarse en blanco</string>
-    <string name="nomovtoday">Hoy no has tenido movimientos en tus cuentas</string>
     <string name="notification_required">Activa las notificaciones para recibir alertas sobre el control de tus gastos. Puedes activarlas o desactivarlas en cualquier momento desde la sección de Ajustes de la aplicación.</string>
-
     <string name="notificationrequiredalert">¿Permites que mis cuentas te envie notificaciones?</string>
-    <string name="weekicome">Ingresos semanales</string>
-    <string name="weekbills">Gastos semanales</string>
-    <string name="monthicome">Ingresos mensuales</string>
-    <string name="monthbills">Gastos mensuales</string>
-    <string name="resultsearch">Resultado</string>
     <string name="permissiongranted">Permiso de notificaciones concedido</string>
     <string name="selectcategories">Selecciona categorias</string>
     <string name="choosecategories">Habilita o Deshabilita categorias para controlar gastos</string>
@@ -355,6 +344,10 @@
     <string name="select">Selecciona</string>
     <string name="titledialog">Límite máximo de categoría </string>
     <string name="messagedialog">Selecciona el límite máximo de gasto por categoría</string>
-    <string name="categoryespendingcontrol">Control de gasto por categoría</string>
-    <string name="expenseslimit">Has superado el límite de gastos en </string>
+    <string name="categoryespendingcontrol">Control de gasto por categoría de</string>
+    <string name="expenseslimit">Has superado el limite de gasto.</string>
+    <string name="expenseslimit80">Estas cerca de superar tu límite de gasto.</string>
+    <string name="expensebycategory">Gasto por categoría de </string>
+    <string name="expenselimitOk">Tus gastos están controlados en esta categoría</string>
+
 </resources>
