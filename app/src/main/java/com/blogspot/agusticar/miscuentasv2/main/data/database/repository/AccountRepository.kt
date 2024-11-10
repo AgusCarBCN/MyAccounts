@@ -46,6 +46,19 @@ class AccountRepository @Inject constructor(private val accountDao: AccountDao) 
     suspend fun transferFunds(fromAccountId: Int, toAccountId: Int, amount: Double) {
         accountDao.transferFunds(fromAccountId, toAccountId, amount)
     }
+    // 9. Update checked account
+    suspend fun updateCheckedAccount(accountId:Int, newValue:Boolean) {
+        accountDao.updateCheckedAccount(accountId,newValue)
+    }
 
+    // 10. Update amount account
+    suspend fun updateAmountAccount(accountId:Int,newAmount:Double) {
+        accountDao.updateAmountAccount(accountId,newAmount)
+    }
+
+    // 11. Update limitMax account
+    suspend fun updateLimitMaxAccount(accountId:Int,newLimitMax:Float) {
+        accountDao.updateLimitMaxAccount(accountId,newLimitMax)
+    }
 
 }

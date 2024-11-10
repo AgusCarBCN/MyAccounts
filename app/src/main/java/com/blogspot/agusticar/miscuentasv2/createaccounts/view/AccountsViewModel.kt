@@ -95,8 +95,16 @@ class AccountsViewModel @Inject constructor(
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
 
+    private val _listOfAccountsChecked = MutableLiveData<List<Account>>()
+    val listOfAccountsChecked: LiveData<List<Account>> = _listOfAccountsChecked
+
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
+
+    //LiveData para textfield de categoria seleccionada para control de gasto
+
+    private val _limitMax=MutableLiveData<String>()
+    val limitMax: LiveData<String> = _limitMax
 
     private val _conversionCurrencyRate = MutableLiveData<Double>()
     val conversionCurrencyRate: LiveData<Double> = _conversionCurrencyRate

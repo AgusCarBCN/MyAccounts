@@ -53,4 +53,16 @@ interface AccountDao {
         updateAccountBalance(fromAccountId, updatedFromBalance)
         updateAccountBalance(toAccountId, updatedToBalance)
     }
+    // 9. Update checked state account
+    @Query("UPDATE AccountEntity SET isChecked = :newValueChecked WHERE id = :accountId")
+    suspend fun updateCheckedAccount(accountId: Int, newValueChecked: Boolean)
+
+    // 10. Update amount account
+    @Query("UPDATE AccountEntity SET amount = :newAmount WHERE id = :accountId")
+    suspend fun updateAmountAccount(accountId: Int, newAmount:Double)
+
+    // 11. Update limitMax account
+    @Query("UPDATE AccountEntity SET limitMax = :newLimitMax WHERE id = :accountId")
+    suspend fun updateLimitMaxAccount(accountId: Int, newLimitMax:Float)
+
 }

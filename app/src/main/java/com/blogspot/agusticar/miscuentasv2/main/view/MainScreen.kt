@@ -332,6 +332,8 @@ fun MainScreen(
                             searchViewModel  ,
                             accountsViewModel
                         )
+
+                        IconOptions.SELECT_ACCOUNTS -> TODO()
                     }
 
                 }
