@@ -14,6 +14,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -31,14 +33,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
-
+import com.blogspot.agusticar.miscuentasv2.utils.Utils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
 
-fun UserImage(uri: Uri,size:Int)
-{
+fun UserImage(uri: Uri, size: Int) {
     Card(
         modifier = Modifier
             .size(size.dp)
@@ -48,7 +55,7 @@ fun UserImage(uri: Uri,size:Int)
 
     {
         Image(
-            painter =if(uri== Uri.EMPTY) painterResource(id = R.drawable.contabilidad)
+            painter = if (uri == Uri.EMPTY) painterResource(id = R.drawable.contabilidad)
             else rememberAsyncImagePainter(uri), // Carga la imagen desde el Uri ,
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
@@ -59,7 +66,7 @@ fun UserImage(uri: Uri,size:Int)
 }
 
 @Composable
-fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> Unit) {
+fun HeadCard(modifier: Modifier, amount: String, isIncome: Boolean, onClickCard: () -> Unit) {
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -67,7 +74,7 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> 
         ),
         colors = CardColors(
             containerColor = LocalCustomColorsPalette.current.drawerColor,
-            contentColor = if(isIncome)LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
+            contentColor = if (isIncome) LocalCustomColorsPalette.current.incomeColor else LocalCustomColorsPalette.current.expenseColor,
             disabledContainerColor = LocalCustomColorsPalette.current.drawerColor,
             disabledContentColor = LocalCustomColorsPalette.current.incomeColor
 
@@ -76,7 +83,7 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> 
             .size(width = 180.dp, height = 120.dp)
     ) {
         Text(
-            text =amount,
+            text = amount,
             modifier = Modifier
                 .padding(top = 12.dp)
                 .fillMaxWidth(),
@@ -91,10 +98,11 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> 
                 onClickCard()
             },
             content = {
-                Text(modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxWidth(),
-                    text = stringResource(id =if(isIncome) R.string.seeincome else  R.string.seeexpense),
+                Text(
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth(),
+                    text = stringResource(id = if (isIncome) R.string.seeincome else R.string.seeexpense),
                     fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
                     textAlign = TextAlign.Center,
                     color = LocalCustomColorsPalette.current.textColor
@@ -104,11 +112,14 @@ fun HeadCard(modifier:Modifier,amount:String,isIncome:Boolean,onClickCard:() -> 
 
     }
 }
+
 @Composable
-fun AccountCard(amount:String,
-                name:String,
-                textButton:Int,
-                onClickCard: () -> Unit){
+fun AccountCard(
+    account: Account,
+    currencyCode: String,
+    textButton: Int,
+    onClickCard: () -> Unit
+) {
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -116,7 +127,7 @@ fun AccountCard(amount:String,
         ),
         colors = CardColors(
             containerColor = LocalCustomColorsPalette.current.drawerColor,
-            contentColor = LocalCustomColorsPalette.current.incomeColor ,
+            contentColor = LocalCustomColorsPalette.current.incomeColor,
             disabledContainerColor = LocalCustomColorsPalette.current.drawerColor,
             disabledContentColor = LocalCustomColorsPalette.current.incomeColor
 
@@ -124,22 +135,23 @@ fun AccountCard(amount:String,
         modifier = Modifier
             .size(width = 360.dp, height = 120.dp)
     ) {
-        Row(modifier = Modifier.padding(5.dp),
+        Row(
+            modifier = Modifier.padding(5.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = name,
+                text = account.name,
                 modifier = Modifier
                     .padding(10.dp)
                     .weight(0.6f),
                 textAlign = TextAlign.Start,
                 fontSize = 22.sp,
-                color= LocalCustomColorsPalette.current.textColor
+                color = LocalCustomColorsPalette.current.textColor
             )
             Spacer(modifier = Modifier.height(12.dp)) // Espacio entre el texto y el botón
             Text(
-                text =amount,
+                text = Utils.numberFormat(account.balance, currencyCode),
                 modifier = Modifier
                     .padding(10.dp)
                     .weight(0.4f),
@@ -152,13 +164,14 @@ fun AccountCard(amount:String,
 
         TextButton(
             onClick = {
-            onClickCard()
+                onClickCard()
             },
             content = {
-                Text(modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxWidth(),
-                    text = stringResource(id =textButton),
+                Text(
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth(),
+                    text = stringResource(id = textButton),
                     fontSize = with(LocalDensity.current) { dimensionResource(id = R.dimen.text_body_large).toSp() },
                     textAlign = TextAlign.Start,
                     color = LocalCustomColorsPalette.current.textColor
@@ -170,3 +183,65 @@ fun AccountCard(amount:String,
 
 }
 
+@Composable
+fun AccountCardWithCheckbox(
+    account: Account,
+    currencyCode: String,
+    searchViewModel: SearchViewModel,
+    onCheckBoxChange: (Boolean) -> Unit
+) {
+
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        colors = CardColors(
+            containerColor = LocalCustomColorsPalette.current.drawerColor,
+            contentColor = LocalCustomColorsPalette.current.incomeColor,
+            disabledContainerColor = LocalCustomColorsPalette.current.drawerColor,
+            disabledContentColor = LocalCustomColorsPalette.current.incomeColor
+
+        ),
+        modifier = Modifier
+            .size(width = 360.dp, height = 120.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(5.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = account.name,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .weight(0.6f),
+                textAlign = TextAlign.Start,
+                fontSize = 22.sp,
+                color = LocalCustomColorsPalette.current.textColor
+            )
+            Spacer(modifier = Modifier.height(12.dp)) // Espacio entre el texto y el botón
+            Text(
+                text = Utils.numberFormat(account.balance, currencyCode),
+                modifier = Modifier
+                    .padding(10.dp)
+                    .weight(0.4f),
+                textAlign = TextAlign.End,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
+
+        Checkbox(
+            modifier = Modifier.weight(0.2f), // Ajuste proporcional para el checkbox
+            checked = account.isChecked,
+            onCheckedChange = onCheckBoxChange,
+            colors = CheckboxDefaults.colors(
+                checkedColor = LocalCustomColorsPalette.current.backgroundPrimary,
+                uncheckedColor = LocalCustomColorsPalette.current.textColor,
+                checkmarkColor = LocalCustomColorsPalette.current.incomeColor
+            )
+        )
+    }
+
+}

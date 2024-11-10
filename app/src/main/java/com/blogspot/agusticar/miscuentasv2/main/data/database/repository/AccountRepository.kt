@@ -52,13 +52,22 @@ class AccountRepository @Inject constructor(private val accountDao: AccountDao) 
     }
 
     // 10. Update amount account
-    suspend fun updateAmountAccount(accountId:Int,newAmount:Double) {
+    suspend fun updateSpendingLimitAccount(accountId:Int, newAmount:Double) {
         accountDao.updateAmountAccount(accountId,newAmount)
     }
 
     // 11. Update limitMax account
-    suspend fun updateLimitMaxAccount(accountId:Int,newLimitMax:Float) {
-        accountDao.updateLimitMaxAccount(accountId,newLimitMax)
+    suspend fun updateLimitMaxAccount(accountId:Int, newLimitMax:Float) {
+        accountDao.updateSpendingLimitMaxAccount(accountId,newLimitMax)
+    }
+    // 12. Update from Date account
+    suspend fun updateFromDateAccount(accountId:Int,newDate:String) {
+        accountDao.updateFromDateAccount(accountId,newDate)
+    }
+
+    // 13. Update to Date account
+    suspend fun updateToDateAccount(accountId:Int,newDate:String) {
+        accountDao.updateToDateAccount(accountId,newDate)
     }
 
 }

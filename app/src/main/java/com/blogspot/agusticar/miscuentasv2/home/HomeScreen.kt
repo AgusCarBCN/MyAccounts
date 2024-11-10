@@ -93,8 +93,8 @@ fun HomeScreen(
             ) {
                 items(accounts) { account -> // Solo utiliza accounts
                     AccountCard(
-                        Utils.numberFormat(account.balance,currencyCodeSelected),
-                        account.name,
+                        account,
+                        currencyCodeSelected,
                         R.string.seeall,
                         onClickCard = { mainViewModel.selectScreen(IconOptions.ENTRIES)
                             entriesViewModel.getAllEntriesByAccount(account.id)

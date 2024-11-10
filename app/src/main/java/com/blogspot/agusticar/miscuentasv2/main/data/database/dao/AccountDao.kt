@@ -63,6 +63,14 @@ interface AccountDao {
 
     // 11. Update limitMax account
     @Query("UPDATE AccountEntity SET limitMax = :newLimitMax WHERE id = :accountId")
-    suspend fun updateLimitMaxAccount(accountId: Int, newLimitMax:Float)
+    suspend fun updateSpendingLimitMaxAccount(accountId: Int, newLimitMax:Float)
+
+    // 12. Update date From  account control expense
+    @Query("UPDATE AccountEntity SET fromDate = :newDate WHERE id = :accountId")
+    suspend fun updateFromDateAccount(accountId:Int,newDate: String)
+
+    // 13. Update date to account control expense
+    @Query("UPDATE AccountEntity SET toDate = :newDate WHERE id = :accountId")
+    suspend fun updateToDateAccount(accountId:Int,newDate: String)
 
 }

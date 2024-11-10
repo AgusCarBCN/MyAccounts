@@ -157,7 +157,7 @@ fun ItemCategoryCheck(category: Category,
         if (category.isChecked) {
 
            ModelDialogWithTextField(
-                category,
+                category.nameResource,
                 showDialog,
                 limitMax,
                 onValueChange = { categoriesViewModel.onChangeLimitMax(it) },

@@ -47,7 +47,7 @@ fun EntryAccountList(
 ) {
     // Observa la lista de categorías desde el ViewModel
     val listOfAccounts by accountsViewModel.listOfAccounts.observeAsState(emptyList())
-
+    val currencyCode by accountsViewModel.currencyCodeShowed.observeAsState("USD")
     LaunchedEffect(Unit) {
         accountsViewModel.getAllAccounts()
     }

@@ -6,6 +6,6 @@ import javax.inject.Inject
 class UpdateAmountAccountUseCase @Inject constructor(private val repository: AccountRepository){
 
     suspend operator fun invoke(accountId:Int,newAmount:Double) {
-        repository.updateAmountAccount(accountId, newAmount)
+        repository.updateSpendingLimitAccount(accountId, newAmount)
     }
 }
