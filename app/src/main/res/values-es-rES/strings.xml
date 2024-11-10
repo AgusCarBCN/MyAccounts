@@ -89,10 +89,15 @@
     <string name="selectedcurrency">Divisa seleccionada: </string>
 
     <!--Ajustes-->
+    <string name="limitmaxexpense">Establece un limite máximo de gasto total</string>
     <string name="expensemanagement">Controla tus gastos</string>
+    <string name="accountscontrol">Selecciona cuentas</string>
+    <string name="accountscontroldes">Habilita o deshabilita cuentas para controlar gastos totales</string>
+    <string name="expenseoptions">Opciones de control de gastos totales</string>
+    <string name="expenseoptionsdes">Selecciona las opciones para controlar todos tus gastos totales en un periodo de tiempo</string>
     <string name="categorycontrol">Gasto por categoría</string>
     <string name="descategorycontrol">Establece un control de gasto por cada categoría y recibe avisos al superarlos.</string>
-    <string name="desexpensecontrol">Controla los gastos totales y recibe avisos cuando los hayas superado con notificaciones</string>
+    <string name="desexpensecontrol">Controla los gastos totales y recibe una notificación cuando los hayas superado</string>
     <string name="expensecontrol">Gasto total</string>
     <string name="modify">Modifica esta cuenta</string>
     <string name="deleteaccount">Borra esta cuenta</string>
@@ -329,23 +334,12 @@
     <string name="novembertable">Noviembre</string>
     <string name="decembertable">Diciciembre</string>
     <!--Notificaciones-->
-    <string name="selectCurrency">Selecciona una divisa para tus cuentas</string>
-    <string name="daylyreport">Informe diario</string>
-    <string name="weekreport">Informe semanal</string>
-    <string name="monthreport">Informe mensual</string>
+
     <string name="lowbalance">Alerta de saldo inferior a </string>
     <string name="hightexpenses">Gastos del mes superiores al limite</string>
     <string name="limitexpense">Limite de gasto mensual</string>
-    <string name="Noblankallowed">Campo requerido.No puede dejarse en blanco</string>
-    <string name="nomovtoday">Hoy no has tenido movimientos en tus cuentas</string>
     <string name="notification_required">Activa las notificaciones para recibir alertas sobre el control de tus gastos. Puedes activarlas o desactivarlas en cualquier momento desde la sección de Ajustes de la aplicación.</string>
-
     <string name="notificationrequiredalert">¿Permites que mis cuentas te envie notificaciones?</string>
-    <string name="weekicome">Ingresos semanales</string>
-    <string name="weekbills">Gastos semanales</string>
-    <string name="monthicome">Ingresos mensuales</string>
-    <string name="monthbills">Gastos mensuales</string>
-    <string name="resultsearch">Resultado</string>
     <string name="permissiongranted">Permiso de notificaciones concedido</string>
     <string name="selectcategories">Selecciona categorias</string>
     <string name="choosecategories">Habilita o Deshabilita categorias para controlar gastos</string>
@@ -353,8 +347,18 @@
     <string name="categorytitle">Categorias</string>
     <string name="limitMax">Limite máximo</string>
     <string name="select">Selecciona</string>
-    <string name="titledialog">Límite máximo de categoría </string>
+    <string name="limitMaxtitle">Límite máximo de gasto</string>
     <string name="messagedialog">Selecciona el límite máximo de gasto por categoría</string>
-    <string name="categoryespendingcontrol">Control de gasto por categoría</string>
-    <string name="expenseslimit">Has superado el límite de gastos en </string>
+    <string name="categoryespendingcontrol">Control de gasto por categoría de</string>
+    <string name="accountespendingcontrol">Control de gastos por cuenta de</string>
+    <string name="expenseslimit">Has superado el limite de gasto.</string>
+    <string name="expenseslimit80">Estas cerca de superar tu límite de gasto.</string>
+    <string name="expensebycategory">Gasto por categoría de </string>
+    <string name="expensebyaccount">Gasto por cuenta de </string>
+    <string name="expenselimitOk">Tus gastos están controlados en esta categoría</string>
+    <string name="expensesByMonth">Gastos por mes</string>
+    <string name="accountchecked">Cuenta seleccionada</string>
+    <string name="accountunchecked">Cuenta no seleccionada</string>
+    <string name="selectaccounts">Selecciona cuentas</string>
+
 </resources>

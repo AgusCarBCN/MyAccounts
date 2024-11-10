@@ -66,7 +66,6 @@ import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
-import com.blogspot.agusticar.miscuentasv2.components.NotificationDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
@@ -77,9 +76,12 @@ import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
+import com.blogspot.agusticar.miscuentasv2.notification.EntryAccountList
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
-import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlScreen
-import com.blogspot.agusticar.miscuentasv2.notification.NotificationObserver
+import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlAccountsScreen
+import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlCategoriesScreen
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationAccountObserver
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationCategoriesObserver
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
 import com.blogspot.agusticar.miscuentasv2.notification.RequestNotificationPermissionDialog
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
@@ -128,7 +130,11 @@ fun MainScreen(
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
     if(enableNotifications) {
-        NotificationObserver(categoriesViewModel, notificationService)
+        NotificationCategoriesObserver(categoriesViewModel,
+            accountsViewModel,
+            notificationService)
+        NotificationAccountObserver(accountsViewModel,
+            notificationService)
     }
     LaunchedEffect(Unit) {
         entriesViewModel.getAllIncomes()  // Llamar a la función para cargar las entradas
@@ -316,17 +322,28 @@ fun MainScreen(
                             title=R.string.piechart
                         }
                         IconOptions.SELECT_CATEGORIES -> {
-                           EntryCategoryList (categoriesViewModel)
+                           EntryCategoryList (categoriesViewModel,searchViewModel)
                             title=R.string.selectcategories
                         }
 
                         IconOptions.CATEGORY_EXPENSE_CONTROL -> {
-                            ExpenseControlScreen(categoriesViewModel,
-                                entriesViewModel,
+                            ExpenseControlCategoriesScreen(categoriesViewModel,
                                 accountsViewModel)
                             title=R.string.categorycontrol
                         }
 
+                        IconOptions.SELECT_ACCOUNTS -> {
+                            EntryAccountList(
+                                accountsViewModel,
+                                searchViewModel
+                            )
+                            title=R.string.selectaccounts
+                        }
+
+                        IconOptions.ACCOUNT_EXPENSE_CONTROL ->
+                            ExpenseControlAccountsScreen(
+                                accountsViewModel
+                            )
 
 
                     }

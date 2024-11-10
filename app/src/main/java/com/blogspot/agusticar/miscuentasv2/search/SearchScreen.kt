@@ -87,13 +87,15 @@ fun SearchScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             DatePickerSearch(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f).
+                padding(10.dp),
                 R.string.fromdate,
                 searchViewModel,
                 true
             )
             DatePickerSearch(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f)
+                    .padding(10.dp),
                 R.string.todate,
                 searchViewModel,
                 false
@@ -107,22 +109,7 @@ fun SearchScreen(
             fromAmount,
             onTextChange = {
                 searchViewModel.onAmountsFieldsChange(it, toAmount)
-                scope.launch(Dispatchers.Main) {
-                    if (!searchViewModel.validateAmounts(fromAmount, toAmount)) {
-                        SnackBarController.sendEvent(
-                            event = SnackBarEvent(
-                                messageAmountError
-                            )
-                        )
-                    }
-                    if(!searchViewModel.validateDates()){
-                        SnackBarController.sendEvent(
-                            event = SnackBarEvent(
-                                messageDateError
-                            )
-                        )
-                    }
-                }
+
             },
             BoardType.DECIMAL,
             false
@@ -133,22 +120,7 @@ fun SearchScreen(
             toAmount,
             onTextChange = {
                 searchViewModel.onAmountsFieldsChange(fromAmount, it)
-                scope.launch(Dispatchers.Main) {
-                    if (!searchViewModel.validateAmounts(fromAmount, toAmount)) {
-                        SnackBarController.sendEvent(
-                            event = SnackBarEvent(
-                                messageAmountError
-                            )
-                        )
-                    }
-                    if(!searchViewModel.validateDates()){
-                        SnackBarController.sendEvent(
-                            event = SnackBarEvent(
-                                messageDateError
-                            )
-                        )
-                    }
-                }
+
             },
             BoardType.DECIMAL,
             false
@@ -158,15 +130,36 @@ fun SearchScreen(
             modifier = Modifier.width(360.dp),
             enableSearchButton,
             onClickButton = {
-                entriesViewModel.getFilteredEntries(id,
-                    entryDescription,
-                    fromDate,
-                    toDate,
-                    fromAmount.toDoubleOrNull() ?:0.0,
-                    toAmount.toDoubleOrNull()?:Double.MAX_VALUE,
-                    selectedOption?:0)
-                mainViewModel.selectScreen(IconOptions.ENTRIES)
+                if (!searchViewModel.validateAmounts(fromAmount, toAmount)) {
+                    scope.launch(Dispatchers.Main) {
+                        SnackBarController.sendEvent(
+                            event = SnackBarEvent(
+                                messageAmountError
+                            )
+                        )
+                    }
+                } else if (!searchViewModel.validateDates()) {
+                    scope.launch(Dispatchers.Main) {
+                        SnackBarController.sendEvent(
+                            event = SnackBarEvent(
+                                messageDateError
+                            )
+                        )
+                    }
 
+                } else {
+                    entriesViewModel.getFilteredEntries(
+                        id,
+                        entryDescription,
+                        fromDate,
+                        toDate,
+                        fromAmount.toDoubleOrNull() ?: 0.0,
+                        toAmount.toDoubleOrNull() ?: Double.MAX_VALUE,
+                        selectedOption ?: 0
+                    )
+                    mainViewModel.selectScreen(IconOptions.ENTRIES)
+
+                }
             }
         )
 

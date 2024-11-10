@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,17 +30,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blogspot.agusticar.miscuentasv2.R
+import com.blogspot.agusticar.miscuentasv2.SnackBarController
+import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialogWithTextField
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun EntryCategoryList(
-    categoriesViewModel: CategoriesViewModel
+    categoriesViewModel: CategoriesViewModel,
+    searchViewModel: SearchViewModel
 ) {
     // Observa la lista de categorías desde el ViewModel
     val listOfCategories by categoriesViewModel.listOfCategories.observeAsState(emptyList())
@@ -67,6 +74,7 @@ fun EntryCategoryList(
                 ItemCategoryCheck(
                     category,
                     categoriesViewModel,
+                    searchViewModel,
                     onCheckBoxChange = { checked ->
                         categoriesViewModel.updateCheckedCategory(category.id,
                             checked)
@@ -87,10 +95,16 @@ fun EntryCategoryList(
 @Composable
 fun ItemCategoryCheck(category: Category,
                       categoriesViewModel: CategoriesViewModel,
+                      searchViewModel: SearchViewModel,
                       onCheckBoxChange: (Boolean) -> Unit
 ) {
     val limitMax by categoriesViewModel.limitMax.observeAsState(category.limitMax.toString())
+    val toDate by searchViewModel.selectedToDate.observeAsState(category.fromDate)
+    val fromDate by searchViewModel.selectedFromDate.observeAsState(category.toDate)
     val showDialog by categoriesViewModel.enableDialog.observeAsState(false)
+    val scope = rememberCoroutineScope()
+    val messageDateError = stringResource(id = R.string.datefromoverdateto)
+    val categoryName= stringResource(id = category.nameResource)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -142,17 +156,38 @@ fun ItemCategoryCheck(category: Category,
 
         }
         if (category.isChecked) {
-            ModelDialogWithTextField(
-                category,
+
+           ModelDialogWithTextField(
+                categoryName,
                 showDialog,
                 limitMax,
                 onValueChange = { categoriesViewModel.onChangeLimitMax(it) },
                 onConfirm = {
-                categoriesViewModel.upDateLimitMaxCategory(category.id,
-                    limitMax.toFloatOrNull()?:0f)
-                categoriesViewModel.onEnableDialogChange(false)
+                    if (!searchViewModel.validateDates()) {
+                        scope.launch(Dispatchers.Main) {
+                            SnackBarController.sendEvent(
+                                event = SnackBarEvent(
+                                    messageDateError
+                                )
+                            )
+                        }
+                        categoriesViewModel.updateCheckedCategory(category.id,false)
+                    } else {
+                        categoriesViewModel.upDateLimitMaxCategory(
+                            category.id,
+                            limitMax.toFloatOrNull() ?: 0f
+                        )
+                        categoriesViewModel.onEnableDialogChange(false)
+                        categoriesViewModel.upDateCategoryDates(category.id, fromDate, toDate)
+                    }
                 },
-                onDismiss = { categoriesViewModel.onEnableDialogChange(false) })
+                onDismiss = { categoriesViewModel.onEnableDialogChange(false)
+                              categoriesViewModel.updateCheckedCategory(category.id,false)
+                            }
+            ,searchViewModel)
+
+
+
         }
     }
  }

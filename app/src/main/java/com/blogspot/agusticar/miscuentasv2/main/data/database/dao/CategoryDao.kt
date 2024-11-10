@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
-import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Entry
 
 @Dao
 interface CategoryDao {
@@ -28,11 +27,20 @@ interface CategoryDao {
     @Query("UPDATE CategoryEntity SET isChecked = :newValueChecked WHERE id = :categoryId")
     suspend fun updateCheckedCategory(categoryId: Int, newValueChecked: Boolean)
 
-    // 5. Update amount category
-    @Query("UPDATE CategoryEntity SET amount = :newAmount WHERE id = :categoryId")
-    suspend fun updateAmountCategory(categoryId: Int, newAmount:Double)
+    // 5. Update periodSpendingLimit category
+    @Query("UPDATE CategoryEntity SET periodSpendingLimit = :newAmount WHERE id = :categoryId")
+    suspend fun updateSpendingLimitCategory(categoryId: Int, newAmount:Double)
 
     // 6. Update limitMax category
     @Query("UPDATE CategoryEntity SET limitMax = :newLimitMax WHERE id = :categoryId")
     suspend fun updateLimitMaxCategory(categoryId: Int, newLimitMax:Float)
+
+    // 7. Update date From  category control expense
+    @Query("UPDATE CategoryEntity SET fromDate = :newDate WHERE id = :categoryId")
+    suspend fun updateFromDateCategory(categoryId:Int,newDate: String)
+
+    // 8. Update date to  category control expense
+    @Query("UPDATE CategoryEntity SET toDate = :newDate WHERE id = :categoryId")
+    suspend fun updateToDateCategory(categoryId:Int,newDate: String)
+
 }

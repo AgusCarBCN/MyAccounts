@@ -10,9 +10,13 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryT
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesByType
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesCheckedUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.InsertCategoryUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateAmountCategoryUseCase
+
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateCheckedCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateFromDateCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateLimitMaxCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateSpendingLimitCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateToDateCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumOfExpensesByCategoryAndDateUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumOfExpensesByCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,10 +35,13 @@ class CategoriesViewModel @Inject constructor(
     private val insertCategory:InsertCategoryUseCase,
     private val getAllCategoriesByType:GetAllCategoriesByType,
     private val getAllCategoriesChecked:GetAllCategoriesCheckedUseCase,
-    private val upDateAmountCategory:UpdateAmountCategoryUseCase,
+    private val upDateSpendingLimit:UpdateSpendingLimitCategoryUseCase,
     private val upDateCheckedCategory:UpdateCheckedCategoryUseCase,
     private val upDateLimitMaxCategory:UpdateLimitMaxCategoryUseCase,
-    private val getSumExpensesByCategory: GetSumOfExpensesByCategoryUseCase
+    private val upDateFromDate:UpdateFromDateCategoryUseCase,
+    private val upDateToDate: UpdateToDateCategoryUseCase,
+    private val getSumExpensesByCategory: GetSumOfExpensesByCategoryAndDateUseCase
+
 ): ViewModel() {
 
     // Flow que emite los gastos actuales y el límite para cada categoría
@@ -109,32 +116,40 @@ class CategoriesViewModel @Inject constructor(
     fun onCategorySelected(categorySelected: Category) {
         _categorySelected.value = categorySelected
     }
+    fun upDateCategoryDates(categoryId:Int,fromDate:String,toDate:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            upDateFromDate.invoke(categoryId, fromDate)
+            upDateToDate.invoke(categoryId, toDate)
 
+        }
+    }
 
     fun updateCheckedCategory(categoryId: Int, isChecked: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             upDateCheckedCategory.invoke(categoryId, isChecked)
             getAllCategoriesByType(CategoryType.EXPENSE)
         }
     }
-    fun upDateAmountCategory(categoryId: Int, newAmount: Double) {
-        viewModelScope.launch {
-            upDateAmountCategory.invoke(categoryId, newAmount)
+    fun upDateSpendingLimitCategory(categoryId: Int, newAmount: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            upDateSpendingLimit.invoke(categoryId, newAmount)
             getAllCategoriesChecked(CategoryType.EXPENSE)
         }
     }
 
     fun upDateLimitMaxCategory(categoryId: Int, newLimitMax: Float) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             upDateLimitMaxCategory.invoke(categoryId, newLimitMax)
             getAllCategoriesChecked(CategoryType.EXPENSE)
         }
     }
-    suspend fun sumOfExpensesByCategory(categoryId:Int): Double? {
+    suspend fun sumOfExpensesByCategory(categoryId:Int,
+                                        fromDate:String,
+                                        toDate:String): Double? {
 
         return try {
             withContext(Dispatchers.IO) {
-                val result=getSumExpensesByCategory.invoke(categoryId)
+                val result=getSumExpensesByCategory.invoke(categoryId,fromDate,toDate)
                 result
             }
         }catch(e: IOException) {
@@ -153,8 +168,8 @@ class CategoriesViewModel @Inject constructor(
         }
 
         val expensePercentageMap = categories.associateWith { category ->
-            val expenses = sumOfExpensesByCategory(category.id) ?: 0.0
-            val percentage = (abs(expenses) / abs(category.amount)).toFloat().coerceIn(0.0f, 1.0f)
+            val expenses = sumOfExpensesByCategory(category.id,category.fromDate,category.toDate) ?: 0.0
+            val percentage = (abs(expenses) / abs(category.spendingLimit)).toFloat().coerceIn(0.0f, 1.0f)
             percentage
         }
         _expensePercentageFlow.value = expensePercentageMap

@@ -9,23 +9,36 @@ import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.domain.apidata.ConvertCurrencyUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.DeleteAccountByIdUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsCheckedUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.TransferUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountBalanceUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountDateFromUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountDateToUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountNameUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateCheckedAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateLimitMaxAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateSpendingLimitAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesByDateUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class AccountsViewModel @Inject constructor(
@@ -33,11 +46,18 @@ class AccountsViewModel @Inject constructor(
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
     private val getAccounts: GetAllAccountsUseCase,
+    private val getAccountsChecked:GetAllAccountsCheckedUseCase,
     private val transferAmount:TransferUseCase,
     private val deleteAccount: DeleteAccountByIdUseCase,
     private val updateName:UpdateAccountNameUseCase,
     private val updateBalance:UpdateAccountBalanceUseCase,
-    private val converterCurrency:ConvertCurrencyUseCase
+    private val converterCurrency:ConvertCurrencyUseCase,
+    private val getSumExpensesByAccount:GetSumTotalExpensesByDateUseCase,
+    private val updateLimitMax:UpdateLimitMaxAccountUseCase,
+    private val updateChecked: UpdateCheckedAccountUseCase,
+    private val updateSpendingLimit: UpdateSpendingLimitAccountUseCase,
+    private val updateFromDate: UpdateAccountDateFromUseCase,
+    private val updateToDate: UpdateAccountDateToUseCase
 
 ) : ViewModel() {
     // Variable privada que representa un estado observable y modificable. Solo el ViewModel puede cambiar este valor,
@@ -46,6 +66,11 @@ class AccountsViewModel @Inject constructor(
     // Variable pública expuesta como LiveData, de solo lectura para otros componentes. La UI observará este valor
     // para reaccionar a los cambios (por ejemplo, habilitar o deshabilitar el botón).
     val isEnableButton: LiveData<Boolean> = _isEnableButton
+
+    // Flow que emite los gastos actuales y el límite para cada cuenta
+    private val _expensePercentageFlow = MutableStateFlow<Map<Account, Float>>(emptyMap())
+    val expensePercentageFlow: StateFlow<Map<Account, Float>> = _expensePercentageFlow.asStateFlow()
+
 
     private val _isEnableChangeNameButton = MutableLiveData<Boolean>()
     val isEnableChangeNameButton: LiveData<Boolean> = _isEnableChangeNameButton
@@ -95,11 +120,23 @@ class AccountsViewModel @Inject constructor(
     private val _listOfAccounts = MutableLiveData<List<Account>>()
     val listOfAccounts: LiveData<List<Account>> = _listOfAccounts
 
+    private val _listOfAccountsChecked = MutableLiveData<List<Account>>()
+    val listOfAccountsChecked: LiveData<List<Account>> = _listOfAccountsChecked
+
     private val _currencyCodeList = MutableLiveData<List<Currency>>()
     val currencyCodeList: LiveData<List<Currency>> = _currencyCodeList
 
+    //LiveData para textfield de categoria seleccionada para control de gasto
+
+    private val _limitMax=MutableLiveData<String>()
+    val limitMax: LiveData<String> = _limitMax
+
     private val _conversionCurrencyRate = MutableLiveData<Double>()
     val conversionCurrencyRate: LiveData<Double> = _conversionCurrencyRate
+
+    private val _enableDialog=MutableLiveData<Boolean>()
+    val enableDialog: LiveData<Boolean> = _enableDialog
+
 
     // Cargar datos iniciales que no dependen de la UI ni de la composición.
     init {
@@ -109,6 +146,7 @@ class AccountsViewModel @Inject constructor(
             _isCurrencyExpanded.value = false
             onAccountUpdated()
             getListOfCurrencyCode()
+            updateExpensePercentage()
 
         }
     }
@@ -181,6 +219,16 @@ class AccountsViewModel @Inject constructor(
         }
     }
 
+    fun getAllAccountsChecked(){
+        viewModelScope.launch {
+            try {
+                val accountsChecked = withContext(Dispatchers.IO) { getAccountsChecked.invoke() }
+                _listOfAccountsChecked.postValue(accountsChecked)
+            } catch (e: Exception) {
+                Log.e("Accounts", "Error fetching all accounts checked: ${e.message}", e)
+            }
+        }
+    }
 
     fun onDisableCurrencySelector(){
         _enableCurrencySelector.postValue(false)
@@ -196,7 +244,9 @@ class AccountsViewModel @Inject constructor(
         _isEnableButton.postValue(false)
 
     }
-
+    fun onEnableDialogChange(newValue:Boolean){
+        _enableDialog.value = newValue
+    }
 
     fun onCurrencyShowedChange(currencyShowed: String) {
         _currencyCodeShowed.value = currencyShowed
@@ -278,7 +328,12 @@ class AccountsViewModel @Inject constructor(
             }
         }
     }
-
+    fun onChangeLimitMax(newLimitMax:String){
+        if (Utils.isValidDecimal(newLimitMax)) {
+            _limitMax.value = newLimitMax
+        }
+        _limitMax.value = newLimitMax
+    }
 
     fun upDateAccountName(idAccount:Int,newName:String){
 
@@ -297,6 +352,36 @@ class AccountsViewModel @Inject constructor(
            onAccountUpdated()
         }
     }
+    fun upDateAccountsDates(accountId:Int,fromDate:String,toDate:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            updateFromDate.invoke(accountId, fromDate)
+            updateToDate.invoke(accountId, toDate)
+
+        }
+    }
+
+    fun updateCheckedAccount(accountId: Int, isChecked: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateChecked.invoke(accountId, isChecked)
+            getAllAccounts()
+        }
+    }
+    fun upDateSpendingLimitAccount(accountId: Int, newAmount: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateSpendingLimit.invoke(accountId, newAmount)
+            //getAllCategoriesChecked(CategoryType.EXPENSE)
+        }
+    }
+
+    fun upDateLimitMaxAccount(accountId: Int, newLimitMax: Float) {
+        viewModelScope.launch(Dispatchers.IO) {
+             updateLimitMax.invoke(accountId, newLimitMax)
+            //getAllCategoriesChecked(CategoryType.EXPENSE)
+        }
+    }
+
+
+
     suspend fun conversionCurrencyRate(fromCurrency: String, toCurrency: String): Double? {
 
         return try {
@@ -306,6 +391,45 @@ class AccountsViewModel @Inject constructor(
             }
         }catch(e: IOException) {
             null
+        }
+    }
+
+    suspend fun sumOfExpensesByAccount(accountId:Int,
+                                        fromDate:String,
+                                        toDate:String): Double? {
+
+        return try {
+            withContext(Dispatchers.IO) {
+                val result=getSumExpensesByAccount.invoke(accountId,fromDate,toDate)
+                result
+            }
+        }catch(e: IOException) {
+            null
+        }
+    }
+
+    // Función que actualiza el flujo con el porcentaje de gasto para cada categoría
+    private suspend fun updateExpensePercentage() {
+        getAllAccountsChecked()
+        val categories = _listOfAccountsChecked.value // Método que obtiene todas las categorías
+        // Verifica que las categorías no sean nulas
+        if (categories.isNullOrEmpty()) {
+            // Si las categorías son nulas o vacías, no se hace nada
+            _expensePercentageFlow.value = emptyMap() // Asigna un mapa vacío
+            return
+        }
+
+        val expensePercentageMap = categories.associateWith { account ->
+            val expenses = sumOfExpensesByAccount(account.id,account.fromDate,account.toDate) ?: 0.0
+            val percentage = (abs(expenses) / abs(account.spendingLimit)).toFloat().coerceIn(0.0f, 1.0f)
+            percentage
+        }
+        _expensePercentageFlow.value = expensePercentageMap
+    }
+    // Función para refrescar el porcentaje de gasto (opcional)
+    fun UpdateExpensePercentage() {
+        viewModelScope.launch {
+            updateExpensePercentage()
         }
     }
 

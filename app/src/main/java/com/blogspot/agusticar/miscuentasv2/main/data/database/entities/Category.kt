@@ -1,6 +1,8 @@
 package com.blogspot.agusticar.miscuentasv2.main.data.database.entities
 
 import androidx.room.*
+import com.blogspot.agusticar.miscuentasv2.utils.dateFormat
+import java.util.Date
 
 @Entity(tableName = "CategoryEntity")
 data class Category(
@@ -10,6 +12,9 @@ data class Category(
     @ColumnInfo(name = "nameResource") val nameResource: Int, // Identificador del recurso de string para el nombre
     @ColumnInfo(name = "iconResource") val iconResource: Int, // Recurso de icono para la categoría
     @ColumnInfo(name = "isChecked") var isChecked: Boolean = false, // Indica si la categoría está seleccionada
-    @ColumnInfo(name = "amount") var amount: Double = 0.0, // Cantidad asociada a la categoría
-    @ColumnInfo(name = "limitMax") var limitMax: Float = 1000f // Cantidad asociada a la categoría
+    @ColumnInfo(name = "periodSpendingLimit") var spendingLimit: Double = 0.0, // Cantidad asociada a la categoría
+    @ColumnInfo(name = "limitMax") var limitMax: Float = 1000f, // Cantidad asociada a la categoría
+    @ColumnInfo(name = "fromDate") val fromDate: String = Date().dateFormat(),
+    @ColumnInfo(name = "toDate") val toDate: String = Date().dateFormat()
+
 )
