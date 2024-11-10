@@ -350,6 +350,7 @@
     <string name="limitMaxtitle">Límite máximo de gasto</string>
     <string name="messagedialog">Selecciona el límite máximo de gasto por categoría</string>
     <string name="categoryespendingcontrol">Control de gasto por categoría de</string>
+    <string name="accountespendingcontrol">Control de gastos por cuenta de</string>
     <string name="expenseslimit">Has superado el limite de gasto.</string>
     <string name="expenseslimit80">Estas cerca de superar tu límite de gasto.</string>
     <string name="expensebycategory">Gasto por categoría de </string>

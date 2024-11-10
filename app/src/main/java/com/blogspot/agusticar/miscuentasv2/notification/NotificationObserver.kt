@@ -126,7 +126,7 @@ fun NotificationAccountObserver(
                     }
                 }
 
-                val accountControl = stringResource(id = R.string.categoryespendingcontrol) +" "+
+                val accountControl = stringResource(id = R.string.accountespendingcontrol) +" "+
                         account.name
 
 
