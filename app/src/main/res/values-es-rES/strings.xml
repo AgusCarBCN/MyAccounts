@@ -91,6 +91,8 @@
     <!--Ajustes-->
     <string name="limitmaxexpense">Establece un limite máximo de gasto total</string>
     <string name="expensemanagement">Controla tus gastos</string>
+    <string name="accountscontrol">Selecciona cuentas</string>
+    <string name="accountscontroldes">Habilita o deshabilita cuentas para controlar gastos totales</string>
     <string name="expenseoptions">Opciones de control de gastos totales</string>
     <string name="expenseoptionsdes">Selecciona las opciones para controlar todos tus gastos totales en un periodo de tiempo</string>
     <string name="categorycontrol">Gasto por categoría</string>

@@ -171,9 +171,9 @@ fun SettingScreen(
         SpacerApp()
         HeadSetting(title = stringResource(id = R.string.expensemanagement), 20)
 
-        RowComponent(title = stringResource(id = R.string.expenseoptions),
-            description = stringResource(id = R.string.expenseoptionsdes),
-            iconResource = R.drawable.ic_selectoptions,
+        RowComponent(title = stringResource(id = R.string.accountscontrol),
+            description = stringResource(id = R.string.accountscontroldes),
+            iconResource = R.drawable.ic_check,
             onClick = {
                 mainViewModel.selectScreen(IconOptions.SELECT_OPTIONS_EXPENSE)
             })

@@ -86,6 +86,8 @@
     <string name="selectcurrency">Select a currency for your accounts.</string>
     <string name="selectedcurrency">Selected currency: </string>
     <!--Settings-->
+    <string name="accountscontrol">Select accounts</string>
+    <string name="accountscontroldes">Enable or disable accounts to control total expenses</string>
     <string name="limitmaxexpense">Set a maximum total spending limit</string>
     <string name="expensemanagement">Manage your expenses</string>
     <string name="expenseoptions">Total expense control options</string>
