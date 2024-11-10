@@ -73,4 +73,7 @@ interface AccountDao {
     @Query("UPDATE AccountEntity SET toDate = :newDate WHERE id = :accountId")
     suspend fun updateToDateAccount(accountId:Int,newDate: String)
 
+    // 14. List all accounts checkec
+    @Query("SELECT * FROM AccountEntity WHERE isChecked=1")
+    suspend fun getAllAccountsChecked(): List<Account>
 }

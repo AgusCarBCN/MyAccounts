@@ -20,6 +20,9 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -35,6 +38,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.SnackBarController
 import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
+import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
@@ -184,9 +188,16 @@ fun AccountCard(
 fun AccountCardWithCheckbox(
     account: Account,
     currencyCode: String,
+    accountsViewModel: AccountsViewModel,
     searchViewModel: SearchViewModel,
     onCheckBoxChange: (Boolean) -> Unit
 ) {
+    val toDate by searchViewModel.selectedToDate.observeAsState(account.fromDate)
+    val fromDate by searchViewModel.selectedFromDate.observeAsState(account.toDate)
+    val showDialog by accountsViewModel.enableDialog.observeAsState(false)
+    val limitMax by accountsViewModel.limitMax.observeAsState(account.limitMax.toString())
+    val messageDateError = stringResource(id = R.string.datefromoverdateto)
+    val scope = rememberCoroutineScope()
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -251,6 +262,34 @@ fun AccountCardWithCheckbox(
                     checkmarkColor = LocalCustomColorsPalette.current.incomeColor
                 )
             )
+            if (account.isChecked) {
+                ModelDialogWithTextField(
+                    account.name,
+                    showDialog,
+                    limitMax,
+                    onValueChange = {accountsViewModel.onChangeLimitMax(it) },
+                    onConfirm = {
+                        if (!searchViewModel.validateDates()) {
+                            scope.launch(Dispatchers.Main) {
+                                SnackBarController.sendEvent(
+                                    event = SnackBarEvent(
+                                        messageDateError
+                                    )
+                                )
+                            }
+                            accountsViewModel.updateCheckedAccount(account.id,false)
+                        } else {
+                            accountsViewModel.upDateLimitMaxAccount(
+                                account.id,
+                                limitMax.toFloatOrNull() ?: 0f
+                            )
+                            accountsViewModel.onEnableDialogChange(false)
+                            accountsViewModel.upDateAccountsDates(account.id, fromDate, toDate)
+                        }
+                    },
+                    onDismiss = { accountsViewModel.onEnableDialogChange(false) }
+                    ,searchViewModel)
+            }
         }
     }
 }

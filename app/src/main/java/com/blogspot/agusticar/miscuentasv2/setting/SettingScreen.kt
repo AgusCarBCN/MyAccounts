@@ -182,7 +182,7 @@ fun SettingScreen(
             description = stringResource(id = R.string.desexpensecontrol),
             iconResource = R.drawable.ic_expensetotal,
             onClick = {
-
+                mainViewModel.selectScreen(IconOptions.ACCOUNT_EXPENSE_CONTROL)
             })
 
         RowComponent(title = stringResource(id = R.string.selectcategories),

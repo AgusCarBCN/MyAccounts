@@ -73,8 +73,10 @@ fun EntryAccountList(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(listOfAccounts) { account ->
-                AccountCardWithCheckbox(account,
+                AccountCardWithCheckbox(
+                    account,
                     currencyCode,
+                    accountsViewModel,
                     searchViewModel,
                     onCheckBoxChange = { checked ->
                         accountsViewModel.updateCheckedAccount(

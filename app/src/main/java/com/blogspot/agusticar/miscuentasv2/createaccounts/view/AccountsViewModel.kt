@@ -12,6 +12,7 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.domain.apidata.ConvertCurrencyUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.DeleteAccountByIdUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsCheckedUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.TransferUseCase
@@ -22,6 +23,7 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.U
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateCheckedAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateLimitMaxAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateSpendingLimitAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumTotalExpensesByDateUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -39,11 +41,13 @@ class AccountsViewModel @Inject constructor(
     private val setCurrencyCode: SetCurrencyCodeUseCase,
     private val addAccount: InsertAccountUseCase,
     private val getAccounts: GetAllAccountsUseCase,
+    private val getAccountsChecked:GetAllAccountsCheckedUseCase,
     private val transferAmount:TransferUseCase,
     private val deleteAccount: DeleteAccountByIdUseCase,
     private val updateName:UpdateAccountNameUseCase,
     private val updateBalance:UpdateAccountBalanceUseCase,
     private val converterCurrency:ConvertCurrencyUseCase,
+    private val getSumExpensesByAccount:GetSumTotalExpensesByDateUseCase,
     private val updateLimitMax:UpdateLimitMaxAccountUseCase,
     private val updateChecked: UpdateCheckedAccountUseCase,
     private val updateSpendingLimit: UpdateSpendingLimitAccountUseCase,
@@ -204,6 +208,16 @@ class AccountsViewModel @Inject constructor(
         }
     }
 
+    fun getAllAccountsChecked(){
+        viewModelScope.launch {
+            try {
+                val accountsChecked = withContext(Dispatchers.IO) { getAccountsChecked.invoke() }
+                _listOfAccountsChecked.postValue(accountsChecked)
+            } catch (e: Exception) {
+                Log.e("Accounts", "Error fetching all accounts checked: ${e.message}", e)
+            }
+        }
+    }
 
     fun onDisableCurrencySelector(){
         _enableCurrencySelector.postValue(false)
@@ -363,6 +377,20 @@ class AccountsViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 val response = converterCurrency.invoke(fromCurrency, toCurrency)
                 response.body()?.conversion_rate
+            }
+        }catch(e: IOException) {
+            null
+        }
+    }
+
+    suspend fun sumOfExpensesByAccount(accountId:Int,
+                                        fromDate:String,
+                                        toDate:String): Double? {
+
+        return try {
+            withContext(Dispatchers.IO) {
+                val result=getSumExpensesByAccount.invoke(accountId,fromDate,toDate)
+                result
             }
         }catch(e: IOException) {
             null

@@ -70,4 +70,10 @@ class AccountRepository @Inject constructor(private val accountDao: AccountDao) 
         accountDao.updateToDateAccount(accountId,newDate)
     }
 
+    // 14. Get all accounts checked
+
+    suspend fun getAllAccountsChecked(): List<Account> {
+        return accountDao.getAllAccountsChecked()
+    }
+
 }

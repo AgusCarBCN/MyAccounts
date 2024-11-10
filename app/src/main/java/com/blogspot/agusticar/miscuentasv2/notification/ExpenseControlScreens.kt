@@ -14,21 +14,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.blogspot.agusticar.miscuentasv2.components.AccountBudgetItemControl
 import com.blogspot.agusticar.miscuentasv2.components.CategoryBudgetItemControl
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
-import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 
 @Composable
 
 fun ExpenseControlCategoriesScreen(categoriesViewModel: CategoriesViewModel,
-                                   accountsViewModel: AccountsViewModel,
-                                   searchViewModel: SearchViewModel
-)
+                                   accountsViewModel: AccountsViewModel)
 
 {
-
     // Observa la lista de categorías desde el ViewModel
     val listOfCategoriesChecked by categoriesViewModel.listOfCategoriesChecked.observeAsState(emptyList())
 
@@ -53,12 +50,41 @@ fun ExpenseControlCategoriesScreen(categoriesViewModel: CategoriesViewModel,
             items(listOfCategoriesChecked) { category ->
                CategoryBudgetItemControl(category,
                    categoriesViewModel,
-                   accountsViewModel,
-                   searchViewModel)
+                   accountsViewModel)
             }
         }
+    }
+}
+@Composable
 
+fun ExpenseControlAccountsScreen(accountsViewModel: AccountsViewModel)
+{
+    // Observa la lista de categorías desde el ViewModel
+    val listOfAccountsChecked by accountsViewModel.listOfAccountsChecked.observeAsState(emptyList())
 
+    LaunchedEffect(Unit) {
+        accountsViewModel.getAllAccountsChecked()
     }
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 30.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Asegúrate de que la LazyColumn ocupa solo el espacio necesario
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f) // Permite que la columna ocupe el espacio disponible
+                .padding(bottom = 16.dp) // Espacio en la parte inferior
+        ) {
+            items(listOfAccountsChecked) { account ->
+
+                AccountBudgetItemControl(account ,
+                    accountsViewModel)
+            }
+        }
+    }
 }

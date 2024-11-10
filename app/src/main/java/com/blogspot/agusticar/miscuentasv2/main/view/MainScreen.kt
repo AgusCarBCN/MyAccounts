@@ -78,6 +78,7 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.notification.EntryAccountList
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
+import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlAccountsScreen
 import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlCategoriesScreen
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationObserver
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
@@ -324,8 +325,7 @@ fun MainScreen(
 
                         IconOptions.CATEGORY_EXPENSE_CONTROL -> {
                             ExpenseControlCategoriesScreen(categoriesViewModel,
-                                accountsViewModel,
-                                searchViewModel)
+                                accountsViewModel)
                             title=R.string.categorycontrol
                         }
 
@@ -336,6 +336,13 @@ fun MainScreen(
                             )
                             title=R.string.selectaccounts
                         }
+
+                        IconOptions.ACCOUNT_EXPENSE_CONTROL ->
+                            ExpenseControlAccountsScreen(
+                                accountsViewModel
+                            )
+
+
                     }
 
                 }

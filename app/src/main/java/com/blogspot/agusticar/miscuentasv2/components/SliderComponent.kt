@@ -20,6 +20,7 @@ import com.blogspot.agusticar.miscuentasv2.SnackBarController
 import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
@@ -34,8 +35,7 @@ import kotlin.math.abs
 fun CategoryBudgetItemControl(
     category: Category,
     categoriesViewModel: CategoriesViewModel,
-    accountsViewModel: AccountsViewModel,
-    searchViewModel: SearchViewModel
+    accountsViewModel: AccountsViewModel
 ) {
 
     val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
@@ -205,32 +205,33 @@ fun CategoryBudgetItemControl(
         )
     }
 }
-
-
 @Composable
-fun ExpenseTotalBudgetControl(
-
-    entriesViewModel: EntriesViewModel,
+fun AccountBudgetItemControl(
+    account:Account,
     accountsViewModel: AccountsViewModel
 ) {
 
-   /* val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
-    val scope = rememberCoroutineScope()
+    val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
+
     val limitExpenseText=stringResource(id = R.string.limitexpense)
     val currentExpense=stringResource(id = R.string.currentexpense)
+    val scope = rememberCoroutineScope()
 
     // Estado para almacenar el total de gastos por categoría
-    var expensesByMonth by remember { mutableDoubleStateOf(0.0) }
+    var expensesByAccount by remember { mutableDoubleStateOf(0.0) }
 
     // Cargar el total de gastos de la categoría cuando cambie el composable o la categoría
-    LaunchedEffect(Unit) {
-        expensesByMonth = entriesViewModel.    }
-    val messageUpdateSpendingLimit = "${stringResource(id = R.string.espendingupdate)} ${stringResource(id = category.nameResource)}"
+    LaunchedEffect(account.id) {
+        expensesByAccount = accountsViewModel.sumOfExpensesByAccount(account.id,
+            account.fromDate,
+            account.toDate) ?: 0.0
+    }
+    val messageUpdateSpendingLimit = "${stringResource(id = R.string.espendingupdate)} ${account.name}"
 
     // Variables de estado para el límite de gasto y porcentaje
-    var spendingLimit by remember { mutableDoubleStateOf(category.amount) }  // Límite de gasto inicial
-   // val maxLimit = category.limitMax
-    val spendingPercentage = (abs(expensesByCategory.toFloat()) / spendingLimit.toFloat()).coerceIn(0.0f, 1.0f) // Porcentaje de gasto
+    var spendingLimit by remember { mutableDoubleStateOf(account.spendingLimit) }  // Límite de gasto inicial
+    val maxLimit = account.limitMax
+    val spendingPercentage = (abs(expensesByAccount.toFloat()) / spendingLimit.toFloat()).coerceIn(0.0f, 1.0f) // Porcentaje de gasto
 
     // Color de la barra de progreso según el porcentaje
     val progressColor = when {
@@ -246,21 +247,9 @@ fun ExpenseTotalBudgetControl(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier
-                .padding(start = 15.dp, end = 20.dp, top = 5.dp, bottom = 15.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center, // Centrar los elementos en el Row
-            verticalAlignment = Alignment.CenterVertically // Alinear verticalmente al centro
-        ) {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id=R.drawable.importoption),
-                contentDescription = "icon",
-                tint = LocalCustomColorsPalette.current.expenseColor
-            )
+
             Text(
-                text = stringResource(id=R.string.expensesByMonth),
+                text = account.name,
                 modifier = Modifier
                     .padding(start = 5.dp) // Ajusta el espacio entre el icono y el texto
                 , // Hace que el texto ocupe espacio disponible
@@ -269,10 +258,42 @@ fun ExpenseTotalBudgetControl(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
+
+        Row(
+            modifier = Modifier
+                .padding(start = 15.dp, end = 20.dp, top = 5.dp, bottom = 15.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center, // Centrar los elementos en el Row
+            verticalAlignment = Alignment.CenterVertically // Alinear verticalmente al centro
+        ) {
+            Text(
+                text = "${stringResource(id = R.string.fromdate)}: ${account.fromDate}",
+                modifier = Modifier
+                    .padding(start = 5.dp) // Ajusta el espacio entre el icono y el texto
+                , // Hace que el texto ocupe espacio disponible
+                color = LocalCustomColorsPalette.current.textColor,
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "${stringResource(id = R.string.todate)}: ${account.toDate}",
+                modifier = Modifier
+                    .padding(start = 5.dp) // Ajusta el espacio entre el icono y el texto
+                , // Hace que el texto ocupe espacio disponible
+                color = LocalCustomColorsPalette.current.textColor,
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
+
+
+
+
         // Barra de progreso de gasto actual
         Text(
-            text = "$currentExpense: ${Utils.numberFormat(expensesByCategory, currencyCode)} / ${Utils.numberFormat(spendingLimit,currencyCode)}",
+            text = "$currentExpense: ${Utils.numberFormat(expensesByAccount, currencyCode)} / ${Utils.numberFormat(spendingLimit,currencyCode)}",
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = LocalCustomColorsPalette.current.textColor,
@@ -331,7 +352,8 @@ fun ExpenseTotalBudgetControl(
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {
-                categoriesViewModel.upDateAmountCategory(category.id,spendingLimit)
+
+                accountsViewModel.upDateSpendingLimitAccount(account.id, spendingLimit)
                 scope.launch(Dispatchers.Main) {
                     SnackBarController.sendEvent(
                         event = SnackBarEvent(
@@ -340,7 +362,7 @@ fun ExpenseTotalBudgetControl(
                     )
                 }
             }
-        )
-    }*/
-}
 
+        )
+    }
+}
