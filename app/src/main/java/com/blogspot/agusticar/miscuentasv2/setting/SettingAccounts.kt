@@ -79,8 +79,8 @@ fun AccountList(
                 ) {
                 items(accounts!!) { account -> // Solo utiliza accounts
                     AccountCard(
-                        Utils.numberFormat(account.balance, currencyCode),
-                        account.name,
+                        account,
+                        currencyCode,
                         if (option) R.string.deleteaccount else R.string.modify,
                         onClickCard = {
                             mainViewModel.selectScreen(if (option) IconOptions.DELETE_ACCOUNT else IconOptions.EDIT_ACCOUNTS)

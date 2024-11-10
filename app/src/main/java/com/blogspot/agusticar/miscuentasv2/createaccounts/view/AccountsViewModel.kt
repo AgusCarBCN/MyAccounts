@@ -16,7 +16,12 @@ import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.G
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.InsertAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.TransferUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountBalanceUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountDateFromUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountDateToUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateAccountNameUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateCheckedAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateLimitMaxAccountUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.UpdateSpendingLimitAccountUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.GetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.datastore.SetCurrencyCodeUseCase
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -38,7 +43,12 @@ class AccountsViewModel @Inject constructor(
     private val deleteAccount: DeleteAccountByIdUseCase,
     private val updateName:UpdateAccountNameUseCase,
     private val updateBalance:UpdateAccountBalanceUseCase,
-    private val converterCurrency:ConvertCurrencyUseCase
+    private val converterCurrency:ConvertCurrencyUseCase,
+    private val updateLimitMax:UpdateLimitMaxAccountUseCase,
+    private val updateChecked: UpdateCheckedAccountUseCase,
+    private val updateSpendingLimit: UpdateSpendingLimitAccountUseCase,
+    private val updateFromDate: UpdateAccountDateFromUseCase,
+    private val updateToDate: UpdateAccountDateToUseCase
 
 ) : ViewModel() {
     // Variable privada que representa un estado observable y modificable. Solo el ViewModel puede cambiar este valor,
@@ -293,7 +303,12 @@ class AccountsViewModel @Inject constructor(
             }
         }
     }
-
+    fun onChangeLimitMax(newLimitMax:String){
+        if (Utils.isValidDecimal(newLimitMax)) {
+            _limitMax.value = newLimitMax
+        }
+        _limitMax.value = newLimitMax
+    }
 
     fun upDateAccountName(idAccount:Int,newName:String){
 
@@ -313,31 +328,31 @@ class AccountsViewModel @Inject constructor(
         }
     }
     fun upDateAccountsDates(accountId:Int,fromDate:String,toDate:String){
-       /* viewModelScope.launch(Dispatchers.IO) {
-            upDateFromDate.invoke(categoryId, fromDate)
-            upDateToDate.invoke(categoryId, toDate)
+        viewModelScope.launch(Dispatchers.IO) {
+            updateFromDate.invoke(accountId, fromDate)
+            updateToDate.invoke(accountId, toDate)
 
-        }*/
+        }
     }
 
     fun updateCheckedAccount(accountId: Int, isChecked: Boolean) {
-       /* viewModelScope.launch(Dispatchers.IO) {
-            upDateCheckedCategory.invoke(categoryId, isChecked)
-            getAllCategoriesByType(CategoryType.EXPENSE)
-        }*/
+        viewModelScope.launch(Dispatchers.IO) {
+            updateChecked.invoke(accountId, isChecked)
+            getAllAccounts()
+        }
     }
     fun upDateSpendingLimitAccount(accountId: Int, newAmount: Double) {
-       /* viewModelScope.launch(Dispatchers.IO) {
-            upDateSpendingLimit.invoke(categoryId, newAmount)
-            getAllCategoriesChecked(CategoryType.EXPENSE)
-        }*/
+        viewModelScope.launch(Dispatchers.IO) {
+            updateSpendingLimit.invoke(accountId, newAmount)
+            //getAllCategoriesChecked(CategoryType.EXPENSE)
+        }
     }
 
     fun upDateLimitMaxAccount(accountId: Int, newLimitMax: Float) {
-       /* viewModelScope.launch(Dispatchers.IO) {
-            upDateLimitMaxCategory.invoke(categoryId, newLimitMax)
-            getAllCategoriesChecked(CategoryType.EXPENSE)
-        }*/
+        viewModelScope.launch(Dispatchers.IO) {
+             updateLimitMax.invoke(accountId, newLimitMax)
+            //getAllCategoriesChecked(CategoryType.EXPENSE)
+        }
     }
 
 

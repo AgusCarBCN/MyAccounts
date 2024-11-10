@@ -231,17 +231,32 @@ fun AccountCardWithCheckbox(
             )
         }
         Spacer(modifier = Modifier.height(8.dp)) // Espacio entre el texto y el botón
-
-        Checkbox(
-            modifier = Modifier.weight(0.2f), // Ajuste proporcional para el checkbox
-            checked = account.isChecked,
-            onCheckedChange = onCheckBoxChange,
-            colors = CheckboxDefaults.colors(
-                checkedColor = LocalCustomColorsPalette.current.backgroundPrimary,
-                uncheckedColor = LocalCustomColorsPalette.current.textColor,
-                checkmarkColor = LocalCustomColorsPalette.current.incomeColor
+        Row(
+            modifier = Modifier.padding(5.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = if(account.isChecked) stringResource(id = R.string.accountchecked)
+                else stringResource(id = R.string.accountunchecked)  ,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .weight(0.6f),
+                textAlign = TextAlign.Start,
+                fontSize = 16.sp,
+                color = LocalCustomColorsPalette.current.textColor
             )
-        )
+            Checkbox(
+                modifier = Modifier.weight(0.2f), // Ajuste proporcional para el checkbox
+                checked = account.isChecked,
+                onCheckedChange = onCheckBoxChange,
+                colors = CheckboxDefaults.colors(
+                    checkedColor = LocalCustomColorsPalette.current.backgroundPrimary,
+                    uncheckedColor = LocalCustomColorsPalette.current.textColor,
+                    checkmarkColor = LocalCustomColorsPalette.current.incomeColor
+                )
+            )
+        }
     }
 
 }

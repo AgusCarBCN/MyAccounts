@@ -355,4 +355,6 @@
     <string name="expensebycategory">Gasto por categoría de </string>
     <string name="expenselimitOk">Tus gastos están controlados en esta categoría</string>
     <string name="expensesByMonth">Gastos por mes</string>
+    <string name="accountchecked">Cuenta seleccionada</string>
+    <string name="accountunchecked">Cuenta no seleccionada</string>
 </resources>

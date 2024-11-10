@@ -122,7 +122,7 @@ fun NotificationDialog(
 
 @Composable
 fun ModelDialogWithTextField(
-    name:Int,
+    name:String,
     showDialog: Boolean,
     textFieldValue: String,
     onValueChange: (String) -> Unit,  // Callback para actualizar el valor del TextField
@@ -136,7 +136,7 @@ fun ModelDialogWithTextField(
             onDismissRequest = { onDismiss() },
             title = {
                 Text(
-                    stringResource(name),
+                    name,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = LocalCustomColorsPalette.current.textColor

@@ -356,4 +356,6 @@
     <string name="expenselimitOk">Your expenses are under control in this category</string>
     <string name="expensesByMonth">Expenses by month</string>
     <string name="limitMaxtitle">Maximum limit of expense</string>
+    <string name="accountchecked">Checked account</string>
+    <string name="accountunchecked">Unchecked account</string>
 </resources>

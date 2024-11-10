@@ -104,6 +104,7 @@ fun ItemCategoryCheck(category: Category,
     val showDialog by categoriesViewModel.enableDialog.observeAsState(false)
     val scope = rememberCoroutineScope()
     val messageDateError = stringResource(id = R.string.datefromoverdateto)
+    val categoryName= stringResource(id = category.nameResource)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -157,7 +158,7 @@ fun ItemCategoryCheck(category: Category,
         if (category.isChecked) {
 
            ModelDialogWithTextField(
-                category.nameResource,
+                categoryName,
                 showDialog,
                 limitMax,
                 onValueChange = { categoriesViewModel.onChangeLimitMax(it) },
