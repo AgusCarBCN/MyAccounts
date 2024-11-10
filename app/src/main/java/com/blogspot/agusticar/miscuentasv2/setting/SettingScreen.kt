@@ -175,7 +175,7 @@ fun SettingScreen(
             description = stringResource(id = R.string.accountscontroldes),
             iconResource = R.drawable.ic_check,
             onClick = {
-                mainViewModel.selectScreen(IconOptions.SELECT_OPTIONS_EXPENSE)
+                mainViewModel.selectScreen(IconOptions.SELECT_CATEGORIES)
             })
 
         RowComponent(title = stringResource(id = R.string.expensecontrol),

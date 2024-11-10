@@ -27,7 +27,6 @@ fun ExpenseControlCategoriesScreen(categoriesViewModel: CategoriesViewModel,
                                    searchViewModel: SearchViewModel
 )
 
-    // Observa la lista de categorías desde el ViewModel
 {
 
     // Observa la lista de categorías desde el ViewModel

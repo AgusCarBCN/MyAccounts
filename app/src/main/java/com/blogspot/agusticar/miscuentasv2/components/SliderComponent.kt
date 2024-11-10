@@ -1,6 +1,5 @@
 package com.blogspot.agusticar.miscuentasv2.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +9,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,7 +22,6 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
-import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
 import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
@@ -45,15 +42,17 @@ fun CategoryBudgetItemControl(
     val scope = rememberCoroutineScope()
     val limitExpenseText=stringResource(id = R.string.limitexpense)
     val currentExpense=stringResource(id = R.string.currentexpense)
-    val fromDate by searchViewModel.selectedFromDate.observeAsState()
-    val toDate by searchViewModel.selectedToDate.observeAsState()
+    val fromDate by searchViewModel.selectedFromDate.observeAsState(category.fromDate)
+    val toDate by searchViewModel.selectedToDate.observeAsState(category.toDate)
 
     // Estado para almacenar el total de gastos por categoría
     var expensesByCategory by remember { mutableDoubleStateOf(0.0) }
 
     // Cargar el total de gastos de la categoría cuando cambie el composable o la categoría
     LaunchedEffect(category.id,fromDate,toDate) {
-        expensesByCategory = categoriesViewModel.sumOfExpensesByCategory(category.id) ?: 0.0
+        expensesByCategory = categoriesViewModel.sumOfExpensesByCategory(category.id,
+            fromDate,
+            toDate) ?: 0.0
     }
     val messageUpdateSpendingLimit = "${stringResource(id = R.string.espendingupdate)} ${stringResource(id = category.nameResource)}"
 
@@ -100,6 +99,38 @@ fun CategoryBudgetItemControl(
                 fontWeight = FontWeight.Bold
             )
         }
+        Row(
+            modifier = Modifier
+                .padding(start = 15.dp, end = 20.dp, top = 5.dp, bottom = 15.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center, // Centrar los elementos en el Row
+            verticalAlignment = Alignment.CenterVertically // Alinear verticalmente al centro
+        ) {
+            Text(
+                text = "${stringResource(id = R.string.fromdate)}: ${category.fromDate}",
+                modifier = Modifier
+                    .padding(start = 5.dp) // Ajusta el espacio entre el icono y el texto
+                , // Hace que el texto ocupe espacio disponible
+                color = LocalCustomColorsPalette.current.textColor,
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "${stringResource(id = R.string.todate)}: ${category.toDate}",
+                modifier = Modifier
+                    .padding(start = 5.dp) // Ajusta el espacio entre el icono y el texto
+                , // Hace que el texto ocupe espacio disponible
+                color = LocalCustomColorsPalette.current.textColor,
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+
+
+
         // Barra de progreso de gasto actual
         Text(
             text = "$currentExpense: ${Utils.numberFormat(expensesByCategory, currencyCode)} / ${Utils.numberFormat(spendingLimit,currencyCode)}",
@@ -161,7 +192,7 @@ fun CategoryBudgetItemControl(
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {
-                categoriesViewModel.upDateAmountCategory(category.id,spendingLimit)
+                categoriesViewModel.upDateSpendingLimitCategory(category.id,spendingLimit)
                 scope.launch(Dispatchers.Main) {
                     SnackBarController.sendEvent(
                         event = SnackBarEvent(

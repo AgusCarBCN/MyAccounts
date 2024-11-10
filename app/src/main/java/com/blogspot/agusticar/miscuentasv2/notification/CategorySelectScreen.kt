@@ -94,6 +94,8 @@ fun ItemCategoryCheck(category: Category,
                       onCheckBoxChange: (Boolean) -> Unit
 ) {
     val limitMax by categoriesViewModel.limitMax.observeAsState(category.limitMax.toString())
+    val toDate by searchViewModel.selectedToDate.observeAsState(category.fromDate)
+    val fromDate by searchViewModel.selectedFromDate.observeAsState(category.toDate)
     val showDialog by categoriesViewModel.enableDialog.observeAsState(false)
     Column(
         modifier = Modifier
@@ -146,7 +148,8 @@ fun ItemCategoryCheck(category: Category,
 
         }
         if (category.isChecked) {
-            ModelDialogWithTextField(
+
+           ModelDialogWithTextField(
                 category,
                 showDialog,
                 limitMax,
@@ -155,6 +158,7 @@ fun ItemCategoryCheck(category: Category,
                 categoriesViewModel.upDateLimitMaxCategory(category.id,
                     limitMax.toFloatOrNull()?:0f)
                 categoriesViewModel.onEnableDialogChange(false)
+                categoriesViewModel.upDateCategoryDates(category.id, fromDate, toDate  )
                 },
                 onDismiss = { categoriesViewModel.onEnableDialogChange(false) }
             ,searchViewModel)

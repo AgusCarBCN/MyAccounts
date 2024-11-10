@@ -36,7 +36,9 @@ fun NotificationObserver(
 
         // Load expenses for each category when the category ID changes
         LaunchedEffect(category.id) {
-            expensesByCategory = categoriesViewModel.sumOfExpensesByCategory(category.id) ?: 0.0
+            expensesByCategory = categoriesViewModel.sumOfExpensesByCategory(category.id,
+                category.fromDate,
+                category.toDate) ?: 0.0
 
         }
 

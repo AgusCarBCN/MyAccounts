@@ -95,7 +95,10 @@ class EntryRepository @Inject constructor(private val entryDao: EntryDao) {
     suspend fun getSumOfExpensesEntriesByCategory(categoryId:Int) :Double=
         entryDao.getSumOfExpenseByCategory(categoryId)?:0.0
 
-
+    suspend fun getSumOfExpensesByCategoryAndDate(categoryId:Int,
+                                                  fromDate:String,
+                                                  toDate: String):Double=
+        entryDao.getSumOfExpenseByCategoryAndDate(categoryId,fromDate,toDate)?:0.0
 
 
 

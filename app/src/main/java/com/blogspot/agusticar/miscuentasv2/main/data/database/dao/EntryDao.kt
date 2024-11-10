@@ -105,6 +105,19 @@ interface EntryDao {
         dateTo: String = Date().dateFormat()
     ): Double?
 
+    //9. Get sum of all expenses by date and category
+    @Transaction
+    @Query(
+        """SELECT SUM(amount) FROM EntryEntity WHERE amount < 0
+            AND categoryId = :categoryId
+            AND date >= :dateFrom  
+            AND date <= :dateTo"""
+    )
+    suspend fun getSumOfExpenseByCategoryAndDate(
+        categoryId: Int,
+        dateFrom: String = Date().dateFormat(),
+        dateTo: String = Date().dateFormat()
+    ): Double?
 
 
     //10.Get sum of incomes entries by month
