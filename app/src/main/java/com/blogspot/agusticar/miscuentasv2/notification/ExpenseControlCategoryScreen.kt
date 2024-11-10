@@ -18,12 +18,17 @@ import com.blogspot.agusticar.miscuentasv2.components.CategoryBudgetItemControl
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 
 @Composable
 
 fun ExpenseControlCategoriesScreen(categoriesViewModel: CategoriesViewModel,
-                                   accountsViewModel: AccountsViewModel
-){
+                                   accountsViewModel: AccountsViewModel,
+                                   searchViewModel: SearchViewModel
+)
+
+    // Observa la lista de categorías desde el ViewModel
+{
 
     // Observa la lista de categorías desde el ViewModel
     val listOfCategoriesChecked by categoriesViewModel.listOfCategoriesChecked.observeAsState(emptyList())
@@ -49,7 +54,8 @@ fun ExpenseControlCategoriesScreen(categoriesViewModel: CategoriesViewModel,
             items(listOfCategoriesChecked) { category ->
                CategoryBudgetItemControl(category,
                    categoriesViewModel,
-                   accountsViewModel)
+                   accountsViewModel,
+                   searchViewModel)
             }
         }
 

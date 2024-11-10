@@ -72,7 +72,7 @@ fun DatePickerSearch(
     }
 
 
-    Box(modifier = Modifier.width(160.dp)) {
+    Box(modifier = modifier) {
         TextField(
             value = selectedDate,
             onValueChange = { searchViewModel.onSelectedDate(selectedDate, isDateFrom) },

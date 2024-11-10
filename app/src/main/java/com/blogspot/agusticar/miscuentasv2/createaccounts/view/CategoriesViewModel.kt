@@ -1,5 +1,6 @@
 package com.blogspot.agusticar.miscuentasv2.createaccounts.view
 
+import android.adservices.signals.UpdateSignalsRequest
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,9 +11,10 @@ import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryT
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesByType
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.GetAllCategoriesCheckedUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.InsertCategoryUseCase
-import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateAmountCategoryUseCase
+
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateCheckedCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateLimitMaxCategoryUseCase
+import com.blogspot.agusticar.miscuentasv2.main.domain.database.categoryusecase.UpdateSpendingLimitCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.entriesusecase.GetSumOfExpensesByCategoryUseCase
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +33,7 @@ class CategoriesViewModel @Inject constructor(
     private val insertCategory:InsertCategoryUseCase,
     private val getAllCategoriesByType:GetAllCategoriesByType,
     private val getAllCategoriesChecked:GetAllCategoriesCheckedUseCase,
-    private val upDateAmountCategory:UpdateAmountCategoryUseCase,
+    private val upDateSpendingLimit:UpdateSpendingLimitCategoryUseCase,
     private val upDateCheckedCategory:UpdateCheckedCategoryUseCase,
     private val upDateLimitMaxCategory:UpdateLimitMaxCategoryUseCase,
     private val getSumExpensesByCategory: GetSumOfExpensesByCategoryUseCase
@@ -119,7 +121,7 @@ class CategoriesViewModel @Inject constructor(
     }
     fun upDateAmountCategory(categoryId: Int, newAmount: Double) {
         viewModelScope.launch {
-            upDateAmountCategory.invoke(categoryId, newAmount)
+            upDateSpendingLimit.invoke(categoryId, newAmount)
             getAllCategoriesChecked(CategoryType.EXPENSE)
         }
     }
@@ -154,7 +156,7 @@ class CategoriesViewModel @Inject constructor(
 
         val expensePercentageMap = categories.associateWith { category ->
             val expenses = sumOfExpensesByCategory(category.id) ?: 0.0
-            val percentage = (abs(expenses) / abs(category.amount)).toFloat().coerceIn(0.0f, 1.0f)
+            val percentage = (abs(expenses) / abs(category.spendingLimit)).toFloat().coerceIn(0.0f, 1.0f)
             percentage
         }
         _expensePercentageFlow.value = expensePercentageMap

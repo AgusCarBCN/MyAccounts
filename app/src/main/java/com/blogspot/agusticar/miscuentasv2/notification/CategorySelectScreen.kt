@@ -34,12 +34,14 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewMod
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.view.MainViewModel
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 
 
 @Composable
 fun EntryCategoryList(
-    categoriesViewModel: CategoriesViewModel
+    categoriesViewModel: CategoriesViewModel,
+    searchViewModel: SearchViewModel
 ) {
     // Observa la lista de categorías desde el ViewModel
     val listOfCategories by categoriesViewModel.listOfCategories.observeAsState(emptyList())
@@ -67,6 +69,7 @@ fun EntryCategoryList(
                 ItemCategoryCheck(
                     category,
                     categoriesViewModel,
+                    searchViewModel,
                     onCheckBoxChange = { checked ->
                         categoriesViewModel.updateCheckedCategory(category.id,
                             checked)
@@ -87,6 +90,7 @@ fun EntryCategoryList(
 @Composable
 fun ItemCategoryCheck(category: Category,
                       categoriesViewModel: CategoriesViewModel,
+                      searchViewModel: SearchViewModel,
                       onCheckBoxChange: (Boolean) -> Unit
 ) {
     val limitMax by categoriesViewModel.limitMax.observeAsState(category.limitMax.toString())
@@ -152,7 +156,8 @@ fun ItemCategoryCheck(category: Category,
                     limitMax.toFloatOrNull()?:0f)
                 categoriesViewModel.onEnableDialogChange(false)
                 },
-                onDismiss = { categoriesViewModel.onEnableDialogChange(false) })
+                onDismiss = { categoriesViewModel.onEnableDialogChange(false) }
+            ,searchViewModel)
         }
     }
  }

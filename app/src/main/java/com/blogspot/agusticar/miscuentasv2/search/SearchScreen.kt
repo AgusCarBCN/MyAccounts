@@ -87,13 +87,15 @@ fun SearchScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             DatePickerSearch(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f).
+                padding(10.dp),
                 R.string.fromdate,
                 searchViewModel,
                 true
             )
             DatePickerSearch(
-                modifier = Modifier.weight(0.5f),
+                modifier = Modifier.weight(0.5f)
+                    .padding(10.dp),
                 R.string.todate,
                 searchViewModel,
                 false

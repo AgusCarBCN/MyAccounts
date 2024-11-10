@@ -58,7 +58,7 @@ interface AccountDao {
     suspend fun updateCheckedAccount(accountId: Int, newValueChecked: Boolean)
 
     // 10. Update amount account
-    @Query("UPDATE AccountEntity SET amount = :newAmount WHERE id = :accountId")
+    @Query("UPDATE AccountEntity SET periodSpendingLimit = :newAmount WHERE id = :accountId")
     suspend fun updateAmountAccount(accountId: Int, newAmount:Double)
 
     // 11. Update limitMax account

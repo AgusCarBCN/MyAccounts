@@ -347,7 +347,7 @@
     <string name="categorytitle">Categorias</string>
     <string name="limitMax">Limite máximo</string>
     <string name="select">Selecciona</string>
-    <string name="titledialog">Límite máximo de categoría </string>
+    <string name="limitMaxtitle">Límite máximo de gasto</string>
     <string name="messagedialog">Selecciona el límite máximo de gasto por categoría</string>
     <string name="categoryespendingcontrol">Control de gasto por categoría de</string>
     <string name="expenseslimit">Has superado el limite de gasto.</string>

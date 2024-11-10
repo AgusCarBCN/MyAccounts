@@ -349,7 +349,7 @@
     <string name="categorytitle">Categories</string>
     <string name="limitMax">Maximum limit</string>
     <string name="select">Select</string>
-    <string name="titledialog">Category maximum limit</string>
+
     <string name="messagedialog">Select the maximum spending limit per category</string>
     <string name="categoryespendingcontrol">Spending control by category of</string>
     <string name="expenseslimit">You have exceeded the spending limit.</string>
@@ -357,7 +357,7 @@
     <string name="expensebycategory">Spending by category of </string>
     <string name="expenselimitOk">Your expenses are under control</string>
     <string name="expensesByMonth">Expenses by month</string>
-
+    <string name="limitMaxtitle">Maximum limit of expense</string>
 
 </resources>
 

@@ -318,13 +318,14 @@ fun MainScreen(
                             title=R.string.piechart
                         }
                         IconOptions.SELECT_CATEGORIES -> {
-                           EntryCategoryList (categoriesViewModel)
+                           EntryCategoryList (categoriesViewModel,searchViewModel)
                             title=R.string.selectcategories
                         }
 
                         IconOptions.CATEGORY_EXPENSE_CONTROL -> {
                             ExpenseControlCategoriesScreen(categoriesViewModel,
-                                accountsViewModel)
+                                accountsViewModel,
+                                searchViewModel)
                             title=R.string.categorycontrol
                         }
 

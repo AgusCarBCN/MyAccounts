@@ -25,6 +25,7 @@ import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewMod
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
+import com.blogspot.agusticar.miscuentasv2.search.SearchViewModel
 import com.blogspot.agusticar.miscuentasv2.ui.theme.LocalCustomColorsPalette
 import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import kotlinx.coroutines.Dispatchers
@@ -36,25 +37,28 @@ import kotlin.math.abs
 fun CategoryBudgetItemControl(
     category: Category,
     categoriesViewModel: CategoriesViewModel,
-    accountsViewModel: AccountsViewModel
+    accountsViewModel: AccountsViewModel,
+    searchViewModel: SearchViewModel
 ) {
 
     val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
     val scope = rememberCoroutineScope()
     val limitExpenseText=stringResource(id = R.string.limitexpense)
     val currentExpense=stringResource(id = R.string.currentexpense)
+    val fromDate by searchViewModel.selectedFromDate.observeAsState()
+    val toDate by searchViewModel.selectedToDate.observeAsState()
 
     // Estado para almacenar el total de gastos por categoría
     var expensesByCategory by remember { mutableDoubleStateOf(0.0) }
 
     // Cargar el total de gastos de la categoría cuando cambie el composable o la categoría
-    LaunchedEffect(category.id) {
+    LaunchedEffect(category.id,fromDate,toDate) {
         expensesByCategory = categoriesViewModel.sumOfExpensesByCategory(category.id) ?: 0.0
     }
     val messageUpdateSpendingLimit = "${stringResource(id = R.string.espendingupdate)} ${stringResource(id = category.nameResource)}"
 
     // Variables de estado para el límite de gasto y porcentaje
-    var spendingLimit by remember { mutableDoubleStateOf(category.amount) }  // Límite de gasto inicial
+    var spendingLimit by remember { mutableDoubleStateOf(category.spendingLimit) }  // Límite de gasto inicial
     val maxLimit = category.limitMax
     val spendingPercentage = (abs(expensesByCategory.toFloat()) / spendingLimit.toFloat()).coerceIn(0.0f, 1.0f) // Porcentaje de gasto
 
