@@ -43,15 +43,7 @@ fun SelectOptionsExpense(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HeadSetting(title = stringResource(id = R.string.limitMax), 20)
-        TextFieldComponent(
-            modifier = Modifier.width(360.dp),
-            stringResource(id = R.string.searchentries),
-            "",
-            onTextChange = {  },
-            BoardType.DECIMAL,
-            false
-        )
+
         HeadSetting(title = stringResource(id = R.string.daterange), 20)
         Row(
             modifier = Modifier
@@ -74,6 +66,16 @@ fun SelectOptionsExpense(
                 false
             )
         }
+        HeadSetting(title = stringResource(id = R.string.limitmaxexpense), 20)
+        TextFieldComponent(
+            modifier = Modifier.width(360.dp),
+            stringResource(id = R.string.limitMax),
+            "",
+            onTextChange = {  },
+            BoardType.DECIMAL,
+            false
+        )
+
         AccountSelector(300, 20, stringResource(id = R.string.selectanaccount), accountsViewModel)
         ModelButton(text = stringResource(id = R.string.confirmButton),
             R.dimen.text_title_medium,

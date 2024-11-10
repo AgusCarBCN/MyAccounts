@@ -89,6 +89,7 @@
     <string name="selectedcurrency">Divisa seleccionada: </string>
 
     <!--Ajustes-->
+    <string name="limitmaxexpense">Establece un limite máximo de gasto total</string>
     <string name="expensemanagement">Controla tus gastos</string>
     <string name="expenseoptions">Opciones de control de gastos totales</string>
     <string name="expenseoptionsdes">Selecciona las opciones para controlar todos tus gastos totales en un periodo de tiempo</string>

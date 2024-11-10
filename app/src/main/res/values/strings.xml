@@ -92,7 +92,7 @@
     <!--Settings-->
     <string name="expenseoptions">Total expense control options</string>
     <string name="expenseoptionsdes">Select options to control all your total expenses within a time period</string>
-
+    <string name="limitmaxexpense">Set a maximum total spending limit</string>
     <string name="expensemanagement">Manage your expenses</string>
     <string name="categorycontrol">Expense by Category</string>
     <string name="descategorycontrol">Set an expense limit for each category and receive alerts when you exceed them.</string>
