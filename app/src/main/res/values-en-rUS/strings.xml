@@ -87,6 +87,8 @@
     <string name="selectedcurrency">Selected currency: </string>
     <!--Settings-->
     <string name="expensemanagement">Manage your expenses</string>
+    <string name="expenseoptions">Total expense control options</string>
+    <string name="expenseoptionsdes">Select options to control all your total expenses within a time period</string>
     <string name="categorycontrol">Expense by Category</string>
     <string name="descategorycontrol">Set an expense limit for each category and receive alerts when you exceed them.</string>
     <string name="desexpensecontrol">Track total expenses and receive notifications when limits are exceeded.</string>
@@ -349,5 +351,6 @@
     <string name="expenseslimit80"> You are about to exceed your spending limit.</string>
     <string name="expensebycategory">Spending by category of </string>
     <string name="expenselimitOk">Your expenses are under control in this category</string>
+    <string name="expensesByMonth">Expenses by month</string>
 
 </resources>

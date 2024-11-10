@@ -90,9 +90,11 @@
 
     <!--Ajustes-->
     <string name="expensemanagement">Controla tus gastos</string>
+    <string name="expenseoptions">Opciones de control de gastos totales</string>
+    <string name="expenseoptionsdes">Selecciona las opciones para controlar todos tus gastos totales en un periodo de tiempo</string>
     <string name="categorycontrol">Gasto por categoría</string>
     <string name="descategorycontrol">Establece un control de gasto por cada categoría y recibe avisos al superarlos.</string>
-    <string name="desexpensecontrol">Controla los gastos totales y recibe avisos cuando los hayas superado con notificaciones</string>
+    <string name="desexpensecontrol">Controla los gastos totales y recibe una notificación cuando los hayas superado</string>
     <string name="expensecontrol">Gasto total</string>
     <string name="modify">Modifica esta cuenta</string>
     <string name="deleteaccount">Borra esta cuenta</string>
@@ -349,5 +351,5 @@
     <string name="expenseslimit80">Estas cerca de superar tu límite de gasto.</string>
     <string name="expensebycategory">Gasto por categoría de </string>
     <string name="expenselimitOk">Tus gastos están controlados en esta categoría</string>
-
+    <string name="expensesByMonth">Gastos por mes</string>
 </resources>

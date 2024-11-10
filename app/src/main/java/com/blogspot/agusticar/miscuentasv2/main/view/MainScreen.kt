@@ -66,7 +66,6 @@ import com.blogspot.agusticar.miscuentasv2.changecurrency.ChangeCurrencyScreen
 import com.blogspot.agusticar.miscuentasv2.components.EntryList
 import com.blogspot.agusticar.miscuentasv2.components.IconComponent
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialog
-import com.blogspot.agusticar.miscuentasv2.components.NotificationDialog
 import com.blogspot.agusticar.miscuentasv2.components.UserImage
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
@@ -78,10 +77,11 @@ import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
-import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlScreen
+import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlCategoriesScreen
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationObserver
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
 import com.blogspot.agusticar.miscuentasv2.notification.RequestNotificationPermissionDialog
+import com.blogspot.agusticar.miscuentasv2.notification.SelectOptionsExpense
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
@@ -323,13 +323,15 @@ fun MainScreen(
                         }
 
                         IconOptions.CATEGORY_EXPENSE_CONTROL -> {
-                            ExpenseControlScreen(categoriesViewModel,
+                            ExpenseControlCategoriesScreen(categoriesViewModel,
                                 accountsViewModel)
                             title=R.string.categorycontrol
                         }
 
-
-
+                        IconOptions.SELECT_OPTIONS_EXPENSE -> SelectOptionsExpense(
+                            searchViewModel  ,
+                            accountsViewModel
+                        )
                     }
 
                 }

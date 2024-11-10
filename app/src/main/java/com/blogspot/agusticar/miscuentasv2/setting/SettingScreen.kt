@@ -170,6 +170,21 @@ fun SettingScreen(
         )
         SpacerApp()
         HeadSetting(title = stringResource(id = R.string.expensemanagement), 20)
+
+        RowComponent(title = stringResource(id = R.string.expenseoptions),
+            description = stringResource(id = R.string.expenseoptionsdes),
+            iconResource = R.drawable.ic_selectoptions,
+            onClick = {
+                mainViewModel.selectScreen(IconOptions.SELECT_OPTIONS_EXPENSE)
+            })
+
+        RowComponent(title = stringResource(id = R.string.expensecontrol),
+            description = stringResource(id = R.string.desexpensecontrol),
+            iconResource = R.drawable.ic_expensetotal,
+            onClick = {
+
+            })
+
         RowComponent(title = stringResource(id = R.string.selectcategories),
             description = stringResource(id = R.string.choosecategories),
             iconResource = R.drawable.ic_check,
@@ -182,12 +197,8 @@ fun SettingScreen(
             onClick = {
                 mainViewModel.selectScreen(IconOptions.CATEGORY_EXPENSE_CONTROL)
             })
-        RowComponent(title = stringResource(id = R.string.expensecontrol),
-            description = stringResource(id = R.string.desexpensecontrol),
-            iconResource = R.drawable.ic_expensetotal,
-            onClick = {
 
-            })
+
 
         SpacerApp()
 
