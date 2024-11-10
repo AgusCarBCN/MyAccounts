@@ -198,6 +198,7 @@ fun AccountCardWithCheckbox(
     val limitMax by accountsViewModel.limitMax.observeAsState(account.limitMax.toString())
     val messageDateError = stringResource(id = R.string.datefromoverdateto)
     val scope = rememberCoroutineScope()
+
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -287,8 +288,10 @@ fun AccountCardWithCheckbox(
                             accountsViewModel.upDateAccountsDates(account.id, fromDate, toDate)
                         }
                     },
-                    onDismiss = { accountsViewModel.onEnableDialogChange(false) }
+                    onDismiss = { accountsViewModel.onEnableDialogChange(false)
+                                accountsViewModel.updateCheckedAccount(account.id,false) }
                     ,searchViewModel)
+
             }
         }
     }

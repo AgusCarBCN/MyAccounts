@@ -181,8 +181,13 @@ fun ItemCategoryCheck(category: Category,
                         categoriesViewModel.upDateCategoryDates(category.id, fromDate, toDate)
                     }
                 },
-                onDismiss = { categoriesViewModel.onEnableDialogChange(false) }
+                onDismiss = { categoriesViewModel.onEnableDialogChange(false)
+                              categoriesViewModel.updateCheckedCategory(category.id,false)
+                            }
             ,searchViewModel)
+
+
+
         }
     }
  }
