@@ -39,11 +39,10 @@ fun CategoryBudgetItemControl(
 ) {
 
     val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
-    val scope = rememberCoroutineScope()
+
     val limitExpenseText=stringResource(id = R.string.limitexpense)
     val currentExpense=stringResource(id = R.string.currentexpense)
-    val fromDate by searchViewModel.selectedFromDate.observeAsState(category.fromDate)
-    val toDate by searchViewModel.selectedToDate.observeAsState(category.toDate)
+    val scope = rememberCoroutineScope()
 
     // Estado para almacenar el total de gastos por categoría
     var expensesByCategory by remember { mutableDoubleStateOf(0.0) }
@@ -192,15 +191,17 @@ fun CategoryBudgetItemControl(
             modifier = Modifier.width(320.dp),
             true,
             onClickButton = {
-                categoriesViewModel.upDateSpendingLimitCategory(category.id,spendingLimit)
-                scope.launch(Dispatchers.Main) {
-                    SnackBarController.sendEvent(
-                        event = SnackBarEvent(
-                            messageUpdateSpendingLimit
+
+                    categoriesViewModel.upDateSpendingLimitCategory(category.id, spendingLimit)
+                    scope.launch(Dispatchers.Main) {
+                        SnackBarController.sendEvent(
+                            event = SnackBarEvent(
+                                messageUpdateSpendingLimit
+                            )
                         )
-                    )
+                    }
                 }
-            }
+
         )
     }
 }
