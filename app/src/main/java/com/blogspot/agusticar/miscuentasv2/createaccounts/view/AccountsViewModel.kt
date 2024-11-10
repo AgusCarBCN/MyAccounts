@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.domain.apidata.ConvertCurrencyUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.DeleteAccountByIdUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.GetAllAccountsUseCase
@@ -109,6 +110,10 @@ class AccountsViewModel @Inject constructor(
     private val _conversionCurrencyRate = MutableLiveData<Double>()
     val conversionCurrencyRate: LiveData<Double> = _conversionCurrencyRate
 
+    private val _enableDialog=MutableLiveData<Boolean>()
+    val enableDialog: LiveData<Boolean> = _enableDialog
+
+
     // Cargar datos iniciales que no dependen de la UI ni de la composición.
     init {
         viewModelScope.launch {
@@ -204,7 +209,9 @@ class AccountsViewModel @Inject constructor(
         _isEnableButton.postValue(false)
 
     }
-
+    fun onEnableDialogChange(newValue:Boolean){
+        _enableDialog.value = newValue
+    }
 
     fun onCurrencyShowedChange(currencyShowed: String) {
         _currencyCodeShowed.value = currencyShowed
@@ -305,6 +312,36 @@ class AccountsViewModel @Inject constructor(
            onAccountUpdated()
         }
     }
+    fun upDateAccountsDates(accountId:Int,fromDate:String,toDate:String){
+       /* viewModelScope.launch(Dispatchers.IO) {
+            upDateFromDate.invoke(categoryId, fromDate)
+            upDateToDate.invoke(categoryId, toDate)
+
+        }*/
+    }
+
+    fun updateCheckedAccount(accountId: Int, isChecked: Boolean) {
+       /* viewModelScope.launch(Dispatchers.IO) {
+            upDateCheckedCategory.invoke(categoryId, isChecked)
+            getAllCategoriesByType(CategoryType.EXPENSE)
+        }*/
+    }
+    fun upDateSpendingLimitAccount(accountId: Int, newAmount: Double) {
+       /* viewModelScope.launch(Dispatchers.IO) {
+            upDateSpendingLimit.invoke(categoryId, newAmount)
+            getAllCategoriesChecked(CategoryType.EXPENSE)
+        }*/
+    }
+
+    fun upDateLimitMaxAccount(accountId: Int, newLimitMax: Float) {
+       /* viewModelScope.launch(Dispatchers.IO) {
+            upDateLimitMaxCategory.invoke(categoryId, newLimitMax)
+            getAllCategoriesChecked(CategoryType.EXPENSE)
+        }*/
+    }
+
+
+
     suspend fun conversionCurrencyRate(fromCurrency: String, toCurrency: String): Double? {
 
         return try {

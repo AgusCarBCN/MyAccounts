@@ -76,13 +76,12 @@ import com.blogspot.agusticar.miscuentasv2.main.model.IconOptions
 import com.blogspot.agusticar.miscuentasv2.newamount.view.CategorySelector
 import com.blogspot.agusticar.miscuentasv2.newamount.view.EntriesViewModel
 import com.blogspot.agusticar.miscuentasv2.newamount.view.NewAmount
-import com.blogspot.agusticar.miscuentasv2.notification.CategoryScreen
+import com.blogspot.agusticar.miscuentasv2.notification.EntryAccountList
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
 import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlCategoriesScreen
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationObserver
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
 import com.blogspot.agusticar.miscuentasv2.notification.RequestNotificationPermissionDialog
-import com.blogspot.agusticar.miscuentasv2.notification.SelectOptionsExpense
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
 import com.blogspot.agusticar.miscuentasv2.profile.ProfileScreen
 import com.blogspot.agusticar.miscuentasv2.search.SearchScreen
@@ -332,7 +331,8 @@ fun MainScreen(
 
 
 
-                        IconOptions.SELECT_ACCOUNTS -> TODO()
+                        IconOptions.SELECT_ACCOUNTS -> EntryAccountList(accountsViewModel,
+                            searchViewModel)
                     }
 
                 }
