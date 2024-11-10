@@ -17,7 +17,7 @@ import com.blogspot.agusticar.miscuentasv2.utils.Utils
 
 
 @Composable
-fun NotificationObserver(
+fun NotificationCategoriesObserver(
     categoriesViewModel: CategoriesViewModel,
     accountsViewModel: AccountsViewModel,
     notificationService: NotificationService
@@ -46,37 +46,102 @@ fun NotificationObserver(
         expensesByCategory?.let { expenses ->
             // Notification logic remains outside LaunchedEffect to allow stringResource usage
 
-                if (!notifiedCategories.contains(category.id)) {
-                    val message = when {
-                        percentage > 0.8f && percentage < 1.0f -> {
-                            "${stringResource(id = R.string.expenseslimit80)}\n" +
-                                    "${stringResource(id = R.string.expensebycategory)} ${Utils.numberFormat(expenses, codeCurrency)}."
-                        }
-                        percentage >= 1.0f -> {
-                            "${stringResource(id = R.string.expenseslimit)}\n" +
-                                    "${stringResource(id = R.string.expensebycategory)} ${Utils.numberFormat(expenses, codeCurrency)}."
-                        }
-                        else -> {
-                            "${stringResource(id = R.string.expenselimitOk)} \n" +
-                                    "${stringResource(id = R.string.expensebycategory)} ${Utils.numberFormat(expenses, codeCurrency)}."
-                        }
+            if (!notifiedCategories.contains(category.id)) {
+                val message = when {
+                    percentage > 0.8f && percentage < 1.0f -> {
+                        "${stringResource(id = R.string.expenseslimit80)}\n" +
+                                "${stringResource(id = R.string.expensebycategory)} ${Utils.numberFormat(expenses, codeCurrency)}."
                     }
-
-                    val categoryControl = stringResource(id = R.string.categoryespendingcontrol) +" "+
-                            stringResource(id = category.nameResource)
-
-
-                    // Send the notification
-                    notificationService.showBasicNotification(
-                        title = categoryControl,
-                        message = message,
-                         category.iconResource
-                    )
-
-                    // Mark category as notified
-                    notifiedCategories.add(category.id)
+                    percentage >= 1.0f -> {
+                        "${stringResource(id = R.string.expenseslimit)}\n" +
+                                "${stringResource(id = R.string.expensebycategory)} ${Utils.numberFormat(expenses, codeCurrency)}."
+                    }
+                    else -> {
+                        "${stringResource(id = R.string.expenselimitOk)} \n" +
+                                "${stringResource(id = R.string.expensebycategory)} ${Utils.numberFormat(expenses, codeCurrency)}."
+                    }
                 }
+
+                val categoryControl = stringResource(id = R.string.categoryespendingcontrol) +" "+
+                        stringResource(id = category.nameResource)
+
+
+                // Send the notification
+                notificationService.showBasicNotification(
+                    title = categoryControl,
+                    message = message,
+                    category.iconResource
+                )
+
+                // Mark category as notified
+                notifiedCategories.add(category.id)
             }
         }
     }
+}
+
+@Composable
+fun NotificationAccountObserver(
+
+    accountsViewModel: AccountsViewModel,
+    notificationService: NotificationService
+) {
+    // Update expense percentage
+    accountsViewModel.UpdateExpensePercentage()
+    val expensePercentageMap by accountsViewModel.expensePercentageFlow.collectAsState()
+    val codeCurrency by accountsViewModel.currencyCodeSelected.observeAsState("USD")
+
+    // Track categories that have already received a notification
+    val notifiedAccounts = remember { mutableSetOf<Int>() }
+
+    expensePercentageMap.forEach { (account, percentage) ->
+        // State to track the expenses by category and whether it has been loaded
+        var expensesByAccounts by remember { mutableStateOf<Double?>(null) }
+
+        // Load expenses for each category when the category ID changes
+        LaunchedEffect(account.id) {
+            expensesByAccounts = accountsViewModel.sumOfExpensesByAccount(account.id,
+                account.fromDate,
+                account.toDate) ?: 0.0
+
+        }
+
+        // Only proceed with notifications if expensesByCategory has been loaded
+        expensesByAccounts?.let { expenses ->
+            // Notification logic remains outside LaunchedEffect to allow stringResource usage
+
+            if (!notifiedAccounts.contains(account.id)) {
+                val message = when {
+                    percentage > 0.8f && percentage < 1.0f -> {
+                        "${stringResource(id = R.string.expenseslimit80)}\n" +
+                                "${stringResource(id = R.string.expensebyaccount)} ${Utils.numberFormat(expenses, codeCurrency)}."
+                    }
+                    percentage >= 1.0f -> {
+                        "${stringResource(id = R.string.expenseslimit)}\n" +
+                                "${stringResource(id = R.string.expensebyaccount)} ${Utils.numberFormat(expenses, codeCurrency)}."
+                    }
+                    else -> {
+                        "${stringResource(id = R.string.expenselimitOk)} \n" +
+                                "${stringResource(id = R.string.expensebyaccount)} ${Utils.numberFormat(expenses, codeCurrency)}."
+                    }
+                }
+
+                val accountControl = stringResource(id = R.string.categoryespendingcontrol) +" "+
+                        account.name
+
+
+                // Send the notification
+                notificationService.showBasicNotification(
+                    title = accountControl,
+                    message = message,
+                    R.drawable.importoption)
+
+
+                // Mark category as notified
+                notifiedAccounts.add(account.id)
+            }
+        }
+    }
+}
+
 

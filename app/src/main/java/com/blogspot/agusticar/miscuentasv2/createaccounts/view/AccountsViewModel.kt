@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.createaccounts.model.Currency
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Account
+import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.Category
 import com.blogspot.agusticar.miscuentasv2.main.data.database.entities.CategoryType
 import com.blogspot.agusticar.miscuentasv2.main.domain.apidata.ConvertCurrencyUseCase
 import com.blogspot.agusticar.miscuentasv2.main.domain.database.accountusecase.DeleteAccountByIdUseCase
@@ -30,10 +31,14 @@ import com.blogspot.agusticar.miscuentasv2.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class AccountsViewModel @Inject constructor(
@@ -61,6 +66,11 @@ class AccountsViewModel @Inject constructor(
     // Variable pública expuesta como LiveData, de solo lectura para otros componentes. La UI observará este valor
     // para reaccionar a los cambios (por ejemplo, habilitar o deshabilitar el botón).
     val isEnableButton: LiveData<Boolean> = _isEnableButton
+
+    // Flow que emite los gastos actuales y el límite para cada cuenta
+    private val _expensePercentageFlow = MutableStateFlow<Map<Account, Float>>(emptyMap())
+    val expensePercentageFlow: StateFlow<Map<Account, Float>> = _expensePercentageFlow.asStateFlow()
+
 
     private val _isEnableChangeNameButton = MutableLiveData<Boolean>()
     val isEnableChangeNameButton: LiveData<Boolean> = _isEnableChangeNameButton
@@ -136,6 +146,7 @@ class AccountsViewModel @Inject constructor(
             _isCurrencyExpanded.value = false
             onAccountUpdated()
             getListOfCurrencyCode()
+            updateExpensePercentage()
 
         }
     }
@@ -394,6 +405,31 @@ class AccountsViewModel @Inject constructor(
             }
         }catch(e: IOException) {
             null
+        }
+    }
+
+    // Función que actualiza el flujo con el porcentaje de gasto para cada categoría
+    private suspend fun updateExpensePercentage() {
+        getAllAccountsChecked()
+        val categories = _listOfAccountsChecked.value // Método que obtiene todas las categorías
+        // Verifica que las categorías no sean nulas
+        if (categories.isNullOrEmpty()) {
+            // Si las categorías son nulas o vacías, no se hace nada
+            _expensePercentageFlow.value = emptyMap() // Asigna un mapa vacío
+            return
+        }
+
+        val expensePercentageMap = categories.associateWith { account ->
+            val expenses = sumOfExpensesByAccount(account.id,account.fromDate,account.toDate) ?: 0.0
+            val percentage = (abs(expenses) / abs(account.spendingLimit)).toFloat().coerceIn(0.0f, 1.0f)
+            percentage
+        }
+        _expensePercentageFlow.value = expensePercentageMap
+    }
+    // Función para refrescar el porcentaje de gasto (opcional)
+    fun UpdateExpensePercentage() {
+        viewModelScope.launch {
+            updateExpensePercentage()
         }
     }
 

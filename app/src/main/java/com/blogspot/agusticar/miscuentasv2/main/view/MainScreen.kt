@@ -80,7 +80,8 @@ import com.blogspot.agusticar.miscuentasv2.notification.EntryAccountList
 import com.blogspot.agusticar.miscuentasv2.notification.EntryCategoryList
 import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlAccountsScreen
 import com.blogspot.agusticar.miscuentasv2.notification.ExpenseControlCategoriesScreen
-import com.blogspot.agusticar.miscuentasv2.notification.NotificationObserver
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationAccountObserver
+import com.blogspot.agusticar.miscuentasv2.notification.NotificationCategoriesObserver
 import com.blogspot.agusticar.miscuentasv2.notification.NotificationService
 import com.blogspot.agusticar.miscuentasv2.notification.RequestNotificationPermissionDialog
 import com.blogspot.agusticar.miscuentasv2.piechart.PieChartScreen
@@ -129,8 +130,10 @@ fun MainScreen(
     val settingAccountOption by settingViewModel.deleteAccountOption.observeAsState(false)
     val selectedAccount by accountsViewModel.accountSelected.observeAsState()
     if(enableNotifications) {
-        NotificationObserver(categoriesViewModel,
+        NotificationCategoriesObserver(categoriesViewModel,
             accountsViewModel,
+            notificationService)
+        NotificationAccountObserver(accountsViewModel,
             notificationService)
     }
     LaunchedEffect(Unit) {
