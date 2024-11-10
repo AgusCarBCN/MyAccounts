@@ -360,5 +360,6 @@
     <string name="limitMaxtitle">Maximum limit of expense</string>
     <string name="accountchecked">Checked account</string>
     <string name="accountunchecked">Unchecked account</string>
+    <string name="selectaccounts">Select accounts</string>
 </resources>
 

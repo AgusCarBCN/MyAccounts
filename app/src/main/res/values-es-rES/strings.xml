@@ -357,4 +357,6 @@
     <string name="expensesByMonth">Gastos por mes</string>
     <string name="accountchecked">Cuenta seleccionada</string>
     <string name="accountunchecked">Cuenta no seleccionada</string>
+    <string name="selectaccounts">Selecciona cuentas</string>
+
 </resources>

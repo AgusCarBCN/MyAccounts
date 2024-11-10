@@ -29,6 +29,7 @@ import com.blogspot.agusticar.miscuentasv2.R
 import com.blogspot.agusticar.miscuentasv2.SnackBarController
 import com.blogspot.agusticar.miscuentasv2.SnackBarEvent
 import com.blogspot.agusticar.miscuentasv2.components.AccountCardWithCheckbox
+import com.blogspot.agusticar.miscuentasv2.components.HeadSetting
 import com.blogspot.agusticar.miscuentasv2.components.ModelDialogWithTextField
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.AccountsViewModel
 import com.blogspot.agusticar.miscuentasv2.createaccounts.view.CategoriesViewModel
@@ -60,16 +61,17 @@ fun EntryAccountList(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        HeadSetting(title = stringResource(id = R.string.selectaccounts),
+            size = 22)
         // Asegúrate de que la LazyColumn ocupa solo el espacio necesario
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f) // Permite que la columna ocupe el espacio disponible
-                .padding(bottom = 16.dp) // Espacio en la parte inferior
+                .padding(bottom = 16.dp), // Espacio en la parte inferior
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(listOfAccounts) { account ->
-
                 AccountCardWithCheckbox(account,
                     currencyCode,
                     searchViewModel,
@@ -83,113 +85,6 @@ fun EntryAccountList(
                         }
                     }
                 )
-                /*  ItemAccountCheck(account,
-                accountsViewModel,
-                searchViewModel,
-                onCheckBoxChange = {
-                        checked ->
-                    accountsViewModel.updateCheckedAccount(account.id,
-                        checked)
-                    if(!account.isChecked){
-                        accountsViewModel.onEnableDialogChange(true)
-                    }
-            })*/
-
-            }
-
-
-        }
-    }
-    @Composable
-    fun ItemAccountCheck(
-        account: Account,
-        accountsViewModel: AccountsViewModel,
-        searchViewModel: SearchViewModel,
-        onCheckBoxChange: (Boolean) -> Unit
-    ) {
-        val limitMax by accountsViewModel.limitMax.observeAsState(account.limitMax.toString())
-        val toDate by searchViewModel.selectedToDate.observeAsState(account.fromDate)
-        val fromDate by searchViewModel.selectedFromDate.observeAsState(account.toDate)
-        val currencyCode by accountsViewModel.currencyCodeSelected.observeAsState("USD")
-        val showDialog by accountsViewModel.enableDialog.observeAsState(false)
-        val scope = rememberCoroutineScope()
-        val messageDateError = stringResource(id = R.string.datefromoverdateto)
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = account.name,
-                    modifier = Modifier
-                        .weight(0.4f)
-                        .padding(horizontal = 4.dp),
-                    color = LocalCustomColorsPalette.current.textColor,
-                    textAlign = TextAlign.Start,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.width(8.dp)) // Espacio entre el ícono y el texto
-
-                // Nombre de la categoría
-                Text(
-                    text = Utils.numberFormat(account.balance, currencyCode),
-                    modifier = Modifier
-                        .weight(0.4f)
-                        .padding(horizontal = 4.dp),
-                    color = LocalCustomColorsPalette.current.textColor,
-                    textAlign = TextAlign.Start,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Checkbox(
-                    modifier = Modifier.weight(0.2f), // Ajuste proporcional para el checkbox
-                    checked = account.isChecked,
-                    onCheckedChange = onCheckBoxChange,
-                    colors = CheckboxDefaults.colors(
-                        checkedColor = LocalCustomColorsPalette.current.backgroundPrimary,
-                        uncheckedColor = LocalCustomColorsPalette.current.textColor,
-                        checkmarkColor = LocalCustomColorsPalette.current.incomeColor
-                    )
-                )
-
-            }
-            if (account.isChecked) {
-
-                ModelDialogWithTextField(
-                    account.name,
-                    showDialog,
-                    limitMax,
-                    onValueChange = { accountsViewModel.onChangeLimitMax(it) },
-                    onConfirm = {
-                        if (!searchViewModel.validateDates()) {
-                            scope.launch(Dispatchers.Main) {
-                                SnackBarController.sendEvent(
-                                    event = SnackBarEvent(
-                                        messageDateError
-                                    )
-                                )
-                            }
-                            accountsViewModel.updateCheckedAccount(account.id, false)
-                        } else {
-                            accountsViewModel.upDateLimitMaxAccount(
-                                account.id,
-                                limitMax.toFloatOrNull() ?: 0f
-                            )
-                            accountsViewModel.onEnableDialogChange(false)
-                            accountsViewModel.upDateAccountsDates(account.id, fromDate, toDate)
-                        }
-                    },
-                    onDismiss = { accountsViewModel.onEnableDialogChange(false) }, searchViewModel)
             }
         }
     }

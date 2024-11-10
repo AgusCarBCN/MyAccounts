@@ -329,8 +329,13 @@ fun MainScreen(
                             title=R.string.categorycontrol
                         }
 
-                        IconOptions.SELECT_ACCOUNTS -> EntryAccountList(accountsViewModel,
-                            searchViewModel)
+                        IconOptions.SELECT_ACCOUNTS -> {
+                            EntryAccountList(
+                                accountsViewModel,
+                                searchViewModel
+                            )
+                            title=R.string.selectaccounts
+                        }
                     }
 
                 }

@@ -109,7 +109,6 @@ fun HeadCard(modifier: Modifier, amount: String, isIncome: Boolean, onClickCard:
                 )
             }
         )
-
     }
 }
 
@@ -178,9 +177,7 @@ fun AccountCard(
                 )
             }
         )
-
     }
-
 }
 
 @Composable
@@ -190,7 +187,6 @@ fun AccountCardWithCheckbox(
     searchViewModel: SearchViewModel,
     onCheckBoxChange: (Boolean) -> Unit
 ) {
-
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -200,7 +196,6 @@ fun AccountCardWithCheckbox(
             contentColor = LocalCustomColorsPalette.current.incomeColor,
             disabledContainerColor = LocalCustomColorsPalette.current.drawerColor,
             disabledContentColor = LocalCustomColorsPalette.current.incomeColor
-
         ),
         modifier = Modifier
             .size(width = 360.dp, height = 120.dp)
@@ -251,12 +246,11 @@ fun AccountCardWithCheckbox(
                 checked = account.isChecked,
                 onCheckedChange = onCheckBoxChange,
                 colors = CheckboxDefaults.colors(
-                    checkedColor = LocalCustomColorsPalette.current.backgroundPrimary,
+                    checkedColor = LocalCustomColorsPalette.current.drawerColor,
                     uncheckedColor = LocalCustomColorsPalette.current.textColor,
                     checkmarkColor = LocalCustomColorsPalette.current.incomeColor
                 )
             )
         }
     }
-
 }
